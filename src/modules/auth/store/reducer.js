@@ -5,7 +5,8 @@ const initialState = {
   accountInfo: null,
   isFetching: false,
   statusMessage: '',
-  isFirst: false
+  isFirst: false,
+  isFacebook: false
 }
 
 export default function reducer(state = initialState, action) {
@@ -13,7 +14,8 @@ export default function reducer(state = initialState, action) {
     case types.LOGIN_REQUEST:
       return {
         ...state,
-        isFetching: true
+        isFetching: true,
+        isFacebook: false
       }
     case types.LOGIN_DONE:
       return {
@@ -32,7 +34,8 @@ export default function reducer(state = initialState, action) {
         return {
           ...state,
           isFetching: false,
-          statusMessage: ''
+          statusMessage: '',
+          isFacebook: false
         }
     case types.LOGOUT_DONE:
       return {
@@ -45,11 +48,24 @@ export default function reducer(state = initialState, action) {
         ...state,
         statusMessage: ''
       }
+    case types.TRY_FACEBOOK_LOGIN_REQUEST:
+      return {
+        ...state,
+        isFetching: true,
+        isFacebook: true
+      }
+    case types.TRY_FACEBOOK_LOGIN_CANCELED:
+      return {
+        ...state,
+        isFetching: false,
+        isFacebook: false
+      }
     case types.FACEBOOK_LOGIN_REQUEST:
-        return {
-          ...state,
-          isFetching: true
-        }
+      return {
+        ...state,
+        isFetching: true,
+        isFacebook: true
+      }
     default: 
       return state
   }

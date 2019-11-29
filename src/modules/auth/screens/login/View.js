@@ -23,6 +23,9 @@ export default class ScreenView extends React.Component {
     const { phoneNumber } = this.state
     const { _t } = this.props.appActions
     const { auth } = this.props;
+    const { isFetching, isFacebook } = auth;
+    const isLoggingIn = (isFetching && !isFacebook);
+    const isLoggingInWithFacebook = (isFetching && isFacebook);
 
     return (
       <FirstWrapper>
@@ -52,8 +55,8 @@ export default class ScreenView extends React.Component {
             <Button
               onPress={this.onLogin}
               caption={_t('Next')}
-              loading={auth.isFetching}
-              disabled={auth.isFetching}
+              loading={isLoggingIn}
+              disabled={isLoggingIn}
             />
             {/* {auth.isFetching
               ? <ActivityIndicator color={'#00a9f2'} />
@@ -71,8 +74,8 @@ export default class ScreenView extends React.Component {
               textColor='#fff'
               bgGradientStart='#48bff3'
               bgGradientEnd='#00a9f2'
-              loading={auth.isFetching}
-              disabled={auth.isFetching}
+              loading={isLoggingInWithFacebook}
+              disabled={isLoggingInWithFacebook}
             />
             <Spacer size={30*em} />
             <TouchableOpacity
@@ -115,8 +118,9 @@ export default class ScreenView extends React.Component {
 
   onFacebookLogin = () => {
     const _this = this;
+    this.props.authActions.tryLoginWithFacebook();
     facebookService.loginWithLoginManager((res) => {
-      console.log('===== onFacebookSignup: ', res);
+      console.log('===== onFacebookLogin: ', res);
       if (res.action === 'loggedin') _this.loadProfileFromFacebook();
       if (res.action === 'cancel') _this.onCancelFacebookLogin();
       if (res.action === 'failed') _this.onFailedFacebookLogin();
@@ -133,14 +137,12 @@ export default class ScreenView extends React.Component {
       this.onSuccessFacebookLogin(profile);
     } catch (error) {
       console.log('===== error: ', error);
-      this.onFailedFacebookLogin(error);
+      this.onFailedFacebookLogin('Network failed. Please try again.');
     }
   }
 
   onSuccessFacebookLogin = (profile) => {
-    this.props.authActions.tryLoginWithFacebook(profile.id);
-
-    // this.props.authActions.loginSuccess(profile);
+    this.props.authActions.loginWithFacebook(profile.id);
   }
 
   onCancelFacebookLogin = () => {

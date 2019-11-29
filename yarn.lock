@@ -7261,10 +7261,9 @@ react-native-lightbox@^0.8.0:
   dependencies:
     prop-types "^15.5.10"
 
-react-native-linear-gradient@^2.5.6:
+react-native-linear-gradient@react-native-community/react-native-linear-gradient:
   version "2.5.6"
-  resolved "https://registry.yarnpkg.com/react-native-linear-gradient/-/react-native-linear-gradient-2.5.6.tgz#96215cbc5ec7a01247a20890888aa75b834d44a0"
-  integrity sha512-HDwEaXcQIuXXCV70O+bK1rizFong3wj+5Q/jSyifKFLg0VWF95xh8XQgfzXwtq0NggL9vNjPKXa016KuFu+VFg==
+  resolved "https://codeload.github.com/react-native-community/react-native-linear-gradient/tar.gz/acd6aa3adb99e08a39c5cc2b0befff5db062397c"
 
 react-native-loading-spinner-overlay@^1.0.1:
   version "1.0.1"

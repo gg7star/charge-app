@@ -47,7 +47,13 @@ export function doLogout() {
   }
 }
 
-export function tryLoginWithFacebook(fbId) {
+export function tryLoginWithFacebook() {
+  return {
+    type: types.TRY_FACEBOOK_LOGIN_REQUEST,
+  }
+}
+
+export function loginWithFacebook(fbId) {
   return {
     type: types.FACEBOOK_LOGIN_REQUEST,
     payload: { fbId }

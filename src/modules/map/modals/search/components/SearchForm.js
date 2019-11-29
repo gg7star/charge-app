@@ -6,6 +6,10 @@ export default class SearchForm extends React.Component {
     searchVal: ''
   }
 
+  UNSAFE_componentWillMount() {
+    this.props.mapActions.searchPlaces('')
+  }
+  
   onChangeText = (searchVal) => {
     const { mapActions } = this.props
     this.setState({searchVal}, () => {

@@ -60,7 +60,7 @@ class FacebookService {
         '/me',
         {
           httpMethod: 'GET',
-          version: 'v2.5',
+          // version: 'v2.5',
           parameters: {
             'fields': {
               'string' : 'name,email,friends,birthday'
@@ -74,6 +74,7 @@ class FacebookService {
             console.log('===== profile: ', profile);
             resolve(profile);
           } else {
+            console.log('===== error: ', error);
             reject(error);
           }
         }

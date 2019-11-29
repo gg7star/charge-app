@@ -31,6 +31,7 @@ export function* loadPlacesOnMap(action) {
     };
     yield put({ type: types.LOAD_PLACES_ON_MAP_SUCCESS, payload: { currentLocation, places } })
   } catch(e) {
+    console.log('====== error: ', e);
     yield put({ type: types.LOAD_PLACES_ON_MAP_FAILURE })
   }  
 }
@@ -55,9 +56,7 @@ export function* getAllStations(action) {
     yield put(requestGetAllStationsSuccess(stationSnList));
     // Get detail info of all stations
     for(var i = 0; i < stationSnList.length; i++) {
-      const stationSnData = {
-        stationSn: stationSnList[i]
-      }
+      const stationSnData = stationSnList[i]
       const responseStation = yield call(
         processRequest,
         `${serverUrls.apiGatewayServerURL}/rental/cabinet_info`,
