@@ -11,6 +11,20 @@ PODS:
     - React-Core (= 0.61.5)
     - React-jsi (= 0.61.5)
     - ReactCommon/turbomodule/core (= 0.61.5)
+  - FBSDKCoreKit (5.8.0):
+    - FBSDKCoreKit/Basics (= 5.8.0)
+    - FBSDKCoreKit/Core (= 5.8.0)
+  - FBSDKCoreKit/Basics (5.8.0)
+  - FBSDKCoreKit/Core (5.8.0):
+    - FBSDKCoreKit/Basics
+  - FBSDKLoginKit (5.8.0):
+    - FBSDKLoginKit/Login (= 5.8.0)
+  - FBSDKLoginKit/Login (5.8.0):
+    - FBSDKCoreKit (~> 5.0)
+  - FBSDKShareKit (5.8.0):
+    - FBSDKShareKit/Share (= 5.8.0)
+  - FBSDKShareKit/Share (5.8.0):
+    - FBSDKCoreKit (~> 5.0)
   - Folly (2018.10.22.00):
     - boost-for-react-native
     - DoubleConversion
@@ -194,7 +208,23 @@ PODS:
     - React
   - react-native-date-picker (2.7.0):
     - React
+  - react-native-fbsdk (1.1.1):
+    - React
+    - react-native-fbsdk/Core (= 1.1.1)
+    - react-native-fbsdk/Login (= 1.1.1)
+    - react-native-fbsdk/Share (= 1.1.1)
+  - react-native-fbsdk/Core (1.1.1):
+    - FBSDKCoreKit (= 5.8)
+    - React
+  - react-native-fbsdk/Login (1.1.1):
+    - FBSDKLoginKit (= 5.8)
+    - React
+  - react-native-fbsdk/Share (1.1.1):
+    - FBSDKShareKit (= 5.8)
+    - React
   - react-native-maps (0.26.1):
+    - React
+  - react-native-splash-screen (3.2.0):
     - React
   - React-RCTActionSheet (0.61.5):
     - React-Core/RCTActionSheetHeaders (= 0.61.5)
@@ -275,7 +305,9 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-camera (from `../node_modules/react-native-camera`)
   - react-native-date-picker (from `../node_modules/react-native-date-picker`)
+  - react-native-fbsdk (from `../node_modules/react-native-fbsdk`)
   - react-native-maps (from `../node_modules/react-native-maps`)
+  - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
   - React-RCTBlob (from `../node_modules/react-native/Libraries/Blob`)
@@ -302,6 +334,9 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - boost-for-react-native
+    - FBSDKCoreKit
+    - FBSDKLoginKit
+    - FBSDKShareKit
     - Stripe
 
 EXTERNAL SOURCES:
@@ -339,8 +374,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-camera"
   react-native-date-picker:
     :path: "../node_modules/react-native-date-picker"
+  react-native-fbsdk:
+    :path: "../node_modules/react-native-fbsdk"
   react-native-maps:
     :path: "../node_modules/react-native-maps"
+  react-native-splash-screen:
+    :path: "../node_modules/react-native-splash-screen"
   React-RCTActionSheet:
     :path: "../node_modules/react-native/Libraries/ActionSheetIOS"
   React-RCTAnimation:
@@ -390,6 +429,9 @@ SPEC CHECKSUMS:
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   FBLazyVector: cb37b5590a27600f0a889222d7c1f019625f4168
   FBReactNativeSpec: 6fda0eee5b059ee8ea0f845f4060620ff96b5b55
+  FBSDKCoreKit: e7dcac0aabcfb09d0166998edd95fe3b05a0ce5d
+  FBSDKLoginKit: 1b0cf04df0370b37404213157b060d6666ede814
+  FBSDKShareKit: abc29e1bb4f9f59f679adf1ae191006d68455f96
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
   RCTRequired: 81db8debffc2eb932841fa02dcf5a2e911af74c1
@@ -403,7 +445,9 @@ SPEC CHECKSUMS:
   React-jsinspector: 044105eea064aec81adc5e4d777a8f6589e7d094
   react-native-camera: 9c50d7def800895e7991ccda6203929553ceec9c
   react-native-date-picker: e6ce9225e56a3aeaddc01847be02c7ed1477de58
+  react-native-fbsdk: f07643d5d8aaa0ca783e55b7518876963e42c46e
   react-native-maps: bb480348a3fe1e5a811fed1ba3387b329161c5cc
+  react-native-splash-screen: a49be22f0f6648b8416f3bd28258645eeaa5b42b
   React-RCTActionSheet: 49433f6e3659ba5d3ee650e44b9c18743ef9a7fc
   React-RCTAnimation: 12f86a4e3542032329366b03bca2cc254a7c64a9
   React-RCTBlob: ba90a4144ad478a022b79a4e8a1f150548d39425
