@@ -37,7 +37,7 @@ class FacebookService {
   };
 
   loginWithLoginManager = (callback) => {
-    LoginManager.logInWithReadPermissions(['public_profile', 'email', 'user_friends']).then(
+    LoginManager.logInWithPermissions(['public_profile', 'email', 'user_friends']).then(
       function (result) {
         if (result.isCancelled) {
           console.log('Login cancelled');
