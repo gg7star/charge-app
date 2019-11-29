@@ -8,13 +8,13 @@ import MapStack from '~/modules/map/routes'
 import ProfileStack from '~/modules/profile/routes'
 
 class NonoRoutes extends Component {
-	componentDidMount() {
+	UNSAFE_componentDidMount() {
 		if (this.props.isAuthenticated) {
 			Actions['authorized']();
 		}
 	}
 
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 	}
 
 	render() {
