@@ -1,0 +1,146 @@
+[
+  {
+    "image": "https://homepages.cae.wisc.edu/~ece533/images/airplane.png",
+    "title": "Bar",
+    "openHour": "22:00",
+    "batteries": 18,
+    "places": 6,
+    "distance": "Go 2min-200m",
+    "location": "79 Rue de Seine, 75006 Paris",
+    "phone": "05 75 43 22 11",
+    "web": "www.supermarche.fr",
+    "exactDistance": "200m",
+    "openHours": [
+      {
+        "day": "Monday",
+        "openHour": "07:00",
+        "closeHour": "22:00"
+      },
+      {
+        "day": "Tuesday",
+        "openHour": "07:00",
+        "closeHour": "22:00"
+      },
+      {
+        "day": "Wednesday",
+        "openHour": "07:00",
+        "closeHour": "22:00"
+      },
+      {
+        "day": "Thirsday",
+        "openHour": "07:00",
+        "closeHour": "22:00"
+      },
+      {
+        "day": "Friday",
+        "openHour": "07:00",
+        "closeHour": "22:00"
+      },
+      {
+        "day": "Saturday",
+        "openHour": "07:00",
+        "closeHour": "22:00"
+      },
+      {
+        "day": "Sunday",
+        "notOpen": true
+      }
+    ]
+  },
+  {
+    "image": "https://homepages.cae.wisc.edu/~ece533/images/baboon.png",
+    "title": "Bar",
+    "openHour": "22:00",
+    "batteries": 18,
+    "places": 6,
+    "distance": "Go 2min-200m",
+    "location": "79 Rue de Seine, 75006 Paris",
+    "phone": "05 75 43 22 11",
+    "web": "www.supermarche.fr",
+    "exactDistance": "200m",
+    "openHours": [
+      {
+        "day": "Monday",
+        "openHour": "07:00",
+        "closeHour": "22:00"
+      },
+      {
+        "day": "Tuesday",
+        "openHour": "07:00",
+        "closeHour": "22:00"
+      },
+      {
+        "day": "Wednesday",
+        "openHour": "07:00",
+        "closeHour": "22:00"
+      },
+      {
+        "day": "Thirsday",
+        "openHour": "07:00",
+        "closeHour": "22:00"
+      },
+      {
+        "day": "Friday",
+        "openHour": "07:00",
+        "closeHour": "22:00"
+      },
+      {
+        "day": "Saturday",
+        "openHour": "07:00",
+        "closeHour": "22:00"
+      },
+      {
+        "day": "Sunday",
+        "notOpen": true
+      }
+    ]
+  },
+  {
+    "image": "https://homepages.cae.wisc.edu/~ece533/images/arctichare.png",
+    "title": "Bar",
+    "openHour": "22:00",
+    "batteries": 18, 
+    "places": 6,
+    "distance": "Go 2min-200m",
+    "location": "79 Rue de Seine, 75006 Paris",
+    "phone": "05 75 43 22 11",
+    "web": "www.supermarche.fr",
+    "exactDistance": "200m",
+    "openHours": [
+      {
+        "day": "Monday",
+        "openHour": "07:00",
+        "closeHour": "22:00"
+      },
+      {
+        "day": "Tuesday",
+        "openHour": "07:00",
+        "closeHour": "22:00"
+      },
+      {
+        "day": "Wednesday",
+        "openHour": "07:00",
+        "closeHour": "22:00"
+      },
+      {
+        "day": "Thirsday",
+        "openHour": "07:00",
+        "closeHour": "22:00"
+      },
+      {
+        "day": "Friday",
+        "openHour": "07:00",
+        "closeHour": "22:00"
+      },
+      {
+        "day": "Saturday",
+        "openHour": "07:00",
+        "closeHour": "22:00"
+      },
+      {
+        "day": "Sunday",
+        "notOpen": true
+      }
+    ]
+  }
+]

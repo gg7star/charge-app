@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="36" height="36" viewBox="0 0 36 36">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.5" y1="1" x2="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#1565c0"/>
+      <stop offset="1" stop-color="#438adb"/>
+    </linearGradient>
+  </defs>
+  <g id="visa-add" transform="translate(-20 -252)">
+    <rect id="Rectangle_2524" data-name="Rectangle 2524" width="36" height="36" rx="14" transform="translate(20 252)" fill="url(#linear-gradient)"/>
+    <g id="Group_5804" data-name="Group 5804" transform="translate(-0.24 -0.853)">
+      <path id="Path_25815" data-name="Path 25815" d="M16.26,19l-3.026,9.046s-.768-3.827-.845-4.307c-1.722-3.94-4.264-3.72-4.264-3.72l3,11.686v0h3.642L19.8,19Z" transform="translate(25.448 246)" fill="#fff"/>
+      <path id="Path_25816" data-name="Path 25816" d="M13.294,25.84l-1.116-5.484a2.049,2.049,0,0,0-1.817-1.189H5.233S11.771,21.1,13.294,25.84Z" transform="translate(25 246.026)" fill="#ffc107"/>
+    </g>
+  </g>
+</svg>

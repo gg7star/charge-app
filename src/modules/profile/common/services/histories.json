@@ -1,0 +1,56 @@
+[
+  {
+    "date": "30/06/2019",
+    "price": "15.6€",
+    "duration": "30 min",
+    "fromPlace": "79 Rue de seins.sadsa",
+    "toPlace": "155 Bouelvard Saint Gernmarenw",
+    "cost": 15.60,
+    "credit": 0
+  },
+  {
+    "date": "22/06/2019",
+    "price": "3€",
+    "duration": "30 min",
+    "fromPlace": "79 Rue de seins.sadsa",
+    "toPlace": "155 Bouelvard Saint Gernmarenw",
+    "cost": 15.60,
+    "credit": 0
+  },
+  {
+    "date": "19/06/2019",
+    "price": "37€",
+    "duration": "30 min",
+    "fromPlace": "79 Rue de seins.sadsa",
+    "toPlace": "155 Bouelvard Saint Gernmarenw",
+    "cost": 15.60,
+    "credit": 0
+  },
+  {
+    "date": "27/05/2019",
+    "price": "16€",
+    "duration": "30 min",
+    "fromPlace": "79 Rue de seins.sadsa",
+    "toPlace": "155 Bouelvard Saint Gernmarenw",
+    "cost": 15.60,
+    "credit": 0
+  },
+  {
+    "date": "15/04/2019",
+    "price": "21€",
+    "duration": "30 min",
+    "fromPlace": "79 Rue de seins.sadsa",
+    "toPlace": "155 Bouelvard Saint Gernmarenw",
+    "cost": 15.60,
+    "credit": 0
+  },
+  {
+    "date": "03/04/2019",    
+    "price": "24€",
+    "duration": "30 min",
+    "fromPlace": "79 Rue de seins.sadsa",
+    "toPlace": "155 Bouelvard Saint Gernmarenw",
+    "cost": 15.60,
+    "credit": 0
+  }
+]

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="36" height="36" viewBox="0 0 36 36">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.5" y1="1" x2="0.5" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#00a0f1"/>
+      <stop offset="1" stop-color="#40b8f5"/>
+    </linearGradient>
+  </defs>
+  <g id="Lydia-add" transform="translate(-20 -252)">
+    <rect id="Rectangle_2524" data-name="Rectangle 2524" width="36" height="36" rx="14" transform="translate(20 252)" fill="url(#linear-gradient)"/>
+    <path id="Path_24275" data-name="Path 24275" d="M458.945,223.106c.088.2.13.287.167.378,1.564,3.766,3.116,7.537,4.7,11.3.7,1.663.325,1.549,2.331,1.542.835,0,.954-.2.614-.979q-2.914-6.693-5.829-13.385c-.793-1.823-.547-1.6-2.453-1.631a1.077,1.077,0,0,0-1.123.749c-.566,1.331-1.155,2.653-1.734,3.978q-2.282,5.22-4.563,10.44c-.252.577-.117.795.5.82.389.016.78-.008,1.17.007a1,1,0,0,0,1.062-.743c1.025-2.53,2.08-5.047,3.126-7.569C457.575,226.4,458.243,224.8,458.945,223.106Z" transform="translate(-420.93 41.674)" fill="#fff"/>
+  </g>
+</svg>
