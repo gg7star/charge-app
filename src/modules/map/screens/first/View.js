@@ -185,7 +185,7 @@ export default class ScreenView extends React.Component {
 
   onBuy = () => {
     const { auth, map, stripeActions } = this.props;
-    const { scanscannedQrCode } = map;
+    const { scannedQrCode } = map;
     return stripe.paymentRequestWithCardForm()
       .then(stripeTokenInfo => {
         console.log('Token created: ', stripeTokenInfo);
@@ -195,7 +195,7 @@ export default class ScreenView extends React.Component {
           tokenId: stripeTokenInfo.tokenId,
           email: auth.accountInfo.email,
           telnumber: auth.accountInfo.phoneNumber,
-          stationSn: scanscannedQrCode,
+          stationSn: scannedQrCode,
           slotId: '1',
           currency: 'eur',
           description: `${auth.accountInfo.name} payed via Nono application.`,

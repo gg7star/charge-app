@@ -22,7 +22,7 @@ export default class ScreenView extends React.Component {
   }
 
   renderSettingTable() {
-    const { personalInfo } = this.props.profile
+    const { accountInfo } = this.props.auth
     const { _t } = this.props.appActions
 
     return (
@@ -33,7 +33,7 @@ export default class ScreenView extends React.Component {
           <Text style={{ color: '#9f9f9f', fontSize: 17}}>
             {_t('Name')}
           </Text>
-          <Text style={{ color: '#36384a', fontSize: 17 }}>{personalInfo.name}</Text>
+          <Text style={{ color: '#36384a', fontSize: 17 }}>{accountInfo.name}</Text>
         </View>
         <View style={{
           marginVertical: 20
@@ -41,7 +41,7 @@ export default class ScreenView extends React.Component {
           <Text style={{ color: '#9f9f9f', fontSize: 17}}>
             {_t('Telephone')}
           </Text>
-          <Text style={{ color: '#36384a', fontSize: 17 }}>{personalInfo.phone}</Text>
+          <Text style={{ color: '#36384a', fontSize: 17 }}>{accountInfo.phoneNumber}</Text>
         </View>
         <View style={{
           marginVertical: 20
@@ -49,7 +49,7 @@ export default class ScreenView extends React.Component {
           <Text style={{ color: '#9f9f9f', fontSize: 17}}>
             {_t('Email')}
           </Text>
-          <Text style={{ color: '#36384a', fontSize: 17 }}>{personalInfo.email}</Text>
+          <Text style={{ color: '#36384a', fontSize: 17 }}>{accountInfo.email}</Text>
         </View>
         <View style={{
           marginVertical: 20
@@ -57,7 +57,7 @@ export default class ScreenView extends React.Component {
           <Text style={{ color: '#9f9f9f', fontSize: 17}}>
             {_t('Birth date')}
           </Text>
-          <Text style={{ color: '#36384a', fontSize: 17 }}>{personalInfo.birthDate}</Text>
+          <Text style={{ color: '#36384a', fontSize: 17 }}>{accountInfo.birthday}</Text>
         </View>
         <View style={{
           marginTop: 20, marginBottom: 20
@@ -112,6 +112,11 @@ export default class ScreenView extends React.Component {
         </TouchableOpacity>
       </View>
     )
+  }
+
+  goBack = () => {
+    Actions.map()
+    Actions['map_first']()
   }
 
   signout = () => {

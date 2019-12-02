@@ -1,12 +1,12 @@
 import * as types from './actionTypes';
 
 const initialState = {
-  personalInfo: {
-    name: 'Theo Rouilly',
-    phone: '32 30 22 144 3331',
-    email: 'theorouilly@nono.fr',
-    birthDate: '18/06/2000'
-  },
+  // personalInfo: {
+  //   name: 'Theo Rouilly',
+  //   phone: '32 30 22 144 3331',
+  //   email: 'theorouilly@nono.fr',
+  //   birthDate: '18/06/2000'
+  // },
   cash: {
     money: 300,
     couponCodeActied: false,
@@ -58,7 +58,8 @@ const initialState = {
       ]
     }
   ],
-  payment: null
+  payment: null,
+  cardInfo: null
 }
 
 export default function reducer(state = initialState, action) {
@@ -79,6 +80,11 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         payment: action.payload.payment
+      }
+    case types.ADD_CREDIT_CARD:
+      return {
+        ...state,
+        cardInfo: action.payload.cardInfo
       }
     default: 
       return state

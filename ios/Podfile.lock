@@ -35,6 +35,7 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
+  - OneSignal (2.11.2)
   - RCTRequired (0.61.5)
   - RCTTypeSafety (0.61.5):
     - FBLazyVector (= 0.61.5)
@@ -224,6 +225,9 @@ PODS:
     - React
   - react-native-maps (0.26.1):
     - React
+  - react-native-onesignal (3.5.0):
+    - OneSignal (= 2.11.2)
+    - React (< 1.0.0, >= 0.13.0)
   - react-native-splash-screen (3.2.0):
     - React
   - React-RCTActionSheet (0.61.5):
@@ -307,6 +311,7 @@ DEPENDENCIES:
   - react-native-date-picker (from `../node_modules/react-native-date-picker`)
   - react-native-fbsdk (from `../node_modules/react-native-fbsdk`)
   - react-native-maps (from `../node_modules/react-native-maps`)
+  - react-native-onesignal (from `../node_modules/react-native-onesignal`)
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
@@ -337,6 +342,7 @@ SPEC REPOS:
     - FBSDKCoreKit
     - FBSDKLoginKit
     - FBSDKShareKit
+    - OneSignal
     - Stripe
 
 EXTERNAL SOURCES:
@@ -378,6 +384,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-fbsdk"
   react-native-maps:
     :path: "../node_modules/react-native-maps"
+  react-native-onesignal:
+    :path: "../node_modules/react-native-onesignal"
   react-native-splash-screen:
     :path: "../node_modules/react-native-splash-screen"
   React-RCTActionSheet:
@@ -434,6 +442,7 @@ SPEC CHECKSUMS:
   FBSDKShareKit: abc29e1bb4f9f59f679adf1ae191006d68455f96
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
+  OneSignal: 4e3e68bb6c29975286a2fa910cb49132bc6e20bb
   RCTRequired: 81db8debffc2eb932841fa02dcf5a2e911af74c1
   RCTTypeSafety: 39a7d8643abe2460aef0adeb9acbe9401b579fff
   React: 89f2294058332cf7c4feee644e17d5024da1f531
@@ -447,6 +456,7 @@ SPEC CHECKSUMS:
   react-native-date-picker: e6ce9225e56a3aeaddc01847be02c7ed1477de58
   react-native-fbsdk: f07643d5d8aaa0ca783e55b7518876963e42c46e
   react-native-maps: bb480348a3fe1e5a811fed1ba3387b329161c5cc
+  react-native-onesignal: f5360d33c345fa562157396c7e3c5288dd70c64d
   react-native-splash-screen: a49be22f0f6648b8416f3bd28258645eeaa5b42b
   React-RCTActionSheet: 49433f6e3659ba5d3ee650e44b9c18743ef9a7fc
   React-RCTAnimation: 12f86a4e3542032329366b03bca2cc254a7c64a9

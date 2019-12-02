@@ -7,7 +7,8 @@ import * as ProfileActions from '../../store/actions'
 
 const mapStateToProps = state => ({
   app: state.app || {},
-  profile: state.profile || {}
+  profile: state.profile || {},
+  auth: state.auth || {}
 })
 
 const mapDispatchToProps = dispatch => ({

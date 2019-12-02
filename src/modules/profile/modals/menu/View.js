@@ -15,7 +15,7 @@ export default class Menu extends React.Component {
   render() {
     const { isShowable } = this.props
     const { _t } = this.props.appActions
-    const { personalInfo } = this.props.profile    
+    const { accountInfo } = this.props.auth
 
     let currency_ = 0
     // const formatter = new Intl.NumberFormat('fr-fr', {
@@ -39,7 +39,7 @@ export default class Menu extends React.Component {
               fontSize: 23, color: colors.primary, fontWeight: '600',
               marginVertical: 10, 
             }}>
-              {personalInfo.name}
+              {accountInfo && accountInfo.name}
             </Text>
             <View>
               <View style={{}}>

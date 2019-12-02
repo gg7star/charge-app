@@ -28,3 +28,10 @@ export function selectPayPrice(payment) {
     payload: { payment }
   }
 }
+
+export function addCreditCard(cardInfo) {
+  return {
+    type: types.ADD_CREDIT_CARD,
+    payload: {cardInfo}
+  }
+}

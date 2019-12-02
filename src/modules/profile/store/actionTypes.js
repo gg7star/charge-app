@@ -10,3 +10,5 @@ export const LOAD_HISTORY_SUCCESS = 'profile/LOAD_HISTORY_SUCCESS'
 
 export const SELECT_HISTORY = 'profile/SELECT_HISTORY'
 export const SELECT_PAY_PRICE = 'profile/SELECT_PAY_PRICE'
+
+export const ADD_CREDIT_CARD = 'profile/ADD_CREDIT_CARD'

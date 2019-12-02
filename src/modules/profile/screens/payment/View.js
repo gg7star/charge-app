@@ -1,6 +1,7 @@
 import React from 'react'
 import { TouchableOpacity, View, Text, Image } from 'react-native'
 import { Actions } from 'react-native-router-flux'
+import stripe from 'tipsi-stripe';
 import ProfileWrapper from '../../common/wrappers/ProfileWrapper'
 import ProfileHeader from '../../common/headers/ProfileHeader'
 import { W, H, em } from '~/common/constants';
@@ -52,9 +53,11 @@ export default class ScreenView extends React.Component {
             />
           </View>
           <View style={{flex: 7, }}>
-            <Text style={{ fontSize: 16 }}>
-              {_t('Add a credit card')}
-            </Text>
+            <TouchableOpacity onPress={this.addCreditCard}>
+              <Text style={{ fontSize: 16 }}>
+                {_t('Add a credit card')}
+              </Text>
+            </TouchableOpacity>
           </View>
           <View style={{flex: 1, alignItems: 'center'}}>
             <Image source={require('~/common/assets/images/png/arrow.png')} 
@@ -92,5 +95,17 @@ export default class ScreenView extends React.Component {
   goBack = () => {
     Actions.map()
     Actions['map_first']()
+  }
+
+  addCreditCard = () => {
+    const { auth, profileActions } = this.props;
+    return stripe.paymentRequestWithCardForm()
+      .then(stripeTokenInfo => {
+        console.log('Token created: ', stripeTokenInfo);
+        profileActions.addCreditCard(stripeTokenInfo)
+      })
+      .catch(error => {
+        console.warn('Payment failed', { error });
+      });
   }
 }

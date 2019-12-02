@@ -45,6 +45,7 @@
     "react-native-modal": "^11.5.3",
     "react-native-modal-dropdown": "^0.7.0",
     "react-native-nav": "^2.0.2",
+    "react-native-onesignal": "^3.5.0",
     "react-native-paper": "^3.2.1",
     "react-native-permissions": "^2.0.4",
     "react-native-phone-input": "^0.2.4",
