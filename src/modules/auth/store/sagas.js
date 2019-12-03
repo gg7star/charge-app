@@ -20,6 +20,7 @@ export function* tryLogin(action) {
   
   try {
     const accountInfo = yield call(firebaseService.tryLogin, { userId: fullPhoneNumber, email, password })
+    console.log('===== accountInfo: ', accountInfo)
     yield put(loginSuccess(accountInfo))
     yield put({ type: mapTypes.GET_ALL_STATIONS})    
   } catch (e) {

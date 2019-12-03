@@ -21,7 +21,7 @@ export function trySignup({ email, password, accountInfo }) {
         signedUp: Firebase.database.ServerValue.TIMESTAMP,
         lastLoggedIn: Firebase.database.ServerValue.TIMESTAMP,
       }
-      FirebaseRef.child(`users/`).set(userData).then(() => {
+      FirebaseRef.child(`users/${userId}`).set(userData).then(() => {
         return
       })
     } else {
