@@ -16,7 +16,7 @@ import { W, H } from '~/common/constants'
 import Menu from '~/modules/profile/modals/menu/ViewContainer'
 import { Actions } from 'react-native-router-flux'
 import { Spacer } from '~/common/components'
-import stripe from 'tipsi-stripe';
+import stripe from 'tipsi-stripe'
 
 stripe.setOptions({
   publishableKey: 'pk_test_ePNxp5U4eZc1CKEg486RGh6g00drRqawLY',
@@ -40,55 +40,42 @@ export default class ScreenView extends React.Component {
   }
 
   render() {
-    const { currentLocation, places } = this.props.map
+    const { currentLocation, places, place } = this.props.map
     const { _t } = this.props.appActions
     const { profileOpened } = this.state
     const { activedModal } = this.state
 
     return (
-      <View 
-        style={{
-          position: 'relative', width: W, height: H
-        }}
-      >
+      <View style={{position: 'relative', width: W, height: H}}>
         <Menu 
           isShowable={profileOpened} 
-          onClose={()=> 
-            this.setState({...this.state, profileOpened: false })
-          }
+          onClose={()=> this.setState({...this.state, profileOpened: false })}
         />
         <MapView
           mapType={Platform.OS == "android" ? "none" : "standard"}
           currentLocation={currentLocation}
           places={places}
+          selectedPlace={place}
           onSelectMarker={this.openNearPlacesDialog}
         >
-          <MapButton name='profile' 
-            onPress={() => 
-              this.setState({...this.state, profileOpened: true})
-            }
+          <MapButton
+            name='profile'
+            onPress={() => this.setState({...this.state, profileOpened: true})}
           />
-          <MapButton name='gift' 
-            onPress={this.goGift}
-          />
-          <MapButton name='search' 
-            onPress={this.openSearchDialog}
-          />
+          <MapButton name='gift' onPress={this.goGift}/>
+          <MapButton name='search' onPress={this.openSearchDialog}/>
           <MapButton name='refresh' />
           <MapButton name='position' />
         </MapView>
         <Spacer size={20} />
-        {activedModal=='unlock' && 
-          <UnlockDialog onGoScan={this.goScan} />
+        {activedModal=='unlock' && <UnlockDialog onGoScan={this.goScan} />}
+        {activedModal=='search' && <SearchDialog onCancel={this.closeSearchDialog} 
+          selectPlace={this.selectPlace} />
         }
-        {activedModal=='search' && 
-          <SearchDialog onCancel={this.closeSearchDialog} 
-            selectPlace={this.selectPlace} 
-          />
-        }
-        {activedModal=='detail' && 
-          <DetailDialog onClose={this.closeDetailDialog} 
-            onFinish={this.openFinishDialog} onReserve={this.openReserveDialog}
+        {activedModal=='detail' && <DetailDialog
+            onClose={this.closeDetailDialog} 
+            onFinish={this.openFinishDialog}
+            onReserve={this.openReserveDialog}
           />
         }
         {activedModal=='finish' && 
