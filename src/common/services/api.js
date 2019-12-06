@@ -31,7 +31,6 @@ export async function processRequest(url = '', method = 'GET', data = null) {
       headers
     };
   }
-  console.log('===== processRequest: ', request);
   return axios(request)
     .then(response =>
       checkStatus(response)

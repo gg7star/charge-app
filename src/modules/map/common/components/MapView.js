@@ -12,7 +12,6 @@ export default class CustomMapView extends React.Component {
     const GOOGLE_MAPS_APIKEY = Platform.OS === 'ios' 
       ? googleMapConfig.IOS_GOOGLE_MAPS_APIKEY
       : googleMapConfig.ANDROID_GOOGLE_MAPS_APIKEY
-    console.log('===== GOOGLE_MAPS_APIKEY: ', GOOGLE_MAPS_APIKEY)
     let region = {}
     if (currentLocation) {
       region = {
@@ -66,29 +65,30 @@ export default class CustomMapView extends React.Component {
 
     return (
       <>
-        {Object.keys(places).map((key, i) => {
+        {places && Object.keys(places).map((key, i) => {
           const place = places[key];
-          return (
-            <MapView.Marker
-              key={i}
-              title={place.name} 
-              coordinate={place.coordinate}
-              onPress={() => this.props.onSelectMarker(i)}
-            >
-              {place.isOpened ?
-                <Image
-                  source={require('~/common/assets/images/png/pin-open.png')} 
-                  style={{width: 40, height: 40}}
-                />
-                :
-                <Image
-                  source={require('~/common/assets/images/png/pin-close.png')} 
-                  style={{width: 40, height: 40}}
-                />
-              }            
-            </MapView.Marker>
-            );
-          })
+          if (place)
+            return (
+              <MapView.Marker
+                key={i}
+                title={place.name} 
+                coordinate={place.coordinate}
+                onPress={() => this.props.onSelectMarker(i)}
+              >
+                {place.isOpened ?
+                  <Image
+                    source={require('~/common/assets/images/png/pin-open.png')} 
+                    style={{width: 40, height: 40}}
+                  />
+                  :
+                  <Image
+                    source={require('~/common/assets/images/png/pin-close.png')} 
+                    style={{width: 40, height: 40}}
+                  />
+                }            
+              </MapView.Marker>
+              );
+            })
         }
       </>
     )

@@ -71,10 +71,8 @@ class FacebookService {
           if (result) {
             const profile = result;
             profile.avatar = `https://graph.facebook.com/${result.id}/picture`;
-            console.log('===== profile: ', profile);
             resolve(profile);
           } else {
-            console.log('===== error: ', error);
             reject(error);
           }
         }
@@ -84,4 +82,4 @@ class FacebookService {
   }
 }
 
-export const facebookService = new FacebookService()
+export const facebookService = new FacebookService();

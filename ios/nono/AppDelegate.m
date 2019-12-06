@@ -11,12 +11,18 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 // #import <GoogleMaps/GoogleMaps.h>
+@import Firebase;
+
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   // [GMSServices provideAPIKey:@"AIzaSyDt3pqdC-kKQFwOA552itU5LtD30uT_q4s"]; // Google Map API Key
+  if ([FIRApp defaultApp] == nil) {
+      [FIRApp configure];
+  }
+  [FIRDatabase database].persistenceEnabled = FALSE;
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
                                                    moduleName:@"nono"

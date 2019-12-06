@@ -7,7 +7,7 @@ const {
   databaseURL,
   storageBucket,
   messagingSenderId,
-} = firebaseConfig;
+} = firebaseConfig.web;
 
 let firebaseInitialized = false;
 
@@ -18,13 +18,7 @@ if (
   && storageBucket !== 'null'
   && messagingSenderId !== 'null'
 ) {
-  FirebaseModule.initializeApp({
-    apiKey,
-    authDomain,
-    databaseURL,
-    storageBucket,
-    messagingSenderId,
-  });
+  FirebaseModule.initializeApp(firebaseConfig.web);
 
   firebaseInitialized = true;
 }

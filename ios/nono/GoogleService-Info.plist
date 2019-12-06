@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>3300133003-c79q210ef19nh2i1i9pdnofqopsbb9ud.apps.googleusercontent.com</string>
+	<string>3300133003-g3cnaab5gdhnce4sai73j7mfi0qf1avi.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.3300133003-c79q210ef19nh2i1i9pdnofqopsbb9ud</string>
+	<string>com.googleusercontent.apps.3300133003-g3cnaab5gdhnce4sai73j7mfi0qf1avi</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDt3pqdC-kKQFwOA552itU5LtD30uT_q4s</string>
+	<string>AIzaSyDxlkgWVpxz-WD3ZJwIKLKkUZ47KSJ7cDM</string>
 	<key>GCM_SENDER_ID</key>
 	<string>3300133003</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.ben.nono</string>
+	<string>com.laplus.nono</string>
 	<key>PROJECT_ID</key>
 	<string>nono-81379</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,7 +29,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:3300133003:ios:e9325a02fbb1be06a6ec8e</string>
+	<string>1:3300133003:ios:75d34643d8b0bbcfa6ec8e</string>
 	<key>DATABASE_URL</key>
 	<string>https://nono-81379.firebaseio.com</string>
 </dict>

@@ -1,9 +1,8 @@
-import View from './View'
-import { compose } from 'recompose'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import * as AppActions from '~/root/app/store/actions'
-import * as ProfileActions from '../../store/actions' 
+import { compose } from 'recompose';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { AppActions, ProfileActions } from '~/actions';
+import View from './View';
 
 const mapStateToProps = state => ({
   app: state.app || {},

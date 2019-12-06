@@ -35,21 +35,28 @@ target 'nono' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
   # pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
+  pod 'Firebase/Core', '~> 6.13.0'
+  pod 'Firebase/Auth', '~> 6.13.0'
+  pod 'Firebase/Database', '~> 6.13.0'
+  pod 'Firebase/Messaging', '~> 6.13.0'
 
-  target 'nonoTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
+  pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app'
+  pod 'RNFBDatabase', :path => '../node_modules/@react-native-firebase/database'
+
+  # target 'nonoTests' do
+  #   inherit! :search_paths
+  #   # Pods for testing
+  # end
 
   use_native_modules!
 end
 
-target 'nono-tvOS' do
-  # Pods for nono-tvOS
+# target 'nono-tvOS' do
+#   # Pods for nono-tvOS
 
-  target 'nono-tvOSTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
+#   target 'nono-tvOSTests' do
+#     inherit! :search_paths
+#     # Pods for testing
+#   end
 
-end
+# end

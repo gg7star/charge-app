@@ -5,7 +5,6 @@ export default class SearchResults extends React.Component {
   render() {
     const { searchedPlaces } = this.props.map
     const { _t } = this.props.appActions
-    console.log('===== searchedPlaces: ', searchedPlaces)
 
     return (
       <ScrollView style={{height: searchedPlaces.length>0?620:400, marginTop: 20}}>
