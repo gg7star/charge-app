@@ -425,7 +425,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.chargeme.nono;
 				PRODUCT_NAME = Nono.temp_caseinsensitive_rename;
-				PROVISIONING_PROFILE_SPECIFIER = nono_chargeme_apple_provision;
+				PROVISIONING_PROFILE_SPECIFIER = nono_chargeme_device_provision;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -492,7 +492,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.chargeme.nono;
 				PRODUCT_NAME = Nono.temp_caseinsensitive_rename;
-				PROVISIONING_PROFILE_SPECIFIER = nono_chargeme_apple_provision;
+				PROVISIONING_PROFILE_SPECIFIER = nono_chargeme_device_provision;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
