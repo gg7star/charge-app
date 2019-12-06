@@ -192,7 +192,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Nono" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "nono" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -368,11 +368,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = nono/Nono.temp_caseinsensitive_rename.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: LA2 PLUS (ZSVQXPQ3L5)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = ZSVQXPQ3L5;
+				DEVELOPMENT_TEAM = RKJP96853R;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(PODS_ROOT)/Headers/Private/React-Core\"",
@@ -423,9 +423,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.laplus.nono;
+				PRODUCT_BUNDLE_IDENTIFIER = com.chargeme.nono;
 				PRODUCT_NAME = Nono.temp_caseinsensitive_rename;
-				PROVISIONING_PROFILE_SPECIFIER = nono_device_provision1;
+				PROVISIONING_PROFILE_SPECIFIER = nono_chargeme_device_provision;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -436,10 +436,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = nono/Nono.temp_caseinsensitive_rename.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: LA2 PLUS (ZSVQXPQ3L5)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = ZSVQXPQ3L5;
+				DEVELOPMENT_TEAM = RKJP96853R;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(PODS_ROOT)/Headers/Private/React-Core\"",
@@ -490,9 +490,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.laplus.nono;
+				PRODUCT_BUNDLE_IDENTIFIER = com.chargeme.nono;
 				PRODUCT_NAME = Nono.temp_caseinsensitive_rename;
-				PROVISIONING_PROFILE_SPECIFIER = nono_device_provision1;
+				PROVISIONING_PROFILE_SPECIFIER = nono_chargeme_device_provision;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -608,7 +608,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Nono" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "nono" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
