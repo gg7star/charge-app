@@ -1,7 +1,5 @@
 import firebase from '@react-native-firebase/app';
 import '@react-native-firebase/database';
-// import auth from '@react-native-firebase/auth';
-// import database from '@react-native-firebase/database';
 import firebaseConfig from '~/common/config/firebase';
 
 export async function onlineDatabase() {
