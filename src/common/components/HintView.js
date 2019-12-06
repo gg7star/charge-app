@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, Animated, StyleSheet } from 'react-native';
-import { Button, Spacer } from '~/common/components'
-import { colors } from '~/common/constants'
-import { em, W } from '~/common/constants'
+import { View, Text, Animated } from 'react-native';
+import Button from './Button';
+import Spacer from './Spacer';
+import { colors } from '~/common/constants';
+import { em, W } from '~/common/constants';
 
 export default class HintView extends React.Component {
   state = {
