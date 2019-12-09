@@ -24,14 +24,14 @@ export function* loadPlacesOnMap(action) {
     // const places = yield call(mapFirebaseService.getPlances);
     const places = yield call(getPlances);
     // For test
-    const currentLocation = {
-      name: "My location",
-      coordinate: {
-        latitude: 37.332096988,
-        longitude: -122.0487472123455
-      }
-    };
-    yield put({ type: mapActionTypes.LOAD_PLACES_ON_MAP_SUCCESS, payload: { currentLocation, places } })
+    // const currentLocation = {
+    //   name: "My location",
+    //   coordinate: {
+    //     latitude: 2.253865,
+    //     longitude: 48.883758
+    //   }
+    // };
+    yield put({ type: mapActionTypes.LOAD_PLACES_ON_MAP_SUCCESS, payload: { places } })
   } catch(e) {
     console.log('====== error: ', e);
     yield put({ type: mapActionTypes.LOAD_PLACES_ON_MAP_FAILURE })

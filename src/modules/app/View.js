@@ -7,11 +7,9 @@ import { Root } from 'native-base';
 import RootRoutes from '~/routes';
 import { Toast } from 'native-base'
 import {name as appName} from '../../../app.json';
-// import OneSignal from 'react-native-onesignal';
 // import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 // import messaging from '@react-native-firebase/messaging';
 import {attemptSignInWithPhone} from '~/common/services/rn-firebase/auth';
-
 
 export default class AppView extends Component {
   state = {
@@ -30,7 +28,6 @@ export default class AppView extends Component {
     appActions.setGlobalNotification({message: null, type: ''});
     signupActions.initSignup();
     loginActions.initLogin();
-    // attemptSignInWithPhone('+1 530-322-5413');
   }
 
   // componentWillReceiveProps(nextProps) {

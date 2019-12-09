@@ -6,6 +6,7 @@ import serverUrls from '~/common/constants/api';
 import { loginActionTypes, signupActionTypes } from '~/actions/types';
 import { AppActions, SignupActions } from '~/actions';
 import { attempSignup } from '~/common/services/rn-firebase/signup';
+import { attemptSignInWithPhone } from '~/common/services/rn-firebase/auth';
 import {
   createAccount,
   createFacebookAccount
@@ -22,82 +23,26 @@ export default function* watcher() {
 }
 
 export function* requestVerificationCode(action) {
-  try {
-    const { countryCode, phoneNumber } = action.payload;
-    const fullPhoneNumber = `${countryCode}${phoneNumber}`;
-    const requestPayload = {
-      to_telnumber: `+${fullPhoneNumber}`
-    };
-    // Firstly, check user on database
-    // const email = virtualAccount.getEmail(fullPhoneNumber);
-    // const password = virtualAccount.getPassword(fullPhoneNumber);
-    // const res = yield call(attempSignup, {email, password});
-    // console.log('====== attempSignup: ', res);
-    // if (res.error) {
-    //   yield put(requestConfirmCodeFailed(res));
-    //   yield put(setGlobalNotification({
-    //     message: res.error,
-    //     type: 'danger',
-    //     duration: 6000
-    //   }));
-    //   return
-    // }
-    // Send confirm code request
-    const response = yield call(
-      processRequest,
-      `${serverUrls.apiGatewayServerURL}/mailjet/send_sms`,
-      'POST',
-      requestPayload
-    );
-    let data = {
-      confirmCode: response.data.message.verification_code,
-      ...response.data,
-    };
-    if (data.status == 200) {
-      const mailjetSmsCode = data.message.res.Status.Code;
-      if (mailjetSmsCode >= 1 && mailjetSmsCode <= 3 ) {
-        yield put(requestConfirmCodeSuccess(data));
-        yield put(setGlobalNotification({
-          message: `This app sent a confirm code via SMS. Please check your phone.`, type: 'success', duration: 6000
-        }));
-      } else {
-        const errorDesctription = data.message.res.Status.Description;
-        // yield put(requestConfirmCodeFailed(data));
-        // yield put(setGlobalNotification({
-        //   message: `Failed to send confirm code. ${errorDesctription}`,
-        //   type: 'danger',
-        //   duration: 6000
-        // }));
-        // For test
-        yield put(requestConfirmCodeSuccess(data));
-      }
-    } else {
-      // yield put(requestConfirmCodeFailed(data));
-      // console.log('==== data: ', data);
-      // yield put(setGlobalNotification({
-      //   message: `Failed to send confirm code.`,
-      //   type: 'danger',
-      //   duration: 6000
-      // }));
-      // For test
-      yield put(requestConfirmCodeSuccess(data));
-    }
-  } catch(error) {
-    console.log('===== signup: error: ', error);
-    // yield put(requestConfirmCodeFailed(error.data || 'Failed to send confirm code via SMS.'));
-    // yield put(setGlobalNotification({
-    //   message: error && error.data 
-    //     ? error.data.message.res.ErrorMessage
-    //     : 'Failed to send confirm code via SMS.',
-    //   type: 'danger',
-    //   duration: 6000
-    // }));
-    // For test
-    let data = {
-      confirmCode: error.data.message.verification_code,
-      ...error.data,
-    };
-    yield put(requestConfirmCodeSuccess(data));
+  const { countryCode, phoneNumber } = action.payload;
+  const fullPhoneNumber = `${countryCode}${phoneNumber}`;
+  const res = yield call(attemptSignInWithPhone, `+${fullPhoneNumber}`);
+  console.log('==== res: ', res);
+  if (res.confirmation) {
+    yield put(requestConfirmCodeSuccess({confirmation: res.confirmation}));
+    yield put(setGlobalNotification({
+      message: `This app sent a confirm code via SMS. Please check your phone.`,
+      type: 'success',
+      duration: 6000
+    }));
+  } else {
+    yield put(requestConfirmCodeFailed({
+      error: res.error
+    }));
+    yield put(setGlobalNotification({
+      message: res.error,
+      type: 'danger',
+      duration: 6000
+    }));
   }
 }
 

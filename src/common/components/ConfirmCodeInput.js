@@ -9,8 +9,8 @@ export default class ConfirmCodeInput extends React.Component {
       <View>
         <CodeInput
           ref='confirmCodeInput'
-          size={60}
-          codeLength={4}
+          size={50}
+          codeLength={6}
           autoFocus={false}
           containerStyle={{ flexDirection: 'row', justifyContent: 'space-between' }}
           codeInputStyle={{ borderRadius: 10, backgroundColor: 'rgba(255, 255, 255, 0.15)'}}

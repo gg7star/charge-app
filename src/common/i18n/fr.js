@@ -16,7 +16,7 @@ export default {
   'Cancel': 'Annuler',
   'Continue': 'Continuer',
   'Phone number validation': 'Validation de numéro de téléphone',
-  'Enter the 4-digit code sent to': 'Saisissez le code à 4 chiffres envoyé au',
+  'Enter the 6-digit code sent to': 'Saisissez le code à 6 chiffres envoyé au',
   'Return the code': 'Renvoyer le code',
   'Hello, what is your name?': 'Bonjour, quel est votre prénom?',
   'First Name': 'Prénom',

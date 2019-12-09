@@ -7,31 +7,30 @@ export function initSignup() {
   }
 }
 
-export function setPhoneNumber(countryCode, phoneNumber) {
+export function setPhoneNumber({countryCode, phoneNumber}) {
   return {
     type: types.SET_PHONE_NUMBER,
-    payload: { countryCode, phoneNumber }
+    payload: { countryCode, phoneNumber, error: null }
   }
 }
 
-export function requestConfirmCodeSuccess(data) {
+
+export function requestConfirmCodeSuccess({confirmation}) {
   console.log('==== go to signup_set_confirm_code')
   Actions['signup_set_confirm_code']()
   return {
     type: types.REQUEST_CONFIRM_CODE_SUCCESS,
     payload: {
-      confirmCode: data.confirmCode,
-      data
+      confirmation
     }
   }
 }
 
-export function requestConfirmCodeFailed(data) {
+export function requestConfirmCodeFailed({error}) {
   return {
     type: types.REQUEST_CONFIRM_CODE_FAILED,
     payload: {
-      confirmCode: data.message ? data.message.verification_code : '',
-      data
+      error
     }
   }
 }

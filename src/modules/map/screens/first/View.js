@@ -17,6 +17,7 @@ import Menu from '~/modules/profile/modals/menu/ViewContainer'
 import { Actions } from 'react-native-router-flux'
 import { Spacer } from '~/common/components'
 import stripe from 'tipsi-stripe'
+import Geolocation from '@react-native-community/geolocation';
 
 stripe.setOptions({
   publishableKey: 'pk_test_ePNxp5U4eZc1CKEg486RGh6g00drRqawLY',
@@ -29,8 +30,27 @@ export default class ScreenView extends React.Component {
   }
 
   componentDidMount() {
-    this.props.mapActions.loadPlacesOnMap()
+    
     const { initialModal } = this.props
+    // Get current location
+    Geolocation.getCurrentPosition(
+      (position) => {
+        console.log("==== position: ", position);
+        this.props.mapActions.changedCurrentLocation({
+          name: "My location",
+          coordinate: {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            error: null,
+          }
+        });
+      },
+      (error) => {
+        console.log('===== location error: ', error.message);
+      },
+      { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 }
+    );
+    this.props.mapActions.loadPlacesOnMap()
     if (initialModal) {
       this.setState({
         ...this.state,

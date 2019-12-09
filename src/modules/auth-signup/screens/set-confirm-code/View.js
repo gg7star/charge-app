@@ -25,7 +25,7 @@ export default class ScreenView extends React.Component {
         </Text>
         <Spacer size={10} />
         <Text style={moduleStyles.text.desc}>
-          {_t('Enter the 4-digit code sent to')}
+          {_t('Enter the 6-digit code sent to')}
         </Text>
         <Spacer size={30} />
         <ConfirmCodeInput onFulfill={this.setConfirmCode} />
@@ -40,35 +40,31 @@ export default class ScreenView extends React.Component {
   } 
 
   onGoBack = () => {
-    Actions['signup_first']()
+    Actions['signup_first']();
   }
 
   setConfirmCode = (confirmCode) => {
     this.setState({...this.state,
       confirmCode
-    })
+    });
   }
 
   onGoNext = () => {
-    const { _t } = this.props.appActions
-    if (this.isInvalid()) {
+    const { _t } = this.props.appActions;
+    const { confirmation } = this.props.signup;
+    const { confirmCode } = this.state ;
+    if (confirmCode == '') return;
+    try {
+      confirmation.confirm(confirmCode).then(() => {
+        // Successful login - onAuthStateChanged is triggered
+        Actions['signup_set_name']();
+      }); // User entered code
+    } catch (e) {
+      console.error('===== failed to confirm code: ', e); // Invalid code
       Toast.show({
         type: 'danger',
         text: _t('Input valid correct confirm code.')
-      })
-      return 
+      });
     }
-
-    // this.props.signupActions.setConfirmCode(this.state.confirmCode)
-    Actions['signup_set_name']()
   }
-
-  isInvalid = () => {
-    const { confirmCode } = this.state
-    if (confirmCode == '') return true
-    if (confirmCode != this.props.signup.confirmCode) return true
-
-    return false
-  }
-
 }

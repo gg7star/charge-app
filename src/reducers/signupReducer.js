@@ -7,6 +7,7 @@ const initialState = {
   countryCode: '',
   phoneNumber: '',
   confirmCode: '',
+  confirmation: null,
   name: '',
   email: '',
   birthday: '',
@@ -25,21 +26,22 @@ export default function reducer(state = initialState, action) {
         ...state,
         countryCode: action.payload.countryCode,
         phoneNumber: action.payload.phoneNumber,
-        isFetching: true
+        isFetching: true,
+        statusMessage: null
       }
     case signupActionTypes.REQUEST_CONFIRM_CODE_SUCCESS:
       return {
         ...state,
-        confirmCode: action.payload.confirmCode,
-        data: action.payload.data,
+        confirmation: action.payload.confirmation,
         isFetching: false
       }
     case signupActionTypes.REQUEST_CONFIRM_CODE_FAILED:
       return {
         ...state,
-        confirmCode: action.payload.confirmCode,
-        data: action.payload.data,
-        isFetching: false
+        confirmation: null,
+        isFetching: false,
+        statusMessage: action.payload.error,
+        statusMessageType: 'danger',
       }
     case signupActionTypes.SET_CONFIRM_CODE: 
       return {

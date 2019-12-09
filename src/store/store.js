@@ -46,7 +46,7 @@ export default function configureStore(onComplete) {
   } else {
     const composeEnhancers = compose;
     store = createStore(
-      storage.reducer(reducer), 
+      storage.reducer(reducers), 
       composeEnhancers(
         applyMiddleware(
           ...middleware

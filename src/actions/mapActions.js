@@ -1,4 +1,12 @@
-import * as types from './types/mapActionTypes'
+import { mapActionTypes } from './types';
+
+const types = mapActionTypes;
+export function changedCurrentLocation(position) {
+  return {
+    type: types.CHANGED_CURRENT_LOCATION,
+    payload: {currentLocation: position}
+  }
+}
 
 export function loadPlacesOnMap() {
   return {

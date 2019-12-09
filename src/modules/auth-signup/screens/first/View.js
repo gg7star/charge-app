@@ -98,10 +98,10 @@ export default class ScreenView extends React.Component {
   }
 
   goNext = () => {
-    if (this.isInvalid()) return
+    if (this.isInvalid()) return;
 
-    const { countryCode, phoneNumber } = this.state
-    this.props.signupActions.setPhoneNumber(countryCode, phoneNumber)
+    const { countryCode, phoneNumber } = this.state;
+    this.props.signupActions.setPhoneNumber({countryCode, phoneNumber});
   }
 
   isInvalid = () => {

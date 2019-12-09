@@ -12,6 +12,7 @@
   "dependencies": {
     "@ptomasroos/react-native-multi-slider": "^1.0.0",
     "@react-native-community/async-storage": "^1.6.3",
+    "@react-native-community/geolocation": "^2.0.2",
     "@react-native-firebase/app": "^6.1.0",
     "@react-native-firebase/auth": "^6.1.0",
     "@react-native-firebase/database": "^6.1.0",
@@ -50,7 +51,6 @@
     "react-native-modal": "^11.5.3",
     "react-native-modal-dropdown": "^0.7.0",
     "react-native-nav": "^2.0.2",
-    "react-native-onesignal": "^3.5.0",
     "react-native-paper": "^3.2.1",
     "react-native-permissions": "^2.0.4",
     "react-native-phone-input": "^0.2.4",

@@ -130,7 +130,6 @@ PODS:
     - nanopb/encode (= 0.3.9011)
   - nanopb/decode (0.3.9011)
   - nanopb/encode (0.3.9011)
-  - OneSignal (2.11.2)
   - Protobuf (3.11.1)
   - RCTRequired (0.61.5)
   - RCTTypeSafety (0.61.5):
@@ -319,11 +318,10 @@ PODS:
   - react-native-fbsdk/Share (1.1.1):
     - FBSDKShareKit (= 5.8)
     - React
+  - react-native-geolocation (2.0.2):
+    - React
   - react-native-maps (0.26.1):
     - React
-  - react-native-onesignal (3.5.0):
-    - OneSignal (= 2.11.2)
-    - React (< 1.0.0, >= 0.13.0)
   - react-native-splash-screen (3.2.0):
     - React
   - React-RCTActionSheet (0.61.5):
@@ -427,8 +425,8 @@ DEPENDENCIES:
   - react-native-camera (from `../node_modules/react-native-camera`)
   - react-native-date-picker (from `../node_modules/react-native-date-picker`)
   - react-native-fbsdk (from `../node_modules/react-native-fbsdk`)
+  - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-maps (from `../node_modules/react-native-maps`)
-  - react-native-onesignal (from `../node_modules/react-native-onesignal`)
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
@@ -458,7 +456,7 @@ DEPENDENCIES:
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  trunk:
     - boost-for-react-native
     - FBSDKCoreKit
     - FBSDKLoginKit
@@ -481,7 +479,6 @@ SPEC REPOS:
     - GTMSessionFetcher
     - leveldb-library
     - nanopb
-    - OneSignal
     - Protobuf
     - Stripe
 
@@ -522,10 +519,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-date-picker"
   react-native-fbsdk:
     :path: "../node_modules/react-native-fbsdk"
+  react-native-geolocation:
+    :path: "../node_modules/@react-native-community/geolocation"
   react-native-maps:
     :path: "../node_modules/react-native-maps"
-  react-native-onesignal:
-    :path: "../node_modules/react-native-onesignal"
   react-native-splash-screen:
     :path: "../node_modules/react-native-splash-screen"
   React-RCTActionSheet:
@@ -581,10 +578,10 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
-  BVLinearGradient: b0b70acf63ee888829b7c2ebbf6b50e227396e55
+  BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
-  FBLazyVector: cb37b5590a27600f0a889222d7c1f019625f4168
-  FBReactNativeSpec: 6fda0eee5b059ee8ea0f845f4060620ff96b5b55
+  FBLazyVector: aaeaf388755e4f29cd74acbc9e3b8da6d807c37f
+  FBReactNativeSpec: 118d0d177724c2d67f08a59136eb29ef5943ec75
   FBSDKCoreKit: e7dcac0aabcfb09d0166998edd95fe3b05a0ce5d
   FBSDKLoginKit: 1b0cf04df0370b37404213157b060d6666ede814
   FBSDKShareKit: abc29e1bb4f9f59f679adf1ae191006d68455f96
@@ -608,50 +605,49 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 43b8b64263023d4f32caa0b40f4c8bfa3c5f36d8
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
-  OneSignal: 4e3e68bb6c29975286a2fa910cb49132bc6e20bb
   Protobuf: 20d79da7f20b5928b80043b05080b816e802659e
-  RCTRequired: 81db8debffc2eb932841fa02dcf5a2e911af74c1
-  RCTTypeSafety: 39a7d8643abe2460aef0adeb9acbe9401b579fff
-  React: 89f2294058332cf7c4feee644e17d5024da1f531
-  React-Core: c55956aa434fae94816b665f99d51d50f48d5993
-  React-CoreModules: c70b9db4f48e31474bb022716fff41983b335ce2
-  React-cxxreact: 1dbe583c02d15d269f13451d203e645bb233fc96
-  React-jsi: f9126dd5818fbd8fbf869be9bbc1c0543973e1a1
-  React-jsiexecutor: 752f034d0f007d1141a1c52ba9ef3fd9668fbfa7
-  React-jsinspector: 044105eea064aec81adc5e4d777a8f6589e7d094
-  react-native-camera: 9c50d7def800895e7991ccda6203929553ceec9c
-  react-native-date-picker: e6ce9225e56a3aeaddc01847be02c7ed1477de58
-  react-native-fbsdk: f07643d5d8aaa0ca783e55b7518876963e42c46e
-  react-native-maps: bb480348a3fe1e5a811fed1ba3387b329161c5cc
-  react-native-onesignal: f5360d33c345fa562157396c7e3c5288dd70c64d
-  react-native-splash-screen: a49be22f0f6648b8416f3bd28258645eeaa5b42b
-  React-RCTActionSheet: 49433f6e3659ba5d3ee650e44b9c18743ef9a7fc
-  React-RCTAnimation: 12f86a4e3542032329366b03bca2cc254a7c64a9
-  React-RCTBlob: ba90a4144ad478a022b79a4e8a1f150548d39425
-  React-RCTImage: f652d97e49f4b0f26c7df336e723a0d259179967
-  React-RCTLinking: e738422857085a1c40c57505a25920160d365783
-  React-RCTNetwork: d0d635ad07deed0c05a1b1499d1ab4ce5c41ac97
-  React-RCTSettings: ae6f8b64ee5c5e4fc629f5109042e122fd0fd14b
-  React-RCTText: 3f24042210886ee8c02613758013010be04b291e
-  React-RCTVibration: d55e1365be416980217914fe009e9d55dec02e03
-  ReactCommon: eb96b70a2a5bed775e919151fd77699fed52944c
-  ReactNativeUiLib: 5ddfec22dda0da4c8f6383aeef1f64670f39b5f1
-  rn-range-slider: cec55798fa68af30559c6352228295e2d49c831c
-  RNAwesomeCardIO: 3a48cf16f3de5296d424a00e48c7932e5c888340
-  RNCAsyncStorage: e99188b8a89ea0edddc82d8831cd5142f4550fdc
-  RNFBApp: 30e1dc2e1619831cf42f2419ad6a4f3f275b2c75
-  RNFBAuth: de8e6d88e67ec216b3f1a0fd385233ae7f35b70c
-  RNFBDatabase: c8fca7a7f3782819f9c2d4e340088e8ceee1f84c
-  RNFBMessaging: 9479c85e1c6df2b2ad43fc5daa2cb28550fdf872
-  RNGestureHandler: 311e3b1cef021a7c9ef31e97e7dc31970cc6288d
-  RNLocalize: 5ba45baff82072a1954f5882b2a64d784d326b20
-  RNPermissions: 09451e563764b938c2bbc945ca430f758044f0dd
-  RNSVG: 2e097b92aaa6d4e0f354fd7c49cbf3b17f8b3920
-  RNVectorIcons: 66af4d5c8ff4f584c7b7cd9c4b0780920f27fce2
+  RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
+  RCTTypeSafety: 9aa1b91d7f9310fc6eadc3cf95126ffe818af320
+  React: b6a59ef847b2b40bb6e0180a97d0ca716969ac78
+  React-Core: 688b451f7d616cc1134ac95295b593d1b5158a04
+  React-CoreModules: d04f8494c1a328b69ec11db9d1137d667f916dcb
+  React-cxxreact: d0f7bcafa196ae410e5300736b424455e7fb7ba7
+  React-jsi: cb2cd74d7ccf4cffb071a46833613edc79cdf8f7
+  React-jsiexecutor: d5525f9ed5f782fdbacb64b9b01a43a9323d2386
+  React-jsinspector: fa0ecc501688c3c4c34f28834a76302233e29dc0
+  react-native-camera: 576f6dbb490af4285de1f8002a09dd3daa86c112
+  react-native-date-picker: 648606a44e21d15725a61cc9f28e864f40ae8cdd
+  react-native-fbsdk: b94a83971c496a35803f38b921aec6d637ba07b5
+  react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
+  react-native-maps: 6e499eee4eabf422ba8b6f94e993cc768bf35153
+  react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
+  React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
+  React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360
+  React-RCTBlob: d89293cc0236d9cb0933d85e430b0bbe81ad1d72
+  React-RCTImage: 6b8e8df449eb7c814c99a92d6b52de6fe39dea4e
+  React-RCTLinking: 121bb231c7503cf9094f4d8461b96a130fabf4a5
+  React-RCTNetwork: fb353640aafcee84ca8b78957297bd395f065c9a
+  React-RCTSettings: 8db258ea2a5efee381fcf7a6d5044e2f8b68b640
+  React-RCTText: 9ccc88273e9a3aacff5094d2175a605efa854dbe
+  React-RCTVibration: a49a1f42bf8f5acf1c3e297097517c6b3af377ad
+  ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
+  ReactNativeUiLib: 52606c273a072841c6fc5cfc9bd617fc87e5ca15
+  rn-range-slider: 0b4800dcb93cfdc3a79bfe31a34a3132acaeb150
+  RNAwesomeCardIO: caa47eefd8b6ae1986af25df3b86f9d8fbae9bb8
+  RNCAsyncStorage: 3c304d1adfaea02ec732ac218801cb13897aa8c0
+  RNFBApp: edeadb99669dd39f9d7f8f7f68d420fda4d8b7d8
+  RNFBAuth: ed3f9103bada30d38bf7e3a7e1431e69eca0e314
+  RNFBDatabase: ea3ddca0ea9b90c5b06ef1e7929808c78912b6a8
+  RNFBMessaging: 5cbfa023eae7e4f16ce285eb9d3ed17fb85ff5b3
+  RNGestureHandler: 946a7691e41df61e2c4b1884deab41a4cdc3afff
+  RNLocalize: 07eb7a91d10021cdf59d80061ebf3adb8a5b5688
+  RNPermissions: 35959d09546f1cd60c129ee128146a120ea595c3
+  RNSVG: f6177f8d7c095fada7cfee2e4bb7388ba426064c
+  RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   Stripe: db29ad197c74aca6fb981e4e8355cf7ebd0fca5a
-  tipsi-stripe: 237cab79699eb7d354bfc09238b3284e3b8dad84
-  Yoga: 6af72bedeaea291a3a3717772d6d41836f23a1b9
+  tipsi-stripe: 61c247493a58d7e8e0bf6ee6b014271f473d2b11
+  Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
 PODFILE CHECKSUM: 8da16da0052f46ab65da5c808156a45d31a36693
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.8.4

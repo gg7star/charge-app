@@ -26,14 +26,17 @@ export async function attemptSignInWithEmail({email, password}) {
   }
 }
 
-// For example: '+1 530-322-5413'
-export async function attemptSignInWithPhone(phoneNumber, callback) {
+export async function attemptSignInWithPhone(phoneNumber) {
+  var confirmation = null;
+  var error = null;
   try {
-    const result = await firebase.auth().signInWithPhoneNumber(phoneNumber);
-    console.log('===== result: ', result);
+    confirmation = await firebase.auth().signInWithPhoneNumber(phoneNumber);
+    console.log('===== confirmation: ', confirmation);
   } catch (error) {
     console.log('===== error: ', error);
+    error = error.message;
   } finally {
     console.log('===== finally')
   }
+  return {confirmation, error};
 }

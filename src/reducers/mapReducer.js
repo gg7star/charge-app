@@ -11,11 +11,16 @@ const initialState = {
 }
 
 export default function reducer(state = initialState, action) {
-  switch(action.type) {    
+  switch(action.type) {
+    case mapActionTypes.CHANGED_CURRENT_LOCATION:
+      return {
+        ...state,
+        currentLocation: action.payload.currentLocation
+      }
     case mapActionTypes.LOAD_PLACES_ON_MAP_SUCCESS:
       return {
         ...state,
-        currentLocation: action.payload.currentLocation,
+        // currentLocation: action.payload.currentLocation,
         places: action.payload.places
       }
     case mapActionTypes.SEARCH_PLACES_REQUEST:
