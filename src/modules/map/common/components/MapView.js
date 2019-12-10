@@ -127,7 +127,7 @@ export default class CustomMapView extends React.Component {
                 <Image
                   source={
                     place.isOpened 
-                    ? ((key === selectedPlace.name) 
+                    ? ((selectedPlace && (key === selectedPlace.name))
                         ? PIN_SELECT_IMAGE
                         : PIN_OPEN_IMAGE
                       )
