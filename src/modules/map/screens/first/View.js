@@ -17,7 +17,13 @@ import Menu from '~/modules/profile/modals/menu/ViewContainer'
 import { Actions } from 'react-native-router-flux'
 import { Spacer } from '~/common/components'
 import stripe from 'tipsi-stripe'
-import Geolocation from '@react-native-community/geolocation';
+import Geolocation from 'react-native-geolocation-service';
+
+const geolocationOption = {
+  enableHighAccuracy: true,
+  timeout: 200000,
+  maximumAge: 1000
+};
 
 stripe.setOptions({
   publishableKey: 'pk_test_ePNxp5U4eZc1CKEg486RGh6g00drRqawLY',
@@ -32,24 +38,20 @@ export default class ScreenView extends React.Component {
   componentDidMount() {
     
     const { initialModal } = this.props
+    const _this = this;
     // Get current location
     Geolocation.getCurrentPosition(
-      (position) => {
-        console.log("==== position: ", position);
-        this.props.mapActions.changedCurrentLocation({
-          name: "My location",
-          coordinate: {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            error: null,
-          }
-        });
-      },
-      (error) => {
-        console.log('===== location error: ', error.message);
-      },
-      { enableHighAccuracy: false, timeout: 200000, maximumAge: 1000 }
+      (position) => { _this.handleGetCurrentLocation(position) },
+      (error) => { _this.handleCurrentLocationError(error) },
+      geolocationOption
     );
+    
+    Geolocation.watchPosition(
+      (position) => { _this.handleGetCurrentLocation(position) },
+      (error) => { _this.handleCurrentLocationError(error) },
+      geolocationOption
+    );
+
     this.props.mapActions.loadPlacesOnMap()
     if (initialModal) {
       this.setState({
@@ -57,6 +59,43 @@ export default class ScreenView extends React.Component {
         activedModal: initialModal
       })
     }
+  }
+
+  componentWillUnmount() {
+    Geolocation.stopObserving();
+  }
+
+  handleGetCurrentLocation = (position) => {
+    console.log("==== position: ", position);
+    const { mapActions } = this.props;
+    const newLocation = {
+      name: "My location",
+      coordinate: {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+        error: null,
+      }
+    };
+    mapActions.changedCurrentLocation(newLocation);
+    mapActions.searchPlaces('', newLocation, null);
+  }
+
+  handleCurrentLocationError = (error) => {
+    console.log('===== location error: ', error.message);
+    // Set previous location.
+    const prevCordinate = this.props.map.currentLocation.coordinate;
+    this.props.mapActions.changedCurrentLocation({
+      name: "My location",
+      coordinate: {
+        latitude: prevCordinate.latitude,
+        longitude: prevCordinate.longitude,
+        error: error.message,
+      }
+    });
+  }
+
+  handleDetectDirection = ({distance, duration}) => {
+    this.props.mapActions.setDirection({distance, duration});
   }
 
   render() {
@@ -77,13 +116,14 @@ export default class ScreenView extends React.Component {
           places={places}
           selectedPlace={place}
           onSelectMarker={this.openNearPlacesDialog}
+          onDetectDirection={this.handleDetectDirection}
         >
           <MapButton
             name='profile'
             onPress={() => this.setState({...this.state, profileOpened: true})}
           />
           <MapButton name='gift' onPress={this.goGift}/>
-          <MapButton name='search' onPress={this.openSearchDialog}/>
+          {/* <MapButton name='search' onPress={this.openSearchDialog}/> */}
           <MapButton name='refresh' />
           <MapButton name='position' />
         </MapView>
@@ -105,19 +145,23 @@ export default class ScreenView extends React.Component {
           </React.Fragment>
         }
         {activedModal=='reserve' && 
-          <ReserveDialog onClose={this.closeReserveDialog} 
+          <ReserveDialog
+            onClose={this.closeReserveDialog} 
             onSelectPlace={this.selectPlace}
           />
         }
         {activedModal=='near-places' && 
-          <NearPlacesDialog onClose={this.closeNearPlacesDialog} 
-            onSelectPlace={this.selectPlace}
-            onFinish={this.openFinishDialog} onReserve={this.openReserveDialog}
+          <NearPlacesDialog
+            onClose={this.closeNearPlacesDialog} 
+            onSelectPlace={this.selectFilteredPlace}
+            onFinish={this.openFinishDialog}
+            onReserve={this.openReserveDialog}
             onOpenFilter={this.openFilterDialog}
           />
         }
         {activedModal=='filter' && 
-          <FilterDialog onClose={this.closeNearPlacesDialog} 
+          <FilterDialog
+            onClose={this.closeNearPlacesDialog} 
             onFilter={this.filterSearch}
           />
         }
@@ -150,6 +194,13 @@ export default class ScreenView extends React.Component {
     this.setState({ ...this.state, activedModal: 'detail' })
   }
 
+  selectFilteredPlace = (index) => {
+    const { map } = this.props;
+    const {searchedPlaces} = map;
+    this.props.mapActions.selectPlace(searchedPlaces[index].name);
+    this.setState({ ...this.state, activedModal: 'detail' })
+  }
+
   closeDetailDialog = () => {
     this.setState({...this.state, activedModal: 'unlock'})
   }
@@ -171,6 +222,7 @@ export default class ScreenView extends React.Component {
   }
 
   openNearPlacesDialog = (index) => {
+    this.props.mapActions.selectPlace(index)
     this.setState({...this.state, activedModal: 'near-places'})
   }
 

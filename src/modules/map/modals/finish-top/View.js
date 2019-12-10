@@ -6,7 +6,7 @@ import { colors, W, H, em } from '~/common/constants'
 export default class Dialog extends React.Component {
   render() {
     const { _t } = this.props.appActions
-    const { place } = this.props.map
+    const { place, direction } = this.props.map
 
     return (
       <View style={{
@@ -23,7 +23,7 @@ export default class Dialog extends React.Component {
             />
             <View style={{ flexDirection: 'row' }}>
               <Text style={{ fontSize: 18, color: '#fff', fontWeight: 'bold' }}>
-                156
+                {direction.distance}
               </Text>
               <Text style={{ fontSize: 18, color: '#fff', fontWeight: 'bold', opacity: 0.5 }}>
                 m

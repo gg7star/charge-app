@@ -17,6 +17,9 @@ export async function attemptSignInWithEmail({email, password}) {
       case 'auth/wrong-password':
         errorMessage = 'No user found or wrong password.';
         break;
+      case 'auth/internal-error':
+        errorMessage = 'An internal error has occurred, please try again.'
+        break;
       default:
         console.error(e);
         break;
@@ -32,9 +35,20 @@ export async function attemptSignInWithPhone(phoneNumber) {
   try {
     confirmation = await firebase.auth().signInWithPhoneNumber(phoneNumber);
     console.log('===== confirmation: ', confirmation);
-  } catch (error) {
-    console.log('===== error: ', error);
-    error = error.message;
+  } catch (e) {
+    console.log('===== error: ', e);
+    error = 'Failed to signin with phone number.';
+    switch (e.code) {
+      case 'auth/invalid-phone-number':
+          error = 'Please enter a valid phone number.';
+        break;
+      case 'auth/too-many-requests':
+          error = 'We have blocked all requests from this device due to unusual activity. Try again later.';
+        break;
+      default:
+        console.error(e);
+        break;
+    }
   } finally {
     console.log('===== finally')
   }

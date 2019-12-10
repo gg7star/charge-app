@@ -7,17 +7,17 @@ import { colors, W, H, em } from '~/common/constants'
 export default class Dialog extends React.Component {
   render() {
     const { _t } = this.props.appActions
-    const { place } = this.props.map
+    const { place, direction } = this.props.map
 
     return (
       <Dialog2Wrapper>
         <View style={{ flexDirection: 'row' }}>
           <View style={{width: 250*em}}>
             <Text style={{ fontWeight: 'bold', fontSize: 22, color: colors.primary }}>
-              {'2 min'}
+              {`${direction.duration} min`}
             </Text>
             <Text style={{ fontSize: 15*em, color: '#7e888d'}}>
-              {'2mn.200m'}
+              {`${direction.duration}mn - ${direction.distance}m`}
             </Text>
           </View>
           <View style={{ width: 70*em }}>

@@ -1,10 +1,12 @@
 import { mapActionTypes } from '~/actions/types';
+import { filterPlaces } from '~/common/utils/filterPlaces';
 
 const initialState = {
   places: {},
   currentLocation: null,
   searchedPlaces: [],
   place: null,
+  direction: {},
   searchLimit: '1km',
   stations: [],
   scannedQrCode: ''
@@ -21,22 +23,21 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         // currentLocation: action.payload.currentLocation,
-        places: action.payload.places
+        places: action.payload.places,
+        searchedPlaces: filterPlaces(
+          action.payload.places,
+          '',
+          action.payload.currentLocation ? action.payload.currentLocation : null
+        )
       }
     case mapActionTypes.SEARCH_PLACES_REQUEST:
-      const searchVal = action.payload.searchVal;
-      var searchedPlaces = []; 
-      Object.keys(state.places).map((key, index) => {
-        const place = state.places[key];
-        if (place.name.toLowerCase().search(searchVal.toLowerCase()) > -1 || 
-          key.toLowerCase().search(searchVal.toLowerCase()) > -1
-        ) {
-          searchedPlaces.push(place);
-        }
-      });
       return {
         ...state,
-        searchedPlaces
+        searchedPlaces: filterPlaces(
+          state.places,
+          action.payload.searchVal,
+          action.payload.currentLocation ? action.payload.currentLocation : null
+        )
       }
     case mapActionTypes.SEARCH_PLACES_SUCCESS:
       return {
@@ -46,7 +47,12 @@ export default function reducer(state = initialState, action) {
     case mapActionTypes.SELECT_PLACE:
       return {
         ...state,
-        place: state.searchedPlaces[action.payload.index]
+        place: state.places[action.payload.index]
+      }
+    case mapActionTypes.SET_DIRECTION:
+      return {
+        ...state,
+        direction: action.payload.direction
       }
     case mapActionTypes.GET_ALL_STATIONS:
       return {

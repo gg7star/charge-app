@@ -18,7 +18,7 @@ export default class MapButton extends React.Component {
         return (
           <Button style={[ styles.button, { top: 50, right: 20 } ]} 
             onPress={onPress}
-            image={require('~/common/assets/images/png/gift.png')}
+            image={require('~/common/assets/images/png/free-credits.png')}
           />
         )
       case 'search':

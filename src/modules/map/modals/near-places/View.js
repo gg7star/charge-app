@@ -6,29 +6,48 @@ import { Spacer } from '~/common/components'
 import { colors, W, H } from '~/common/constants'
 import ActionBar from '../detail/components/ActionBarContainer'
 import PlacesList from '../reserve/components/PlacesListContainer'
+import { Button } from '~/common/components'
 
 export default class Dialog extends React.Component {
   render() {
     const { _t } = this.props.appActions
-    const { places, searchLimit, place, stationSnList } = this.props.map
+    const { places, searchLimit, place, direction, stationSnList } = this.props.map
     const price = 1
 
     return (
       <FilterDialog2Wrapper 
-        onClose={this.props.onClose} onClear={this.props.onClear} onOpenFilter={this.props.onOpenFilter}
-        _t={_t}>
+        onClose={this.props.onClose}
+        onClear={this.props.onClear}
+        onOpenFilter={this.props.onOpenFilter}
+        _t={_t}
+      >
         <Text style={{ color: '#bfbfc4', fontSize: 13 }}>
-          {`${_t('Radius of')} ${searchLimit}`}
         </Text>
         <Spacer size={10} />
         <Text style={{ color: '#36384a', fontSize: 22, fontWeight: 'bold' }}>
-          {`${stationSnList.length} ${_t('stations')}`}
         </Text>
         <Spacer size={10} />
-        <PlacesList onSelectPlace={this.props.onSelectPlace} />
+        <PlacesList onSelectPlace={this.props.onSelectPlace}/>
         <Spacer size={20} />
         {place && 
-        <ActionBar data={place} onFinish={this.props.onFinish} onReserve={this.props.onReserve}/>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between'
+            }}
+          >
+            <Button
+              icon={require('~/common/assets/images/png/go.png')} iconColor='#fff'
+              textColor='#fff'
+              bgGradientStart='#ff52a8' bgGradientEnd='#ffdf00'
+              caption={
+                direction.duration ? 
+                `Go ${direction.duration} mn - ${direction.distance} m` 
+                : ''
+              }
+              onPress={() => this.props.onFinish()}
+            />
+          </View>
         }
       </FilterDialog2Wrapper>
     )

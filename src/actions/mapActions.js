@@ -14,10 +14,10 @@ export function loadPlacesOnMap() {
   }
 }
 
-export function searchPlaces(searchVal) {
+export function searchPlaces(searchVal, currentLocation, radius) {
   return {
     type: types.SEARCH_PLACES_REQUEST,
-    payload: { searchVal }
+    payload: { searchVal, currentLocation, radius }
   }
 }
 
@@ -25,6 +25,13 @@ export function selectPlace(index) {
   return {
     type: types.SELECT_PLACE,
     payload: { index }
+  }
+}
+
+export function setDirection({distance, duration}) {
+  return {
+    type: types.SET_DIRECTION,
+    payload: {direction: {distance, duration}}
   }
 }
 
