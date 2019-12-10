@@ -4,7 +4,7 @@ import { em } from '~/common/constants'
 
 export default class MapButton extends React.Component {
   render() {
-    const { name, onPress } = this.props
+    const { name, onPress, onClickCurrentPosition, onClickRotate } = this.props
 
     switch(name) {
       case 'profile':
@@ -18,7 +18,14 @@ export default class MapButton extends React.Component {
         return (
           <Button style={[ styles.button, { top: 50, right: 20 } ]} 
             onPress={onPress}
-            image={require('~/common/assets/images/png/free-credits.png')}
+            image={require('~/common/assets/images/png/gift.png')}
+          />
+        )
+      case 'tree':
+        return (
+          <Button style={[ styles.button, { top: 50, right: 20 } ]} 
+            onPress={onPress}
+            image={require('~/common/assets/images/png/tree.png')}
           />
         )
       case 'search':
@@ -31,14 +38,14 @@ export default class MapButton extends React.Component {
       case 'refresh':
         return (
           <Button style={[ styles.button, { bottom: 151, right: 20, borderBottomLeftRadius: 0, borderBottomRightRadius: 0, } ]} 
-            onPress={onPress}
+            onPress={onClickRotate}
             image={require('~/common/assets/images/png/refresh.png')}
           />
         )
       case 'position':
         return (
           <Button style={[ styles.button, { bottom: 100, right: 20, borderTopLeftRadius: 0, borderTopRightRadius: 0 } ]} 
-            onPress={onPress}
+            onPress={onClickCurrentPosition}
             image={require('~/common/assets/images/png/position.png')}
           />
         )

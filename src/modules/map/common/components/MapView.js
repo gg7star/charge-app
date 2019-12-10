@@ -10,6 +10,9 @@ const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+const PIN_OPEN_IMAGE = require('~/common/assets/images/png/pin-open.png');
+const PIN_CLOSE_IMAGE = require('~/common/assets/images/png/pin-close.png');
+const PIN_SELECT_IMAGE = require('~/common/assets/images/png/pin-select.png');
 
 export default class CustomMapView extends React.Component {
   state = {
@@ -107,7 +110,7 @@ export default class CustomMapView extends React.Component {
     )
   }
   renderMarkers() {
-    const { places } = this.props
+    const { places, selectedPlace } = this.props
 
     return (
       <React.Fragment>
@@ -121,17 +124,16 @@ export default class CustomMapView extends React.Component {
                 coordinate={place.coordinate}
                 onPress={() => this.props.onSelectMarker(key)}
               >
-                {place.isOpened ?
-                  <Image
-                    source={require('~/common/assets/images/png/pin-open.png')} 
-                    style={{width: 40, height: 40}}
-                  />
-                  :
-                  <Image
-                    source={require('~/common/assets/images/png/pin-close.png')} 
-                    style={{width: 40, height: 40}}
-                  />
-                }            
+                <Image
+                  source={
+                    place.isOpened 
+                    ? ((key === selectedPlace.name) 
+                        ? PIN_SELECT_IMAGE
+                        : PIN_OPEN_IMAGE
+                      )
+                    : PIN_CLOSE_IMAGE} 
+                  style={{width: 40, height: 40}}
+                />            
               </MapView.Marker>
               );
             })

@@ -122,7 +122,7 @@ export default class ScreenView extends React.Component {
             name='profile'
             onPress={() => this.setState({...this.state, profileOpened: true})}
           />
-          <MapButton name='gift' onPress={this.goGift}/>
+          <MapButton name='tree' onPress={this.goGift}/>
           {/* <MapButton name='search' onPress={this.openSearchDialog}/> */}
           <MapButton name='refresh' />
           <MapButton name='position' />
