@@ -7,7 +7,7 @@ export default class ProfileWrapper extends React.Component {
     return (
       <View 
         style={{
-          paddingTop: 60, paddingHorizontal: 10,
+          paddingTop: 40, paddingHorizontal: 10,
           width: W, height: H,
           backgroundColor: 'white',
           position: 'relative'

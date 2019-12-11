@@ -2,51 +2,80 @@ import React from 'react'
 import { View, TouchableOpacity, StyleSheet, Image } from 'react-native'
 import { em } from '~/common/constants'
 
+const PROFILE_IMAGE = require('~/common/assets/images/png/profile.png');
+const GIFT_IMAGE = require('~/common/assets/images/png/gift.png');
+const TREE_IMAGE = require('~/common/assets/images/png/tree.png');
+const SEARCH_IMAGE = require('~/common/assets/images/png/search.png');
+const REFRESH_IMAGE = require('~/common/assets/images/png/refresh.png');
+const POSITION_IMAGE = require('~/common/assets/images/png/position.png');
+
 export default class MapButton extends React.Component {
   render() {
-    const { name, onPress, onClickCurrentPosition, onClickRotate } = this.props
+    const {name, onPress} = this.props
 
     switch(name) {
       case 'profile':
         return (
-          <Button style={[ styles.button, { top: 50, left: 20 } ]} 
+          <Button
+            style={[styles.button, {top: 50, left: 20}]} 
             onPress={onPress}
-            image={require('~/common/assets/images/png/profile.png')}
+            image={PROFILE_IMAGE}
           />
         )
       case 'gift':
         return (
-          <Button style={[ styles.button, { top: 50, right: 20 } ]} 
+          <Button
+            style={[styles.button, {top: 50, right: 20}]} 
             onPress={onPress}
-            image={require('~/common/assets/images/png/gift.png')}
+            image={GIFT_IMAGE}
           />
         )
       case 'tree':
         return (
-          <Button style={[ styles.button, { top: 50, right: 20 } ]} 
+          <Button
+            style={[styles.button, {top: 50, right: 20}]} 
             onPress={onPress}
-            image={require('~/common/assets/images/png/tree.png')}
+            image={TREE_IMAGE}
           />
         )
       case 'search':
         return (
-          <Button style={[ styles.button, { bottom: 220, right: 20 } ]} 
+          <Button
+            style={[styles.button, {bottom: 220, right: 20}]} 
             onPress={onPress}
-            image={require('~/common/assets/images/png/search.png')}
+            image={SEARCH_IMAGE}
           />
         )
       case 'refresh':
         return (
-          <Button style={[ styles.button, { bottom: 151, right: 20, borderBottomLeftRadius: 0, borderBottomRightRadius: 0, } ]} 
-            onPress={onClickRotate}
-            image={require('~/common/assets/images/png/refresh.png')}
+          <Button
+            style={[
+              styles.button,
+              { 
+                bottom: 151,
+                right: 20, 
+                borderBottomLeftRadius: 0,
+                borderBottomRightRadius: 0
+              }
+            ]} 
+            onPress={onPress}
+            image={REFRESH_IMAGE}
           />
         )
       case 'position':
         return (
-          <Button style={[ styles.button, { bottom: 100, right: 20, borderTopLeftRadius: 0, borderTopRightRadius: 0 } ]} 
-            onPress={onClickCurrentPosition}
-            image={require('~/common/assets/images/png/position.png')}
+          <Button
+            style={[
+              styles.button,
+              {
+                bottom: 100,
+                right: 20,
+                borderTopLeftRadius: 0,
+                borderTopRightRadius: 0
+              }
+            ]} 
+            onPress={onPress}
+            image={POSITION_IMAGE}
           />
         )
       default: 
