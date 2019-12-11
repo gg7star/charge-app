@@ -1,12 +1,11 @@
-import React from 'react'
-import { View, Text } from 'react-native'
-import SetWrapper from '../../common/wrappers/SetWrapper'
-import { Actions } from 'react-native-router-flux'
-import ConfirmCodeInput from '../../../../common/components/ConfirmCodeInput'
-import moduleStyles from '../../common/styles'
-import { em } from '~/common/constants'
-import { Spacer, Button } from '~/common/components'
-import { Toast } from 'native-base'
+import React from 'react';
+import { View, Text } from 'react-native';
+import { Toast } from 'native-base';
+import SetWrapper from '~/modules/auth-signup/common/wrappers/SetWrapper';
+import { Actions } from 'react-native-router-flux';
+import moduleStyles from '~/modules/auth-signup/common/styles';
+import { em } from '~/common/constants';
+import { Spacer, Button, ConfirmCodeInput } from '~/common/components';
 
 export default class ScreenView extends React.Component {
   state = {
