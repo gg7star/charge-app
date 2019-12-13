@@ -57,12 +57,17 @@ open other console and run this command
 
 Close the iPhone simulation
 ```shell
-yarn cache clean && \
-  watchman watch-del-all && \
-  rm -rf node_modules && \
-  rm -rf /tmp/metro-bundler-cache-* && \
-  rm -rf /tmp/haste-map-react-native-packager-* && \
-  rm -rf $TMPDIR/react-* && rm -rf /tmp/metro-bundler-cache-* && \
-  rm -rf /tmp/haste-map-react-native-packager-* && \
-  xcrun simctl erase all
-```  
+  yarn cache clean && \
+    watchman watch-del-all && \
+    rm -rf node_modules && \
+    rm -rf /tmp/metro-bundler-cache-* && \
+    rm -rf /tmp/haste-map-react-native-packager-* && \
+    rm -rf $TMPDIR/react-* && rm -rf /tmp/metro-bundler-cache-* && \
+    rm -rf /tmp/haste-map-react-native-packager-* && \
+    xcrun simctl erase all
+```
+
+* Clean build
+```
+  npx react-native-clean-project --remove-iOS-build --remove-iOS-pods
+```

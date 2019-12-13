@@ -43,8 +43,8 @@ export default firebaseConfig = {
     apiKey: 'AIzaSyBwINjstRC_Slxjj8s1HnS7k__4y5J3OQ8',
     databaseURL: 'https://nono-app-a7dde.firebaseio.com',
     storageBucket: 'nono-app-a7dde.appspot.com',
-    messagingSenderId: '3300133003',
-    projectId: '"nono-81379',
+    messagingSenderId: '725402495129',
+    projectId: 'nono-app-a7dde',
     // persistence: true,
   },
   android: {

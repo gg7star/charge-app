@@ -21,15 +21,15 @@ export default class ScreenView extends React.Component {
     }
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    const { auth } = nextProps;
-    console.log('==== auth: ', auth);
-    if(auth.isAuthenticated && auth.authInfo) {
-      console.log('==== go to map');
-    //   Actions.map();
-    //   Actions['map_first']();
-    }
-  }
+  // UNSAFE_componentWillReceiveProps(nextProps) {
+  //   const { auth } = nextProps;
+  //   console.log('==== auth: ', auth);
+  //   if(auth.isAuthenticated && auth.authInfo) {
+  //     console.log('==== go to map');
+  //   //   Actions.map();
+  //   //   Actions['map_first']();
+  //   }
+  // }
 
   render() {
     const { phoneNumber } = this.state

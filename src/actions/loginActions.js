@@ -7,6 +7,20 @@ export function initLogin() {
   }
 }
 
+export function setFcmToken(fcmToken) {
+  return {
+    type: types.SET_FCM_TOKEN,
+    payload: {fcmToken}
+  }
+}
+
+export function receivedFcm(message) {
+  return {
+    type: types.RECEIVED_FCM,
+    payload: { message }
+  }
+}
+
 export function tryLogin(countryCode, phoneNumber) {
   return {
     type: types.LOGIN_REQUEST,

@@ -7,6 +7,7 @@ import {
   Text,
   Image,
   AppState,
+  Alert
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { RNCamera } from 'react-native-camera';
@@ -260,11 +261,12 @@ export default class QRScannerView extends Component {
   static defaultProps = {
     torchOn: false,
     scanInterval: 2000,
-    userFront: false,
+    userFront: false
   };
   
   state = {
     qrCode: '',
+    scanEnabled: true
   };
 
   constructor(props){
@@ -292,9 +294,34 @@ export default class QRScannerView extends Component {
   onScanResult = (e) => {
     _this = this;
     console.log('==== Type: ' + e.type + '\nData: ' + e.data);
-    this.setState({qrCode: e ? `${e.type}: ${e.data}` : ''}, () => {
-      if (RNCamera.Constants.BarCodeType.qr === e.type) _this.props.onScanResult(e);
-    })
+    
+    if (
+      this.state.scanEnabled &&
+      RNCamera.Constants.BarCodeType.qr === e.type
+    ) {
+      const qrCode = e ? `${e.type}: ${e.data}` : '';
+      this.handleAppStateChange('stop');
+      this.setState({scanEnabled: false, qrCode}, () => {
+        Alert.alert(
+          'Scaned QR Code',
+          `${qrCode}. Are you sure to pay to this device?`,
+          [
+            {
+              text: 'Cancel',
+              onPress: () => {
+                _this.handleAppStateChange('active');
+                _this.setState({scanEnabled: true});
+              },
+              style: 'cancel',
+            },
+            {text: 'OK', onPress: () => {
+              _this.props.onScanResult(qrCode);
+            }},
+          ],
+          {cancelable: false},
+        );  
+      })
+    }
   }
 
   onPausePreview = () => {

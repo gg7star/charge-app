@@ -16,15 +16,18 @@ const HintWrapper = ({ children, onGoBack, onClose }) => (
 )
 
 const Header = ({ onGoBack, onClose }) => (
-  <View style={{
-    marginTop: 30*em, marginBottom: 30*em,
-    flexDirection: 'row', justifyContent: 'space-between'
-  }}>
+  <View
+    style={{
+      marginTop: 30*em, marginBottom: 30*em,
+      flexDirection: 'row', justifyContent: 'space-between'
+    }}
+  >
     <TouchableOpacity
       style={{width: 50*em, height: 50*em, alignItems: 'flex-start', justifyContent: 'center'}}
       onPress={onGoBack}
     >
-      <Image source={require('~/common/assets/images/png/arrow.png')}
+      <Image
+        source={require('~/common/assets/images/png/arrow.png')}
         style={{width: 13*em, height: 20*em, tintColor: '#35cdfa'}}
       />
     </TouchableOpacity>  

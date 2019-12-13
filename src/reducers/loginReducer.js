@@ -8,7 +8,8 @@ const initialState = {
   isFetching: false,
   statusMessage: '',
   isFirst: false,
-  isFacebook: false
+  isFacebook: false,
+  fcm: {token: null}
 }
 
 export default function reducer(state = initialState, action) {
@@ -78,6 +79,19 @@ export default function reducer(state = initialState, action) {
         ...state,
         isFetching: true,
         isFacebook: true
+      }
+    case loginActionTypes.SET_FCM_TOKEN:
+      return {
+        ...state,
+        fcm: {token: action.payload.fcmToken}
+      }
+    case loginActionTypes.RECEIVED_FCM:
+      return {
+        ...state,
+        fcm: {
+          ...state.fcm,
+          lastMessage: action.payload.messsage
+        }
       }
     default: 
       return state

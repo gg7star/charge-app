@@ -82,16 +82,18 @@ export default class ScreenView extends React.Component {
 
   handleCurrentLocationError = (error) => {
     console.log('===== location error: ', error.message);
-    // Set previous location.
-    const prevCordinate = this.props.map.currentLocation.coordinate;
-    this.props.mapActions.changedCurrentLocation({
-      name: "My location",
-      coordinate: {
-        latitude: prevCordinate.latitude,
-        longitude: prevCordinate.longitude,
-        error: error.message,
-      }
-    });
+    if (this.props.map.currentLocation) {
+      // Set previous location.
+      const prevCordinate = this.props.map.currentLocation.coordinate;
+      this.props.mapActions.changedCurrentLocation({
+        name: "My location",
+        coordinate: {
+          latitude: prevCordinate.latitude,
+          longitude: prevCordinate.longitude,
+          error: error.message,
+        }
+      });
+    }
   }
 
   handleDetectDirection = ({distance, duration}) => {

@@ -28,6 +28,7 @@ export function* tryLogin(action) {
       if (userInfo) {
         yield put({ type: mapActionTypes.GET_ALL_STATIONS});
         yield put(loginSuccess({authInfo: result.authInfo, accountInfo: userInfo}));
+        // startReceiveNotifications(result.authInfo.user.uid);
         return;
       } else {
         errorMessage = 'account info does not exist';

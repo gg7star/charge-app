@@ -124,26 +124,12 @@ export default class ScreenView extends React.Component {
     Actions['map_first']()
   }
 
-  onReceivedQRCode = (event) => {    
-    this.setState({qrCode: event.data, scanBarAnimateReverse: false}, () => {
+  onReceivedQRCode = (scanedQrCode) => {
+    this.setState({qrCode: scanedQrCode, scanBarAnimateReverse: false}, () => {
       console.log('==== QR code: ', this.state.qrCode);
-      const { qrCode }= this.state
-      Alert.alert(
-        'Scaned QR Code',
-        `${qrCode}. Are you sure to pay to this device?`,
-        [
-          {
-            text: 'Cancel',
-            onPress: () => console.log('Cancel Pressed'),
-            style: 'cancel',
-          },
-          {text: 'OK', onPress: () => {
-            this.props.mapActions.scannedQrCode(this.state.qrCode);
-            Actions['map_first']({initialModal: 'rent'})
-          }},
-        ],
-        {cancelable: false},
-      );
+      const { qrCode } = this.state;
+      this.props.mapActions.scannedQrCode(qrCode);
+      Actions['map_first']({initialModal: 'rent'});
     });
   };
 }

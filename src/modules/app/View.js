@@ -4,19 +4,23 @@ import {
   AppRegistry, AsyncStorage, Alert
 } from 'react-native';
 import { Root } from 'native-base';
-import RootRoutes from '~/routes';
 import { Toast } from 'native-base'
+import OneSignal from 'react-native-onesignal';
 import {name as appName} from '../../../app.json';
-// import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
-// import messaging from '@react-native-firebase/messaging';
-import {attemptSignInWithPhone} from '~/common/services/rn-firebase/auth';
+import RootRoutes from '~/routes';
+import {
+  createFcmToken,
+  startReceiveFcm,
+  saveFcmToken
+} from '~/common/services/rn-firebase/message';
 
 export default class AppView extends Component {
   state = {
-    // notification: null
+    fcmListener: null,
+    fcmToken: null
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     const {
       auth,
       signup,
@@ -28,22 +32,48 @@ export default class AppView extends Component {
     appActions.setGlobalNotification({message: null, type: ''});
     signupActions.initSignup();
     loginActions.initLogin();
+
+    // Onsignal
+    OneSignal.init("b4e6bc9d-3ebb-4ff5-818e-91a76b5239b7");
+    OneSignal.addEventListener('received', this.onReceived);
+    OneSignal.addEventListener('opened', this.onOpened);
+    OneSignal.addEventListener('ids', this.onIds);
+
+    // Fcm
+    const fcmToken = await createFcmToken();
+    loginActions.setFcmToken(fcmToken);
+    const fcmListener = startReceiveFcm(loginActions.receivedFcm);
+    this.setState({fcmToken, fcmListener});    
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   const { app } = nextProps;
-  //   const { appActions } = this.props;
-  //   console.log('===== app: ', app.globalNotification);
-  //   if (app.globalNotification && app.globalNotification.message) {
-  //     const { message, type, duration } = app.globalNotification;
-  //     this.setState({notification: { message, type, duration }}, () => {
-  //       // appActions.setGlobalNotification({message: null, type: ''});
-  //     });
-  //   } else {
-  //     // this.setState({notification: null});
-  //   }
-  // }
+  componentWillUnmount() {
+    OneSignal.removeEventListener('received', this.onReceived);
+    OneSignal.removeEventListener('opened', this.onOpened);
+    OneSignal.removeEventListener('ids', this.onIds);
 
+    const { fcmListener } = this.state;
+    fcmListener && fcmListener()
+  }
+  
+  onReceived(notification) {
+    console.log("Notification received: ", notification);
+  }
+
+  onOpened(openResult) {
+    console.log('Message: ', openResult.notification.payload.body);
+    console.log('Data: ', openResult.notification.payload.additionalData);
+    console.log('isActive: ', openResult.notification.isAppInFocus);
+    console.log('openResult: ', openResult);
+  }
+
+  onIds(device) {
+    console.log('Device info: ', device);
+  }
+
+  setFcmListiner = (fcmListener) => {
+    console.log('===== fcmListener: ', fcmListener);
+    this.setState({fcmListener});
+  }
   showToast() {
     const { _t } = this.props.appActions
     const { notification } = this.state
