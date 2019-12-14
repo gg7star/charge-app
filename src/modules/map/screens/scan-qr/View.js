@@ -126,9 +126,8 @@ export default class ScreenView extends React.Component {
 
   onReceivedQRCode = (scanedQrCode) => {
     this.setState({qrCode: scanedQrCode, scanBarAnimateReverse: false}, () => {
-      console.log('==== QR code: ', this.state.qrCode);
-      const { qrCode } = this.state;
-      this.props.mapActions.scannedQrCode(qrCode);
+      console.log('==== QR code: ', scanedQrCode);
+      this.props.mapActions.scannedQrCode(scanedQrCode);
       Actions['map_first']({initialModal: 'rent'});
     });
   };

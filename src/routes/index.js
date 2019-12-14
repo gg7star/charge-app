@@ -19,7 +19,7 @@ class NonoRoutes extends Component {
 	render() {
 		return (
 			<Router>
-				<Stack key='root' hideNavBar>
+				<Stack key='root' hideNavBar panHandlers={null}>
 					{SignupStack}
 					{LoginStack}
 					<Stack key={'authorized'} hideNavBar>

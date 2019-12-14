@@ -271,7 +271,11 @@ export default class QRScannerView extends Component {
 
   constructor(props){
     super(props);
-    this.onScanResult = throttle(this.onScanResult, this.props.scanInterval, { maxWait: 0, trailing: false });
+    this.onScanResult = throttle(
+      this.onScanResult,
+      this.props.scanInterval,
+      { maxWait: 0, trailing: false }
+    );
   }
   
   componentDidMount(){
@@ -293,7 +297,6 @@ export default class QRScannerView extends Component {
   
   onScanResult = (e) => {
     _this = this;
-    console.log('==== Type: ' + e.type + '\nData: ' + e.data);
     
     if (
       this.state.scanEnabled &&
@@ -326,6 +329,7 @@ export default class QRScannerView extends Component {
 
   onPausePreview = () => {
     console.log('===== onPausePreview');
+    this.handleAppStateChange('stop');
   }
   
   render(){

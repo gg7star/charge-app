@@ -9,19 +9,18 @@ const initialState = {
   statusMessage: '',
   isFirst: false,
   isFacebook: false,
-  fcm: {token: null}
+  fcm: {
+    token: null,
+    fcmListener: null,
+    lastMessage: null
+  }
 }
 
 export default function reducer(state = initialState, action) {
   switch(action.type) {
     case loginActionTypes.LOGIN_INIT:
       return {
-        isAuthenticated: false,
-        accountInfo: null,
-        isFetching: false,
-        statusMessage: '',
-        isFirst: false,
-        isFacebook: false
+        ...initialState
       }
     case loginActionTypes.LOGIN_REQUEST:
       return {
@@ -85,11 +84,22 @@ export default function reducer(state = initialState, action) {
         ...state,
         fcm: {token: action.payload.fcmToken}
       }
+    case loginActionTypes.SET_FCM_LISTENER:
+      console.log('==== action.payload: ', action.payload, state);
+      return {
+        ...state,
+        fcm: {
+          token: state.fcm.token,
+          fcmListener: action.payload.fcmListener,
+          lastMessage: state.fcm.lastMessage,
+        }
+      }
     case loginActionTypes.RECEIVED_FCM:
       return {
         ...state,
         fcm: {
-          ...state.fcm,
+          token: state.fcm.token,
+          fcmListener: state.fcm.fcmListener,
           lastMessage: action.payload.messsage
         }
       }

@@ -2,11 +2,11 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity, Platform } from 'react-native';
 import { W, H, em } from '~/common/constants';
 import { Button } from '~/common/components';
-import Header from './components/HeaderContainer'
-import ActionBar from './components/ActionBarContainer'
-import PriceBox from './components/PriceBoxContainer'
+import Header from './components/HeaderContainer';
+import ActionBar from './components/ActionBarContainer';
+import PriceBox from './components/PriceBoxContainer';
 import { Actions } from 'react-native-router-flux';
-import ToggleSwitch from 'toggle-switch-react-native'
+import ToggleSwitch from 'toggle-switch-react-native';
 
 export default class ScreenView extends React.Component {
   state = {

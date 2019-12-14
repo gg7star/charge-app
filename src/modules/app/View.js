@@ -40,19 +40,17 @@ export default class AppView extends Component {
     OneSignal.addEventListener('ids', this.onIds);
 
     // Fcm
-    const fcmToken = await createFcmToken();
-    loginActions.setFcmToken(fcmToken);
-    const fcmListener = startReceiveFcm(loginActions.receivedFcm);
-    this.setState({fcmToken, fcmListener});    
+    // const fcmToken = await createFcmToken();
+    // loginActions.setFcmToken(fcmToken);  
   }
 
-  componentWillUnmount() {
+  async componentWillUnmount() {
     OneSignal.removeEventListener('received', this.onReceived);
     OneSignal.removeEventListener('opened', this.onOpened);
     OneSignal.removeEventListener('ids', this.onIds);
 
-    const { fcmListener } = this.state;
-    fcmListener && fcmListener()
+    const { auth } = this.props;
+    (auth && auth.fcm && auth.fcm.fcmListener) && auth.fcm.fcmListener();
   }
   
   onReceived(notification) {
@@ -91,7 +89,7 @@ export default class AppView extends Component {
         buttonTextStyle: { color: "#ffffff" },
         // buttonStyle: { backgroundColor: "#5cb85c" }
       });
-      // appActions.setGlobalNotification({message: null, type: ''});
+      appActions.setGlobalNotification({message: null, type: ''});
     }
   }
   

@@ -5,10 +5,11 @@ import {loginActionTypes, mapActionTypes} from '~/actions/types';
 // import { loginFirebaseService } from '~/common/services/firebase';
 import { attemptSignInWithEmail } from '~/common/services/rn-firebase/auth';
 import { getCurrentUserInfo } from '~/common/services/rn-firebase/database';
+import { createFcmToken, saveFcmToken, startReceiveFcm } from '~/common/services/rn-firebase/message';
 import { AppActions, LoginActions } from '~/actions';
 
 const { setGlobalNotification } = AppActions;
-const { loginSuccess, loginFailed } = LoginActions;
+const { loginSuccess, loginFailed, setFcmToken, setFcmListener } = LoginActions;
 
 export default function* watcher() {
   yield takeLatest(loginActionTypes.LOGIN_REQUEST, tryLogin)
@@ -28,7 +29,12 @@ export function* tryLogin(action) {
       if (userInfo) {
         yield put({ type: mapActionTypes.GET_ALL_STATIONS});
         yield put(loginSuccess({authInfo: result.authInfo, accountInfo: userInfo}));
-        // startReceiveNotifications(result.authInfo.user.uid);
+        const fcmToken = yield call(createFcmToken);
+        yield put(setFcmToken(fcmToken));
+        const res = yield call(saveFcmToken, result.authInfo.user.uid, fcmToken);
+        const fcmListener = startReceiveFcm(LoginActions.receivedFcm);
+        console.log('====== fcmListener: ', fcmListener);
+        yield put(setFcmListener(fcmListener));
         return;
       } else {
         errorMessage = 'account info does not exist';

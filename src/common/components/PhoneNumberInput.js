@@ -1,9 +1,9 @@
-import React from 'react'
-import { em, colors } from '~/common/constants'
-import commonStyles from '~/common/styles'
-import { View, Text, TextInput, TouchableOpacity, Image, ScrollView } from 'react-native'
+import React from 'react';
+import { View, Text, TextInput, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { em, colors } from '~/common/constants';
+import commonStyles from '~/common/styles';
 
-const countries = require('~/common/config/countries.json')
+const countries = require('~/common/config/countries.json');
 
 export default class PhoneNumberInput extends React.Component {
   state = {
@@ -17,10 +17,17 @@ export default class PhoneNumberInput extends React.Component {
     const { openedCountryPicker } = this.state
     return (
       <View style={{ position: 'relative', zIndex: 10 }}>        
-        <View style={[{
-          flexDirection: 'row', width: '100%', justifyContent: 'space-between',
-          overflow: 'hidden', borderRadius: 15,          
-        }, containerStyles && {}]}>
+        <View
+          style={
+            [
+              {
+                flexDirection: 'row', width: '100%', justifyContent: 'space-between',
+                overflow: 'hidden', borderRadius: 15,          
+              },
+              containerStyles && {}
+            ]
+          }
+        >
           <View style={{
             width: '20%',
             backgroundColor: 'rgba(255, 255, 255, 0.15)'
@@ -58,13 +65,21 @@ export default class PhoneNumberInput extends React.Component {
   }
 
   onOpenCountryPicker = () => {
-    this.setState({...this.state, openedCountryPicker: !this.state.openedCountryPicker})
+    this.setState({
+      ...this.state,
+      openedCountryPicker: !this.state.openedCountryPicker
+    })
   }
 
   onChangeCountry = (selectedCountry, code) => {    
-    this.setState({...this.state, selectedCountry, openedCountryPicker: false}, () => {
+    this.setState({
+      ...this.state,
+      selectedCountry,
+      openedCountryPicker: false
+    }, () => {
       const { onChangeCountry } = this.props;
-      if(onChangeCountry) onChangeCountry(this.state.selectedCountry, code);
+      if(onChangeCountry)
+        onChangeCountry(this.state.selectedCountry, code);
     })
   }
 }

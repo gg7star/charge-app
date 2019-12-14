@@ -3,12 +3,12 @@ import LinearGradient from 'react-native-linear-gradient';
 import {
   Image,
   StyleSheet,
-  TouchableOpacity,
   View,
   Text,
   ActivityIndicator,
+  TouchableOpacity
 } from 'react-native';
-import { em } from '~/common/constants'
+import { em } from '~/common/constants';
 
 export default class Button extends React.Component {
   render() {
@@ -31,10 +31,9 @@ export default class Button extends React.Component {
         }}
         disabled={disabled}
       >
-        {!bgGradientStart?
-          this.renderDefaultButton()
-        :
-          this.renderGradientButton()
+        {!bgGradientStart
+          ? this.renderDefaultButton()
+          : this.renderGradientButton()
         }
       </TouchableOpacity>
     )

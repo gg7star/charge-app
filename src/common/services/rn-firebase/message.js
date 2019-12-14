@@ -38,67 +38,15 @@ export function startReceiveFcm(callback) {
 
 export async function saveFcmToken(uid, fcmToken) {
   const usersRef = firebase.database().ref(`users/${uid}`);
-  console.log('===== startReceiveNotifications: uid: ', uid, usersRef);
-  usersRef.once('value').then((user) => {
-      if (user) {
-        // gets the device's push token
-        usersRef.update({
-          isOnline: true,
-          pushToken: fcmToken,
-          actived: true
-        });
-      }
-  });
+  console.log('===== saveFcmToken: uid: ', uid, usersRef);
+  const user = await usersRef.once('value');
+  if (user) {
+    const res = await usersRef.update({
+      isOnline: true,
+      pushToken: fcmToken,
+      actived: true
+    });
+    return true;
+  }
+  return false;
 }
-
-
-
-
-// const requestPermission = async (callback) => {
-//   try {
-//     const permission = await requestNotifications(["alert", "badge", "sound"]);
-//     await sleep(5000);
-//     if (permission.status === "granted") {
-//       getFcmToken(callback);
-//     }
-//   } catch (e) {
-//     console.log('==== requestPermission: error: ', e);
-//   }
-// };
-
-// const getFcmToken = async (callback) => {
-//   try {
-//     await messaging().registerForRemoteNotifications();
-//     const fcmToken = await messaging().getToken();
-//     //await handleToken(fcmToken);
-//     console.log('===== fcmToken: ', fcmToken);
-//     messageListener = messaging().onMessage(async (remoteMessage) => {
-//       console.log('==== FCM Message Data:', remoteMessage.data);
-//     });
-//     callback(messageListener);
-//   } catch (e) {
-//     console.log('======= getFcmToken: error: ', e);
-//   }
-// }
-// export async function checkPermission(callback) {
-//   try {
-//     console.log('==== messaging: ', messaging());
-//     const enabled = await messaging().hasPermission();
-//     console.log('==== messaging().hasPermission(): enabled: ', enabled);
-//     if (enabled) {
-//       getFcmToken(callback);
-//     } else {
-//       requestPermission(callback);
-//     }
-//   } catch (e) {
-//     console.log('==== checkPermission: error: ', e);
-//   }
-// };
-
-// export function startReceiveFcm() {
-//   messageListener = messaging().onMessage(async (remoteMessage) => {
-//     console.log('==== FCM Message Data:', remoteMessage.data);
-//   });
-//   return messageListener;
-//   // messageListener();
-// }

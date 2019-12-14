@@ -6,6 +6,7 @@ import KeyboardAvoidingView from './KeyboardAvoidingView';
 import PhoneNumberInput from './PhoneNumberInput';
 import Spacer from './Spacer';
 import ToastShow from './ToastShow';
+import TouchableDebounce from './TouchableDebounce';
 
 export {
   Button,
@@ -15,5 +16,6 @@ export {
   PhoneNumberInput,
   Spacer,
   KeyboardAvoidingView,
-  ToastShow
+  ToastShow,
+  TouchableDebounce
 }

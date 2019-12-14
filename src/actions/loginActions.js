@@ -14,6 +14,13 @@ export function setFcmToken(fcmToken) {
   }
 }
 
+export function setFcmListener(fcmListener) {
+  return {
+    type: types.SET_FCM_LISTENER,
+    payload: {fcmListener: fcmListener}
+  }
+}
+
 export function receivedFcm(message) {
   return {
     type: types.RECEIVED_FCM,
