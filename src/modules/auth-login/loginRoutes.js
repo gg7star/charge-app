@@ -1,6 +1,6 @@
-import React from 'react'
-import { Scene, Stack } from 'react-native-router-flux'
-import Login from './screens/login/ViewContainer'
+import React from 'react';
+import { Scene, Stack } from 'react-native-router-flux';
+import Login from './screens/login/ViewContainer';
 
 const LoginStack = (
   <Stack key={'auth'}>
@@ -10,6 +10,6 @@ const LoginStack = (
       component={Login}
     />
   </Stack>
-)
+);
 
-export default LoginStack
+export default LoginStack;

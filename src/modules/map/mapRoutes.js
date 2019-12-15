@@ -1,9 +1,9 @@
-import React from 'react'
-import { Scene, Stack } from 'react-native-router-flux'
-import FirstScreen from './screens/first/ViewContainer'
-import GiftScreen from './screens/gift/ViewContainer'
-import ScanQrScreen from './screens/scan-qr/ViewContainer'
-import EnterCodeScreen from './screens/enter-code/ViewContainer'
+import React from 'react';
+import { Scene, Stack } from 'react-native-router-flux';
+import FirstScreen from '~/modules/map/screens/first/ViewContainer';
+import GiftScreen from '~/modules/map/screens/gift/ViewContainer';
+import ScanQrScreen from '~/modules/map/screens/scan-qr/ViewContainer';
+import EnterCodeScreen from '~/modules/map/screens/enter-code/ViewContainer';
 
 const MapStack = (
   <Stack key={'map'} >
@@ -30,4 +30,4 @@ const MapStack = (
   </Stack>
 )
 
-export default MapStack
+export default MapStack;

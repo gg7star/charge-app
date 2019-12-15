@@ -1,19 +1,20 @@
 import React, { Component } from 'react';
 import { Router, Stack, Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import LoginStack from '~/modules/auth-login/loginRoutes';
-import SignupStack from '~/modules/auth-signup/signupRoutes';
-import MapStack from '~/modules/map/mapRoutes';
-import ProfileStack from '~/modules/profile/profileRoutes'
+import LoginStack from '../modules/auth-login/loginRoutes';
+import SignupStack from '../modules/auth-signup/signupRoutes';
+import MapStack from '../modules/map/mapRoutes';
+import ProfileStack from '../modules/profile/profileRoutes'
 
 class NonoRoutes extends Component {
 	UNSAFE_componentDidMount() {
+		console.log('==== UNSAFE_componentDidMount')
 		if (this.props.isAuthenticated) {
-			Actions['authorized']();
+			console.log('==== go to map')
+			// Actions['authorized']();
+			Actions['map']();
+			Actions['map_first']();
 		}
-	}
-
-	UNSAFE_componentWillMount() {
 	}
 
 	render() {
@@ -22,10 +23,8 @@ class NonoRoutes extends Component {
 				<Stack key='root' hideNavBar panHandlers={null}>
 					{SignupStack}
 					{LoginStack}
-					<Stack key={'authorized'} hideNavBar>
-						{MapStack}
-						{ProfileStack}
-					</Stack>
+					{MapStack}
+					{ProfileStack}
 				</Stack>
 			</Router>
 		)

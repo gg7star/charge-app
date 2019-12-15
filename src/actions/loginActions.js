@@ -36,10 +36,15 @@ export function tryLogin(countryCode, phoneNumber) {
 }
 
 export function loginSuccess({authInfo, accountInfo}) {
+  console.log('===== loginSuccess');
   if (accountInfo.isFirst) {
-    Actions['signup_hint_find_station'] ()
+    console.log('===== loginSuccess go to accountInfo.isFirst')
+    Actions['signup_hint_find_station'] ();
   } else {
-    Actions['authorized']()
+    console.log('===== loginSuccess and go to map')
+    // Actions['authorized']();
+    Actions['map']();
+    Actions['map_first']();
   }
   return {
     type: types.LOGIN_DONE,
@@ -89,9 +94,10 @@ export function loginWithFacebook(fbId) {
 
 export function loginWithFacebookSuccess(accountInfo) {
   if (accountInfo.isFirst) {
-    Actions['signup_hint_find_station'] ()
+    Actions['signup_hint_find_station'] ();
   } else {
-    Actions['authorized']()
+    // Actions['authorized']();
+    Actions['map']();
   }
   return {
     type: types.LOGIN_DONE,

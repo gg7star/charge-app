@@ -1,15 +1,15 @@
-import React from 'react'
-import { Scene, Stack, Actions } from 'react-native-router-flux'
-import CreateTeam from './screens/create-team/ViewContainer'
-import Wallet from './screens/wallet/ViewContainer'
-import History from './screens/history/ViewContainer'
-import HistorySummary from './screens/history-summary/ViewContainer'
-import Payment from './screens/payment/ViewContainer'
-import Setting from './screens/setting/ViewContainer'
-import AboutUs from './screens/about-us/ViewContainer'
-import Help from './screens/help/ViewContainer'
-import AddCoupon from './screens/add-coupon/ViewContainer'
-import Pay from './screens/pay/ViewContainer'
+import React from 'react';
+import { Scene, Stack, Actions } from 'react-native-router-flux';
+import CreateTeam from './screens/create-team/ViewContainer';
+import Wallet from './screens/wallet/ViewContainer';
+import History from './screens/history/ViewContainer';
+import HistorySummary from './screens/history-summary/ViewContainer';
+import Payment from './screens/payment/ViewContainer';
+import Setting from './screens/setting/ViewContainer';
+import AboutUs from './screens/about-us/ViewContainer';
+import Help from './screens/help/ViewContainer';
+import AddCoupon from './screens/add-coupon/ViewContainer';
+import Pay from './screens/pay/ViewContainer';
 
 const ProfileStack = (
   <Stack key={'profile'}>
@@ -64,6 +64,6 @@ const ProfileStack = (
       component={Help}
     />
   </Stack>
-)
+);
 
-export default ProfileStack
+export default ProfileStack;
