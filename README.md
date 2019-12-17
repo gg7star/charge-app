@@ -12,23 +12,23 @@
 
 ### Environement ###
 
-- node version: `10.16.0`
-- react version: `16.8.3`
-- react-native version: `0.60.5`
+- node version: `12.13.1`
+- react version: `16.9.0`
+- react-native version: `0.61.5`
+- react-native-firebase: `6.2.0`
 
 ### Running cli ###
 
 - Install react-native-cli.
 ```shell
-  $ nvm use 10.15.0
+  $ nvm use 12.13.1
   $ yarn global add react-native-cli
   $ yarn install
 ```
 
 - Run on ios simulator
 ```shell
-  $ nvm use 10.15.0
-  $ react-native link
+  $ nvm use 12.13.1
   $ cd ios &&
   $ pod install
   $ cd ..
@@ -36,7 +36,7 @@
 ```
 open other console and run this command
 ```shell
-  $ nvm use 10.15.0
+  $ nvm use 12.13.1
   $ react-native run-ios
 ```
 ### Publishing ###
