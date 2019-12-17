@@ -6,14 +6,24 @@ import {loginActionTypes, mapActionTypes} from '~/actions/types';
 import { attemptSignInWithEmail } from '~/common/services/rn-firebase/auth';
 import { getCurrentUserInfo } from '~/common/services/rn-firebase/database';
 import { createFcmToken, saveFcmToken, startReceiveFcm } from '~/common/services/rn-firebase/message';
-import { AppActions, LoginActions } from '~/actions';
+import { AppActions, LoginActions, RentActions } from '~/actions';
 
 const { setGlobalNotification } = AppActions;
 const { loginSuccess, loginFailed, setFcmToken, setFcmListener } = LoginActions;
+const { rentSuccess } = RentActions;
 
 export default function* watcher() {
-  yield takeLatest(loginActionTypes.LOGIN_REQUEST, tryLogin)
-  yield takeLatest(loginActionTypes.FACEBOOK_LOGIN_REQUEST, tryLoginWithFacebook)
+  yield takeLatest(loginActionTypes.LOGIN_REQUEST, tryLogin);
+  yield takeLatest(loginActionTypes.FACEBOOK_LOGIN_REQUEST, tryLoginWithFacebook);
+  // yield takeLastest(loginActionTypes.RECEIVED_FCM, receivedFcm);
+}
+
+function receivedFcm(fcmMsg) {
+  console.log('==== receivedFcm: fcmMsg: ', fcmMsg);
+  if(fcmMsg.type === 'lend_result') {
+    rentSuccess({...fcmMsg.data});
+    Actions['map_first']({initialModal: 'rent'});
+  }
 }
 
 export function* tryLogin(action) {  
@@ -35,14 +45,14 @@ export function* tryLogin(action) {
           Actions['signup_hint_find_station'] ();
         } else {
           console.log('===== loginSuccess and go to map')
-          Actions.map({type:ActionConst.RESET});
-          Actions.map_first();
+          Actions.map();
+          // Actions.map_first();
         }
 
         const fcmToken = yield call(createFcmToken);
         yield put(setFcmToken(fcmToken));
         const res = yield call(saveFcmToken, result.authInfo.user.uid, fcmToken);
-        const fcmListener = startReceiveFcm(LoginActions.receivedFcm);
+        const fcmListener = startReceiveFcm(receivedFcm);
         console.log('====== fcmListener: ', fcmListener);
         yield put(setFcmListener(fcmListener));
         return;

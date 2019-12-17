@@ -3,6 +3,7 @@ import auth from './loginSagas';
 import auth_signup from './signupSagas';
 import map from './mapSagas';
 import profile from './profileSagas';
+import rent from './rentSagas';
 import stripe from './stripeSagas';
 
 export default function* root() {
@@ -11,6 +12,7 @@ export default function* root() {
     auth_signup(),    
     map(),
     profile(),
-    stripe()
+    rent(),
+    stripe(),
   ])
 }

@@ -19,7 +19,7 @@ import { W, H } from '~/common/constants';
 import Menu from '~/modules/profile/modals/menu/ViewContainer';
 import { Spacer } from '~/common/components';
 
-const geolocationOption = {
+const GEOLOCATION_OPTION = {
   enableHighAccuracy: true,
   timeout: 200000,
   maximumAge: 1000
@@ -32,20 +32,19 @@ export default class ScreenView extends React.Component {
   }
 
   componentDidMount() {
-    
     const { initialModal } = this.props
     const _this = this;
     // Get current location
     Geolocation.getCurrentPosition(
       (position) => { _this.handleGetCurrentLocation(position) },
       (error) => { _this.handleCurrentLocationError(error) },
-      geolocationOption
+      GEOLOCATION_OPTION
     );
     
     Geolocation.watchPosition(
       (position) => { _this.handleGetCurrentLocation(position) },
       (error) => { _this.handleCurrentLocationError(error) },
-      geolocationOption
+      GEOLOCATION_OPTION
     );
 
     this.props.mapActions.loadPlacesOnMap()
@@ -266,25 +265,27 @@ export default class ScreenView extends React.Component {
 
   onDeposit = () => {
     const { auth, stripeActions } = this.props;
-    return stripe.paymentRequestWithCardForm()
-      .then(stripeTokenInfo => {
-        console.log('Token created: ', stripeTokenInfo);
-        // call payment function
-        stripeActions.doPaymentRequest({
-          amount: '50',
-          tokenId: stripeTokenInfo.tokenId,
-          email: auth.accountInfo.email,
-          telnumber: auth.accountInfo.phoneNumber,
-          stationSn: 'T1219071904',
-          slotId: '1',
-          currency: 'eur',
-          description: `${auth.accountInfo.name} payed via Nono application.`,
-          accessToken: null
-        })
-      })
-      .catch(error => {
-        console.warn('Payment failed', { error });
-      });
+    // stripeActions.rentComplete();
+
+    // return stripe.paymentRequestWithCardForm()
+    //   .then(stripeTokenInfo => {
+    //     console.log('Token created: ', stripeTokenInfo);
+    //     // call payment function
+    //     stripeActions.doPaymentRequest({
+    //       amount: '50',
+    //       tokenId: stripeTokenInfo.tokenId,
+    //       email: auth.accountInfo.email,
+    //       telnumber: auth.accountInfo.phoneNumber,
+    //       stationSn: 'T1219071904',
+    //       slotId: '1',
+    //       currency: 'eur',
+    //       description: `${auth.accountInfo.name} payed via Nono application.`,
+    //       accessToken: null
+    //     })
+    //   })
+    //   .catch(error => {
+    //     console.warn('Payment failed', { error });
+    //   });
   }
 
   openFeedbackDialog = () => {
@@ -298,19 +299,23 @@ export default class ScreenView extends React.Component {
   onUnlock = () => {
     const { auth, map, stripeActions } = this.props;
     const { scannedQrCode } = map;
-    // setup card info
-
-    return stripe.paymentRequestWithCardForm()
-      .then(stripeTokenInfo => {
-        console.log('Token created: ', stripeTokenInfo);
-        // call payment function
-        stripeActions.registerCardRequest({
-          email: auth.accountInfo.email,
-          tokenId: stripeTokenInfo.tokenId
-        })
-      })
-      .catch(error => {
-        console.log('Register card failed', { error });
-      });
+    const stripeProps = this.props.stripe;
+    if (stripeProps.customer && stripeProps.customer.id) {
+      Actions['map_scan_qr']();
+    } else {
+      // setup card info
+      return stripe.paymentRequestWithCardForm()
+              .then(stripeTokenInfo => {
+                console.log('Token created: ', stripeTokenInfo);
+                // call payment function
+                stripeActions.registerCardRequest({
+                  email: auth.accountInfo.email,
+                  tokenId: stripeTokenInfo.tokenId
+                })
+              })
+              .catch(error => {
+                console.log('Register card failed', { error });
+              });
+    }
   }
 }

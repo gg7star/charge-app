@@ -19,8 +19,7 @@ export default class Dialog extends React.Component {
           textContent={'Doing payment...'}
           textStyle={{color: '#FFF'}}
         />
-        {this.renderTitle()}
-        {this.renderPriceTable()}   
+        {this.renderTitle()} 
         <Spacer size={20} />
         {this.renderActions()}
       </RentDialogWrapper>
@@ -111,14 +110,6 @@ export default class Dialog extends React.Component {
 
     return (
       <View>
-        <View style={{ alignItems: 'center' }}>
-          <TouchableOpacity>
-            <Text style={{ fontSize: 18, fontWeight: 'bold', color: 'white' }}>
-              {_t('Rent another battery')}
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <Spacer size={20} />
         <View style={{
           flexDirection: 'row', justifyContent: 'space-between'
         }}>

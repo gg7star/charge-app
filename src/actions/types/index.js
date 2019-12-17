@@ -4,6 +4,7 @@ import * as signupActionTypes from './signupActionTypes';
 import * as mapActionTypes from './mapActionTypes';
 import * as profileActionTypes from './profileActionTypes';
 import * as stripeActionTypes from './stripeActionTypes';
+import * as rentActionTypes from './rentActionTypes';
 
 export {
   appActionTypes,
@@ -11,5 +12,6 @@ export {
   signupActionTypes,
   mapActionTypes,
   profileActionTypes,
-  stripeActionTypes
+  stripeActionTypes,
+  rentActionTypes
 };

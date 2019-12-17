@@ -307,7 +307,7 @@ export default class QRScannerView extends Component {
       this.setState({scanEnabled: false, qrCode}, () => {
         Alert.alert(
           'Scaned QR Code',
-          `${qrCode}. Are you sure to pay to this device?`,
+          `${qrCode}. Are you sure to rent to this device?`,
           [
             {
               text: 'Cancel',

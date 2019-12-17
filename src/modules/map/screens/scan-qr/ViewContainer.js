@@ -1,17 +1,19 @@
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { compose } from 'recompose';
-import { AppActions, MapActions } from '~/actions';
+import { AppActions, MapActions, RentActions } from '~/actions';
 import ScreenView from './View';
 
 const mapStateToProps = state => ({
   app: state.app || {},
-  map: state.map || {},  
+  map: state.map || {},
+  rent: state.rent || {}
 });
 
 const mapDispatchToProps = dispatch => ({
   appActions: bindActionCreators(AppActions, dispatch),
   mapActions: bindActionCreators(MapActions, dispatch),
+  rentActions: bindActionCreators(RentActions, dispatch),
 });
 
 export default compose(

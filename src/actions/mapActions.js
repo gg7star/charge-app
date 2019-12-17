@@ -76,11 +76,11 @@ export function receivedStationDetail(station) {
   }
 }
 
-export function scannedQrCode(scannedQrCode) {
+export function scannedQrCode(qrCode) {
   return {
     type: types.SCANNED_QR_CODE,
     payload: {
-      scannedQrCode
+      scannedQrCode: qrCode
     }
   }
 }

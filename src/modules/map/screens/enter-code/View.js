@@ -1,8 +1,17 @@
-import React from 'react'
-import { View, ScrollView, Image, Text, TextInput, TouchableOpacity, Alert } from 'react-native'
-import { Spacer } from '~/common/components'
-import { Actions } from 'react-native-router-flux'
-import { W, H, colors, em } from '~/common/constants'
+import React from 'react';
+import {
+  View,
+  ScrollView,
+  Image,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+  Platform
+} from 'react-native';
+import { Spacer } from '~/common/components';
+import { Actions } from 'react-native-router-flux';
+import { W, H, colors, em } from '~/common/constants';
 
 export default class ScreenView extends React.Component {
   state = {
@@ -103,9 +112,12 @@ export default class ScreenView extends React.Component {
 
   enterCode = () => {
     const { code } = this.state;
+    const { stationSnList } = this.props.map;
+    const { auth } = this.props;
+
     Alert.alert(
       'Entered QR Code',
-      `${code}. Are you sure to pay to this device?`,
+      `${code}. Are you sure to rent to this device?`,
       [
         {
           text: 'Cancel',
@@ -113,8 +125,27 @@ export default class ScreenView extends React.Component {
           style: 'cancel',
         },
         {text: 'OK', onPress: () => {
-          this.props.mapActions.scannedQrCode(code);
-          Actions['map_first']({initialModal: 'rent'})
+          // Check stationSN validation
+          if (stationSnList && stationSnList.find(e => e.stationSn === code)) {
+            this.props.mapActions.scannedQrCode(code);
+            this.props.rentActions.rentStation({
+              stationSn: code,
+              uuid: auth.accountInfo.uid,
+              pushToken: auth.fcm.token,
+              deviceType: Platform.OS
+            })
+            // For test
+            Actions['map_first']({initialModal: 'rent'});
+          } else {
+            Alert.alert(
+              'Invalid QR code',
+              `${code}. The code is invalid. Please enter correct QR code of this station, again.`,
+              [
+                {text: 'OK', onPress: () => {}}
+              ],
+              {cancelable: false},
+            );
+          }
         }},
       ],
       {cancelable: false},

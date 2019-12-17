@@ -14,9 +14,9 @@ const {
 
 export default function* watcher() {
   // yield takeLatest(types.SEARCH_PLACES_REQUEST, doSearch)
-  yield takeLatest(mapActionTypes.LOAD_PLACES_ON_MAP_REQUEST, loadPlacesOnMap)
-  yield takeLatest(mapActionTypes.GET_ALL_STATIONS, getAllStations)
-  yield takeLatest(mapActionTypes.GET_STATION_DETAIL, getStationDetail)
+  yield takeLatest(mapActionTypes.LOAD_PLACES_ON_MAP_REQUEST, loadPlacesOnMap);
+  yield takeLatest(mapActionTypes.GET_ALL_STATIONS, getAllStations);
+  yield takeLatest(mapActionTypes.GET_STATION_DETAIL, getStationDetail);
 }
 
 export function* loadPlacesOnMap(action) {

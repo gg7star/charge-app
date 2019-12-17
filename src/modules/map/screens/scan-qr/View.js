@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ScrollView, Image, Text, TouchableOpacity, Alert } from 'react-native'
+import { View, ScrollView, Image, Text, TouchableOpacity, Alert, Platform } from 'react-native'
 import { W, H, em } from '~/common/constants'
 import { Spacer } from '~/common/components'
 import QRScanner from './components/QRScanner'
@@ -127,8 +127,28 @@ export default class ScreenView extends React.Component {
   onReceivedQRCode = (scanedQrCode) => {
     this.setState({qrCode: scanedQrCode, scanBarAnimateReverse: false}, () => {
       console.log('==== QR code: ', scanedQrCode);
-      this.props.mapActions.scannedQrCode(scanedQrCode);
-      Actions['map_first']({initialModal: 'rent'});
+      // Check stationSN validation
+      const { stationSnList, auth } = this.props.map;
+      if (stationSnList && stationSnList.find(e => e.stationSn === scanedQrCode)) {
+        this.props.mapActions.scannedQrCode(scanedQrCode);
+        this.props.rentActions.rentStation({
+          stationSn: scanedQrCode,
+          uuid: auth.accountInfo.uid,
+          pushToken: auth.fcm.token,
+          deviceType: Platform.OS
+        });
+        // For test
+        Actions['map_first']({initialModal: 'rent'});
+      } else {
+        Alert.alert(
+          'Invalid QR code',
+          `${code}. The code is invalid. Please enter correct QR code of this station, again.`,
+          [
+            {text: 'OK', onPress: () => {}}
+          ],
+          {cancelable: false},
+        );
+      }
     });
   };
 }

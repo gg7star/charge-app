@@ -60,12 +60,11 @@ export function* saveCardInfo(action) {
       action.payload
     );
     if (response.data.status === 200) {
-      yield put(registerCardSuccess(response.data));
+      yield put(registerCardSuccess(response.data.data));
       // yield put(setGlobalNotification({
       //   message: 'You saved card info succefully. Thank you!',
       //   type: 'success'
       // }));
-      Actions.map();
       Actions['map_scan_qr']();
     } else {
       yield put(registerCardFailure({errorMessage: response.data.message}));

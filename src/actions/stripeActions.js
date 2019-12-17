@@ -45,11 +45,11 @@ export function registerCardRequest(data) {
   };
 }
 
-export function registerCardSuccess(result) {
+export function registerCardSuccess(customer) {
   return {
     type: types.REGISTER_CARD_SUCCESS,
     payload: {
-      result
+      customer
     }
   };
 }
