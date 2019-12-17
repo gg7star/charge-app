@@ -82,7 +82,7 @@ const Wrapper = (props) => (
   <View style={{
     position: 'relative', width: W, height: H, paddingTop: 60
   }}>
-    <Image source={require('~/common/assets/images/png/LockDialogBg.png')}
+    <Image source={require('~/common/assets/images/png/14.S1-nono.map.png')}
       style={{
         position: 'absolute', left: 0, top: 0, width: W,
         zIndex: 10

@@ -6,7 +6,7 @@ import ScanQrScreen from '~/modules/map/screens/scan-qr/ViewContainer';
 import EnterCodeScreen from '~/modules/map/screens/enter-code/ViewContainer';
 
 const MapStack = (
-  <Stack key={'map'} >
+  <Scene key={'map'} >
     <Scene 
       key='map_first'
       hideNavBar
@@ -27,7 +27,7 @@ const MapStack = (
       hideNavBar
       component={EnterCodeScreen}
     />
-  </Stack>
+  </Scene>
 )
 
 export default MapStack;

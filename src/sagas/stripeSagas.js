@@ -5,11 +5,17 @@ import serverUrls from '~/common/constants/api';
 import { AppActions, StripeActions } from '~/actions';
 import { stripeActionTypes } from '~/actions/types';
 
-const { doPaymentSuccess, doPaymentFailure } = StripeActions;
+const {
+  doPaymentSuccess,
+  doPaymentFailure,
+  registerCardSuccess,
+  registerCardFailure
+} = StripeActions;
 const { setGlobalNotification } = AppActions;
 
 export default function* watcher() {
-  yield takeLatest(stripeActionTypes.DO_PAYMENT_REQUEST, doPayment)
+  yield takeLatest(stripeActionTypes.REGISTER_CARD_REQUEST, saveCardInfo);
+  yield takeLatest(stripeActionTypes.DO_PAYMENT_REQUEST, doPayment);
 }
 
 export function* doPayment(action) {
@@ -43,25 +49,34 @@ export function* doPayment(action) {
   }
 }
 
-export function* getStationDetail(action) {
+export function* saveCardInfo(action) {
   try {
-    const { phoneNumber } = action.payload;
-    const requestPayload = {
-      to_telnumber: phoneNumber
-    };
-
-    const response = yield call(processRequest, `${serverUrls.apiGatewayServerURL}/mailjet/send_sms`, 'POST', requestPayload);
-    let data = {
-      confirmCode: response.data.message.verification_code,
-      ...response.data,
-    }
-
-    if(data.status) {
-      yield put(requestConfirmCodeSuccess(data));
+    // Get a list of all stationSn
+    console.log('===== calling saveCardInfo')
+    const response = yield call(
+      processRequest,
+      `${serverUrls.apiGatewayServerURL}/payment/stripe/save_card`,
+      'POST',
+      action.payload
+    );
+    if (response.data.status === 200) {
+      yield put(registerCardSuccess(response.data));
+      // yield put(setGlobalNotification({
+      //   message: 'You saved card info succefully. Thank you!',
+      //   type: 'success'
+      // }));
+      Actions.map();
+      Actions['map_scan_qr']();
     } else {
-      yield put(requestConfirmCodeFailed(data));
+      yield put(registerCardFailure({errorMessage: response.data.message}));
+      yield put(setGlobalNotification({
+        message: 'Your card was failed to save. Please try later.',
+        type: 'danger'}
+      ));
     }
   } catch(error) {
-    yield put(requestConfirmCodeFailed(error.data));
+    console.log('==== doPayment response error: ', error);
+    yield put(registerCardFailure(error.data));
+    yield put(setGlobalNotification({message: 'Your card was failed to save. Please try later.', type: 'danger'}));
   }
 }

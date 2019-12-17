@@ -47,9 +47,7 @@ export default class ScreenView extends React.Component {
         </View>
         <Spacer size={80} />
         {this.renderForm()}
-        
-          {this.renderActionButtons()}
-       
+        {this.renderActionButtons()}
       </View>
       </ScrollView>
     )

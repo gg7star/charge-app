@@ -1,5 +1,5 @@
 import { put, takeLatest, call } from 'redux-saga/effects';
-import { Actions } from 'react-native-router-flux';
+import { Actions, ActionConst } from 'react-native-router-flux';
 import * as virtualAccount from '~/common/utils/virtualAccount';
 import {loginActionTypes, mapActionTypes} from '~/actions/types';
 // import { loginFirebaseService } from '~/common/services/firebase';
@@ -29,6 +29,16 @@ export function* tryLogin(action) {
       if (userInfo) {
         yield put({ type: mapActionTypes.GET_ALL_STATIONS});
         yield put(loginSuccess({authInfo: result.authInfo, accountInfo: userInfo}));
+        console.log('===== loginSuccess');
+        if (userInfo.isFirst) {
+          console.log('===== loginSuccess go to userInfo.isFirst')
+          Actions['signup_hint_find_station'] ();
+        } else {
+          console.log('===== loginSuccess and go to map')
+          Actions.map({type:ActionConst.RESET});
+          Actions.map_first();
+        }
+
         const fcmToken = yield call(createFcmToken);
         yield put(setFcmToken(fcmToken));
         const res = yield call(saveFcmToken, result.authInfo.user.uid, fcmToken);

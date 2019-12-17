@@ -36,16 +36,6 @@ export function tryLogin(countryCode, phoneNumber) {
 }
 
 export function loginSuccess({authInfo, accountInfo}) {
-  console.log('===== loginSuccess');
-  if (accountInfo.isFirst) {
-    console.log('===== loginSuccess go to accountInfo.isFirst')
-    Actions['signup_hint_find_station'] ();
-  } else {
-    console.log('===== loginSuccess and go to map')
-    // Actions['authorized']();
-    Actions['map']();
-    Actions['map_first']();
-  }
   return {
     type: types.LOGIN_DONE,
     payload: {authInfo, accountInfo}
@@ -97,7 +87,8 @@ export function loginWithFacebookSuccess(accountInfo) {
     Actions['signup_hint_find_station'] ();
   } else {
     // Actions['authorized']();
-    Actions['map']();
+    Actions.map();
+    Actions['map_first']();
   }
   return {
     type: types.LOGIN_DONE,

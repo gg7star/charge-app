@@ -25,7 +25,7 @@ export default class View extends React.Component {
 
   onClose = () => {
     // Actions['authorized']()
-    Actions['map']()
+    Actions.map()
   }
 
   onGoNext = () => {

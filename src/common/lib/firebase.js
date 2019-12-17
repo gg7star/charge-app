@@ -19,7 +19,6 @@ if (
   && messagingSenderId !== 'null'
 ) {
   FirebaseModule.initializeApp(firebaseConfig.web);
-
   firebaseInitialized = true;
 }
 

@@ -9,7 +9,7 @@ import LinearGradient from 'react-native-linear-gradient';
 const TITLE_FONT_SIZE = 25;
 const DESC_FONT_SIZE = 15;
 const SPECIAL_DESC_FONT_SIZE = 18;
-const BACKGROUND_IMAGE = require('~/common/assets/images/png/LockDialogBg.png');
+const BACKGROUND_IMAGE = require('~/common/assets/images/png/14.S1-nono.map.png');
 const DESCRIPTION_IMAGE = require('~/common/assets/images/png/code-parrainage.png');
 
 export default class ScreenView extends React.Component {

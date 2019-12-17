@@ -155,7 +155,7 @@ export default class ScreenView extends React.Component {
   }
 
   goSignup = () => {
-    Actions['signup']()
+    Actions['signup_first']()
   }
 
   onChangeCountry = (country, code) => {

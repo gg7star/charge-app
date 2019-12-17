@@ -6,7 +6,7 @@ import { colors, W } from '~/common/constants'
 
 export default class Dialog extends React.Component {
   render() {
-    const { onGoScan } = this.props
+    const { onClickUnlock } = this.props
     const { _t } = this.props.appActions
 
     return (
@@ -16,7 +16,7 @@ export default class Dialog extends React.Component {
           textColor={'#fff'}
           icon={require('~/common/assets/images/png/qr-code.png')}  iconColor={'#fff'}
           caption={_t('Unlocks a nono')}
-          onPress={onGoScan}
+          onPress={onClickUnlock}
         />
         <Spacer size={30} />
       </DialogWrapper>

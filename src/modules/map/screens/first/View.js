@@ -1,33 +1,29 @@
 import React from 'react'
-import { View,Text, TouchableOpacity, Platform } from 'react-native'
-import MapView from '../../common/components/MapView'
-import MapButton from '../../common/components/MapButton'
-import UnlockDialog from '../../modals/unlock/ViewContainer'
-import SearchDialog from '../../modals/search/ViewContainer'
-import DetailDialog from '../../modals/detail/ViewContainer'
-import FinishDialog from '../../modals/finish/ViewContainer'
-import FinishTopDialog from '../../modals/finish-top/ViewContainer'
-import ReserveDialog from '../../modals/reserve/ViewContainer'
-import NearPlacesDialog from '../../modals/near-places/ViewContainer'
-import FilterDialog from '../../modals/filter/ViewContainer'
-import RentDialog from '../../modals/rent/ViewContainer'
-import FeedbackDialog from '../../modals/feedback/ViewContainer'
-import { W, H } from '~/common/constants'
-import Menu from '~/modules/profile/modals/menu/ViewContainer'
-import { Actions } from 'react-native-router-flux'
-import { Spacer } from '~/common/components'
-import stripe from 'tipsi-stripe'
+import { View,Text, TouchableOpacity, Platform } from 'react-native';
+import { Actions } from 'react-native-router-flux';
+import stripe from 'tipsi-stripe';
 import Geolocation from 'react-native-geolocation-service';
+import MapView from '../../common/components/MapView';
+import MapButton from '../../common/components/MapButton';
+import UnlockDialog from '../../modals/unlock/ViewContainer';
+import SearchDialog from '../../modals/search/ViewContainer';
+import DetailDialog from '../../modals/detail/ViewContainer';
+import FinishDialog from '../../modals/finish/ViewContainer';
+import FinishTopDialog from '../../modals/finish-top/ViewContainer';
+import ReserveDialog from '../../modals/reserve/ViewContainer';
+import NearPlacesDialog from '../../modals/near-places/ViewContainer';
+import FilterDialog from '../../modals/filter/ViewContainer';
+import RentDialog from '../../modals/rent/ViewContainer';
+import FeedbackDialog from '../../modals/feedback/ViewContainer';
+import { W, H } from '~/common/constants';
+import Menu from '~/modules/profile/modals/menu/ViewContainer';
+import { Spacer } from '~/common/components';
 
 const geolocationOption = {
   enableHighAccuracy: true,
   timeout: 200000,
   maximumAge: 1000
 };
-
-stripe.setOptions({
-  publishableKey: 'pk_test_ePNxp5U4eZc1CKEg486RGh6g00drRqawLY',
-});
 
 export default class ScreenView extends React.Component {
   state = {
@@ -130,7 +126,7 @@ export default class ScreenView extends React.Component {
           <MapButton name='position' />
         </MapView>
         <Spacer size={20} />
-        {activedModal=='unlock' && <UnlockDialog onGoScan={this.goScan} />}
+        {activedModal=='unlock' && <UnlockDialog onClickUnlock={this.onUnlock} />}
         {activedModal=='search' && <SearchDialog onCancel={this.closeSearchDialog} 
           selectPlace={this.selectPlace} />
         }
@@ -299,9 +295,22 @@ export default class ScreenView extends React.Component {
     this.setState({...this.state, activedModal: 'unlock'})
   }
 
-  goScan = () => {
-    Actions['map_scan_qr']()
-    // For test
-    // Actions['map_enter_code']()
+  onUnlock = () => {
+    const { auth, map, stripeActions } = this.props;
+    const { scannedQrCode } = map;
+    // setup card info
+
+    return stripe.paymentRequestWithCardForm()
+      .then(stripeTokenInfo => {
+        console.log('Token created: ', stripeTokenInfo);
+        // call payment function
+        stripeActions.registerCardRequest({
+          email: auth.accountInfo.email,
+          tokenId: stripeTokenInfo.tokenId
+        })
+      })
+      .catch(error => {
+        console.log('Register card failed', { error });
+      });
   }
 }

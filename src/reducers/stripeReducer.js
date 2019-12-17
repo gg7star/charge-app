@@ -1,14 +1,17 @@
 import { stripeActionTypes } from '~/actions/types';
 
 export const initialState = {
-  amount: '0',
-  tokenId: false,
-  email: false,
-  telnumber: false,
-  stationSn: false,
-  slotId: false,
-  currency: 'eur',
-  description: '',
+  payment: {
+    amount: '0',
+    tokenId: false,
+    email: false,
+    telnumber: false,
+    stationSn: false,
+    slotId: false,
+    currency: 'eur',
+    description: '',
+  },
+  customer: null,
   accessToken: false,
   isFetched: false,
   isFetching: false,
@@ -27,20 +30,40 @@ export default function StripeStateReducer(
     case stripeActionTypes.DO_PAYMENT_REQUEST:
       return {
         ...state,
-        ...action.payload,
+        payment: {...action.payload},
         isFetching: true,
       };
     case stripeActionTypes.DO_PAYMENT_SUCCESS:
       return {
         ...state,
-        ...action.payload,
+        payment: {...action.payload},
         isFetched: true,
         isFetching: false
       };
     case stripeActionTypes.DO_PAYMENT_FAILURE:
       return {
         ...state,
-        ...action.payload,
+        payment: {...action.payload},
+        isFetched: true,
+        isFetching: false
+      }
+    case stripeActionTypes.REGISTER_CARD_REQUEST:
+      return {
+        ...state,
+        customer: {...action.payload},
+        isFetching: true,
+      };
+    case stripeActionTypes.REGISTER_CARD_SUCCESS:
+      return {
+        ...state,
+        customer: {...action.payload},
+        isFetched: true,
+        isFetching: false
+      };
+    case stripeActionTypes.REGISTER_CARD_FAILURE:
+      return {
+        ...state,
+        customer: {...action.payload},
         isFetched: true,
         isFetching: false
       }

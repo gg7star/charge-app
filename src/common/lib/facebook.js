@@ -1,5 +1,5 @@
-import React from 'react'
-import { LoginButton, LoginManager, AccessToken, GraphRequest, GraphRequestManager } from 'react-native-fbsdk'
+import React from 'react';
+import { LoginButton, LoginManager, AccessToken, GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
 
 class FacebookService {
   constructor() {

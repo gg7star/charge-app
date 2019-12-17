@@ -122,7 +122,6 @@ export default class ScreenView extends React.Component {
   signout = () => {
     this.props.authActions.doLogout()
     this.props.appActions.setGlobalNotification({message: null, type: ''})
-    Actions.auth()
     Actions['login']()
   }
 }

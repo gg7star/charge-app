@@ -160,7 +160,6 @@ export default class ScreenView extends React.Component {
   }
 
   goLogin = () => {
-    Actions.auth();
     Actions['login']();
   }
 
