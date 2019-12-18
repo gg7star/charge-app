@@ -175,7 +175,8 @@ export default class ScreenView extends React.Component {
   }
 
   goGift = () => {
-    Actions['map_gift']()
+    Actions.profile()
+    Actions['profile_create_team']()
   }
 
   openSearchDialog = () => {
@@ -263,29 +264,9 @@ export default class ScreenView extends React.Component {
       });
   }
 
-  onDeposit = () => {
-    const { auth, stripeActions } = this.props;
-    // stripeActions.rentComplete();
-
-    // return stripe.paymentRequestWithCardForm()
-    //   .then(stripeTokenInfo => {
-    //     console.log('Token created: ', stripeTokenInfo);
-    //     // call payment function
-    //     stripeActions.doPaymentRequest({
-    //       amount: '50',
-    //       tokenId: stripeTokenInfo.tokenId,
-    //       email: auth.accountInfo.email,
-    //       telnumber: auth.accountInfo.phoneNumber,
-    //       stationSn: 'T1219071904',
-    //       slotId: '1',
-    //       currency: 'eur',
-    //       description: `${auth.accountInfo.name} payed via Nono application.`,
-    //       accessToken: null
-    //     })
-    //   })
-    //   .catch(error => {
-    //     console.warn('Payment failed', { error });
-    //   });
+  onDeposit = async () => {
+    const { auth, stripeActions, rentActions } = this.props;
+    Actions['admob']({adMode: 'reward'});
   }
 
   openFeedbackDialog = () => {

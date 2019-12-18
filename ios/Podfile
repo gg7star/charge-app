@@ -40,14 +40,7 @@ target 'nono' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
-  # pod 'Firebase/Core', '~> 6.13.0'
-  # pod 'Firebase/Auth', '~> 6.13.0'
-  # pod 'Firebase/Database', '~> 6.13.0'
-  # pod 'Firebase/Messaging', '~> 6.13.0'
-
-  # pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app'
-  # pod 'RNFBDatabase', :path => '../node_modules/@react-native-firebase/database'
-
+  # pod 'RNFBAdMob', :path => '../node_modules/@react-native-firebase/admob'
 
   # target 'nonoTests' do
   #   inherit! :search_paths

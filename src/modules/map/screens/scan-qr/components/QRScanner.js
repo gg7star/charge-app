@@ -284,14 +284,14 @@ export default class QRScannerView extends Component {
   
   componentWillUnmount(){
     AppState.removeEventListener('change', this.handleAppStateChange);
-    this.rnCamera && this.rnCamera.pausePreview();
+    this.rnCamera && this.rnCamera.pausePreview && this.rnCamera.pausePreview();
   }
   
   handleAppStateChange = (currentAppState) => {
     if ( currentAppState !== 'active' ) {
-      this.rnCamera && this.rnCamera.pausePreview();
+      this.rnCamera && this.rnCamera.pausePreview && this.rnCamera.pausePreview();
     } else {
-      this.rnCamera && this.rnCamera.resumePreview();
+      this.rnCamera && this.rnCamera.pausePreview && this.rnCamera.resumePreview();
     }
   };
   

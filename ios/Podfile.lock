@@ -25,6 +25,11 @@ PODS:
     - FBSDKShareKit/Share (= 5.8.0)
   - FBSDKShareKit/Share (5.8.0):
     - FBSDKCoreKit (~> 5.0)
+  - Firebase/AdMob (6.13.0):
+    - Firebase/CoreOnly
+    - Google-Mobile-Ads-SDK (~> 7.50)
+  - Firebase/Analytics (6.13.0):
+    - Firebase/Core
   - Firebase/Auth (6.13.0):
     - Firebase/CoreOnly
     - FirebaseAuth (~> 6.4.0)
@@ -95,6 +100,8 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
+  - Google-Mobile-Ads-SDK (7.53.0):
+    - GoogleAppMeasurement (~> 6.0)
   - GoogleAppMeasurement (6.1.6):
     - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
     - GoogleUtilities/MethodSwizzler (~> 6.0)
@@ -133,6 +140,7 @@ PODS:
   - OneSignal (2.12.2)
   - Permission-Notifications (2.0.8):
     - RNPermissions
+  - PersonalizedAdConsent (1.0.4)
   - Protobuf (3.11.1)
   - RCTRequired (0.61.5)
   - RCTTypeSafety (0.61.5):
@@ -373,6 +381,17 @@ PODS:
     - React
   - RNCAsyncStorage (1.7.0):
     - React
+  - RNFBAdMob (6.2.0):
+    - Firebase/AdMob (~> 6.13.0)
+    - Firebase/Analytics (~> 6.13.0)
+    - Firebase/Core (~> 6.13.0)
+    - PersonalizedAdConsent
+    - React
+    - RNFBApp
+  - RNFBAnalytics (6.2.0):
+    - Firebase/Core (~> 6.13.0)
+    - React
+    - RNFBApp
   - RNFBApp (6.2.0):
     - Firebase/Core (~> 6.13.0)
     - React
@@ -447,6 +466,8 @@ DEPENDENCIES:
   - rn-range-slider (from `../node_modules/rn-range-slider`)
   - RNAwesomeCardIO (from `../node_modules/react-native-awesome-card-io`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
+  - "RNFBAdMob (from `../node_modules/@react-native-firebase/admob`)"
+  - "RNFBAnalytics (from `../node_modules/@react-native-firebase/analytics`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBAuth (from `../node_modules/@react-native-firebase/auth`)"
   - "RNFBDatabase (from `../node_modules/@react-native-firebase/database`)"
@@ -476,6 +497,7 @@ SPEC REPOS:
     - FirebaseDatabase
     - FirebaseInstanceID
     - FirebaseMessaging
+    - Google-Mobile-Ads-SDK
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleDataTransportCCTSupport
@@ -484,6 +506,7 @@ SPEC REPOS:
     - leveldb-library
     - nanopb
     - OneSignal
+    - PersonalizedAdConsent
     - Protobuf
     - Stripe
 
@@ -562,6 +585,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-awesome-card-io"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-community/async-storage"
+  RNFBAdMob:
+    :path: "../node_modules/@react-native-firebase/admob"
+  RNFBAnalytics:
+    :path: "../node_modules/@react-native-firebase/analytics"
   RNFBApp:
     :path: "../node_modules/@react-native-firebase/app"
   RNFBAuth:
@@ -607,6 +634,7 @@ SPEC CHECKSUMS:
   FirebaseMessaging: e8d71368a5c579083da02203146c953f3386d503
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
+  Google-Mobile-Ads-SDK: 4b855e61f9c5a1a97cb55734ea372a4c36d00242
   GoogleAppMeasurement: dfe55efa543e899d906309eaaac6ca26d249862f
   GoogleDataTransport: 8e9b210c97d55fbff306cc5468ff91b9cb32dcf5
   GoogleDataTransportCCTSupport: ef79a4728b864946a8aafdbab770d5294faf3b5f
@@ -616,6 +644,7 @@ SPEC CHECKSUMS:
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
   OneSignal: b2c1511c6b5db2d3b0ce1859f574dcf190dde5f3
   Permission-Notifications: 0722c1cd783b86d2ae77a1a0c925d525f9170e7d
+  PersonalizedAdConsent: 4b87320b7a0f22576bec530ae3b7adba88a24c78
   Protobuf: 20d79da7f20b5928b80043b05080b816e802659e
   RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
   RCTTypeSafety: 9aa1b91d7f9310fc6eadc3cf95126ffe818af320
@@ -647,6 +676,8 @@ SPEC CHECKSUMS:
   rn-range-slider: 0b4800dcb93cfdc3a79bfe31a34a3132acaeb150
   RNAwesomeCardIO: caa47eefd8b6ae1986af25df3b86f9d8fbae9bb8
   RNCAsyncStorage: 8a2fadab0c6cc58d6a0629e24f978cc2ff3151fc
+  RNFBAdMob: 6bd7b601928d23a0b454252172fedbe746b0f7cc
+  RNFBAnalytics: 57dc0bfad4e40f68779757653676699072651218
   RNFBApp: 5b215aacc09105a1761de31b9a0eb2abcce06253
   RNFBAuth: 61673c0d38ce225c315e7be13a1b494904baedd2
   RNFBDatabase: 267f476097111054553ecb99208201945961efa5
@@ -660,6 +691,6 @@ SPEC CHECKSUMS:
   tipsi-stripe: 61c247493a58d7e8e0bf6ee6b014271f473d2b11
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: 5215ec7ccb986bac03ce716c6eef4ab047145b3c
+PODFILE CHECKSUM: c501c16656fb42d873173b63e82a6fcea81c8191
 
 COCOAPODS: 1.8.4

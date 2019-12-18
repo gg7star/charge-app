@@ -18,6 +18,8 @@
 {
   [FIRApp configure];
   [FIRDatabase database].persistenceEnabled = FALSE;
+  // Initialize the Google Mobile Ads SDK.
+  // [[GADMobileAds sharedInstance] startWithCompletionHandler:nil];
 
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge

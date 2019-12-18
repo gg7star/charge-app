@@ -12,7 +12,7 @@ import AddCoupon from './screens/add-coupon/ViewContainer';
 import Pay from './screens/pay/ViewContainer';
 
 const ProfileStack = (
-  <Scene key={'profile'}>
+  <Stack key={'profile'}>
     <Scene 
       key='profile_create_team'
       hideNavBar
@@ -63,7 +63,7 @@ const ProfileStack = (
       hideNavBar
       component={Help}
     />
-  </Scene>
+  </Stack>
 );
 
 export default ProfileStack;

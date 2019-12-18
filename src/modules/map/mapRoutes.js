@@ -4,6 +4,7 @@ import FirstScreen from '~/modules/map/screens/first/ViewContainer';
 import GiftScreen from '~/modules/map/screens/gift/ViewContainer';
 import ScanQrScreen from '~/modules/map/screens/scan-qr/ViewContainer';
 import EnterCodeScreen from '~/modules/map/screens/enter-code/ViewContainer';
+import AdmobScreen from '~/modules/map/screens/admob/ViewContainer';
 
 const MapStack = (
   <Scene key={'map'} >
@@ -26,6 +27,11 @@ const MapStack = (
       key='map_enter_code'
       hideNavBar
       component={EnterCodeScreen}
+    />
+    <Scene 
+      key='admob'
+      hideNavBar
+      component={AdmobScreen}
     />
   </Scene>
 )
