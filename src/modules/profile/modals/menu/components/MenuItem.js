@@ -15,15 +15,33 @@ const MenuItem = (props) => (
     <View style={{marginRight: 10, flexDirection: 'row'}}>
       <Image
         source={props.image}
-        style={{width: 20, height: 20, tintColor: colors.primary, marginRight: 5}}
+        style={{
+          width: 20,
+          marginRight: 5,
+          marginLeft: 5,
+          opacity: props.disabled ? 0.5: 1
+        }}
       />
-      <Text style={{fontSize: 16, fontWeight: '400', color: props.disabled ? '#BFBFC4' : '#36384A'}}>
+      <Text
+        style={{
+          fontSize: 16,
+          fontWeight: '400',
+          color: props.disabled ? '#BFBFC4' : '#36384A',
+          paddingLeft: 15
+        }}
+      >
         {props.title}
       </Text>
     </View>
     <View>
       {props.subtitle &&
-        <Text style={{fontSize: 13, fontWeight: '300', color: props.disabled ? '#BFBFC4' : '#36384A'}}>
+        <Text
+          style={{
+            fontSize: 13,
+            fontWeight: '300',
+            color: props.disabled ? '#BFBFC4' : '#36384A'
+          }}
+        >
           {props.subtitle}
         </Text>
       }

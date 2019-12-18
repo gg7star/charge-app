@@ -1,15 +1,23 @@
-import React from 'react'
-import { View, Text, TouchableOpacity, Image } from 'react-native'
-import { W, H, em, colors } from '~/common/constants'
-import TouchableScale from 'react-native-touchable-scale'
-import { List, ListItem } from 'native-base'
-import LinearGradient from 'react-native-linear-gradient'
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
+import React from 'react';
+import { View, Text, Image } from 'react-native';
+import TouchableScale from 'react-native-touchable-scale';
+import { Actions } from 'react-native-router-flux';
+import LinearGradient from 'react-native-linear-gradient';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 // import Intl from 'react-native-intl'
-import BackWrapper from './wrappers/BackWrapper'
-import MenuWrapper from './wrappers/MenuWrapper'
-import MenuItem from './components/MenuItem'
-import { Actions } from 'react-native-router-flux'
+import { colors } from '~/common/constants';
+import BackWrapper from './wrappers/BackWrapper';
+import MenuWrapper from './wrappers/MenuWrapper';
+import MenuItem from './components/MenuItem';
+
+const TREE_IMAGE = require('~/common/assets/images/png/tree.png');
+const NOTIFICATION_IMAGE = require('~/common/assets/images/menu-notification.png');
+const MEDAL_IMAGE = require('~/common/assets/images/menu-medal.png');
+const PLANT_IMAGE = require('~/common/assets/images/menu-plant.png');
+const HISTORY_IMAGE = require('~/common/assets/images/menu-history.png');
+const SETTINGS_IMAEG = require('~/common/assets/images/menu-settings.png');
+const ABOUT_US_IMAGE = require('~/common/assets/images/menu-aboutus.png');
+const NEED_HELP_IMAGE = require('~/common/assets/images/menu-help.png');
 
 export default class Menu extends React.Component {
   handleClickOutside = () => {
@@ -22,30 +30,18 @@ export default class Menu extends React.Component {
     const { _t } = this.props.appActions
     const { accountInfo } = this.props.auth
 
-    let currency = 0
-    // const formatter = new Intl.NumberFormat('fr-fr', {
-    //   style: 'currency',
-    //   currency: 'EUR',
-    //   minimumFractionDigits: 2
-    // })
-
-    if (this.props.profile) {      
-      currency = this.props.profile.cash.money //formatter.format(this.props.profile.cash.money)
-    } else {
-      currency = 0 //formatter.format(0)
-    }
-
     return (
       <React.Fragment>
         { isShowable && 
         <BackWrapper onPress={this.handleClickOutside}>
           <MenuWrapper onClose={this.props.onClose}>
             <Text
-                style={{ 
+              style={{ 
                 fontSize: 23,
                 color: colors.primary,
                 fontWeight: '600',
-                marginVertical: 10, 
+                marginVertical: 10,
+                marginLeft: 5
               }}
             >
               {accountInfo && accountInfo.name}
@@ -54,37 +50,50 @@ export default class Menu extends React.Component {
               <View style={{}}>
                 <TouchableScale
                   onPress={() => {
-                    Actions.profile()
-                    Actions['profile_create_team']()
+                    Actions.profile();
+                    Actions['profile_create_team']();
                   }}
                 >
                   <LinearGradient
                     colors={['#07e28e', '#36f7ad']}
                     style={{
-                      paddingVertical: 10, paddingLeft: 8,
+                      paddingVertical: 10,
+                      paddingLeft: 8,
                       borderRadius: 15, 
-                      flexDirection: 'row', width: '100%',
+                      flexDirection: 'row',
+                      width: '100%',
                       justifyContent: 'space-between',
                       alignItems: 'center'
                     }}
                   >
-                    <View style={{ flexDirection: 'row' }}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                      }}
+                    >
                       <Image
-                        source={require('~/common/assets/images/png/tree.png')} 
-                        style={{width: 20, height: 20, marginLeft: 5, marginRight: 5}}
+                        source={TREE_IMAGE} 
+                        style={{ marginLeft: 5, marginRight: 5}}
                       />
                       <Text
                         style={{
-                          color: 'white', fontSize: 16, fontWeight: '600', paddingLeft: 5
+                          color: 'white', fontSize: 16, fontWeight: '600', paddingLeft: 5,
+                          justifyContent: 'center', alignContent: 'center', alignItems: 'center'
                         }}
                       >
                         {_t('Start your forest')}
                       </Text>
                     </View>                    
-                    <MaterialIcon name='chevron-right' style={{
-                      backgroundColor: 'transparent',
-                      color: 'white', fontSize: 24,
-                    }} />
+                    <MaterialIcon
+                      name='chevron-right'
+                      style={{
+                        backgroundColor: 'transparent',
+                        color: 'white',
+                        fontSize: 24,
+                      }}
+                    />
                   </LinearGradient>
                 </TouchableScale>
               </View>
@@ -95,8 +104,8 @@ export default class Menu extends React.Component {
                     title={_t(menu.title)}
                     disabled={menu.disabled}
                     onPress={() => {
-                      Actions.profile()
-                      Actions[menu.route]()
+                      Actions.profile();
+                      Actions[menu.route]();
                     }}
                   />
                 </View>
@@ -108,8 +117,8 @@ export default class Menu extends React.Component {
                 title={_t(lastMenuItem.title)}
                 disabled={lastMenuItem.disabled}
                 onPress={() => {
-                  Actions.profile()
-                  Actions[lastMenuItem.route]()
+                  Actions.profile();
+                  Actions[lastMenuItem.route]();
                 }}
               />
             </View>
@@ -124,47 +133,37 @@ export default class Menu extends React.Component {
 const menuList = [
   {
     title: 'Notifications',
-    image: require('~/common/assets/images/menu-notification.png'),
+    image: NOTIFICATION_IMAGE,
     route: 'profile_history',
     disabled: false
   },
   {
     title: 'My points',
-    image: require('~/common/assets/images/menu-medal.png'),
+    image: MEDAL_IMAGE,
     route: 'profile_history',
     disabled: true
   },
   {
     title: 'Your planted trees',
-    image: require('~/common/assets/images/menu-plant.png'),
+    image: PLANT_IMAGE,
     route: 'profile_history',
     disabled: true
   },
-  // {
-  //   title: 'Wallet',
-  //   image: require('~/common/assets/images/menu-wallet.png'),
-  //   route: 'profile_wallet'
-  // },
   {
     title: 'Histories',
-    image: require('~/common/assets/images/menu-history.png'),
+    image: HISTORY_IMAGE,
     route: 'profile_history',
     disabled: false
   },
-  // {
-  //   title: 'Payment',
-  //   image: require('~/common/assets/images/menu-payment.png'),
-  //   route: 'profile_payment'
-  // },
   {
     title: 'Settings',
-    image: require('~/common/assets/images/menu-settings.png'),
+    image: SETTINGS_IMAEG,
     route: 'profile_setting',
     disabled: false
   },
   {
     title: 'About us',
-    image: require('~/common/assets/images/menu-aboutus.png'),
+    image: ABOUT_US_IMAGE,
     route: 'profile_about_us',
     disabled: false
   }
@@ -172,7 +171,7 @@ const menuList = [
 
 const lastMenuItem = {
   title: 'Need help?',
-  image: require('~/common/assets/images/png/help.png'),
+  image: NEED_HELP_IMAGE,
   route: 'profile_help',
   disabled: false
 }

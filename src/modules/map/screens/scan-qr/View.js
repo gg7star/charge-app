@@ -124,7 +124,7 @@ export default class ScreenView extends React.Component {
     Actions['map_first']()
   }
 
-  onReceivedQRCode = (scanedQrCode) => {
+  onReceivedQRCode = (scanedQrCode, callbackResumScan) => {
     this.setState({qrCode: scanedQrCode, scanBarAnimateReverse: false}, () => {
       console.log('==== QR code: ', scanedQrCode);
       // Check stationSN validation
@@ -142,9 +142,11 @@ export default class ScreenView extends React.Component {
       } else {
         Alert.alert(
           'Invalid QR code',
-          `${code}. The code is invalid. Please enter correct QR code of this station, again.`,
+          `${scanedQrCode}. The code is invalid. Please enter correct QR code of this station, again.`,
           [
-            {text: 'OK', onPress: () => {}}
+            {text: 'OK', onPress: () => {
+              callbackResumScan();
+            }}
           ],
           {cancelable: false},
         );

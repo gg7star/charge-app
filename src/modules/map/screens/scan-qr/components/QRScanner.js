@@ -312,13 +312,12 @@ export default class QRScannerView extends Component {
             {
               text: 'Cancel',
               onPress: () => {
-                _this.handleAppStateChange('active');
-                _this.setState({scanEnabled: true});
+                _this.resumeScan();
               },
               style: 'cancel',
             },
             {text: 'OK', onPress: () => {
-              _this.props.onScanResult(qrCode);
+              _this.props.onScanResult(qrCode, this.resumeScan);
             }},
           ],
           {cancelable: false},
@@ -330,6 +329,11 @@ export default class QRScannerView extends Component {
   onPausePreview = () => {
     console.log('===== onPausePreview');
     this.handleAppStateChange('stop');
+  }
+
+  resumeScan = () => {
+    _this.handleAppStateChange('active');
+    _this.setState({scanEnabled: true});
   }
   
   render(){

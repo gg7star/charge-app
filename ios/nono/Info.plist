@@ -2,18 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>GADIsAdManagerApp</key>
-	<true/>
-	<key>GADApplicationIdentifier</key>
-	<string>ca-app-pub-9857774334300015~2815081438</string>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>fbauth2</string>
-		<string>fbapi</string>
-		<string>fbshareextension</string>
-	</array>
-	<key>LSApplicationCategoryType</key>
-	<string>public.app-category.productivity</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
 	<key>CFBundleDisplayName</key>
 	<string>Nono</string>
 	<key>CFBundleExecutable</key>
@@ -51,12 +41,22 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>en</string>
 	<key>FacebookAppID</key>
 	<string>411769359503356</string>
 	<key>FacebookDisplayName</key>
 	<string>nono</string>
+	<key>GADApplicationIdentifier</key>
+	<string>ca-app-pub-9857774334300015~2815081438</string>
+	<key>GADIsAdManagerApp</key>
+	<true/>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.productivity</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbauth2</string>
+		<string>fbapi</string>
+		<string>fbshareextension</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -74,12 +74,12 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Nono application requires access to your phone’s camera.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Your location ia always required for Nono application.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Your location is always required for Nono application.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Your location is required for Nono application.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Your location ia always required for Nono application.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Nono application requires access to the photo library.</string>
 	<key>UIAppFonts</key>

@@ -86,7 +86,7 @@ export default class ScreenView extends React.Component {
                 {_t("No account?")}
               </Text>
               <Text style={[commonStyles.text.defaultWhite, {fontSize: 14*em, fontWeight: 'bold'}]}>
-                {_t('Register yourself')}              
+                {` ${_t('Register yourself')}`}              
               </Text>
             </TouchableOpacity>
             <Spacer size={60*em} />
