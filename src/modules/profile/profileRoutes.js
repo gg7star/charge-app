@@ -1,5 +1,6 @@
 import React from 'react';
 import { Scene, Stack, Actions } from 'react-native-router-flux';
+import ProfileMenu from './modals/menu/ViewContainer';
 import CreateTeam from './screens/create-team/ViewContainer';
 import Wallet from './screens/wallet/ViewContainer';
 import History from './screens/history/ViewContainer';
@@ -13,6 +14,11 @@ import Pay from './screens/pay/ViewContainer';
 
 const ProfileStack = (
   <Stack key={'profile'}>
+    <Scene 
+      key='profile_menu'
+      hideNavBar
+      component={ProfileMenu}
+    />
     <Scene 
       key='profile_create_team'
       hideNavBar

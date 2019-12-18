@@ -1,8 +1,7 @@
 import React from 'react'
-import { View,Text, TouchableOpacity, Platform } from 'react-native';
+import { View, Platform } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import stripe from 'tipsi-stripe';
-import Geolocation from 'react-native-geolocation-service';
 import MapView from '../../common/components/MapView';
 import MapButton from '../../common/components/MapButton';
 import UnlockDialog from '../../modals/unlock/ViewContainer';
@@ -19,12 +18,6 @@ import { W, H } from '~/common/constants';
 import Menu from '~/modules/profile/modals/menu/ViewContainer';
 import { Spacer } from '~/common/components';
 
-const GEOLOCATION_OPTION = {
-  enableHighAccuracy: true,
-  timeout: 200000,
-  maximumAge: 1000
-};
-
 export default class ScreenView extends React.Component {
   state = {
     profileOpened: false,
@@ -32,80 +25,35 @@ export default class ScreenView extends React.Component {
   }
 
   componentDidMount() {
-    const { initialModal } = this.props
-    const _this = this;
-    // Get current location
-    Geolocation.getCurrentPosition(
-      (position) => { _this.handleGetCurrentLocation(position) },
-      (error) => { _this.handleCurrentLocationError(error) },
-      GEOLOCATION_OPTION
-    );
-    
-    Geolocation.watchPosition(
-      (position) => { _this.handleGetCurrentLocation(position) },
-      (error) => { _this.handleCurrentLocationError(error) },
-      GEOLOCATION_OPTION
-    );
-
-    this.props.mapActions.loadPlacesOnMap()
+    const { initialModal, profileOpened } = this.props
+    var newState = {...this.state};
     if (initialModal) {
-      this.setState({
-        ...this.state,
+      newState = {
+        ...newState,
         activedModal: initialModal
-      })
-    }
-  }
-
-  componentWillUnmount() {
-    Geolocation.stopObserving();
-  }
-
-  handleGetCurrentLocation = (position) => {
-    console.log("==== position: ", position);
-    const { mapActions } = this.props;
-    const newLocation = {
-      name: "My location",
-      coordinate: {
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-        error: null,
       }
-    };
-    mapActions.changedCurrentLocation(newLocation);
-    mapActions.searchPlaces('', newLocation, null);
-  }
-
-  handleCurrentLocationError = (error) => {
-    console.log('===== location error: ', error.message);
-    if (this.props.map.currentLocation) {
-      // Set previous location.
-      const prevCordinate = this.props.map.currentLocation.coordinate;
-      this.props.mapActions.changedCurrentLocation({
-        name: "My location",
-        coordinate: {
-          latitude: prevCordinate.latitude,
-          longitude: prevCordinate.longitude,
-          error: error.message,
-        }
-      });
     }
-  }
-
-  handleDetectDirection = ({distance, duration}) => {
-    this.props.mapActions.setDirection({distance, duration});
+    if (profileOpened) {
+      newState = {
+        ...newState,
+        profileOpened
+      }
+    }
+    this.setState({...newState})
   }
 
   render() {
-    const { currentLocation, places, place } = this.props.map
-    const { _t } = this.props.appActions
-    const { profileOpened } = this.state
-    const { activedModal } = this.state
-
+    const { currentLocation, places, place } = this.props.map;
+    const { _t } = this.props.appActions;
+    const { profileOpened } = this.state;
+    const { activedModal } = this.state;
+    const propsProfileOpened = this.props.profileOpened;
+    // console.log('=== propsProfileOpened: ', propsProfileOpened)
     return (
       <View style={{position: 'relative', width: W, height: H}}>
         <Menu 
-          isShowable={profileOpened} 
-          onClose={()=> this.setState({...this.state, profileOpened: false })}
+          isShowable={profileOpened || propsProfileOpened} 
+          onClose={()=> {this.setState({...this.state, profileOpened: false })}}
         />
         <MapView
           mapType={Platform.OS == "android" ? "none" : "standard"}
@@ -117,7 +65,10 @@ export default class ScreenView extends React.Component {
         >
           <MapButton
             name='profile'
-            onPress={() => this.setState({...this.state, profileOpened: true})}
+            onPress={() => {
+                this.setState({...this.state, profileOpened: true});
+              }
+            }
           />
           <MapButton name='tree' onPress={this.goGift}/>
           {/* <MapButton name='search' onPress={this.openSearchDialog}/> */}

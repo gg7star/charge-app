@@ -1,4 +1,3 @@
-import { Actions } from 'react-native-router-flux';
 import * as types from './types/signupActionTypes';
 
 export function initSignup() {
@@ -16,8 +15,6 @@ export function setPhoneNumber({countryCode, phoneNumber}) {
 
 
 export function requestConfirmCodeSuccess({confirmation}) {
-  console.log('==== go to signup_set_confirm_code')
-  Actions['signup_set_confirm_code']()
   return {
     type: types.REQUEST_CONFIRM_CODE_SUCCESS,
     payload: {

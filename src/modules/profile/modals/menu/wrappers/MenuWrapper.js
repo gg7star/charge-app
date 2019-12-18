@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, TouchableOpacity, Image } from 'react-native';
-import { W, H, em, colors } from '~/common/constants';
+import { View, TouchableOpacity, Image, TouchableWithoutFeedback } from 'react-native';
+import { W, H } from '~/common/constants';
 import { Spacer } from '~/common/components';
 const CLOSE_IMAGE = require('~/common/assets/images/png/cross.png');
 
@@ -9,7 +9,7 @@ const MenuWrapper = (props) => {
     <View 
       style={{
         position: 'absolute', zIndex: 90,
-        left: 0, top: 0, width: '80%', height: H,
+        left: 0, top: 0, width: W*0.8, height: H,
         backgroundColor: '#fff',
         borderTopRightRadius: 20, borderBottomRightRadius: 20,
         paddingTop: 20, paddingBottom: 20, paddingHorizontal: 20,

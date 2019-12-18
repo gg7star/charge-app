@@ -1,4 +1,5 @@
 import { put, takeLatest, call } from 'redux-saga/effects';
+import { Actions } from 'react-native-router-flux';
 import { signupFirebaseService } from '~/common/services/firebase';
 import * as virtualAccount from '~/common/utils/virtualAccount';
 import { processRequest } from '~/common/services/api';
@@ -34,6 +35,8 @@ export function* requestVerificationCode(action) {
       type: 'success',
       duration: 6000
     }));
+    console.log('==== go to signup_set_confirm_code');
+    Actions['signup_set_confirm_code']();
   } else {
     yield put(requestConfirmCodeFailed({
       error: res.error

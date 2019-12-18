@@ -12,12 +12,17 @@ import MenuItem from './components/MenuItem'
 import { Actions } from 'react-native-router-flux'
 
 export default class Menu extends React.Component {
+  handleClickOutside = () => {
+    Actions.map();
+    Actions['map_first']({profileOpened: false});
+  }
+
   render() {
     const { isShowable } = this.props
     const { _t } = this.props.appActions
     const { accountInfo } = this.props.auth
 
-    let currency_ = 0
+    let currency = 0
     // const formatter = new Intl.NumberFormat('fr-fr', {
     //   style: 'currency',
     //   currency: 'EUR',
@@ -85,18 +90,6 @@ export default class Menu extends React.Component {
               </View>
               {menuList.map((menu, k) => (
                 <View key={k}>
-                  { menu.title=='Wallet'?
-                  <MenuItem
-                    image={menu.image}
-                    title={_t(menu.title)}
-                    subtitle={currency}
-                    disabled={menu.disabled}
-                    onPress={() => {
-                      Actions.profile()
-                      Actions[menu.route]()
-                    }}
-                  />
-                  :
                   <MenuItem
                     image={menu.image}
                     title={_t(menu.title)}
@@ -106,7 +99,6 @@ export default class Menu extends React.Component {
                       Actions[menu.route]()
                     }}
                   />
-                  }
                 </View>
               ))}
             </View>

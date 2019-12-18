@@ -77,7 +77,7 @@ export default class CustomMapView extends React.Component {
               strokeColor="hotpink"
               optimizeWaypoints={true}
               onStart={(params) => {
-                console.log(`Started routing between "${params.origin}" and "${params.destination}"`);
+                // console.log(`Started routing between "${params.origin}" and "${params.destination}"`);
               }}
               onReady={result => {
                 // console.log(`==== Distance: ${result.distance} km`)

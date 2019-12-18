@@ -13,6 +13,13 @@ import {
   startReceiveFcm,
   saveFcmToken
 } from '~/common/services/rn-firebase/message';
+import Geolocation from 'react-native-geolocation-service';
+
+const GEOLOCATION_OPTION = {
+  enableHighAccuracy: true,
+  timeout: 200000,
+  maximumAge: 1000
+};
 
 export default class AppView extends Component {
   state = {
@@ -41,7 +48,24 @@ export default class AppView extends Component {
 
     // Fcm
     // const fcmToken = await createFcmToken();
-    // loginActions.setFcmToken(fcmToken);  
+    // loginActions.setFcmToken(fcmToken);
+
+    // Map
+    const _this = this;
+    // Get current location
+    Geolocation.getCurrentPosition(
+      (position) => { _this.handleGetCurrentLocation(position) },
+      (error) => { _this.handleCurrentLocationError(error) },
+      GEOLOCATION_OPTION
+    );
+
+    Geolocation.watchPosition(
+      (position) => { _this.handleGetCurrentLocation(position) },
+      (error) => { _this.handleCurrentLocationError(error) },
+      GEOLOCATION_OPTION
+    );
+
+    this.props.mapActions.loadPlacesOnMap();
   }
 
   async componentWillUnmount() {
@@ -51,6 +75,8 @@ export default class AppView extends Component {
 
     const { auth } = this.props;
     (auth && auth.fcm && auth.fcm.fcmListener) && auth.fcm.fcmListener();
+
+    Geolocation.stopObserving();
   }
   
   onReceived(notification) {
@@ -72,6 +98,44 @@ export default class AppView extends Component {
     console.log('===== fcmListener: ', fcmListener);
     this.setState({fcmListener});
   }
+
+
+  handleGetCurrentLocation = (position) => {
+    // console.log("==== position: ", position);
+    const { mapActions } = this.props;
+    const newLocation = {
+      name: "My location",
+      coordinate: {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+        error: null,
+      }
+    };
+    mapActions.changedCurrentLocation(newLocation);
+    mapActions.searchPlaces('', newLocation, null);
+  }
+
+  handleCurrentLocationError = (error) => {
+    // console.log('===== location error: ', error.message);
+    if (this.props.map.currentLocation) {
+      // Set previous location.
+      const prevCordinate = this.props.map.currentLocation.coordinate;
+      this.props.mapActions.changedCurrentLocation({
+        name: "My location",
+        coordinate: {
+          latitude: prevCordinate.latitude,
+          longitude: prevCordinate.longitude,
+          error: error.message,
+        }
+      });
+    }
+  }
+
+  handleDetectDirection = ({distance, duration}) => {
+    this.props.mapActions.setDirection({distance, duration});
+  }
+
+
   showToast() {
     const { _t } = this.props.appActions
     const { notification } = this.state
