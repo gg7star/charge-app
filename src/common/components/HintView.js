@@ -35,16 +35,14 @@ export default class HintView extends React.Component {
 
     return (
       <View style={{ justifyContent: 'space-around' }}>
-        <View style={{}}>
+        <Animated.View>
           <Animated.Image
             resizeMode="contain"
-            style={{ width: (W-40), height: 527/425*(W-40), marginVertical: 20 }}
+            style={{ width: (W-40), height: 480/425*(W-40), marginVertical: 20 }}
             source={image}
           />
-        </View>
-        <Animated.View
-          style={{}}
-        >
+        </Animated.View>
+        <Animated.View>
           <Text style={{ color: '#313131', fontSize: 22, fontWeight: 'bold', textAlign: 'center' }}>
             {title}
           </Text>

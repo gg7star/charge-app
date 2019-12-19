@@ -27,7 +27,6 @@ export function* requestVerificationCode(action) {
   const { countryCode, phoneNumber } = action.payload;
   const fullPhoneNumber = `${countryCode}${phoneNumber}`;
   const res = yield call(attemptSignInWithPhone, `+${fullPhoneNumber}`);
-  console.log('==== res: ', res);
   if (res.confirmation) {
     yield put(requestConfirmCodeSuccess({confirmation: res.confirmation}));
     yield put(setGlobalNotification({
@@ -88,6 +87,11 @@ export function* trySignup(action) {
       type: signupActionTypes.SIGNUP_FAILURE,
       payload: {statusMessage: errorMessage}
     });
+    yield put(setGlobalNotification({
+      message: errorMessage,
+      type: 'danger',
+      duration: 6000
+    }));
     return;
   } catch (e) {
     console.log('===== e: ', e);
@@ -98,6 +102,11 @@ export function* trySignup(action) {
       type: signupActionTypes.SIGNUP_FAILURE,
       payload: {statusMessage: errorMessage}
     });
+    yield put(setGlobalNotification({
+      message: errorMessage,
+      type: 'danger',
+      duration: 6000
+    }));
   }
 }
 
@@ -126,6 +135,11 @@ export function* tryRegisterFbUserToFirebase(action) {
       type: signupActionTypes.SIGNUP_FAILURE,
       payload: {statusMessage: errorMessage}
     });
+    yield put(setGlobalNotification({
+      message: errorMessage,
+      type: 'danger',
+      duration: 6000
+    }));
     return;
   } catch (e) {
     console.log('===== e: ', e);
@@ -136,5 +150,10 @@ export function* tryRegisterFbUserToFirebase(action) {
       type: signupActionTypes.SIGNUP_FAILURE,
       payload: {statusMessage: errorMessage}
     });
+    yield put(setGlobalNotification({
+      message: errorMessage,
+      type: 'danger',
+      duration: 6000
+    }));
   }
 }

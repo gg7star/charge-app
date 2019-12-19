@@ -1,8 +1,7 @@
 import { put, takeLatest, call } from 'redux-saga/effects';
-import { Actions, ActionConst } from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux';
 import * as virtualAccount from '~/common/utils/virtualAccount';
 import {loginActionTypes, mapActionTypes} from '~/actions/types';
-// import { loginFirebaseService } from '~/common/services/firebase';
 import { attemptSignInWithEmail } from '~/common/services/rn-firebase/auth';
 import { getCurrentUserInfo } from '~/common/services/rn-firebase/database';
 import { createFcmToken, saveFcmToken, startReceiveFcm } from '~/common/services/rn-firebase/message';

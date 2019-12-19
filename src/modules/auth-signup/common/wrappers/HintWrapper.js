@@ -18,7 +18,7 @@ const HintWrapper = ({ children, onGoBack, onClose }) => (
 const Header = ({ onGoBack, onClose }) => (
   <View
     style={{
-      marginTop: 30*em, marginBottom: 30*em,
+      marginTop: 30*em, marginBottom: 0*em,
       flexDirection: 'row', justifyContent: 'space-between'
     }}
   >
@@ -26,12 +26,14 @@ const Header = ({ onGoBack, onClose }) => (
       style={{width: 50*em, height: 50*em, alignItems: 'flex-start', justifyContent: 'center'}}
       onPress={onGoBack}
     >
-      <Image
-        source={require('~/common/assets/images/png/arrow.png')}
-        style={{width: 13*em, height: 20*em, tintColor: '#35cdfa'}}
-      />
+      {onGoBack && 
+        <Image
+          source={require('~/common/assets/images/png/arrow.png')}
+          style={{width: 13*em, height: 20*em, tintColor: '#35cdfa'}}
+        />
+      }
     </TouchableOpacity>  
-    <View>
+    <View style={{alignItems: 'center', justifyContent: 'center'}}>
       <Image
         source={require('~/common/assets/images/png/Union-32.png')}
         style={{width: 79*em, height: 18*em,}}

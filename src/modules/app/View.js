@@ -3,8 +3,7 @@ import {
   StyleSheet, SafeAreaView, View, StatusBar, Platform,
   AppRegistry, AsyncStorage, Alert
 } from 'react-native';
-import { Root } from 'native-base';
-import { Toast } from 'native-base'
+import { Root, Toast } from 'native-base';
 import OneSignal from 'react-native-onesignal';
 import {name as appName} from '../../../app.json';
 import RootRoutes from '~/routes';
