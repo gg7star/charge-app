@@ -134,7 +134,7 @@ const menuList = [
   {
     title: 'Notifications',
     image: NOTIFICATION_IMAGE,
-    route: 'profile_history',
+    route: 'profile_notification',
     disabled: false
   },
   {

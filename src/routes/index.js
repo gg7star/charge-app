@@ -32,7 +32,7 @@ class NonoRoutes extends Component {
 		return (
 			<Router>
 				<Scene key='root' hideNavBar panHandlers={null}>
-					{/* <Scene 
+					<Scene 
 						key='signup_first'
 						hideNavBar
 						component={FirstScreen}
@@ -56,7 +56,7 @@ class NonoRoutes extends Component {
 						key='signup_set_birthday'
 						hideNavBar
 						component={SetBirthday}
-					/> */}
+					/>
 					<Scene 
 						key='signup_hint_find_station'
 						hideNavBar

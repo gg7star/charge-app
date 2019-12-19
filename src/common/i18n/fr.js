@@ -182,5 +182,6 @@ export default {
   'Créer ton groupe': 'Create your group',
   'Notifications': 'Notifications',
   'Mes points': 'My points',
-  'Vos arbres plantés': 'Your planted trees'
+  'Vos arbres plantés': 'Your planted trees',
+  'Nothing': 'Rien'
 };
