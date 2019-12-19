@@ -4,6 +4,7 @@ import { Actions } from 'react-native-router-flux'
 import ProfileWrapper from '../../common/wrappers/ProfileWrapper'
 import ProfileHeader from '../../common/headers/ProfileHeader'
 import { W, H, em } from '~/common/constants';
+import { facebookService } from '~common/lib/facebook';
 
 export default class ScreenView extends React.Component {
   state = {
@@ -120,8 +121,9 @@ export default class ScreenView extends React.Component {
   }
 
   signout = () => {
-    this.props.authActions.doLogout()
-    this.props.appActions.setGlobalNotification({message: null, type: ''})
-    Actions['login']()
+    this.props.appActions.setGlobalNotification({message: null, type: ''});
+    this.props.authActions.doLogout();
+    facebookService.logout();
+    Actions.login();
   }
 }

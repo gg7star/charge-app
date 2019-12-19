@@ -3,6 +3,7 @@ import firebase from '@react-native-firebase/app';
 export async function attemptSignInWithEmail({email, password}) {
   try {
     const res = await firebase.auth().signInWithEmailAndPassword(email, password);
+    console.log('===== res: ', res);
     return { authInfo: res, error: null };
   } catch (e) {
     var errorMessage = 'Firebase auth failed.';

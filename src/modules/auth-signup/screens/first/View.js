@@ -40,17 +40,7 @@ export default class ScreenView extends React.Component {
 
     return (
       <FirstWrapper>
-        <View
-          style={{
-            flex: 1,
-            alignItems: 'center', justifyContent: 'space-around',
-            paddingHorizontal: 20*em
-          }}
-        >
-          <View style={{width: '100%'}}>
-            <Spacer size={this.state.adjust.mostTop} />
-            <LogoView />
-            <Spacer size={50*em} />
+        <React.Fragment>
             <Text style={[commonStyles.text.titleWhite, {fontSize: 26*em, textAlign: 'center'}]}>
               {_t("Register yourself")}
             </Text>
@@ -101,8 +91,7 @@ export default class ScreenView extends React.Component {
               </Text>
             </TouchableOpacity>
             <Spacer size={60*em} />
-          </View>
-        </View>
+          </React.Fragment>
       </FirstWrapper>
     )
   }
@@ -160,6 +149,7 @@ export default class ScreenView extends React.Component {
   }
 
   goLogin = () => {
+    this.props.signupActions.initSignup();
     Actions['login']();
   }
 

@@ -9,6 +9,7 @@ const initialState = {
   statusMessage: '',
   isFirst: false,
   isFacebook: false,
+  fbProfile: null,
   fcm: {
     token: null,
     fcmListener: null,
@@ -54,7 +55,10 @@ export default function reducer(state = initialState, action) {
         ...state,
         isAuthenticated: false,
         accountInfo: null,
-        authInfo: null
+        authInfo: null,
+        fbProfile: null,
+        isFacebook: false,
+        fbId: null
       }
     case loginActionTypes.CLEAR_MESSAGE:
       return {
@@ -76,6 +80,8 @@ export default function reducer(state = initialState, action) {
     case loginActionTypes.FACEBOOK_LOGIN_REQUEST:
       return {
         ...state,
+        fbId: action.payload.fbId,
+        fbProfile: action.payload.fbProfile,
         isFetching: true,
         isFacebook: true
       }

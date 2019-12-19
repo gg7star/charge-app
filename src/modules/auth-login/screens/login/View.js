@@ -29,69 +29,51 @@ export default class ScreenView extends React.Component {
 
     return (
       <FirstWrapper>
-        <View style={{
-          flex: 1,
-          alignItems: 'center', justifyContent: 'center',
-          paddingHorizontal: 20*em
-        }}>
-          <View style={{width: '100%'}}>
-            <Spacer size={this.state.adjust.mostTop} />
-            <LogoView />
-            <Spacer size={50*em} />
-            <Text style={[commonStyles.text.titleWhite, {fontSize: 26*em, textAlign: 'center'}]}>
-              {_t("Connect yourself")}
+        <React.Fragment>
+          <Text style={[commonStyles.text.titleWhite, {fontSize: 26*em, textAlign: 'center'}]}>
+            {_t("Connect yourself")}
+          </Text>
+          <Spacer size={10*em} />
+          <PhoneNumberInput
+            defaultCountry={this.props.app.language.toUpperCase()}
+            placeholder={_t('Mobile number')} 
+            phoneNumber={phoneNumber}
+            onChangeCountry={this.onChangeCountry}
+            onChangePhoneNumber={(phoneNumber) => this.setState({...this.state, phoneNumber})} 
+            onFocus={() => this.adjustOnTextFocus()}
+            onBlur={() => this.adjustOnTextBlur()}
+          />
+          <Spacer size={20*em} />
+          <Button
+            onPress={this.onLogin}
+            caption={_t('Next')}
+            loading={isLoggingIn}
+            disabled={isLoggingIn}
+          />
+          <Spacer size={20*em} />
+          <Button onPress={this.onFacebookLogin} 
+            caption={_t('Continue with facebook')} 
+            icon={require('~/common/assets/images/facebook.png')}
+            textColor='#fff'
+            bgGradientStart='#48bff3'
+            bgGradientEnd='#00a9f2'
+            loading={isLoggingInWithFacebook}
+            disabled={isLoggingInWithFacebook}
+          />
+          <Spacer size={30*em} />
+          <TouchableOpacity
+            style={{width: '100%', alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}
+            onPress={() => this.goSignup()}
+          >
+            <Text style={[commonStyles.text.defaultWhite, {fontSize: 14*em}]}>
+              {_t("No account?")}
             </Text>
-            <Spacer size={10*em} />
-            <PhoneNumberInput
-              defaultCountry={this.props.app.language.toUpperCase()}
-              placeholder={_t('Mobile number')} 
-              phoneNumber={phoneNumber}
-              onChangeCountry={this.onChangeCountry}
-              onChangePhoneNumber={(phoneNumber) => this.setState({...this.state, phoneNumber})} 
-              onFocus={() => this.adjustOnTextFocus()}
-              onBlur={() => this.adjustOnTextBlur()}
-            />
-            <Spacer size={20*em} />
-            <Button
-              onPress={this.onLogin}
-              caption={_t('Next')}
-              loading={isLoggingIn}
-              disabled={isLoggingIn}
-            />
-            {/* {auth.isFetching
-              ? <ActivityIndicator color={'#00a9f2'} />
-              : <Button
-                  onPress={this.onLogin}
-                  caption={_t('Next')}
-                  loading={auth.isFetching}
-                  disabled={auth.isFetching}
-                />
-            }*/}
-            <Spacer size={20*em} />
-            <Button onPress={this.onFacebookLogin} 
-              caption={_t('Continue with facebook')} 
-              icon={require('~/common/assets/images/facebook.png')}
-              textColor='#fff'
-              bgGradientStart='#48bff3'
-              bgGradientEnd='#00a9f2'
-              loading={isLoggingInWithFacebook}
-              disabled={isLoggingInWithFacebook}
-            />
-            <Spacer size={30*em} />
-            <TouchableOpacity
-              style={{width: '100%', alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}
-              onPress={() => this.goSignup()}
-            >
-              <Text style={[commonStyles.text.defaultWhite, {fontSize: 14*em}]}>
-                {_t("No account?")}
-              </Text>
-              <Text style={[commonStyles.text.defaultWhite, {fontSize: 14*em, fontWeight: 'bold'}]}>
-                {` ${_t('Register yourself')}`}              
-              </Text>
-            </TouchableOpacity>
-            <Spacer size={60*em} />
-          </View>
-        </View>
+            <Text style={[commonStyles.text.defaultWhite, {fontSize: 14*em, fontWeight: 'bold'}]}>
+              {` ${_t('Register yourself')}`}              
+            </Text>
+          </TouchableOpacity>
+          <Spacer size={60*em} />
+        </React.Fragment>
       </FirstWrapper>
     )
   }
@@ -141,7 +123,7 @@ export default class ScreenView extends React.Component {
   }
 
   onSuccessFacebookLogin = (profile) => {
-    this.props.authActions.loginWithFacebook(profile.id);
+    this.props.authActions.loginWithFacebook(profile);
   }
 
   onCancelFacebookLogin = () => {
@@ -155,7 +137,8 @@ export default class ScreenView extends React.Component {
   }
 
   goSignup = () => {
-    Actions['signup_first']()
+    this.props.authActions.initLogin();
+    Actions['signup_first']();
   }
 
   onChangeCountry = (country, code) => {

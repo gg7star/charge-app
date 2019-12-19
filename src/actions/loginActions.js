@@ -75,10 +75,13 @@ export function tryLoginWithFacebook() {
   }
 }
 
-export function loginWithFacebook(fbId) {
+export function loginWithFacebook(fbProfile) {
   return {
     type: types.FACEBOOK_LOGIN_REQUEST,
-    payload: { fbId }
+    payload: {
+      fbId: fbProfile.id,
+      fbProfile: fbProfile
+    }
   }
 }
 
@@ -86,7 +89,6 @@ export function loginWithFacebookSuccess(accountInfo) {
   if (accountInfo.isFirst) {
     Actions['signup_hint_find_station'] ();
   } else {
-    // Actions['authorized']();
     Actions.map();
     Actions['map_first']();
   }

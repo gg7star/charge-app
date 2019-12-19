@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Platform, Animated } from 'react-native';
-import { em } from '~/common/constants'
+import { em } from '~/common/constants';
 
 export default class LogoView extends Component {
   render() {
+    const { style } = this.props;
     return (
       <Animated.View
-        style={{
+        style={[{
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'center',    
           position: 'relative',
           width: '100%',
-        }}
+        }, style && style]}
       >
         <View
           style={{
@@ -22,7 +23,7 @@ export default class LogoView extends Component {
         >
           <Animated.Image
             resizeMode="contain"
-            style={{width: 160*em, height: 160*em, marginBottom: 20*em}}
+            style={{width: 160*em, height: 160*em, marginBottom: 5*em}}
             source={require('~/common/assets/images/png/logo-nono-2x.png')}
           />
           <Animated.Image

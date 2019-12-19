@@ -1,7 +1,7 @@
-import React from 'react'
-import { View, TextInput } from 'react-native'
-import CodeInput from 'react-native-confirmation-code-input'
-import { colors } from '~/common/constants'
+import React from 'react';
+import { View } from 'react-native';
+import CodeInput from 'react-native-confirmation-code-input';
+import { em } from '~/common/constants';
 
 export default class ConfirmCodeInput extends React.Component {
   render() {
@@ -9,7 +9,8 @@ export default class ConfirmCodeInput extends React.Component {
       <View>
         <CodeInput
           ref='confirmCodeInput'
-          size={50}
+          keyboardType="numeric"
+          size={47*em}
           codeLength={6}
           autoFocus={false}
           containerStyle={{ flexDirection: 'row', justifyContent: 'space-between' }}

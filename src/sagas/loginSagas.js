@@ -13,7 +13,7 @@ const { loginSuccess, loginFailed, setFcmToken, setFcmListener } = LoginActions;
 const { rentSuccess } = RentActions;
 
 export default function* watcher() {
-  yield takeLatest(loginActionTypes.LOGIN_REQUEST, tryLogin);
+  yield takeLatest(loginActionTypes.LOGIN_REQUEST, tryLoginWithPhoneNumber);
   yield takeLatest(loginActionTypes.FACEBOOK_LOGIN_REQUEST, tryLoginWithFacebook);
   // yield takeLastest(loginActionTypes.RECEIVED_FCM, receivedFcm);
 }
@@ -26,11 +26,7 @@ function receivedFcm(fcmMsg) {
   }
 }
 
-export function* tryLogin(action) {  
-  const { countryCode, phoneNumber } = action.payload
-  const fullPhoneNumber = `${countryCode}${phoneNumber}`
-  const email = virtualAccount.getEmail(fullPhoneNumber)
-  const password = virtualAccount.getPassword(fullPhoneNumber)
+function* commonLogin({email, password}) {
   var errorMessage = null;
   try {
     const result = yield call(attemptSignInWithEmail,{email, password})
@@ -46,7 +42,6 @@ export function* tryLogin(action) {
         } else {
           console.log('===== loginSuccess and go to map')
           Actions.map();
-          // Actions.map_first();
         }
 
         const fcmToken = yield call(createFcmToken);
@@ -81,27 +76,43 @@ export function* tryLogin(action) {
   }
 }
 
+export function* tryLoginWithPhoneNumber(action) {  
+  const { countryCode, phoneNumber } = action.payload
+  const fullPhoneNumber = `${countryCode}${phoneNumber}`
+  const email = virtualAccount.getEmail(fullPhoneNumber)
+  const password = virtualAccount.getPassword(fullPhoneNumber)
+  yield commonLogin({email, password});
+}
+
 export function* tryLoginWithFacebook(action) {  
-  const { fbId } = action.payload;
+  const { fbId, fbProfile } = action.payload;
   const email = virtualAccount.getEmailForFacebook(fbId);
   const password = virtualAccount.getPassword(fbId);
-
-  try {
-    // const accountInfo = yield call(
-    //   loginFirebaseService.tryLogin,
-    //   { userId: fbId, email, password }
-    // );
-    const accountInfo = yield call(attemptSignInWithEmail,{email, password})
-    yield put(loginSuccess(accountInfo));
-    yield put({ type: mapTypes.GET_ALL_STATIONS});
-  } catch (e) {
-    console.log('====== e: ', e);
-    const errorMessage = 'Login failed. Input correct phone number.';
-    yield put(loginFailed(errorMessage));
-    yield put(setGlobalNotification({
-      message: errorMessage,
-      type: 'danger',
-      duration: 6000
-    }));
-  }
+  yield commonLogin({email, password});
+  // try {
+  //   // const accountInfo = yield call(
+  //   //   loginFirebaseService.tryLogin,
+  //   //   { userId: fbId, email, password }
+  //   // );
+  //   const authInfo = yield call(attemptSignInWithEmail,{email, password});
+  //   const accountInfo = yield call()
+  //   yield put(loginSuccess({authInfo, accountInfo}));
+  //   yield put({ type: mapActionTypes.GET_ALL_STATIONS});
+  //   if (accountInfo.isFirst) {
+  //     console.log('===== loginSuccess go to accountInfo.isFirst')
+  //     Actions['signup_hint_find_station'] ();
+  //   } else {
+  //     console.log('===== facebook loginSuccess and go to map')
+  //     Actions.map();
+  //   }
+  // } catch (e) {
+  //   console.log('====== e: ', e);
+  //   const errorMessage = 'Login failed. Input correct phone number.';
+  //   yield put(loginFailed(errorMessage));
+  //   yield put(setGlobalNotification({
+  //     message: errorMessage,
+  //     type: 'danger',
+  //     duration: 6000
+  //   }));
+  // }
 }

@@ -30,9 +30,7 @@ class FacebookService {
 
   makeLogoutButton = (callback) => {
     return (
-      <LoginButton onLogoutFinished={() => {
-        callback()
-      }} />
+      <LoginButton onLogoutFinished={() => { callback() }} />
     )
   };
 
@@ -55,12 +53,14 @@ class FacebookService {
   };
 
   async fetchProfile(callback) {
+    const accessData = await AccessToken.getCurrentAccessToken();
     return new Promise((resolve, reject) => {
       const request = new GraphRequest(
         '/me',
         {
           httpMethod: 'GET',
           // version: 'v2.5',
+          accessToken: accessData.accessToken,
           parameters: {
             'fields': {
               'string' : 'name,email,friends,birthday'
@@ -79,6 +79,10 @@ class FacebookService {
       );
       this.requestManager.addRequest(request).start();
     });
+  }
+
+  logout = () => {
+    LoginManager.logOut();
   }
 }
 

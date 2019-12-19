@@ -13,7 +13,6 @@ export function setPhoneNumber({countryCode, phoneNumber}) {
   }
 }
 
-
 export function requestConfirmCodeSuccess({confirmation}) {
   return {
     type: types.REQUEST_CONFIRM_CODE_SUCCESS,
