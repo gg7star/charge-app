@@ -1,12 +1,6 @@
 import { profileActionTypes } from '~/actions/types';
 
 const initialState = {
-  // personalInfo: {
-  //   name: 'Theo Rouilly',
-  //   phone: '32 30 22 144 3331',
-  //   email: 'theorouilly@nono.fr',
-  //   birthDate: '18/06/2000'
-  // },
   cash: {
     money: 300,
     couponCodeActied: false,
@@ -59,7 +53,9 @@ const initialState = {
     }
   ],
   payment: null,
-  cardInfo: null
+  cardInfo: null,
+  notifications: [],
+  team: null
 }
 
 export default function reducer(state = initialState, action) {

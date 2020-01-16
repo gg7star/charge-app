@@ -3,6 +3,7 @@ import {
   StyleSheet, SafeAreaView, View, StatusBar, Platform,
   AppRegistry, AsyncStorage, Alert
 } from 'react-native';
+import {PERMISSIONS, request} from 'react-native-permissions';
 import { Root, Toast } from 'native-base';
 import OneSignal from 'react-native-onesignal';
 import {name as appName} from '../../../app.json';
@@ -39,6 +40,8 @@ export default class AppView extends Component {
     signupActions.initSignup();
     loginActions.initLogin();
 
+    // Check permissions
+    // const cameraStatus = await request(PERMISSIONS.IOS.CAMERA);
     // Onsignal
     OneSignal.init("b4e6bc9d-3ebb-4ff5-818e-91a76b5239b7");
     OneSignal.addEventListener('received', this.onReceived);
