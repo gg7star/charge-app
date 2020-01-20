@@ -25,7 +25,7 @@ export default class FirstWrapper extends React.Component {
     }
   };
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.keyboardDidShowListener = Keyboard.addListener(
       Platform.select({ android: 'keyboardDidShow', ios: 'keyboardWillShow' }),
       this._keyboardDidShow.bind(this),

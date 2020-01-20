@@ -14,6 +14,10 @@ const initialState = {
 
 export default function reducer(state = initialState, action) {
   switch(action.type) {
+    case mapActionTypes.MAP_INIT:
+      return {
+        ...initialState
+      }
     case mapActionTypes.CHANGED_CURRENT_LOCATION:
       return {
         ...state,
@@ -47,7 +51,8 @@ export default function reducer(state = initialState, action) {
     case mapActionTypes.SELECT_PLACE:
       return {
         ...state,
-        place: state.places[action.payload.index]
+        place: ((action.payload.index == -1) && state.searchedPlaces)
+          ? null : state.searchedPlaces[action.payload.index]
       }
     case mapActionTypes.SET_DIRECTION:
       return {

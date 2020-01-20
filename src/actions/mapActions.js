@@ -1,6 +1,13 @@
 import { mapActionTypes } from './types';
 
 const types = mapActionTypes;
+
+export function initMap() {
+  return {
+    type: types.MAP_INIT
+  }
+}
+
 export function changedCurrentLocation(position) {
   return {
     type: types.CHANGED_CURRENT_LOCATION,

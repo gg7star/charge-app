@@ -6,6 +6,8 @@ import AppView from './View';
 
 const mapStateToProps = state => ({
   app: state.app || {},
+  auth: state.auth || {},
+  signup: state.signup || {},
   map: state.app || {}
 });
 

@@ -11,6 +11,7 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import <Firebase.h>
+#import <GoogleMaps/GoogleMaps.h>
 
 @implementation AppDelegate
 
@@ -20,7 +21,8 @@
   [FIRDatabase database].persistenceEnabled = FALSE;
   // Initialize the Google Mobile Ads SDK.
   // [[GADMobileAds sharedInstance] startWithCompletionHandler:nil];
-
+  [GMSServices provideAPIKey:@"AIzaSyBwINjstRC_Slxjj8s1HnS7k__4y5J3OQ8"];
+  
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
                                                    moduleName:@"nono"

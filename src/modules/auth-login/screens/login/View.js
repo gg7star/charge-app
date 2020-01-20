@@ -50,7 +50,14 @@ export default class ScreenView extends React.Component {
             loading={isLoggingIn}
             disabled={isLoggingIn}
           />
-          <Spacer size={20*em} />
+          <Text style={[commonStyles.text.defaultWhite, {textAlign: 'center', fontSize: 12*em}]}>
+            {_t("We will send you an SMS to check your number")}
+          </Text>
+          <Spacer size={10*em} />
+          <Text style={[commonStyles.text.defaultWhite, {textAlign: 'center'}]}>
+            {_t("or")}
+          </Text>
+          <Spacer size={10*em} />
           <Button onPress={this.onFacebookLogin} 
             caption={_t('Continue with facebook')} 
             icon={require('~/common/assets/images/facebook.png')}
@@ -137,7 +144,7 @@ export default class ScreenView extends React.Component {
   }
 
   goSignup = () => {
-    this.props.authActions.initLogin();
+    // this.props.authActions.initLogin();
     Actions['signup_first']();
   }
 

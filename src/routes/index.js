@@ -33,6 +33,11 @@ class NonoRoutes extends Component {
 			<Router>
 				<Scene key='root' hideNavBar panHandlers={null}>
 					<Scene 
+						key='login'
+						hideNavBar
+						component={Login}
+					/>
+					<Scene 
 						key='signup_first'
 						hideNavBar
 						component={FirstScreen}
@@ -81,11 +86,6 @@ class NonoRoutes extends Component {
 						key='signup_hint_recommend'
 						hideNavBar
 						component={HintRecommend}
-					/>
-					<Scene 
-						key='login'
-						hideNavBar
-						component={Login}
 					/>
 					{MapStack}
 					{ProfileStack}

@@ -13,3 +13,4 @@ export const FACEBOOK_LOGIN_FAILED = 'auth/FACEBOOK_LOGIN_FAILED';
 export const SET_FCM_TOKEN = 'auth/SET_FCM_TOKEN';
 export const SET_FCM_LISTENER = 'auth/SET_FCM_LISTENER';
 export const RECEIVED_FCM = 'auth/RECEIVED_FCM';
+export const LOGIN_LOAD_PREV_STATE = 'auth/LOGIN_LOAD_PREV_STATE';

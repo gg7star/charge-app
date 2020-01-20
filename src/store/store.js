@@ -1,4 +1,4 @@
-import { createStore, applyMiddleware, compose } from 'redux';
+import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { createLogger } from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
@@ -46,7 +46,7 @@ export default function configureStore(onComplete) {
   } else {
     const composeEnhancers = compose;
     store = createStore(
-      storage.reducer(reducers), 
+      storage.reducer(combineReducers(reducers)), 
       composeEnhancers(
         applyMiddleware(
           ...middleware

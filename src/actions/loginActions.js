@@ -97,3 +97,10 @@ export function loginWithFacebookSuccess(accountInfo) {
     payload: { accountInfo }
   }
 }
+
+export function loadPrevState (prevState) {
+  return {
+    type: types.LOGIN_LOAD_PREV_STATE,
+    payload: { prevState }
+  }
+}

@@ -5,6 +5,7 @@ import MapViewDirections from 'react-native-maps-directions';
 import googleMapConfig from '~/common/config/googleMap';
 import { W, H } from '~/common/constants';
 import { generateColor } from '~/common/utils/gradientColor';
+import defaultCurrentLocation from '~/common/config/locations';
 
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -13,6 +14,7 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const PIN_OPEN_IMAGE = require('~/common/assets/images/png/pin-open.png');
 const PIN_CLOSE_IMAGE = require('~/common/assets/images/png/pin-close.png');
 const PIN_SELECT_IMAGE = require('~/common/assets/images/png/pin-select.png');
+const CURRENT_LOCATION_IMAGE = require('~/common/assets/images/png/currentLocation.png');
 
 export default class CustomMapView extends React.Component {
   state = {
@@ -25,20 +27,20 @@ export default class CustomMapView extends React.Component {
   }
 
   render() {
-    const { children } = this.props
-    const { currentLocation, selectedPlace, onDetectDirection } = this.props
+    const { children } = this.props;
+    const { selectedPlace, onDetectDirection } = this.props;
+    const currentLocation = this.props.currentLocation || defaultCurrentLocation;
     const GOOGLE_MAPS_APIKEY = Platform.OS === 'ios' 
       ? googleMapConfig.IOS_GOOGLE_MAPS_APIKEY
-      : googleMapConfig.ANDROID_GOOGLE_MAPS_APIKEY
-    let region = {}
-    if (currentLocation) {
-      region = {
-        latitude: currentLocation.coordinate.latitude,
-        longitude: currentLocation.coordinate.longitude,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA,
-      }
-    }
+      : googleMapConfig.ANDROID_GOOGLE_MAPS_APIKEY;
+    const region = {
+      latitude: currentLocation.coordinate.latitude,
+      longitude: currentLocation.coordinate.longitude,
+      latitudeDelta: LATITUDE_DELTA,
+      longitudeDelta: LONGITUDE_DELTA,
+    };
+    console.log('==== currentLocation: ', currentLocation);
+    console.log('==== selectedPlace: ', selectedPlace);
 
     return (
       <View 
@@ -47,16 +49,16 @@ export default class CustomMapView extends React.Component {
           width: W, height: H, zIndex: 10
         }}
       >
-        { currentLocation && 
         <React.Fragment>
           <MapView 
             style={{width: '100%', height: '100%'}}
             initialRegion={region}
+            provider={PROVIDER_GOOGLE}
+            mapType={Platform.OS == "android" ? "terrain" : "standard"}
             // showsUserLocation={true}
-            // provider={PROVIDER_GOOGLE}
-            mapType={Platform.OS == "android" ? "terrain" : "mutedStandard"}
             // showsMyLocationButton={true}
             // followsUserLocation={true}
+
             showsCompass={true}
             showsTraffic={true}
             rotateEnabled={true}
@@ -67,93 +69,106 @@ export default class CustomMapView extends React.Component {
             onUserLocationChange={this.handleUserLocationChange}
           >
             { this.renderMarkers() }
-            { this.renderCurrentLocationMarker() }
-            {(selectedPlace && selectedPlace.coordinate && currentLocation.coordinate) && <MapViewDirections
-              origin={currentLocation.coordinate}
-              destination={selectedPlace.coordinate}
-              apikey={GOOGLE_MAPS_APIKEY}
-              mode="WALKING"
-              strokeWidth={1}
-              strokeColor="hotpink"
-              optimizeWaypoints={true}
-              onStart={(params) => {
-                // console.log(`Started routing between "${params.origin}" and "${params.destination}"`);
-              }}
-              onReady={result => {
-                // console.log(`==== Distance: ${result.distance} km`)
-                // console.log(`==== Duration: ${result.duration} min.`)
-                // console.log('====== result: ', result);
-                onDetectDirection && onDetectDirection({
-                  distance: Math.round(result.distance * 100),
-                  duration: Math.round(result.duration)
-                })
-                this.mapView && this.mapView.fitToCoordinates(result.coordinates, {
-                  edgePadding: {
-                    right: (width / 20),
-                    bottom: (height / 20),
-                    left: (width / 20),
-                    top: (height / 20),
+            {(selectedPlace && selectedPlace.coordinate && currentLocation.coordinate) && 
+              <MapViewDirections
+                origin={currentLocation.coordinate}
+                destination={selectedPlace.coordinate}
+                apikey={GOOGLE_MAPS_APIKEY}
+                mode={'WALKING'}
+                strokeWidth={0}
+                strokeColor="hotpink"
+                optimizeWaypoints={true}
+                precision={'high'}
+                onStart={(params) => {
+                  console.log(`Started routing between "${params.origin}" and "${params.destination}"`);
+                }}
+                onReady={result => {
+                  console.log(`==== Distance: ${result.distance} km`)
+                  console.log(`==== Duration: ${result.duration} min.`)
+                  console.log('====== result: ', result);
+                  onDetectDirection && onDetectDirection({
+                    distance: Math.round(result.distance * 100),
+                    duration: Math.round(result.duration)
+                  })
+                  var directionCoordinates = [];
+                  directionCoordinates.push(currentLocation.coordinate);
+                  for(var i = 0; i < result.coordinates.length - 1; i++) {
+                    var coord = result.coordinates[i];
+                    directionCoordinates.push(coord);
                   }
-                });
-                this.setState({directionCoordinates: result.coordinates});
-              }}
-              onError={(errorMessage) => {
-                // console.log('GOT AN ERROR');
-              }}
-            />}
-            { this.renderCustomDirection() }
+                  directionCoordinates.push(selectedPlace.coordinate);
+                  this.mapView && this.mapView.fitToCoordinates(directionCoordinates, {
+                    edgePadding: {
+                      right: (width / 20),
+                      bottom: (height / 20),
+                      left: (width / 20),
+                      top: (height / 20),
+                    }
+                  });
+                  this.setState({directionCoordinates});
+                }}
+                onError={(errorMessage) => {
+                  console.log('==== GOT AN ERROR');
+                }}
+              />
+            }
+            { selectedPlace && this.renderCustomDirection() }
           </MapView>
           { children && children }
         </React.Fragment>
-        }
       </View>      
     )
   }
+
   renderMarkers() {
     const { places, selectedPlace } = this.props
-
+    const currentLocation = this.props.currentLocation || defaultCurrentLocation;
+    const selectedIndex = places.findIndex(p => {return selectedPlace && p.name === selectedPlace.name});
+    var placeImage = PIN_OPEN_IMAGE;
+   
     return (
       <React.Fragment>
-        {places && Object.keys(places).map((key, i) => {
+        {places && Object.keys(places).map((key, index) => {
           const place = places[key];
-          if (place)
+          console.log('===== key: index: ', key, index, (selectedPlace && (key === `${selectedIndex}`)))
+          if (place){
+            if (selectedPlace && (key === `${selectedIndex}`)) placeImage = PIN_SELECT_IMAGE;
+            else placeImage = place.isOpened ? PIN_OPEN_IMAGE : PIN_CLOSE_IMAGE;
+            console.log('===== placeImage: ', placeImage);
             return (
               <MapView.Marker
-                key={`station-${i}`}
+                key={`station-${index}`}
                 title={place.name} 
                 coordinate={place.coordinate}
                 onPress={() => this.props.onSelectMarker(key)}
               >
                 <Image
-                  source={
-                    place.isOpened 
-                    ? ((selectedPlace && (key === selectedPlace.name))
-                        ? PIN_SELECT_IMAGE
-                        : PIN_OPEN_IMAGE
-                      )
-                    : PIN_CLOSE_IMAGE} 
+                  source={placeImage}
                   style={{width: 40, height: 40}}
                 />            
               </MapView.Marker>
               );
-            })
+            }
+          })
         }
+        { currentLocation.coordinate && this.renderCurrentLocationMarker() }
       </React.Fragment>
     )
   }
 
   renderCurrentLocationMarker() {
-    const { currentLocation } = this.props    
+    const currentLocation = this.props.currentLocation || defaultCurrentLocation;
 
     return (
       <MapView.Marker
-        key='my-location'
+        key={'my-location'}
         coordinate={currentLocation.coordinate}
-        title={'Me'}
+        anchor={{x: 0.5, y: 0.5}}
+        // title={'Me'}
       >
         <Image
-          source={require('~/common/assets/images/png/currentLocation.png')}
-          style={{width: 150, height: 150}}
+          source={CURRENT_LOCATION_IMAGE}
+          style={{width: 44, height: 40}}
         />
       </MapView.Marker>
     )

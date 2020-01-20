@@ -149,7 +149,7 @@ export default class ScreenView extends React.Component {
   }
 
   goLogin = () => {
-    this.props.signupActions.initSignup();
+    // this.props.signupActions.initSignup();
     Actions['login']();
   }
 

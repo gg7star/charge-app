@@ -1,5 +1,7 @@
 import { loginActionTypes } from '~/actions/types';
 import { Actions } from 'react-native-router-flux';
+import LocalStorage from '~/store/localStorage';
+import STORAGE from '~/common/constants/storage';
 
 const initialState = {
   isAuthenticated: false,
@@ -30,13 +32,16 @@ export default function reducer(state = initialState, action) {
         isFacebook: false
       }
     case loginActionTypes.LOGIN_DONE:
-      return {
+      const login_state = {
         ...state,
         isAuthenticated: true,
         isFetching: false,
         accountInfo: action.payload.accountInfo,
         authInfo: action.payload.authInfo
       }
+      // Save local storage
+      LocalStorage.storeData(STORAGE.AUTH_DATA, login_state);
+      return login_state;
     case loginActionTypes.LOGIN_FAILURE:
       return {
         ...state,
@@ -51,7 +56,7 @@ export default function reducer(state = initialState, action) {
           isFacebook: false
         }
     case loginActionTypes.LOGOUT_DONE:
-      return {
+      const logout_state = {
         ...state,
         isAuthenticated: false,
         accountInfo: null,
@@ -60,6 +65,9 @@ export default function reducer(state = initialState, action) {
         isFacebook: false,
         fbId: null
       }
+      // Remove from local storage
+      LocalStorage.removeData(STORAGE.AUTH_DATA);
+      return logout_state;
     case loginActionTypes.CLEAR_MESSAGE:
       return {
         ...state,
@@ -108,6 +116,10 @@ export default function reducer(state = initialState, action) {
           fcmListener: state.fcm.fcmListener,
           lastMessage: action.payload.messsage
         }
+      }
+    case loginActionTypes.LOGIN_LOAD_PREV_STATE:
+      return {
+        ...action.payload.prevState
       }
     default: 
       return state

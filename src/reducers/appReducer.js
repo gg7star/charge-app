@@ -1,4 +1,5 @@
 import { appActionTypes } from '~/actions/types';
+import { LOAD, SAVE } from 'redux-storage';
 
 export const initialState = {
   isFirstOpen: true,
@@ -7,7 +8,8 @@ export const initialState = {
     message: null,
     type: 'success',
     duration: 4000
-  }
+  },
+  loaded: false
 };
 
 export default function AppStateReducer(
@@ -34,6 +36,8 @@ export default function AppStateReducer(
           duration: action.payload.duration ? action.payload.duration : 4000
         }
       }
+    case LOAD:
+      return { ...state, loaded: true };
     default:
       return state;
   }

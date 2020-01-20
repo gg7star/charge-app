@@ -8,8 +8,8 @@ export default class SearchResults extends React.Component {
 
     return (
       <ScrollView style={{height: searchedPlaces.length>0?620:400, marginTop: 20}}>
-        {searchedPlaces.map((place, k) => (
-          <SearchResultItem data={place} _t={_t} key={k} 
+        {searchedPlaces.map((place, index) => (
+          <SearchResultItem data={place} _t={_t} key={`${index}`} 
             onPress={() => this.selectPlace(k)}
           />
         ))}

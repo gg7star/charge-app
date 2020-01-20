@@ -42,13 +42,17 @@ export default class ScreenView extends React.Component {
     this.setState({...newState})
   }
 
+
+  handleDetectDirection = ({distance, duration}) => {
+    this.props.mapActions.setDirection({distance, duration});
+  }
+
   render() {
-    const { currentLocation, places, place } = this.props.map;
+    const { currentLocation, places, searchedPlaces, place } = this.props.map;
     const { _t } = this.props.appActions;
     const { profileOpened } = this.state;
     const { activedModal } = this.state;
     const propsProfileOpened = this.props.profileOpened;
-    // console.log('=== propsProfileOpened: ', propsProfileOpened)
     return (
       <View style={{position: 'relative', width: W, height: H}}>
         <Menu 
@@ -58,7 +62,7 @@ export default class ScreenView extends React.Component {
         <MapView
           mapType={Platform.OS == "android" ? "none" : "standard"}
           currentLocation={currentLocation}
-          places={places}
+          places={searchedPlaces}
           selectedPlace={place}
           onSelectMarker={this.openNearPlacesDialog}
           onDetectDirection={this.handleDetectDirection}
@@ -101,7 +105,7 @@ export default class ScreenView extends React.Component {
         {activedModal=='near-places' && 
           <NearPlacesDialog
             onClose={this.closeNearPlacesDialog} 
-            onSelectPlace={this.selectFilteredPlace}
+            onSelectPlace={this.onSelectPlace}
             onFinish={this.openFinishDialog}
             onReserve={this.openReserveDialog}
             onOpenFilter={this.openFilterDialog}
@@ -135,56 +139,59 @@ export default class ScreenView extends React.Component {
   }
 
   closeSearchDialog = () => {
-    this.setState({...this.state, activedModal: 'unlock'})
+    this.setState({...this.state, activedModal: 'unlock'});
   }
 
   selectPlace = (index) => {
-    this.props.mapActions.selectPlace(index)
-    this.setState({ ...this.state, activedModal: 'detail' })
+    this.props.mapActions.selectPlace(index);
+    console.log('==== index: ', index);
+    this.setState({ ...this.state, activedModal: 'detail' });
   }
-
-  selectFilteredPlace = (index) => {
-    const { map } = this.props;
-    const {searchedPlaces} = map;
-    this.props.mapActions.selectPlace(searchedPlaces[index].name);
-    this.setState({ ...this.state, activedModal: 'detail' })
+  //onSelectPlace
+  onSelectPlace = (index) => {
+    this.selectPlace(index);
   }
 
   closeDetailDialog = () => {
-    this.setState({...this.state, activedModal: 'unlock'})
+    this.setState({...this.state, activedModal: 'unlock'}, () => {
+      this.props.mapActions.selectPlace(-1);
+    });
   }
 
   openFinishDialog = () => {
-    this.setState({...this.state, activedModal: 'finish'})
+    this.setState({...this.state, activedModal: 'finish'});
   }
 
   closeFinishDialog = () => {
-    this.setState({...this.state, activedModal: 'unlock'})
+    this.setState({...this.state, activedModal: 'unlock'});
   }
 
   openReserveDialog = () => {
-    this.setState({...this.state, activedModal: 'reserve'})
+    this.setState({...this.state, activedModal: 'reserve'});
   }
 
   closeReserveDialog = () => {
-    this.setState({...this.state, activedModal: 'unlock'})
+    this.setState({...this.state, activedModal: 'unlock'});
   }
 
   openNearPlacesDialog = (index) => {
-    this.props.mapActions.selectPlace(index)
-    this.setState({...this.state, activedModal: 'near-places'})
+    this.props.mapActions.selectPlace(index);
+    this.setState({...this.state, activedModal: 'near-places'});
   }
 
   closeNearPlacesDialog = () => {
-    this.setState({...this.state, activedModal: 'unlock'})
+    const _this = this;
+    this.setState({...this.state, activedModal: 'unlock'}, () => {
+      _this.props.mapActions.selectPlace(-1);
+    });
   }
 
   openFilterDialog = (index) => {
-    this.setState({...this.state, activedModal: 'filter'})
+    this.setState({...this.state, activedModal: 'filter'});
   }
 
   closeFilterDialog = () => {
-    this.setState({...this.state, activedModal: 'unlock'})
+    this.setState({...this.state, activedModal: 'unlock'});
   }
 
   filterSearch = () => {
@@ -208,7 +215,7 @@ export default class ScreenView extends React.Component {
           currency: 'eur',
           description: `${auth.accountInfo.name} payed via Nono application.`,
           accessToken: null
-        })
+        });
       })
       .catch(error => {
         console.warn('Payment failed', { error });

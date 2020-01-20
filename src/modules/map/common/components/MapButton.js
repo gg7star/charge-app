@@ -17,7 +17,7 @@ export default class MapButton extends React.Component {
       case 'profile':
         return (
           <Button
-            style={[styles.button, {top: 50, left: 20}]} 
+            style={[styles.button, {top: 50, left: 20}, styles.shadow]} 
             onPress={onPress}
             image={PROFILE_IMAGE}
           />
@@ -33,7 +33,7 @@ export default class MapButton extends React.Component {
       case 'tree':
         return (
           <Button
-            style={[styles.button, {top: 50, right: 20}]} 
+            style={[styles.button, {top: 50, right: 20}, styles.shadow]} 
             onPress={onPress}
             image={TREE_IMAGE}
           />
@@ -52,11 +52,12 @@ export default class MapButton extends React.Component {
             style={[
               styles.button,
               { 
-                bottom: 151,
+                bottom: 205,
                 right: 20, 
                 borderBottomLeftRadius: 0,
                 borderBottomRightRadius: 0
-              }
+              },
+              styles.shadow
             ]} 
             onPress={onPress}
             image={REFRESH_IMAGE}
@@ -68,11 +69,12 @@ export default class MapButton extends React.Component {
             style={[
               styles.button,
               {
-                bottom: 100,
+                bottom: 150,
                 right: 20,
                 borderTopLeftRadius: 0,
                 borderTopRightRadius: 0
-              }
+              },
+              styles.shadow
             ]} 
             onPress={onPress}
             image={POSITION_IMAGE}
@@ -95,9 +97,20 @@ const Button = ({ image, onPress, style }) => (
 
 const styles = StyleSheet.create({
   button: {
-    position: 'absolute', zIndex: 15,
-    width: 50*em, height: 50*em,
-    borderRadius: 20*em, backgroundColor: '#fff',
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center'
+    position: 'absolute',
+    zIndex: 15,
+    width: 50*em,
+    height: 50*em,
+    borderRadius: 20*em,
+    backgroundColor: '#fff',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  shadow: {
+    shadowColor: "#000000",
+    shadowOffset: { width: 1, height: 5 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
   }
 })
