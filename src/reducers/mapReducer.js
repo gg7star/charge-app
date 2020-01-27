@@ -2,7 +2,7 @@ import { mapActionTypes } from '~/actions/types';
 import { filterPlaces } from '~/common/utils/filterPlaces';
 
 const initialState = {
-  places: {},
+  places: [],
   currentLocation: null,
   searchedPlaces: [],
   place: null,

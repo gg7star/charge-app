@@ -7238,10 +7238,10 @@ react-native-confirmation-code-input@^1.0.4:
     lodash "^4.17.4"
     prop-types "^15.5.10"
 
-react-native-country-picker-modal@^1.9.8:
-  version "1.9.8"
-  resolved "https://registry.yarnpkg.com/react-native-country-picker-modal/-/react-native-country-picker-modal-1.9.8.tgz#448967e8f25bda41cc0322cf825af959b6f6c6ae"
-  integrity sha512-Cn2tB/1hzikfMKoNRWWJjPDGybWvkg8VXElQHS3EovanqzBPD23GabXeYWvb5un4YHFkI1oRAAj8uIOGfpFt2g==
+react-native-country-picker-modal@^1.10.0:
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/react-native-country-picker-modal/-/react-native-country-picker-modal-1.10.0.tgz#ff4a3b73f08d5241f75f9edfaa2ad4cc0b1823f7"
+  integrity sha512-NkPBF7GJRp1FONiirN0vOLb9q6HKA/S1oIVNQUNGk9lVv5OLJ5Op3XhY7f+Dg4g7tF/M3kMXZWuvRWmKoHrMMQ==
   dependencies:
     "@callstack/react-theme-provider" "3.0.3"
     fuse.js "3.4.5"

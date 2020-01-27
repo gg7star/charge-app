@@ -11,7 +11,7 @@ import sagas from '~/sagas';
 
 const isDebuggingInChrome = __DEV__ && !!window.navigator.userAgent;
 
-export default function configureStore(onComplete) {
+export default function configureStore(onComplete, onFailedLoad) {
 
   const engine = createEngine('AppTree');
   const storeMiddleware = storage.createMiddleware(engine, [], );
@@ -44,12 +44,20 @@ export default function configureStore(onComplete) {
       )
     );
   } else {
+    // For test
+    const logger = createLogger({
+      predicate: (getState, action) => isDebuggingInChrome,
+      collapsed: true,
+      duration: true,
+      diff: true,
+    });
+
     const composeEnhancers = compose;
     store = createStore(
-      storage.reducer(combineReducers(reducers)), 
+      storage.reducer(reducers), //combineReducers(reducers)), 
       composeEnhancers(
         applyMiddleware(
-          ...middleware
+          ...middleware, logger
         ),
       )
     );
@@ -62,8 +70,16 @@ export default function configureStore(onComplete) {
 
   const load = storage.createLoader(engine);
   load(store)
-    .then(onComplete)
-    .catch(() => console.log('Failed to load previous state'));
+    .then(
+      (newState) => {
+        console.log('==== Loaded state:', newState);
+        onComplete && onComplete();
+      }
+    )
+    .catch(() => {
+      console.log('==== Failed to load previous state');
+      onFailedLoad && onFailedLoad();
+    });
 
   sagaMiddleware.run(sagas);
 

@@ -5,10 +5,11 @@ import {loginActionTypes, mapActionTypes} from '~/actions/types';
 import { attemptSignInWithEmail } from '~/common/services/rn-firebase/auth';
 import { getCurrentUserInfo } from '~/common/services/rn-firebase/database';
 import { createFcmToken, saveFcmToken, startReceiveFcm } from '~/common/services/rn-firebase/message';
-import { AppActions, LoginActions, RentActions } from '~/actions';
+import { AppActions, LoginActions, RentActions, MapActions } from '~/actions';
 
 const { setGlobalNotification } = AppActions;
 const { loginSuccess, loginFailed, setFcmToken, setFcmListener } = LoginActions;
+const { getAllStations } = MapActions;
 const { rentSuccess } = RentActions;
 
 export default function* watcher() {
@@ -32,7 +33,7 @@ function* commonLogin({email, password}) {
     if (result.authInfo) {
       const userInfo = yield call(getCurrentUserInfo);
       if (userInfo) {
-        yield put({ type: mapActionTypes.GET_ALL_STATIONS});
+        yield put(getAllStations());
         yield put(loginSuccess({authInfo: result.authInfo, accountInfo: userInfo}));
         console.log('===== loginSuccess');
         if (userInfo.isFirst) {

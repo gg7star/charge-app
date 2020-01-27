@@ -16,14 +16,14 @@ export function setLanguage(language) {
 
 export function getLanguage() {
   return (dispatch, getState) => {
-    language = getState().app.language;
+    language = (getState() && getState().app) ? getState().app.language : null;
     return language
   };
 }
 
 export function _t(message) {
   return (dispatch, getState) => {
-    language = getState().app.language;
+    language = (getState() && getState().app) ? getState().app.language : null;
     return translate(message, language)
   };
 }

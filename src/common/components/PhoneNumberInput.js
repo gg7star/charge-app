@@ -1,150 +1,113 @@
 import React from 'react';
-import { View, Text, TextInput, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { em, colors } from '~/common/constants';
 import commonStyles from '~/common/styles';
+import CustomCountryPicker from './CustomCountryPicker';
 
-const countries = require('~/common/config/countries.json');
+const countries = require('~/common/config/countries2.json');
 
 export default class PhoneNumberInput extends React.Component {
   state = {
+    cca2: null,
+    callingCode: null,
     selectedCountry: this.props.defaultCountry || 'FR',
     openedCountryPicker: false
   }
 
+  onOpenCountryPicker = () => {
+    const { openedCountryPicker } = this.state;
+    this.setState({openedCountryPicker: !openedCountryPicker});
+  }
+
+  onCloseCoutryModal = () => {
+    this.setState({openedCountryPicker: false});
+  };
+
+  onChangeCountry = (country) => {
+    this.setState({
+      selectedCountry: country.cca2,
+      cca2: country.cca2,
+      callingCode: country.callingCode,
+      openedCountryPicker: false
+    }, () => {
+      const { onChangeCountry } = this.props;
+      const { cca2, callingCode } = this.state;
+      onChangeCountry && onChangeCountry(cca2, callingCode);
+    });
+  };
+
   render() {
-    const { placeholder } = this.props
-    const { containerStyles, countryPikcerStyles } = this.props
-    const { openedCountryPicker } = this.state
+    const { containerStyles, countryPikcerStyles, placeholder } = this.props;
+    const { openedCountryPicker, callingCode, selectedCountry } = this.state;
     return (
       <View style={{ position: 'relative', zIndex: 10 }}>        
-        <View
-          style={
-            [
-              {
-                flexDirection: 'row', width: '100%', justifyContent: 'space-between',
-                overflow: 'hidden', borderRadius: 15,          
-              },
-              containerStyles && {}
-            ]
-          }
-        >
-          <View style={{
-            width: '20%',
-            backgroundColor: 'rgba(255, 255, 255, 0.15)'
-          }}>
+        <View style={[styles.container, containerStyles && containerStyles]}>
+          <View style={styles.countryViewContainer}>
             <CountryInput
-              selectedCountry={this.state.selectedCountry} 
+              selectedCountryCode={selectedCountry}
+              callingCode={callingCode}
               onOpenCountryPicker={this.onOpenCountryPicker}
             />
+            {openedCountryPicker &&
+              <CustomCountryPicker
+                isVisible={openedCountryPicker}
+                onSelect={this.onChangeCountry}
+                onClose={this.onCloseCoutryModal}
+              />
+            }
           </View>
-          <View style={{
-            width: '79%',
-            backgroundColor: 'rgba(255, 255, 255, 0.15)'
-          }}>
+          <View style={styles.numberViewContainer}>
             <NumberInput
               placeholder={placeholder}
               value={this.props.phoneNumber}
-              onChangePhoneNumber={(phoneNumber) => this.props.onChangePhoneNumber(phoneNumber)}
+              onChangePhoneNumber={
+                (phoneNumber) => this.props.onChangePhoneNumber(phoneNumber)
+              }
               onFocus={this.props.onFocus}
               onBlur={this.props.onBlur}
             />
           </View>
         </View>
-        <View style={{
-          position: 'absolute', top: 50, left: 0, zIndex: 100
-        }}>
-          {openedCountryPicker &&
-            <CountryPicker
-              styles={countryPikcerStyles} 
-              onChangeCountry={this.onChangeCountry}
-            />
-          }          
-        </View>
+        {openedCountryPicker && 
+          <CustomCountryPicker
+            isVisible={openedCountryPicker}
+            onSelect={this.onChangeCountry}
+            onClose={this.onCloseCoutryModal}
+          />
+        }
       </View>
     )
-  }
-
-  onOpenCountryPicker = () => {
-    this.setState({
-      ...this.state,
-      openedCountryPicker: !this.state.openedCountryPicker
-    })
-  }
-
-  onChangeCountry = (selectedCountry, code) => {    
-    this.setState({
-      ...this.state,
-      selectedCountry,
-      openedCountryPicker: false
-    }, () => {
-      const { onChangeCountry } = this.props;
-      if(onChangeCountry)
-        onChangeCountry(this.state.selectedCountry, code);
-    })
   }
 }
 
 class CountryInput extends React.Component {
   render() {
-    const selectedCountryCode = this.props.selectedCountry
+    const { selectedCountryCode, onOpenCountryPicker } = this.props;
     let selectedCountry = {};
     for (let countryCode in countries) {
       if (selectedCountryCode == countryCode) {
-        selectedCountry = countries[countryCode]
-        break
+        selectedCountry = countries[countryCode];
+        break;
       }
     }
 
     return ( 
       <TouchableOpacity
-        style={{
-          paddingVertical: 18*em,
-          paddingHorizontal: 12*em,
-          flexDirection: 'row'
-        }}
-        onPress={this.props.onOpenCountryPicker}
+        style={styles.countryInputContainer}
+        onPress={onOpenCountryPicker}
       >
         <Image
           source={{uri: selectedCountry['flag']}}
-          style={{width: 22*em, height: 15*em}}
+          style={styles.flagImage}
         />
+        <Text style={styles.callingCode}>
+          {`+${selectedCountry.callingCode}`}
+        </Text>
         <Image
           source={require('~/common/assets/images/png/arrow2.png')}
-          style={{tintColor: '#fff', marginTop: 4*em, marginLeft: 4*em}}
+          style={styles.dropdownArrow}
         />
       </TouchableOpacity>
-    )
-  }
-}
-
-class CountryPicker extends React.Component {
-  render() {    
-    return (
-      <ScrollView
-        style={{
-          height: 150*em,
-          backgroundColor: colors.primaryBackground
-        }}
-      >
-        {Object.keys(countries).map((countryCode) => (
-          <TouchableOpacity 
-            key={countryCode}
-            style={{flexDirection: 'row', padding: 5*em}}
-            onPressOut={() => this.props.onChangeCountry(countryCode, countries[countryCode]['callingCode'])}
-          >
-            <Image
-              source={{uri: countries[countryCode]['flag']}}
-              style={{width: 22*em, height: 15*em, marginRight: 8*em}}
-            />
-            <Text style={[commonStyles.text.defaultWhite, {paddingHorizontal: 2}]}>
-              {countryCode}
-            </Text>
-            <Text style={[commonStyles.text.defaultWhite, {paddingHorizontal: 2}]}>
-              +{countries[countryCode]['callingCode']}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
     )
   }
 }
@@ -152,15 +115,9 @@ class CountryPicker extends React.Component {
 class NumberInput extends React.Component {
   render() {
     return (
-      <View style={{paddingVertical: 16*em, paddingHorizontal: 12*em}}>
+      <View style={styles.numberInputContainer}>
         <TextInput
-          style={[
-            {
-              backgroundColor: 'transparent',
-              height: 17*em, fontSize: 17*em,
-            },
-            commonStyles.text.defaultWhite
-          ]} 
+          style={[styles.numberInputText,commonStyles.text.defaultWhite]}
           placeholder={this.props.placeholder}
           placeholderTextColor={'#fff'} 
           value={this.props.phoneNumber}
@@ -173,3 +130,52 @@ class NumberInput extends React.Component {
     )
   }
 }
+
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-between',
+    overflow: 'hidden',
+    borderRadius: 15       
+  },
+  countryViewContainer: {
+    width: '30%',
+    backgroundColor: 'rgba(255, 255, 255, 0.15)'
+  },
+  numberViewContainer:  {
+    width: '69%',
+    backgroundColor: 'rgba(255, 255, 255, 0.15)'
+  },
+  countryInputContainer: {
+    paddingVertical: 18*em,
+    paddingHorizontal: 12*em,
+    flexDirection: 'row'
+  },
+  flagImage: {
+    width: 22*em,
+    height: 15*em
+  },
+  callingCode: {
+    width: 40*em,
+    color: '#ffffff',
+    marginLeft: 4*em,
+    textAlign: 'center'
+  },
+  dropdownArrow: {
+    tintColor: '#fff',
+    marginTop: 4*em,
+    marginLeft: 4*em
+  },
+  numberInputContainer: {
+    paddingVertical: 16*em,
+    paddingHorizontal: 12*em
+  },
+  numberInputText: {
+    backgroundColor: 'transparent',
+    height: 17*em,
+    fontSize: 17*em
+  }
+ });
+ 

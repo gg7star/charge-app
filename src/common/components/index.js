@@ -1,5 +1,6 @@
 import Button from './Button';
 import ConfirmCodeInput from './ConfirmCodeInput';
+import CustomCountryPicker from './CustomCountryPicker';
 import HintView from './HintView';
 import LogoView from './LogoView';
 import KeyboardAvoidingView from './KeyboardAvoidingView';
@@ -12,6 +13,7 @@ import SplashView from './SplashView';
 export {
   Button,
   ConfirmCodeInput,
+  CustomCountryPicker,
   HintView,
   LogoView,
   PhoneNumberInput,

@@ -37,6 +37,7 @@ export default function AppStateReducer(
         }
       }
     case LOAD:
+      console.log('==== LOAD: ', state);
       return { ...state, loaded: true };
     default:
       return state;

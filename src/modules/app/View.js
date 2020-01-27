@@ -91,9 +91,10 @@ export default class AppView extends Component {
     loginActions.setFcmToken(fcmToken);
 
     // Map
-    await this.initGeoLocation();
+    // await this.initGeoLocation();
 
     mapActions.loadPlacesOnMap();
+    mapActions.getAllStations();
     if (auth.isAuthenticated) {
       Actions.map();
     }
@@ -221,7 +222,7 @@ export default class AppView extends Component {
   
   render() {
     const { loaded } = this.state;
-
+    console.log('===== state: loaded: ', loaded);
     if (loaded) {
       this.showToast();
       return (

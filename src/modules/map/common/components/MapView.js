@@ -55,12 +55,12 @@ export default class CustomMapView extends React.Component {
             initialRegion={region}
             provider={PROVIDER_GOOGLE}
             mapType={Platform.OS == "android" ? "terrain" : "standard"}
-            // showsUserLocation={true}
-            // showsMyLocationButton={true}
-            // followsUserLocation={true}
+            showsUserLocation={true}
+            showsMyLocationButton={true}
+            followsUserLocation={true}
 
             showsCompass={true}
-            showsTraffic={true}
+            // showsTraffic={true}
             rotateEnabled={true}
             loadingEnabled={true}
             showsBuildings={true}
@@ -130,11 +130,9 @@ export default class CustomMapView extends React.Component {
       <React.Fragment>
         {places && Object.keys(places).map((key, index) => {
           const place = places[key];
-          console.log('===== key: index: ', key, index, (selectedPlace && (key === `${selectedIndex}`)))
           if (place){
             if (selectedPlace && (key === `${selectedIndex}`)) placeImage = PIN_SELECT_IMAGE;
             else placeImage = place.isOpened ? PIN_OPEN_IMAGE : PIN_CLOSE_IMAGE;
-            console.log('===== placeImage: ', placeImage);
             return (
               <MapView.Marker
                 key={`station-${index}`}
