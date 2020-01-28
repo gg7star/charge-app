@@ -116,7 +116,6 @@ export default class FirstScreenView extends React.Component {
   }
 
   handleGetCurrentLocation = (position) => {
-    console.log("==== handleGetCurrentLocation: ", position);
     const { mapActions } = this.props;
     const newLocation = {
       name: "My location",
@@ -178,7 +177,6 @@ export default class FirstScreenView extends React.Component {
 
   selectPlace = (index) => {
     this.props.mapActions.selectPlace(index);
-    console.log('==== index: ', index);
     this.setState({ ...this.state, activedModal: 'detail' });
   }
   //onSelectPlace
