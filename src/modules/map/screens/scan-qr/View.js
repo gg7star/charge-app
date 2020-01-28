@@ -6,7 +6,7 @@ import QRScanner from './components/QRScanner'
 import { Actions } from 'react-native-router-flux'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 
-export default class ScreenView extends React.Component {
+export default class ScanQRView extends React.Component {
   state = {
     qrCode: '',
     scanBarAnimateReverse: true
@@ -126,14 +126,16 @@ export default class ScreenView extends React.Component {
 
   onReceivedQRCode = (scanedQrCode, callbackResumScan) => {
     this.setState({qrCode: scanedQrCode, scanBarAnimateReverse: false}, () => {
-      console.log('==== QR code: ', scanedQrCode);
+      var temp = scanedQrCode.split(' ');
       // For test
-      const parsedStationSn = 'T1219071904'; // need to parse from scanedQrCode
+      const parsedStationSn = temp[temp.length-1]; //'T1219071904'; // need to parse from scanedQrCode
+      console.log('==== QR code: ', scanedQrCode, parsedStationSn);
       // Check stationSN validation
-      const { stationSnList, auth } = this.props.map;
+      const { auth, map, mapActions, rentActions } = this.props;
+      const { stationSnList } = map;
       if (stationSnList && stationSnList.find(e => e.stationSn === parsedStationSn)) {
-        this.props.mapActions.scannedQrCode(parsedStationSn);
-        this.props.rentActions.rentStation({
+        mapActions.scannedQrCode(parsedStationSn);
+        rentActions.rentStation({
           stationSn: parsedStationSn,
           uuid: auth.accountInfo.uid,
           pushToken: auth.fcm.token,

@@ -106,8 +106,8 @@ export default class DetailInfo extends React.Component {
       address = data.address;
       subAddress = `Located in ${address.split(',')[0]}`;
     } else {
-      address = data.description;
-      subAddress = `${data.coordinate.latitude, data.coordinate.longitude}`
+      address = data.description ? data.description : data.title;
+      subAddress = `${data.coordinate.latitude}, ${data.coordinate.longitude}`
     }
 
     return (

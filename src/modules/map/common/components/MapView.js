@@ -6,6 +6,7 @@ import googleMapConfig from '~/common/config/googleMap';
 import { W, H } from '~/common/constants';
 import { generateColor } from '~/common/utils/gradientColor';
 import defaultCurrentLocation from '~/common/config/locations';
+import { openHourStatus } from '~/common/utils/time';
 
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -35,16 +36,22 @@ export default class CustomMapView extends React.Component {
   renderMarkers = () => {
     const { places, selectedPlace } = this.props
     const currentLocation = this.props.currentLocation || defaultCurrentLocation;
-    const selectedIndex = places.findIndex(p => {return selectedPlace && p.name === selectedPlace.name});
+    const selectedIndex = places.findIndex(p => {
+        return selectedPlace && p.name === selectedPlace.name
+      });
     var placeImage = PIN_OPEN_IMAGE;
    
     return (
       <React.Fragment>
         {places && Object.keys(places).map((key, index) => {
           const place = places[key];
-          if (place){
+          if(place) {
             if (selectedPlace && (key === `${selectedIndex}`)) placeImage = PIN_SELECT_IMAGE;
-            else placeImage = place.isOpened ? PIN_OPEN_IMAGE : PIN_CLOSE_IMAGE;
+            else {
+              // placeImage = place.isOpened ? PIN_OPEN_IMAGE : PIN_CLOSE_IMAGE;
+              const hourStatus = openHourStatus(place.openHours);
+              placeImage = hourStatus.openStatus ? PIN_OPEN_IMAGE : PIN_CLOSE_IMAGE;
+            };
             return (
               <MapView.Marker
                 key={`station-${index}`}
