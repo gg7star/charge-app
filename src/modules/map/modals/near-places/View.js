@@ -24,11 +24,8 @@ export default class Dialog extends React.Component {
         <Text style={{ color: '#bfbfc4', fontSize: 13 }}>
         </Text>
         <Spacer size={10} />
-        <Text style={{ color: '#36384a', fontSize: 22, fontWeight: 'bold' }}>
-        </Text>
-        <Spacer size={10} />
         <PlacesList onSelectPlace={this.props.onSelectPlace}/>
-        <Spacer size={20} />
+        <Spacer size={10} />
         {place && 
           <View
             style={{
@@ -42,8 +39,8 @@ export default class Dialog extends React.Component {
               bgGradientStart='#ff52a8' bgGradientEnd='#ffdf00'
               caption={
                 direction.duration ? 
-                `Go ${direction.duration} mn - ${direction.distance} m` 
-                : ''
+                `Go ${direction.duration} min - ${direction.distance} m` 
+                : _t('Not sure')
               }
               onPress={() => this.props.onFinish()}
             />

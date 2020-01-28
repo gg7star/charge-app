@@ -51,10 +51,12 @@ export default {
   'THEO1827nono': 'THEO1827nono',
   'Search': 'Rechercher',
   'Open': 'Ouvert',
+  'Opened at': 'Ouvert à',
   'Open now': 'Ouvert maintenant',
   'Open from': 'Ouvert de',
   'Closed': 'Ferme',
   'at': 'à',
+  'Closed at': 'Fermé à',
   'batteries': 'batteries',
   'places': 'places',
   'Go': 'Go',
@@ -183,5 +185,6 @@ export default {
   'Notifications': 'Notifications',
   'Mes points': 'My points',
   'Vos arbres plantés': 'Your planted trees',
-  'Nothing': 'Rien'
+  'Nothing': 'Rien',
+  'Not sure': 'Pas certain'
 };

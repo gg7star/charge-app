@@ -2,29 +2,47 @@ import React from 'react'
 import { View, Platform } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import stripe from 'tipsi-stripe';
-import MapView from '../../common/components/MapView';
-import MapButton from '../../common/components/MapButton';
-import UnlockDialog from '../../modals/unlock/ViewContainer';
-import SearchDialog from '../../modals/search/ViewContainer';
-import DetailDialog from '../../modals/detail/ViewContainer';
-import FinishDialog from '../../modals/finish/ViewContainer';
-import FinishTopDialog from '../../modals/finish-top/ViewContainer';
-import ReserveDialog from '../../modals/reserve/ViewContainer';
-import NearPlacesDialog from '../../modals/near-places/ViewContainer';
-import FilterDialog from '../../modals/filter/ViewContainer';
-import RentDialog from '../../modals/rent/ViewContainer';
-import FeedbackDialog from '../../modals/feedback/ViewContainer';
+import Geolocation from 'react-native-geolocation-service';
+import {
+  UnlockDialog,
+  SearchDialog,
+  DetailDialog,
+  FinishDialog,
+  FinishTopDialog,
+  ReserveDialog,
+  NearPlacesDialog,
+  FilterDialog,
+  RentDialog,
+  FeedbackDialog
+} from '~/modules/map/modals';
 import { W, H } from '~/common/constants';
-import Menu from '~/modules/profile/modals/menu/ViewContainer';
 import { Spacer } from '~/common/components';
+import Menu from '~/modules/profile/modals/menu/ViewContainer';
+import MapButton from '~/modules/map/common/components/MapButton';
+import MapView from '~/modules/map/common/components/MapView';
+import defaultCurrentLocation from '~/common/config/locations';
 
-export default class ScreenView extends React.Component {
+const GEOLOCATION_OPTION = {
+  enableHighAccuracy: true,
+  timeout: 15000,
+  maximumAge: 10000,
+  distanceFilter: 50,
+  forceRequestLocation: true
+};
+const GEOLOCATION_WATCH_OPTION = {
+  enableHighAccuracy: false,
+  distanceFilter: 0,
+  interval: 5000,
+  fastestInterval: 3000
+}
+
+export default class FirstScreenView extends React.Component {
   state = {
     profileOpened: false,
     activedModal: 'unlock'
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { initialModal, profileOpened } = this.props
     var newState = {...this.state};
     if (initialModal) {
@@ -33,100 +51,116 @@ export default class ScreenView extends React.Component {
         activedModal: initialModal
       }
     }
+
     if (profileOpened) {
       newState = {
         ...newState,
         profileOpened
       }
     }
-    this.setState({...newState})
+    this.setState({...newState});
+
+    await this.initGeoLocation();
   }
 
+  async componentWillUnmount() {
+    Geolocation.stopObserving();
+  }
 
-  handleDetectDirection = ({distance, duration}) => {
+  async initGeoLocation() {
+    const hasPermission = await this.hasLocationPermission();
+    if(hasPermission) {
+      Geolocation.requestAuthorization();
+      // Map
+      const _this = this;
+      // Get current location
+      Geolocation.getCurrentPosition(
+        (position) => { _this.handleGetCurrentLocation(position) },
+        (error) => { _this.handleCurrentLocationError(error) },
+        GEOLOCATION_OPTION
+      );
+
+      Geolocation.watchPosition(
+        (position) => { _this.handleGetCurrentLocation(position) },
+        (error) => { _this.handleCurrentLocationError(error) },
+        GEOLOCATION_WATCH_OPTION
+      );
+    }
+  }
+
+  hasLocationPermission = async () => {
+    if (Platform.OS === 'ios' ||
+        (Platform.OS === 'android' && Platform.Version < 23)) {
+      return true;
+    }
+
+    const hasPermission = await PermissionsAndroid.check(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+    );
+
+    if (hasPermission) return true;
+
+    const status = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+    );
+
+    if (status === PermissionsAndroid.RESULTS.GRANTED) return true;
+
+    if (status === PermissionsAndroid.RESULTS.DENIED) {
+      ToastAndroid.show('Location permission denied by user.', ToastAndroid.LONG);
+    } else if (status === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
+      ToastAndroid.show('Location permission revoked by user.', ToastAndroid.LONG);
+    }
+
+    return false;
+  }
+
+  handleGetCurrentLocation = (position) => {
+    console.log("==== handleGetCurrentLocation: ", position);
+    const { mapActions } = this.props;
+    const newLocation = {
+      name: "My location",
+      coordinate: {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+        error: null,
+      }
+    };
+    mapActions.changedCurrentLocation(newLocation);
+    mapActions.searchPlaces('', newLocation, null);
+  }
+
+  handleCurrentLocationError = (error) => {
+    console.log('===== location error: ', error);
+    if (this.props.map.currentLocation) {
+      // Set previous location.
+      const prevCordinate = this.props.map.currentLocation.coordinate;
+      this.props.mapActions.changedCurrentLocation({
+        name: "My location",
+        coordinate: {
+          latitude: prevCordinate.latitude,
+          longitude: prevCordinate.longitude,
+          error: error.message,
+        }
+      });
+    }
+  }
+
+  handleDetectDirection = ({distance, duration}) => 
     this.props.mapActions.setDirection({distance, duration});
-  }
 
-  render() {
-    const { currentLocation, places, searchedPlaces, place } = this.props.map;
-    const { _t } = this.props.appActions;
-    const { profileOpened } = this.state;
-    const { activedModal } = this.state;
-    const propsProfileOpened = this.props.profileOpened;
-    return (
-      <View style={{position: 'relative', width: W, height: H}}>
-        <Menu 
-          isShowable={profileOpened || propsProfileOpened} 
-          onClose={()=> {this.setState({...this.state, profileOpened: false })}}
-        />
-        <MapView
-          mapType={Platform.OS == "android" ? "none" : "standard"}
-          currentLocation={currentLocation}
-          places={searchedPlaces}
-          selectedPlace={place}
-          onSelectMarker={this.openNearPlacesDialog}
-          onDetectDirection={this.handleDetectDirection}
-        >
-          <MapButton
-            name='profile'
-            onPress={() => {
-                this.setState({...this.state, profileOpened: true});
-              }
-            }
-          />
-          <MapButton name='tree' onPress={this.goGift}/>
-          {/* <MapButton name='search' onPress={this.openSearchDialog}/> */}
-          <MapButton name='refresh' />
-          <MapButton name='position' />
-        </MapView>
-        <Spacer size={20} />
-        {activedModal=='unlock' && <UnlockDialog onClickUnlock={this.onUnlock} />}
-        {activedModal=='search' && <SearchDialog onCancel={this.closeSearchDialog} 
-          selectPlace={this.selectPlace} />
-        }
-        {activedModal=='detail' && <DetailDialog
-            onClose={this.closeDetailDialog} 
-            onFinish={this.openFinishDialog}
-            onReserve={this.openReserveDialog}
-          />
-        }
-        {activedModal=='finish' && 
-          <React.Fragment>
-            <FinishTopDialog />
-            <FinishDialog onFinish={this.closeFinishDialog} />
-          </React.Fragment>
-        }
-        {activedModal=='reserve' && 
-          <ReserveDialog
-            onClose={this.closeReserveDialog} 
-            onSelectPlace={this.selectPlace}
-          />
-        }
-        {activedModal=='near-places' && 
-          <NearPlacesDialog
-            onClose={this.closeNearPlacesDialog} 
-            onSelectPlace={this.onSelectPlace}
-            onFinish={this.openFinishDialog}
-            onReserve={this.openReserveDialog}
-            onOpenFilter={this.openFilterDialog}
-          />
-        }
-        {activedModal=='filter' && 
-          <FilterDialog
-            onClose={this.closeNearPlacesDialog} 
-            onFilter={this.filterSearch}
-          />
-        }
-        {activedModal=='rent' && 
-          // <RentDialog onBuy={this.openFeedbackDialog} onDeposit={this.openFeedbackDialog} />
-          <RentDialog onBuy={this.onBuy} onDeposit={this.onDeposit} />
-        }
-        {activedModal=='feedback' && 
-          <FeedbackDialog onClose={this.closeFeedbackDialog} />
-        }
-        
-      </View>
-    )
+  onClickRefresh = () => {
+    this.props.mapActions.loadPlacesOnMap();
+    this.props.mapActions.getAllStations();
+  };
+
+  onClickPosition = () => {
+    const { map } = this.props;
+    const position = (map && map.currentLocation) 
+      ? map.currentLocation
+      : defaultCurrentLocation;
+    (this.mapView && this.mapView.onGoToLocation) && 
+      this.mapView.onGoToLocation(position.coordinate);
   }
 
   goGift = () => {
@@ -163,7 +197,10 @@ export default class ScreenView extends React.Component {
   }
 
   closeFinishDialog = () => {
-    this.setState({...this.state, activedModal: 'unlock'});
+    this.setState({
+      ...this.state, activedModal: 'unlock'},
+      () => this.props.mapActions.selectPlace(-1)
+    );
   }
 
   openReserveDialog = () => {
@@ -256,5 +293,86 @@ export default class ScreenView extends React.Component {
                 console.log('Register card failed', { error });
               });
     }
+  }
+
+  render() {
+    const { currentLocation, places, searchedPlaces, place } = this.props.map;
+    const { _t } = this.props.appActions;
+    const { profileOpened } = this.state;
+    const { activedModal } = this.state;
+    const propsProfileOpened = this.props.profileOpened;
+    return (
+      <View style={{position: 'relative', width: W, height: H}}>
+        <Menu 
+          isShowable={profileOpened || propsProfileOpened} 
+          onClose={()=> {this.setState({...this.state, profileOpened: false })}}
+        />
+        <MapView
+          mapType={Platform.OS == "android" ? "none" : "standard"}
+          currentLocation={currentLocation}
+          places={searchedPlaces}
+          selectedPlace={place}
+          onSelectMarker={this.openNearPlacesDialog}
+          onDetectDirection={this.handleDetectDirection}
+          ref={c => this.mapView = c}
+        >
+          <MapButton
+            name='profile'
+            onPress={() => {
+                this.setState({...this.state, profileOpened: true});
+              }
+            }
+          />
+          <MapButton name='tree' onPress={this.goGift}/>
+          <MapButton name='refresh' onPress={this.onClickRefresh}/>
+          <MapButton name='position' onPress={this.onClickPosition}/>
+        </MapView>
+        <Spacer size={20} />
+        {activedModal=='unlock' && <UnlockDialog onClickUnlock={this.onUnlock} />}
+        {activedModal=='search' && <SearchDialog onCancel={this.closeSearchDialog} 
+          selectPlace={this.selectPlace} />
+        }
+        {activedModal=='detail' && <DetailDialog
+            onClose={this.closeDetailDialog} 
+            onFinish={this.openFinishDialog}
+            onReserve={this.openReserveDialog}
+          />
+        }
+        {activedModal=='finish' && 
+          <React.Fragment>
+            <FinishTopDialog />
+            <FinishDialog onFinish={this.closeFinishDialog} />
+          </React.Fragment>
+        }
+        {activedModal=='reserve' && 
+          <ReserveDialog
+            onClose={this.closeReserveDialog} 
+            onSelectPlace={this.selectPlace}
+          />
+        }
+        {activedModal=='near-places' && 
+          <NearPlacesDialog
+            onClose={this.closeNearPlacesDialog} 
+            onSelectPlace={this.onSelectPlace}
+            onFinish={this.openFinishDialog}
+            onReserve={this.openReserveDialog}
+            onOpenFilter={this.openFilterDialog}
+          />
+        }
+        {activedModal=='filter' && 
+          <FilterDialog
+            onClose={this.closeNearPlacesDialog} 
+            onFilter={this.filterSearch}
+          />
+        }
+        {activedModal=='rent' && 
+          // <RentDialog onBuy={this.openFeedbackDialog} onDeposit={this.openFeedbackDialog} />
+          <RentDialog onBuy={this.onBuy} onDeposit={this.onDeposit} />
+        }
+        {activedModal=='feedback' && 
+          <FeedbackDialog onClose={this.closeFeedbackDialog} />
+        }
+      </View>
+    )
   }
 }

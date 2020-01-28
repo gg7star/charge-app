@@ -17,7 +17,7 @@ export default class MapButton extends React.Component {
       case 'profile':
         return (
           <Button
-            style={[styles.button, {top: 50, left: 20}, styles.shadow]} 
+            style={[styles.button, styles.profile, styles.shadow]}
             onPress={onPress}
             image={PROFILE_IMAGE}
           />
@@ -25,7 +25,7 @@ export default class MapButton extends React.Component {
       case 'gift':
         return (
           <Button
-            style={[styles.button, {top: 50, right: 20}]} 
+            style={[styles.button, styles.gift]} 
             onPress={onPress}
             image={GIFT_IMAGE}
           />
@@ -33,7 +33,7 @@ export default class MapButton extends React.Component {
       case 'tree':
         return (
           <Button
-            style={[styles.button, {top: 50, right: 20}, styles.shadow]} 
+            style={[styles.button, styles.tree, styles.shadow]} 
             onPress={onPress}
             image={TREE_IMAGE}
           />
@@ -41,7 +41,7 @@ export default class MapButton extends React.Component {
       case 'search':
         return (
           <Button
-            style={[styles.button, {bottom: 220, right: 20}]} 
+            style={[styles.button, styles.search]} 
             onPress={onPress}
             image={SEARCH_IMAGE}
           />
@@ -49,16 +49,7 @@ export default class MapButton extends React.Component {
       case 'refresh':
         return (
           <Button
-            style={[
-              styles.button,
-              { 
-                bottom: 205,
-                right: 20, 
-                borderBottomLeftRadius: 0,
-                borderBottomRightRadius: 0
-              },
-              styles.shadow
-            ]} 
+            style={[styles.button, styles.refresh, styles.shadow]} 
             onPress={onPress}
             image={REFRESH_IMAGE}
           />
@@ -66,16 +57,7 @@ export default class MapButton extends React.Component {
       case 'position':
         return (
           <Button
-            style={[
-              styles.button,
-              {
-                bottom: 150,
-                right: 20,
-                borderTopLeftRadius: 0,
-                borderTopRightRadius: 0
-              },
-              styles.shadow
-            ]} 
+            style={[styles.button, styles.position, styles.shadow]} 
             onPress={onPress}
             image={POSITION_IMAGE}
           />
@@ -112,5 +94,33 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 1, height: 5 },
     shadowOpacity: 0.2,
     shadowRadius: 2,
+  },
+  profile: {
+    top: 50,
+    left: 13
+  },
+  gift: {
+    top: 50,
+    right: 20
+  },
+  tree: {
+    top: 50,
+    right: 13
+  },
+  search: {
+    bottom: 220,
+    right: 20
+  },
+  refresh: { 
+    bottom: 212,
+    right: 20,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0
+  },
+  position: {
+    bottom: 150,
+    right: 20,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0
   }
 })

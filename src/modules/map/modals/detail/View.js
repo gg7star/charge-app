@@ -21,7 +21,7 @@ export default class Dialog extends React.Component {
         />
         {place &&
           <Dialog2Wrapper onClose={this.props.onClose}>
-            <DetailInfo data={place} />
+            <DetailInfo data={place} distance={direction.distance} />
             <Spacer size={20} />
             <View
               style={{

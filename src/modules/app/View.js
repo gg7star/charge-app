@@ -1,14 +1,8 @@
 import React, {Component} from 'react';
-import {
-  StyleSheet, SafeAreaView, View, StatusBar, Platform,
-  AppRegistry, AsyncStorage, Alert,
-  PermissionsAndroid,
-  ToastAndroid,
-} from 'react-native';
+import { StyleSheet,View } from 'react-native';
 import {PERMISSIONS, request} from 'react-native-permissions';
 import { Root, Toast } from 'native-base';
 import OneSignal from 'react-native-onesignal';
-import Geolocation from 'react-native-geolocation-service';
 import { Actions } from 'react-native-router-flux';
 import onesignalConfig from '~/common/config/onesignal';
 import RootRoutes from '~/routes';
@@ -17,16 +11,7 @@ import {
   startReceiveFcm,
   saveFcmToken
 } from '~/common/services/rn-firebase/message';
-import LocalStorage from '~/store/localStorage';
-import STORAGE from '~/common/constants/storage';
 import { SplashView } from '~/common/components';
-
-const GEOLOCATION_OPTION = {
-  enableHighAccuracy: true, timeout: 15000, maximumAge: 10000, distanceFilter: 50, forceRequestLocation: true
-};
-const GEOLOCATION_WATCH_OPTION = {
-  enableHighAccuracy: true, distanceFilter: 0, interval: 5000, fastestInterval: 2000
-}
 
 export default class AppView extends Component {
   state = {
@@ -58,7 +43,7 @@ export default class AppView extends Component {
     const { auth } = this.props;
     (auth && auth.fcm && auth.fcm.fcmListener) && auth.fcm.fcmListener();
 
-    Geolocation.stopObserving();
+    // Geolocation.stopObserving();
   }
   
   async initialize() {
@@ -100,53 +85,7 @@ export default class AppView extends Component {
     }
   }
 
-  async initGeoLocation() {
-    const hasPermission = await this.hasLocationPermission();
-    if(hasPermission) {
-      Geolocation.requestAuthorization();
-      // Map
-      const _this = this;
-      // Get current location
-      Geolocation.getCurrentPosition(
-        (position) => { _this.handleGetCurrentLocation(position) },
-        (error) => { _this.handleCurrentLocationError(error) },
-        GEOLOCATION_OPTION
-      );
-
-      Geolocation.watchPosition(
-        (position) => { _this.handleGetCurrentLocation(position) },
-        (error) => { _this.handleCurrentLocationError(error) },
-        GEOLOCATION_WATCH_OPTION
-      );
-    }
-  }
-
-  hasLocationPermission = async () => {
-    if (Platform.OS === 'ios' ||
-        (Platform.OS === 'android' && Platform.Version < 23)) {
-      return true;
-    }
-
-    const hasPermission = await PermissionsAndroid.check(
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
-    );
-
-    if (hasPermission) return true;
-
-    const status = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
-    );
-
-    if (status === PermissionsAndroid.RESULTS.GRANTED) return true;
-
-    if (status === PermissionsAndroid.RESULTS.DENIED) {
-      ToastAndroid.show('Location permission denied by user.', ToastAndroid.LONG);
-    } else if (status === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
-      ToastAndroid.show('Location permission revoked by user.', ToastAndroid.LONG);
-    }
-
-    return false;
-  }
+  
 
   onReceived(notification) {
     console.log("Notification received: ", notification);
@@ -166,38 +105,6 @@ export default class AppView extends Component {
   setFcmListiner = (fcmListener) => {
     console.log('===== fcmListener: ', fcmListener);
     this.setState({fcmListener});
-  }
-
-
-  handleGetCurrentLocation = (position) => {
-    console.log("==== handleGetCurrentLocation: ", position);
-    const { mapActions } = this.props;
-    const newLocation = {
-      name: "My location",
-      coordinate: {
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-        error: null,
-      }
-    };
-    mapActions.changedCurrentLocation(newLocation);
-    mapActions.searchPlaces('', newLocation, null);
-  }
-
-  handleCurrentLocationError = (error) => {
-    console.log('===== location error: ', error);
-    if (this.props.map.currentLocation) {
-      // Set previous location.
-      const prevCordinate = this.props.map.currentLocation.coordinate;
-      this.props.mapActions.changedCurrentLocation({
-        name: "My location",
-        coordinate: {
-          latitude: prevCordinate.latitude,
-          longitude: prevCordinate.longitude,
-          error: error.message,
-        }
-      });
-    }
   }
 
   showToast() {

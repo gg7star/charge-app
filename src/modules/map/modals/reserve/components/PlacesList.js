@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, Text, ImageBackground, Image, TouchableOpacity, StyleSheet, FlatList } from 'react-native'
 import { em, H, W } from '~/common/constants'
+import { openHourStatus } from '~/common/utils/time';
 
 export default class PlacesList extends React.Component {
   state = {
@@ -10,13 +11,15 @@ export default class PlacesList extends React.Component {
   UNSAFE_componentWillReceiveProps(nextProps) {
     const { searchedPlaces, place } = nextProps.map;
    
-    console.log('===== WillReceiveProps: ', nextProps);
     if (searchedPlaces && place) {
-      const selectedIndex = searchedPlaces.findIndex(p => {return p.name === place.name});
-      console.log('===== selectedIndex: ', selectedIndex);
+      const selectedIndex = searchedPlaces.findIndex(p => p.name === place.name);
       if (this.flatList && selectedIndex >= 0) {
-        console.log('==== scroll to ', selectedIndex)
-        this.flatList.scrollToIndex({animated: true, index: selectedIndex, viewOffset: 0, viewPosition: 0.5});
+        this.flatList.scrollToIndex({
+          animated: true,
+          index: selectedIndex,
+          viewOffset: 0,
+          viewPosition: 0.5
+        });
       }
     }   
   }
@@ -40,8 +43,7 @@ export default class PlacesList extends React.Component {
   renderListItem = ({ item, index }) => {
     const { _t } = this.props.appActions;
     const { place } = this.props.map;
-    const isSelectedItem = (place.name === item.name);
-    const backgroundColor = '#FFFFFF'; //isSelectedItem ? '#f6f8fa' : '#FFFFFF';
+    const backgroundColor = '#FFFFFF';
     var itemContainerStyles = [{ 
       marginLeft: 20,
       marginRight: 20,
@@ -49,15 +51,7 @@ export default class PlacesList extends React.Component {
       position: 'relative',
       width: W-40
     }];
-    if (place.name === item.name) {
-      itemContainerStyles.push({
-        borderRadius: 23*em,
-        shadowColor: "#000000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.3,
-        shadowRadius: 2,
-      })
-    }
+    const hourStatus = openHourStatus(item.openHours);
     
     return (
       <View style={itemContainerStyles}>
@@ -84,11 +78,11 @@ export default class PlacesList extends React.Component {
                   {item.title}
                 </Text>
                 <View style={{ flexDirection: 'row', marginVertical: 5 }}>
-                  <Text style={{ color: '#1be497' }}>
-                    {_t('Open')}
-                  </Text>
-                  <Text style={{ color: '#c9c9ce'}}>
-                    {` ${_t('Closed')} ${_t('at')} ${item.openHour}`}
+                  <Text style={{ color: (hourStatus.openStatus ? '#1be497' : '#c9c9ce') }}>
+                    {hourStatus.openStatus
+                      ? `${_t('Opened at')} ${hourStatus.hour}`
+                      : `${_t('Closed at')} ${hourStatus.hour}`
+                    }
                   </Text>
                 </View>
                 <View style={{ flexDirection: 'row', marginVertical: 5 }}>
@@ -107,9 +101,11 @@ export default class PlacesList extends React.Component {
   render() {
     const { searchedPlaces, place } = this.props.map;
     const itemIndex = searchedPlaces.findIndex(p => {return p.name === place.name});
+    console.log('===== itemIndex: ', itemIndex, searchedPlaces[itemIndex]);
     return (
       <View style={{ marginHorizontal: -20 }}>
-        <FlatList
+        {this.renderListItem({item: searchedPlaces[itemIndex], index: itemIndex})}
+        {/* <FlatList
           data={searchedPlaces}
           renderItem={this.renderListItem}
           keyExtractor={this._keyExtractor}
@@ -117,7 +113,7 @@ export default class PlacesList extends React.Component {
           getItemLayout={(data, index) => this.getItemLayout(data, index)}
           initialScrollIndex={itemIndex}
           ref={ref => (this.flatList = ref)}
-        />       
+        />        */}
       </View>
     )
   }

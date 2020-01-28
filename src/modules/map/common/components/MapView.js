@@ -22,9 +22,86 @@ export default class CustomMapView extends React.Component {
     directionCoordinates: []
   }
 
-  handleUserLocationChange = (coordinate) => {
-    console.log('===== handleUserLocationChange: ', coordinate);
-  }
+  onGoToLocation = (coordinate) => {
+    this.mapView.animateToRegion({
+      latitude: coordinate.latitude,
+      longitude: coordinate.longitude,
+      latitudeDelta: 0.0059397161733585335,
+      longitudeDelta: 0.005845874547958374
+    });  
+  };
+
+
+  renderMarkers = () => {
+    const { places, selectedPlace } = this.props
+    const currentLocation = this.props.currentLocation || defaultCurrentLocation;
+    const selectedIndex = places.findIndex(p => {return selectedPlace && p.name === selectedPlace.name});
+    var placeImage = PIN_OPEN_IMAGE;
+   
+    return (
+      <React.Fragment>
+        {places && Object.keys(places).map((key, index) => {
+          const place = places[key];
+          if (place){
+            if (selectedPlace && (key === `${selectedIndex}`)) placeImage = PIN_SELECT_IMAGE;
+            else placeImage = place.isOpened ? PIN_OPEN_IMAGE : PIN_CLOSE_IMAGE;
+            return (
+              <MapView.Marker
+                key={`station-${index}`}
+                coordinate={place.coordinate}
+                onPress={() => this.props.onSelectMarker(key)}
+              >
+                <Image
+                  source={placeImage}
+                  style={{width: 40, height: 40}}
+                />            
+              </MapView.Marker>
+              );
+            }
+          })
+        }
+        { currentLocation.coordinate && this.renderCurrentLocationMarker() }
+      </React.Fragment>
+    )
+  };
+
+  renderCurrentLocationMarker = () => {
+    const currentLocation = this.props.currentLocation || defaultCurrentLocation;
+
+    return (
+      <MapView.Marker
+        key={'my-location'}
+        coordinate={currentLocation.coordinate}
+        anchor={{x: 0.5, y: 0.5}}
+        // title={'Me'}
+      >
+        <Image
+          source={CURRENT_LOCATION_IMAGE}
+          style={{width: 44, height: 40}}
+        />
+      </MapView.Marker>
+    )
+  };
+
+  renderCustomDirection = () => {
+    const { directionCoordinates } = this.state;
+    const startColor = '#FFDF00';
+    const endColor = '#FF52A8';
+    const strokeColors = generateColor(
+      startColor,
+      endColor,
+      directionCoordinates ? directionCoordinates.length : 1
+    );
+
+    return (
+      <MapView.Polyline
+        coordinates={directionCoordinates}
+        strokeWidth={4}
+        strokeColor={startColor}
+        strokeColors={strokeColors}
+      />
+    )
+  };
 
   render() {
     const { children } = this.props;
@@ -39,8 +116,6 @@ export default class CustomMapView extends React.Component {
       latitudeDelta: LATITUDE_DELTA,
       longitudeDelta: LONGITUDE_DELTA,
     };
-    console.log('==== currentLocation: ', currentLocation);
-    console.log('==== selectedPlace: ', selectedPlace);
 
     return (
       <View 
@@ -55,18 +130,15 @@ export default class CustomMapView extends React.Component {
             initialRegion={region}
             provider={PROVIDER_GOOGLE}
             mapType={Platform.OS == "android" ? "terrain" : "standard"}
-            showsUserLocation={true}
-            showsMyLocationButton={true}
-            followsUserLocation={true}
-
+            // showsUserLocation={true}
+            // showsMyLocationButton={true}
+            // followsUserLocation={true}
             showsCompass={true}
-            // showsTraffic={true}
             rotateEnabled={true}
             loadingEnabled={true}
             showsBuildings={true}
             pitchEnabled={true}
             ref={c => this.mapView = c}
-            onUserLocationChange={this.handleUserLocationChange}
           >
             { this.renderMarkers() }
             {(selectedPlace && selectedPlace.coordinate && currentLocation.coordinate) && 
@@ -97,12 +169,13 @@ export default class CustomMapView extends React.Component {
                     directionCoordinates.push(coord);
                   }
                   directionCoordinates.push(selectedPlace.coordinate);
+                  const counts = directionCoordinates.length;
                   this.mapView && this.mapView.fitToCoordinates(directionCoordinates, {
                     edgePadding: {
-                      right: (width / 20),
-                      bottom: (height / 20),
-                      left: (width / 20),
-                      top: (height / 20),
+                      right: (width / 10),
+                      bottom: (height / 5 * 2),
+                      left: (width / 10),
+                      top: (height / 7),
                     }
                   });
                   this.setState({directionCoordinates});
@@ -117,78 +190,6 @@ export default class CustomMapView extends React.Component {
           { children && children }
         </React.Fragment>
       </View>      
-    )
-  }
-
-  renderMarkers() {
-    const { places, selectedPlace } = this.props
-    const currentLocation = this.props.currentLocation || defaultCurrentLocation;
-    const selectedIndex = places.findIndex(p => {return selectedPlace && p.name === selectedPlace.name});
-    var placeImage = PIN_OPEN_IMAGE;
-   
-    return (
-      <React.Fragment>
-        {places && Object.keys(places).map((key, index) => {
-          const place = places[key];
-          if (place){
-            if (selectedPlace && (key === `${selectedIndex}`)) placeImage = PIN_SELECT_IMAGE;
-            else placeImage = place.isOpened ? PIN_OPEN_IMAGE : PIN_CLOSE_IMAGE;
-            return (
-              <MapView.Marker
-                key={`station-${index}`}
-                title={place.name} 
-                coordinate={place.coordinate}
-                onPress={() => this.props.onSelectMarker(key)}
-              >
-                <Image
-                  source={placeImage}
-                  style={{width: 40, height: 40}}
-                />            
-              </MapView.Marker>
-              );
-            }
-          })
-        }
-        { currentLocation.coordinate && this.renderCurrentLocationMarker() }
-      </React.Fragment>
-    )
-  }
-
-  renderCurrentLocationMarker() {
-    const currentLocation = this.props.currentLocation || defaultCurrentLocation;
-
-    return (
-      <MapView.Marker
-        key={'my-location'}
-        coordinate={currentLocation.coordinate}
-        anchor={{x: 0.5, y: 0.5}}
-        // title={'Me'}
-      >
-        <Image
-          source={CURRENT_LOCATION_IMAGE}
-          style={{width: 44, height: 40}}
-        />
-      </MapView.Marker>
-    )
-  }
-
-  renderCustomDirection() {
-    const { directionCoordinates } = this.state;
-    const startColor = '#FFDF00';
-    const endColor = '#FF52A8';
-    const strokeColors = generateColor(
-      startColor,
-      endColor,
-      directionCoordinates ? directionCoordinates.length : 1
-    );
-
-    return (
-      <MapView.Polyline
-        coordinates={directionCoordinates}
-        strokeWidth={4}
-        strokeColor={startColor}
-        strokeColors={strokeColors}
-      />
     )
   }
 }
