@@ -30,28 +30,38 @@ export async function attemptSignInWithEmail({email, password}) {
   }
 }
 
-export async function attemptSignInWithPhone(phoneNumber) {
+export async function loginWithPhone(phoneNumber) {
   var confirmation = null;
-  var error = null;
+  var errorMessage = null;
+  var errorType = null;
   try {
     confirmation = await firebase.auth().signInWithPhoneNumber(phoneNumber);
     console.log('===== confirmation: ', confirmation);
-  } catch (e) {
-    console.log('===== error: ', e);
-    error = 'Failed to signin with phone number.';
-    switch (e.code) {
+  } catch (error) {
+    console.log('===== errorMessage: ', error);
+    // errorMessage = error.message;
+    // errorType = error.code;
+    switch (error.code) {
       case 'auth/invalid-phone-number':
-          error = 'Please enter a valid phone number.';
+        errorMessage = 'Please enter a valid phone number.';
         break;
       case 'auth/too-many-requests':
-          error = 'We have blocked all requests from this device due to unusual activity. Try again later.';
+        errorMessage = 'We have blocked all requests from this device due to unusual activity. Try again later.';
         break;
       default:
-        console.error(e);
+        console.log('==== error: ', error);
         break;
     }
-  } finally {
-    console.log('===== finally')
   }
-  return {confirmation, error};
+  return {confirmation, error: errorMessage, errorType};
+}
+
+export async function confirmWithPhone(confirmation, confirmCode) {
+  try {
+    const credential = await confirmation.confirm(confirmCode)
+    return { credential, error: null, errorType: null };
+  } catch (error) {
+    console.log('===== Phone number confirmation error: ', error);
+    return { credential: null, error: error.message, errorType: error.code };
+  }
 }

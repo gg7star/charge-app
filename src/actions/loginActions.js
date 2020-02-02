@@ -10,7 +10,7 @@ export function initLogin() {
 export function setFcmToken(fcmToken) {
   return {
     type: types.SET_FCM_TOKEN,
-    payload: {fcmToken}
+    payload: { fcmToken }
   }
 }
 
@@ -28,17 +28,10 @@ export function receivedFcm(message) {
   }
 }
 
-export function tryLogin(countryCode, phoneNumber) {
+export function loginSuccess(credential) {
   return {
-    type: types.LOGIN_REQUEST,
-    payload: { countryCode, phoneNumber }
-  }
-}
-
-export function loginSuccess({authInfo, accountInfo}) {
-  return {
-    type: types.LOGIN_DONE,
-    payload: {authInfo, accountInfo}
+    type: types.LOGIN_SUCCESS,
+    payload: { credential }
   }
 }
 
@@ -66,35 +59,6 @@ export function clearMessage() {
 export function doLogout() {
   return {
     type: types.LOGOUT_DONE
-  }
-}
-
-export function tryLoginWithFacebook() {
-  return {
-    type: types.TRY_FACEBOOK_LOGIN_REQUEST,
-  }
-}
-
-export function loginWithFacebook(fbProfile) {
-  return {
-    type: types.FACEBOOK_LOGIN_REQUEST,
-    payload: {
-      fbId: fbProfile.id,
-      fbProfile: fbProfile
-    }
-  }
-}
-
-export function loginWithFacebookSuccess(accountInfo) {
-  if (accountInfo.isFirst) {
-    Actions['signup_hint_find_station'] ();
-  } else {
-    Actions.map();
-    Actions['map_first']();
-  }
-  return {
-    type: types.LOGIN_DONE,
-    payload: { accountInfo }
   }
 }
 

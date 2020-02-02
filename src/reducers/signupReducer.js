@@ -11,7 +11,7 @@ const initialState = {
   name: '',
   email: '',
   birthday: '',
-  isFacebookSigup: false,
+  isSocialSigup: false,
 }
 
 export default function reducer(state = initialState, action) {
@@ -91,13 +91,13 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         isFetching: true,
-        isFacebookSigup: true,
+        isSocialSigup: true,
       }
     case signupActionTypes.FACEBOOK_SIGNUP_SUCCESS:
       return {
         ...state,
         ...action.payload,
-        isFacebookSigup: true,
+        isSocialSigup: true,
         isFetching: false,
         statusMessage: action.payload.statusMessage,
         statusMessageType: 'success'
@@ -107,7 +107,7 @@ export default function reducer(state = initialState, action) {
         ...state,
         ...action.payload,
         isFetching: false,
-        isFacebookSigup: true,
+        isSocialSigup: true,
         statusMessage: action.payload.statusMessage,
         statusMessageType: 'danger'
       }
@@ -115,7 +115,7 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         isFetching: false,
-        isFacebookSigup: true,
+        isSocialSigup: true,
         statusMessage: '',
         statusMessageType: ''
       }

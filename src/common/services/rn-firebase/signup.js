@@ -48,7 +48,7 @@ export async function attempSignup({email, password}) {
 //           name,
 //           email: userEmail,
 //           birthday: birthday || '',
-//           isFacebookUser: true,
+//           isSocialUser: true,
 //           userId,
 //           signedUp: Firebase.database.ServerValue.TIMESTAMP,
 //           lastLoggedIn: Firebase.database.ServerValue.TIMESTAMP,

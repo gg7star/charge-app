@@ -7,16 +7,43 @@ import moduleStyles from '~/modules/auth-signup/common/styles';
 import { em } from '~/common/constants';
 import { Spacer, Button, ConfirmCodeInput } from '~/common/components';
 
-export default class ScreenView extends React.Component {
+export default class SetConfirmCodeView extends React.Component {
   state = {
     confirmCode: '',
-    adjust: {
-      fixedBottom: 40*em
-    }    
-  }
+    isConfirming: false,
+    adjust: { fixedBottom: 40*em }
+  };
+
+  onGoBack = () => Actions['signup_first']();
+
+  setConfirmCode = (confirmCode) => this.setState({ confirmCode });
+
+  onGoNext = async () => {
+    const { confirmation, isSignup, appActions, authActions } = this.props;
+    const { _t } = appActions;
+    const { confirmCode } = this.state ;
+
+    if (confirmCode == '') return;
+    this.setState({isConfirming: true});
+    try {
+      const res = await confirmation.confirm(confirmCode);
+      console.log('==== onGoNext: res: ', res);
+      authActions.loginSuccess(res);
+      if (isSignup) Actions['signup_set_name']();
+      else Actions['home']();
+    } catch (e) {
+      console.error('===== failed to confirm code: ', e);
+      Alert.alert(
+        _t('Failed to confirm your code.'),
+        _t('Input valid correct confirm code.'),
+      );
+    }
+    this.setState({isConfirming: true});
+  };
 
   render() {
-    const { _t } = this.props.appActions
+    const { _t } = this.props.appActions;
+    const { confirmCode, isConfirming } = this.state;
     return (
       <SetWrapper onGoBack={this.onGoBack}>
         <Text style={moduleStyles.text.title}>
@@ -28,42 +55,20 @@ export default class ScreenView extends React.Component {
         </Text>
         <Spacer size={30} />
         <ConfirmCodeInput onFulfill={this.setConfirmCode} />
-        <View style={[moduleStyles.bottomActionBar, {bottom: this.state.adjust.fixedBottom}]}>
+        <View
+          style={[
+            moduleStyles.bottomActionBar,
+            {bottom: this.state.adjust.fixedBottom}
+          ]}
+        >
           <Button 
             onPress={this.onGoNext}
             caption={_t('Next')}
+            loading={isConfirming}
+            disabled={(confirmCode === '') && (confirmCode.length == 6)}
           />
         </View>
       </SetWrapper>
     )
-  } 
-
-  onGoBack = () => {
-    Actions['signup_first']();
-  }
-
-  setConfirmCode = (confirmCode) => {
-    this.setState({...this.state,
-      confirmCode
-    });
-  }
-
-  onGoNext = () => {
-    const { _t } = this.props.appActions;
-    const { confirmation } = this.props.signup;
-    const { confirmCode } = this.state ;
-    if (confirmCode == '') return;
-    try {
-      confirmation.confirm(confirmCode).then(() => {
-        // Successful login - onAuthStateChanged is triggered
-        Actions['signup_set_name']();
-      }); // User entered code
-    } catch (e) {
-      console.error('===== failed to confirm code: ', e); // Invalid code
-      Toast.show({
-        type: 'danger',
-        text: _t('Input valid correct confirm code.')
-      });
-    }
   }
 }

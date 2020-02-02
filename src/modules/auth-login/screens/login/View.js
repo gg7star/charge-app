@@ -1,150 +1,70 @@
 import React from 'react';
-import { TouchableOpacity, View, Text } from 'react-native';
-import { Toast } from 'native-base';
+import { TouchableOpacity, View, Text, Alert } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import LogoView from '~/common/components/LogoView';
+import Modal from "react-native-modal";
 import { Spacer, Button } from '~/common/components';
 import commonStyles from '~/common/styles';
 import PhoneNumberInput from '~/common/components/PhoneNumberInput';
-import { facebookService } from '~/common/lib/facebook';
-import { W, H, em, colors } from '~/common/constants';
+import { PhoneAuth, FacebookAuth } from '~/common/services/rn-firebase/auth';
+import { W, H, em } from '~/common/constants';
 import FirstWrapper from '../../common/wrappers/FirstWrapper';
+import { convertLanguage2CallingCode } from '~/common/utils/country';
+import SetConfirmCode from '../../confirm-code/ViewContainer';
+
+
+const { loginWithPhone, confirmWithPhone } = PhoneAuth;
+const { loginWithFacebook } = FacebookAuth;
+const FACEBOOK_IMAGE = require('~/common/assets/images/facebook.png');
+
 
 export default class ScreenView extends React.Component {
   state = {
     phoneNumber: '',
-    countryCode: '33',
-    adjust: {
-      mostTop: 180*em
-    }
+    countryCode: convertLanguage2CallingCode(this.props.app.language) || '33',
+    facebookLogining: false,
+    phoneLogining: false,
+    showConfirmCodeModal: false
   }
 
-  render() {
-    const { phoneNumber } = this.state
-    const { _t } = this.props.appActions
-    const { auth } = this.props;
-    const { isFetching, isFacebook } = auth;
-    const isLoggingIn = (isFetching && !isFacebook);
-    const isLoggingInWithFacebook = (isFetching && isFacebook);
-
-    return (
-      <FirstWrapper>
-        <React.Fragment>
-          <Text style={[commonStyles.text.titleWhite, {fontSize: 26*em, textAlign: 'center'}]}>
-            {_t("Connect yourself")}
-          </Text>
-          <Spacer size={10*em} />
-          <PhoneNumberInput
-            defaultCountry={this.props.app.language.toUpperCase()}
-            placeholder={_t('Mobile number')} 
-            phoneNumber={phoneNumber}
-            onChangeCountry={this.onChangeCountry}
-            onChangePhoneNumber={(phoneNumber) => this.setState({...this.state, phoneNumber})} 
-            onFocus={() => this.adjustOnTextFocus()}
-            onBlur={() => this.adjustOnTextBlur()}
-          />
-          <Spacer size={20*em} />
-          <Button
-            onPress={this.onLogin}
-            caption={_t('Next')}
-            loading={isLoggingIn}
-            disabled={isLoggingIn}
-          />
-          <Text style={[commonStyles.text.defaultWhite, {textAlign: 'center', fontSize: 12*em}]}>
-            {_t("We will send you an SMS to check your number")}
-          </Text>
-          <Spacer size={10*em} />
-          <Text style={[commonStyles.text.defaultWhite, {textAlign: 'center'}]}>
-            {_t("or")}
-          </Text>
-          <Spacer size={10*em} />
-          <Button onPress={this.onFacebookLogin} 
-            caption={_t('Continue with facebook')} 
-            icon={require('~/common/assets/images/facebook.png')}
-            textColor='#fff'
-            bgGradientStart='#48bff3'
-            bgGradientEnd='#00a9f2'
-            loading={isLoggingInWithFacebook}
-            disabled={isLoggingInWithFacebook}
-          />
-          <Spacer size={30*em} />
-          <TouchableOpacity
-            style={{width: '100%', alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}
-            onPress={() => this.goSignup()}
-          >
-            <Text style={[commonStyles.text.defaultWhite, {fontSize: 14*em}]}>
-              {_t("No account?")}
-            </Text>
-            <Text style={[commonStyles.text.defaultWhite, {fontSize: 14*em, fontWeight: 'bold'}]}>
-              {` ${_t('Register yourself')}`}              
-            </Text>
-          </TouchableOpacity>
-          <Spacer size={60*em} />
-        </React.Fragment>
-      </FirstWrapper>
-    )
-  }
-
-  showToast() {
-    const { _t } = this.props.appActions
-    const { statusMessage } = this.props.auth
-    const { clearMessage } = this.props.authActions
-
-    if (statusMessage != '') {
-      Toast.show({
-        type: 'danger',
-        text: _t(statusMessage),
-        position: 'top',
-      })
-      clearMessage()
-    }
-  }
-
-  onLogin = () => {
-    const { countryCode, phoneNumber } = this.state
-    this.props.authActions.tryLogin(countryCode, phoneNumber)
-  }
-
-  onFacebookLogin = () => {
-    const _this = this;
-    this.props.authActions.tryLoginWithFacebook();
-    facebookService.loginWithLoginManager((res) => {
-      if (res.action === 'loggedin') _this.loadProfileFromFacebook();
-      if (res.action === 'cancel') _this.onCancelFacebookLogin();
-      if (res.action === 'failed') _this.onFailedFacebookLogin();
-    });
-  }
-
-  async loadProfileFromFacebook() {
-    try {
-      const profile = await facebookService.fetchProfile((profile, error) => {
-        if (profile) console.log('====== onFacebookLoing: profile: ', profile);
-        if (error) console.log('====== onFacebookLogging: error: ', error);
+  onLogin = async () => {
+    const { _t } = this.props.appActions;
+    const { countryCode, phoneNumber } = this.state;
+    this.setState({phoneLogining: true});
+    const res = await loginWithPhone(`+${countryCode}${phoneNumber}`);
+    this.setState({phoneLogining: false});
+    if (res.confirmation) {
+      this.setState({
+        confirmation: res.confirmation,
+        showConfirmCodeModal: true
       });
-      console.log('==== loadProfileFromFacebook: profile: ', profile);
-      this.onSuccessFacebookLogin(profile);
-    } catch (error) {
-      console.log('===== error: ', error);
-      this.onFailedFacebookLogin('Network failed. Please try again.');
+    } else {
+      Alert.alert(
+        _t('Failed to login'),
+        _t(res.error),
+        [
+          {text: _t('OK'), onPress: () => console.log('OK Pressed')},
+        ],
+        {cancelable: false},
+      );
+      this.setState({phoneLogining: false});
     }
   }
 
-  onSuccessFacebookLogin = (profile) => {
-    this.props.authActions.loginWithFacebook(profile);
-  }
-
-  onCancelFacebookLogin = () => {
-    this.props.authActions.loginCanceled();
-  }
-
-  onFailedFacebookLogin = (error) => {
-    console.log('===== error: ', error);
-    this.props.appActions.setGlobalNotification({message: error.message, type: 'danger', duration: 6000});
-    this.props.authActions.loginFailed(error);
+  onFacebookLogin = async () => {
+    const { authActions } = this.props;
+    this.setState({facebookLogining: true});
+    const res = await loginWithFacebook();
+    this.setState({facebookLogining: false});
+    if (res.credential) {
+      authActions.loginSuccess(res.credential);
+      Actions['home'];
+    } else {
+      authActions.loginFailed(res.error);
+      Alert(res.error);
+    }
   }
 
   goSignup = () => {
-    // this.props.authActions.initLogin();
     Actions['signup_first']();
   }
 
@@ -154,12 +74,132 @@ export default class ScreenView extends React.Component {
     });
   }
 
-  adjustOnTextFocus = () => {
-    // this.setState({...this.state, adjust: {mostTop: 20*em}})
+  onCloseConfirmCodeModal = () => {
+    this.setState({showConfirmCodeModal: false});
   }
 
-  adjustOnTextBlur = () => {
-    // this.setState({...this.state, adjust: {mostTop: 180*em}})
+  onConfirmedCode = (res) => {
+    console.log('===== res: ', res);
+    if (!res.error) this.props.authActions.loginSuccess(res.credentail);
+    this.onCloseConfirmCodeModal();
   }
 
+  renderConfirmCodeModal = () => {
+    const { showConfirmCodeModal, confirmation } = this.state;
+    return (
+      <Modal
+        isVisible={showConfirmCodeModal}
+        animationIn={'slideInRight'}
+        deviceWidth={W}
+        deviceHeight={H}
+        avoidKeyboard={true}
+        hasBackdrop
+        backdropColor='white'
+        coverScreen
+        style={{margin: 0}}
+      >
+        <SetConfirmCode
+          confirmation={confirmation}
+          confirmFunc={confirmWithPhone}
+          onClose={this.onCloseConfirmCodeModal}
+          onConfirmed={this.onConfirmedCode} 
+        />
+      </Modal>
+    )
+  };
+
+  render() {
+    const {
+      phoneNumber,
+      phoneLogining,
+      facebookLogining,
+      showConfirmCodeModal,
+      confirmation
+    } = this.state;
+    const { _t } = this.props.appActions;
+    const { auth } = this.props;
+
+    return (
+      <FirstWrapper>
+        <React.Fragment>
+          <Text
+            style={[
+              commonStyles.text.titleWhite,
+              {fontSize: 26*em, textAlign: 'center'}
+            ]}
+          >
+            {_t("Connect yourself")}
+          </Text>
+          <Spacer size={10*em} />
+          <PhoneNumberInput
+            defaultCountry={this.props.app.language.toUpperCase()}
+            placeholder={_t('Mobile number')} 
+            phoneNumber={phoneNumber}
+            onChangeCountry={this.onChangeCountry}
+            onChangePhoneNumber={(phoneNumber) => this.setState({phoneNumber})}
+          />
+          <Spacer size={20*em} />
+          <Button
+            onPress={this.onLogin}
+            caption={_t('Next')}
+            loading={phoneLogining}
+            disabled={phoneLogining}
+          />
+          <Text
+            style={[
+              commonStyles.text.defaultWhite,
+              {textAlign: 'center', fontSize: 12*em}
+            ]}
+          >
+            {_t("We will send you an SMS to check your number")}
+          </Text>
+          <Spacer size={10*em} />
+          <Text style={[commonStyles.text.defaultWhite, {textAlign: 'center'}]}>
+            {_t("or")}
+          </Text>
+          <Spacer size={10*em} />
+          <Button onPress={this.onFacebookLogin} 
+            caption={_t('Continue with facebook')} 
+            icon={FACEBOOK_IMAGE}
+            textColor='#fff'
+            bgGradientStart='#48bff3'
+            bgGradientEnd='#00a9f2'
+            loading={facebookLogining}
+            disabled={facebookLogining}
+          />
+          <Spacer size={30*em} />
+          <TouchableOpacity
+            style={{
+              width: '100%',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection: 'row'
+            }}
+            onPress={() => this.goSignup()}
+          >
+            <Text style={[commonStyles.text.defaultWhite, {fontSize: 14*em}]}>
+              {_t("No account?")}
+            </Text>
+            <Text
+              style={[
+                commonStyles.text.defaultWhite,
+                {fontSize: 14*em, fontWeight: 'bold'}
+              ]}
+            >
+              {` ${_t('Register yourself')}`}              
+            </Text>
+          </TouchableOpacity>
+          <Spacer size={60*em} />
+
+          <SetConfirmCode
+            isVisible={showConfirmCodeModal}
+            confirmation={confirmation}
+            confirmFunc={confirmWithPhone}
+            onClose={this.onCloseConfirmCodeModal}
+            onConfirmed={this.onConfirmedCode} 
+          />
+        </React.Fragment>
+      </FirstWrapper>
+    )
+  }
 }

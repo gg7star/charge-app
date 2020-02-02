@@ -21,22 +21,12 @@ export default class ScreenView extends React.Component {
     }
   }
 
-  // UNSAFE_componentWillReceiveProps(nextProps) {
-  //   const { auth } = nextProps;
-  //   console.log('==== auth: ', auth);
-  //   if(auth.isAuthenticated && auth.authInfo) {
-  //     console.log('==== go to map');
-  //   //   Actions.map();
-  //   //   Actions['map_first']();
-  //   }
-  // }
-
   render() {
     const { phoneNumber } = this.state
     const { _t } = this.props.appActions
     const { signup } = this.props;
-    const signingUp = signup.isFetching && !signup.isFacebookSigup;
-    const signingUpWithFacebook = signup.isFetching && signup.isFacebookSigup
+    const signingUp = signup.isFetching && !signup.isSocialSigup;
+    const signingUpWithFacebook = signup.isFetching && signup.isSocialSigup
 
     return (
       <FirstWrapper>

@@ -18,15 +18,15 @@ import MapStack from '../modules/map/mapRoutes';
 import ProfileStack from '../modules/profile/profileRoutes';
 
 class NonoRoutes extends Component {
-	UNSAFE_componentDidMount() {
-		console.log('==== UNSAFE_componentDidMount')
-		if (this.props.isAuthenticated) {
-			console.log('==== go to map')
-			// Actions['authorized']();
-			Actions.map();
-			Actions['map_first']();
-		}
-	}
+	// UNSAFE_componentDidMount() {
+	// 	console.log('==== UNSAFE_componentDidMount')
+	// 	if (this.props.isAuthenticated) {
+	// 		console.log('==== go to map')
+	// 		// Actions['authorized']();
+	// 		Actions.map();
+	// 		Actions['map_first']();
+	// 	}
+	// }
 
 	render() {
 		return (
@@ -62,33 +62,37 @@ class NonoRoutes extends Component {
 						hideNavBar
 						component={SetBirthday}
 					/>
-					<Scene 
-						key='signup_hint_find_station'
-						hideNavBar
-						component={HintFindStation}
-					/>
-					<Scene 
-						key='signup_hint_scan_qr'
-						hideNavBar
-						component={HintScanQr}
-					/>
-					<Scene 
-						key='signup_hint_saved'
-						hideNavBar
-						component={HintSaved}
-					/>
-					<Scene 
-						key='signup_hint_bringback'
-						hideNavBar
-						component={HintBringback}
-					/>
-					<Scene 
-						key='signup_hint_recommend'
-						hideNavBar
-						component={HintRecommend}
-					/>
-					{MapStack}
-					{ProfileStack}
+					<Scene key='home' hideNavBar>
+						{MapStack}
+						{ProfileStack}
+						<Scene key='hint' hideNavBar>
+							<Scene 
+							key='signup_hint_find_station'
+							hideNavBar
+							component={HintFindStation}
+						/>
+						<Scene 
+							key='signup_hint_scan_qr'
+							hideNavBar
+							component={HintScanQr}
+						/>
+						<Scene 
+							key='signup_hint_saved'
+							hideNavBar
+							component={HintSaved}
+						/>
+						<Scene 
+							key='signup_hint_bringback'
+							hideNavBar
+							component={HintBringback}
+						/>
+						<Scene 
+							key='signup_hint_recommend'
+							hideNavBar
+							component={HintRecommend}
+						/>
+						</Scene>
+					</Scene>
 				</Scene>
 			</Router>
 		)

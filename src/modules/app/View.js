@@ -81,7 +81,7 @@ export default class AppView extends Component {
     mapActions.loadPlacesOnMap();
     mapActions.getAllStations();
     if (auth.isAuthenticated) {
-      Actions.map();
+      Actions['home'];
     }
   }
 
@@ -131,7 +131,7 @@ export default class AppView extends Component {
     const { loaded } = this.state;
     console.log('===== state: loaded: ', loaded);
     if (loaded) {
-      this.showToast();
+      // this.showToast();
       return (
         <View style={styles.safeArea}>
           <View style={styles.container}>

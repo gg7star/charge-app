@@ -7,7 +7,7 @@ import serverUrls from '~/common/constants/api';
 import { loginActionTypes, signupActionTypes } from '~/actions/types';
 import { AppActions, SignupActions } from '~/actions';
 import { attempSignup } from '~/common/services/rn-firebase/signup';
-import { attemptSignInWithPhone } from '~/common/services/rn-firebase/auth';
+import { loginWithPhone } from '~/common/services/rn-firebase/auth';
 import {
   createAccount,
   createFacebookAccount
@@ -26,7 +26,7 @@ export default function* watcher() {
 export function* requestVerificationCode(action) {
   const { countryCode, phoneNumber } = action.payload;
   const fullPhoneNumber = `${countryCode}${phoneNumber}`;
-  const res = yield call(attemptSignInWithPhone, `+${fullPhoneNumber}`);
+  const res = yield call(loginWithPhone, `+${fullPhoneNumber}`);
   if (res.confirmation) {
     yield put(requestConfirmCodeSuccess({confirmation: res.confirmation}));
     yield put(setGlobalNotification({
