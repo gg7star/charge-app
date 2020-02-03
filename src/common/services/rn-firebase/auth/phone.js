@@ -48,6 +48,8 @@ export async function loginWithPhone(phoneNumber) {
       case 'auth/too-many-requests':
         errorMessage = 'We have blocked all requests from this device due to unusual activity. Try again later.';
         break;
+      case 'auth/network-request-failed':
+        errorMessage = 'A network error has occurred, please try again.';
       default:
         console.log('==== error: ', error);
         break;
@@ -58,10 +60,14 @@ export async function loginWithPhone(phoneNumber) {
 
 export async function confirmWithPhone(confirmation, confirmCode) {
   try {
-    const credential = await confirmation.confirm(confirmCode)
-    return { credential, error: null, errorType: null };
+    const user = await confirmation.confirm(confirmCode)
+    console.log('===== confirmWithPhone: confirmation: ', confirmation);
+    console.log('===== confirmWithPhone: confirmCode: ', confirmCode);
+    console.log('===== confirmWithPhone: user: ', user);
+
+    return { user, error: null, errorType: null };
   } catch (error) {
     console.log('===== Phone number confirmation error: ', error);
-    return { credential: null, error: error.message, errorType: error.code };
+    return { user: null, error: error.message, errorType: error.code };
   }
 }

@@ -20,27 +20,21 @@ const { rentSuccess } = RentActions;
 
 export default function* watcher() {
   yield takeLatest(loginActionTypes.LOGIN_SUCCESS, processLoginSuccess);
-  // yield takeLatest(loginActionTypes.TRY_SOCIAL_LOGIN_REQUEST, processSocialLoginSuccess);
+  yield takeLatest(loginActionTypes.SOCIAL_LOGIN_SUCCESS, processSocialLoginSuccess);
   // yield takeLastest(loginActionTypes.RECEIVED_FCM, receivedFcm);
 }
 
 export function* processLoginSuccess(action) {
   const { credential } = action.payload;
-  const provider = credential.user.providerData[0].providerId;
-  const isSocial = (provider === 'facebook.com');
   
-  const resCreateUser = yield call(
-    isSocial ? createSocialAccount : createAccount,
-    credential
-  );
+  const resCreateUser = yield call(createAccount, {credential});
+  console.log('===== resCreateUser: ', resCreateUser);
   if(resCreateUser) Actions['home']();
 }
 
 export function* processSocialLoginSuccess(action) {
-  const resCreateUser = yield call(
-    createSocialAccount,
-    { credential: action.payload.credential }
-  );
+  const { credential } = action.payload;
+  const resCreateUser = yield call(createSocialAccount, credential);
   if(resCreateUser) Actions['home']();
 }
 

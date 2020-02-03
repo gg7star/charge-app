@@ -91,7 +91,6 @@ export async function onlineDatabase() {
 // }
 
 export async function createAccount({credential, signupInfo}) {
-  const { firstName, lastName, email, birthday } = signupInfo;
   const user = credential.user._user;
   const { uid } = user;
   if (uid) {
@@ -101,11 +100,23 @@ export async function createAccount({credential, signupInfo}) {
       signedUp: firebase.database.ServerValue.TIMESTAMP,
       lastLoggedIn: firebase.database.ServerValue.TIMESTAMP,
       isSocialUser: false,
-      firstName,
-      lastName,
-      birthday: birthday || '',
-      ...user
+      firstName: null,
+      lastName: null,
+      birthday: null,
+      ...user,
     };
+    if (signupInfo) {
+      const { firstName, lastName, email, birthday } = signupInfo;
+      userData.email = email;
+      userData = {
+        ...userData,
+        email,
+        firstName,
+        lastName,
+        birthday,
+      };
+    }
+    
     try {
       return firebase.database().ref(`${USER_TABLE_NAME}/${uid}`)
         .set(userData).then(() => {

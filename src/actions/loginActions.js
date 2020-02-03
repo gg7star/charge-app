@@ -35,6 +35,13 @@ export function loginSuccess(credential) {
   }
 }
 
+export function loginSuccessWithSocial(credential) {
+  return {
+    type: types.SOCIAL_LOGIN_SUCCESS,
+    payload: { credential }
+  }
+}
+
 export function loginCanceled() {
   return {
     type: types.LOGIN_CANCELED

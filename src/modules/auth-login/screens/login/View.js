@@ -56,8 +56,7 @@ export default class ScreenView extends React.Component {
     const res = await loginWithFacebook();
     this.setState({facebookLogining: false});
     if (res.credential) {
-      authActions.loginSuccess(res.credential);
-      Actions['home'];
+      authActions.loginSuccessWithSocial(res.credential);
     } else {
       authActions.loginFailed(res.error);
       Alert(res.error);
@@ -80,33 +79,15 @@ export default class ScreenView extends React.Component {
 
   onConfirmedCode = (res) => {
     console.log('===== res: ', res);
-    if (!res.error) this.props.authActions.loginSuccess(res.credentail);
+    if (!res.error) {
+      const credentail = {
+        additionalUserInfo: {},
+        user: res.user
+      };
+      this.props.authActions.loginSuccess(credentail);
+    }
     this.onCloseConfirmCodeModal();
   }
-
-  renderConfirmCodeModal = () => {
-    const { showConfirmCodeModal, confirmation } = this.state;
-    return (
-      <Modal
-        isVisible={showConfirmCodeModal}
-        animationIn={'slideInRight'}
-        deviceWidth={W}
-        deviceHeight={H}
-        avoidKeyboard={true}
-        hasBackdrop
-        backdropColor='white'
-        coverScreen
-        style={{margin: 0}}
-      >
-        <SetConfirmCode
-          confirmation={confirmation}
-          confirmFunc={confirmWithPhone}
-          onClose={this.onCloseConfirmCodeModal}
-          onConfirmed={this.onConfirmedCode} 
-        />
-      </Modal>
-    )
-  };
 
   render() {
     const {
