@@ -17,11 +17,17 @@ const { setGlobalNotification } = AppActions;
 const { loginSuccess, loginFailed, setFcmToken, setFcmListener } = LoginActions;
 const { getAllStations } = MapActions;
 const { rentSuccess } = RentActions;
+import { LOAD } from 'redux-storage';
 
 export default function* watcher() {
+  yield takeLatest(LOAD, processLoadDataOnFirstRunning);
   yield takeLatest(loginActionTypes.LOGIN_SUCCESS, processLoginSuccess);
   yield takeLatest(loginActionTypes.SOCIAL_LOGIN_SUCCESS, processSocialLoginSuccess);
   // yield takeLastest(loginActionTypes.RECEIVED_FCM, receivedFcm);
+}
+
+export function* processLoadDataOnFirstRunning() {
+  Actions['home']();
 }
 
 export function* processLoginSuccess(action) {

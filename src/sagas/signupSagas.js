@@ -1,9 +1,6 @@
 import { put, takeLatest, call } from 'redux-saga/effects';
 import { Actions } from 'react-native-router-flux';
-import { signupFirebaseService } from '~/common/services/firebase';
 import * as virtualAccount from '~/common/utils/virtualAccount';
-import { processRequest } from '~/common/services/api';
-import serverUrls from '~/common/constants/api';
 import { loginActionTypes, signupActionTypes } from '~/actions/types';
 import { AppActions, SignupActions } from '~/actions';
 import { attempSignup } from '~/common/services/rn-firebase/signup';

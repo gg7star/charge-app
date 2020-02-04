@@ -85,8 +85,6 @@ export default class AppView extends Component {
     }
   }
 
-  
-
   onReceived(notification) {
     console.log("Notification received: ", notification);
   }

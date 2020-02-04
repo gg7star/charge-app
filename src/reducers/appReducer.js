@@ -1,5 +1,5 @@
 import { appActionTypes } from '~/actions/types';
-import { LOAD, SAVE } from 'redux-storage';
+import { LOAD } from 'redux-storage';
 
 export const initialState = {
   isFirstOpen: true,

@@ -28,7 +28,7 @@ export default class Menu extends React.Component {
   render() {
     const { isShowable } = this.props
     const { _t } = this.props.appActions
-    const { accountInfo } = this.props.auth
+    const { credential } = this.props.auth
 
     return (
       <React.Fragment>
@@ -44,7 +44,7 @@ export default class Menu extends React.Component {
                 marginLeft: 5
               }}
             >
-              {accountInfo && accountInfo.name}
+              {credential && credential.user.displayName}
             </Text>
             <View>
               <View style={{}}>

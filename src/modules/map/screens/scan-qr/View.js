@@ -137,7 +137,7 @@ export default class ScanQRView extends React.Component {
         mapActions.scannedQrCode(parsedStationSn);
         rentActions.rentStation({
           stationSn: parsedStationSn,
-          uuid: auth.accountInfo.uid,
+          uuid: auth.credential.user.uid,
           pushToken: auth.fcm.token,
           deviceType: Platform.OS
         });

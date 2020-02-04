@@ -243,12 +243,12 @@ export default class FirstScreenView extends React.Component {
         stripeActions.doPaymentRequest({
           amount: '50',
           tokenId: stripeTokenInfo.tokenId,
-          email: auth.accountInfo.email,
-          telnumber: auth.accountInfo.phoneNumber,
+          email: auth.credential.user.email,
+          telnumber: auth.credential.user.phoneNumber,
           stationSn: scannedQrCode,
           slotId: '1',
           currency: 'eur',
-          description: `${auth.accountInfo.name} payed via Nono application.`,
+          description: `${auth.credential.user.diaplayName} payed via Nono application.`,
           accessToken: null
         });
       })
@@ -283,7 +283,7 @@ export default class FirstScreenView extends React.Component {
                 console.log('Token created: ', stripeTokenInfo);
                 // call payment function
                 stripeActions.registerCardRequest({
-                  email: auth.accountInfo.email,
+                  email: auth.credential.user.email,
                   tokenId: stripeTokenInfo.tokenId
                 })
               })

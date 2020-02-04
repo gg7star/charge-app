@@ -130,7 +130,7 @@ export default class ScreenView extends React.Component {
             this.props.mapActions.scannedQrCode(code);
             this.props.rentActions.rentStation({
               stationSn: code,
-              uuid: auth.accountInfo.uid,
+              uuid: auth.credential.user.uid,
               pushToken: auth.fcm.token,
               deviceType: Platform.OS
             })
