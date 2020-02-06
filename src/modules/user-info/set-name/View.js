@@ -1,8 +1,8 @@
 import React from 'react'
 import { View, Text, TextInput, Alert } from 'react-native'
-import SetWrapper from '../../common/wrappers/SetWrapper'
+import SetWrapper from '../../auth-signup/common/wrappers/SetWrapper'
 import { Actions } from 'react-native-router-flux'
-import moduleStyles from '../../common/styles'
+import moduleStyles from '../../auth-signup/common/styles'
 import { em } from '~/common/constants'
 import { Spacer, Button } from '~/common/components'
 

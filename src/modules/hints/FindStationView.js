@@ -1,6 +1,6 @@
 import React from 'react';
 import { Actions } from 'react-native-router-flux';
-import HintWrapper from '../../common/wrappers/HintWrapper';
+import HintWrapper from '../auth-signup/common/wrappers/HintWrapper';
 import HintView from '~/common/components/HintView';
 
 export default class View extends React.Component {
