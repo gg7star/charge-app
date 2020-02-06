@@ -6,7 +6,7 @@ import View from './View';
 
 const mapStateToProps = state => ({
   app: state.app || {},
-  signup: state.signup || {},  
+  auth: state.auth || {},  
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -20,16 +20,12 @@ export default class View extends React.Component {
     )
   }
 
-  onGoBack = () => {
-    Actions['signup_hint_scan_qr']()
-  }
+  onGoBack = () => Actions['signup_hint_scan_qr']();
 
   onClose = () => {
-    // Actions['authorized']()
-    Actions.map()
-  }
+    Actions.reset('hint');
+    Actions['home']();
+  };
 
-  onGoNext = () => {
-    Actions['signup_hint_bringback']()
-  }
+  onGoNext = () => Actions['signup_hint_bringback']();
 }

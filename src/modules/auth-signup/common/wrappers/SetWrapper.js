@@ -3,7 +3,7 @@ import { View, Platform, Image, TouchableOpacity, Text, ScrollView } from 'react
 import { W, H, em, colors } from '~/common/constants'
 import commonStyles from '~/common/styles'
 
-const SetWrapper = ({ children, onGoBack, onPass, passText }) => (
+const SetWrapper = ({ children, onGoBack, visible, onPass, passText }) => (
   <View
     style={{
       flex: 1, position: 'relative', 
@@ -11,28 +11,28 @@ const SetWrapper = ({ children, onGoBack, onPass, passText }) => (
       backgroundColor: colors.primaryBackground,
     }}
   >
-    <Header onGoBack={onGoBack} onPass={onPass} passText={passText} />
+    <Header onGoBack={onGoBack} onPass={onPass} passText={passText} visible/>
     {children}
   </View>
 )
 
-const Header = ({ onGoBack, onPass, passText }) => (
+const Header = ({ onGoBack, onPass, passText, visible }) => (
   <View
     style={{
       marginTop: 30*em, marginBottom: 30*em,
       flexDirection: 'row', justifyContent: 'space-between'
     }}
   >
-    {onGoBack &&
-    <TouchableOpacity
-      style={{width: 50*em, height: 50*em, alignItems: 'flex-start', justifyContent: 'center'}}
-      onPress={onGoBack}
-    >
-      <Image
-        source={require('~/common/assets/images/png/arrow.png')}
-        style={{width: 13*em, height: 20*em, tintColor: '#fff'}}
-      />
-    </TouchableOpacity>      
+    { onGoBack &&
+      <TouchableOpacity
+        style={{width: 50*em, height: 50*em, alignItems: 'flex-start', justifyContent: 'center'}}
+        onPress={onGoBack}
+      >
+        <Image
+          source={require('~/common/assets/images/png/arrow.png')}
+          style={{width: 13*em, height: 20*em, tintColor: '#fff'}}
+        />
+      </TouchableOpacity>      
     }
     {onPass &&
       <TouchableOpacity
@@ -43,6 +43,13 @@ const Header = ({ onGoBack, onPass, passText }) => (
           {passText}
         </Text>
       </TouchableOpacity>
+    }
+    { visible && 
+      <View
+        style={{width: 50*em, height: 50*em, alignItems: 'flex-end', justifyContent: 'center'}}
+      >
+        <Text style={[commonStyles.text.defaultWhite, {fontSize: 17*em, lineHeight: 20*em}]}/>
+      </View>
     }
   </View>
 )

@@ -47,26 +47,32 @@ class NonoRoutes extends Component {
 						hideNavBar
 						component={SetConfirmCode}
 					/>
-					<Scene 
-						key='signup_set_name'
-						hideNavBar
-						component={SetName}
-					/>
-					<Scene 
-						key='signup_set_email'
-						hideNavBar
-						component={SetEmail}
-					/>
-					<Scene 
-						key='signup_set_birthday'
-						hideNavBar
-						component={SetBirthday}
-					/>
+					
 					<Scene key='home' hideNavBar>
 						{MapStack}
 						{ProfileStack}
-						<Scene key='hint' hideNavBar>
-							<Scene 
+					</Scene>
+
+					<Scene key='set_user_info' hideNavBar>
+						<Scene 
+							key='signup_set_name'
+							hideNavBar
+							component={SetName}
+						/>
+						<Scene 
+							key='signup_set_email'
+							hideNavBar
+							component={SetEmail}
+						/>
+						<Scene 
+							key='signup_set_birthday'
+							hideNavBar
+							component={SetBirthday}
+						/>
+					</Scene>
+					
+					<Scene key='hint' hideNavBar>
+						<Scene 
 							key='signup_hint_find_station'
 							hideNavBar
 							component={HintFindStation}
@@ -91,7 +97,6 @@ class NonoRoutes extends Component {
 							hideNavBar
 							component={HintRecommend}
 						/>
-						</Scene>
 					</Scene>
 				</Scene>
 			</Router>

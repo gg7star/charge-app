@@ -59,8 +59,6 @@ export default class AppView extends Component {
 
     appActions.setLanguage(app.language || 'fr');
     appActions.setGlobalNotification({message: null, type: ''});
-    // signupActions.initSignup();
-    // loginActions.initLogin();
     mapActions.initMap();
 
     // Check permissions
@@ -80,9 +78,9 @@ export default class AppView extends Component {
 
     mapActions.loadPlacesOnMap();
     mapActions.getAllStations();
-    if (auth.isAuthenticated) {
-      Actions['home'];
-    }
+    // if (auth.isAuthenticated && auth.credential && auth.credential.user) {
+    //   Actions['home'];
+    // }
   }
 
   onReceived(notification) {
@@ -105,31 +103,9 @@ export default class AppView extends Component {
     this.setState({fcmListener});
   }
 
-  showToast() {
-    const { _t } = this.props.appActions
-    const { notification } = this.state
-    const { appActions, app } = this.props;
-
-    if (app.globalNotification && app.globalNotification.message) {
-      const { message, type, duration } = app.globalNotification;
-      Toast.show({
-        type: type,
-        text: _t(message),
-        position: 'top',
-        duration: duration,
-        buttonText: 'X',
-        buttonTextStyle: { color: "#ffffff" },
-        // buttonStyle: { backgroundColor: "#5cb85c" }
-      });
-      appActions.setGlobalNotification({message: null, type: ''});
-    }
-  }
-  
   render() {
     const { loaded } = this.state;
-    console.log('===== state: loaded: ', loaded);
     if (loaded) {
-      // this.showToast();
       return (
         <View style={styles.safeArea}>
           <View style={styles.container}>

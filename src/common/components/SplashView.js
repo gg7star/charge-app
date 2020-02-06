@@ -2,18 +2,10 @@ import React from 'react';
 import {
   View,
   ImageBackground,
-  ScrollView,
   Animated,
-  Keyboard,
-  Platform,
-  LayoutAnimation,
-  TouchableOpacity,
-  TouchableWithoutFeedback
 } from 'react-native';
 import { W, H, em } from '~/common/constants';
-import { KeyboardAvoidingView } from '~/common/components';
-import { Spacer, Button } from '~/common/components';
-import LogoView from '~/common/components/LogoView';
+import LogoView from './LogoView';
 
 const LOGIN_BG_IMAGE = require('~/common/assets/images/png/login-bg.jpg');
 

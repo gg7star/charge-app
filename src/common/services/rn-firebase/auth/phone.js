@@ -1,34 +1,6 @@
 import firebase from '@react-native-firebase/app';
 
-export async function attemptSignInWithEmail({email, password}) {
-  try {
-    const res = await firebase.auth().signInWithEmailAndPassword(email, password);
-    console.log('===== res: ', res);
-    return { authInfo: res, error: null };
-  } catch (e) {
-    var errorMessage = 'Firebase auth failed.';
-    switch (e.code) {
-      case 'auth/invalid-email':
-        errorMessage = 'Please enter a valid email address.';
-        break;
-      case 'auth/user-disabled':
-        errorMessage = 'This account has been disabled.';
-        break;
-      case 'auth/user-not-found':
-      case 'auth/wrong-password':
-        errorMessage = 'No user found or wrong password.';
-        break;
-      case 'auth/internal-error':
-        errorMessage = 'An internal error has occurred, please try again.'
-        break;
-      default:
-        console.error(e);
-        break;
-    }
-    // callback(null, errorMessage);
-    return {authInfo: null, userInfo: null, error: errorMessage};
-  }
-}
+export const AUTH_PROVIDER = 'phone';
 
 export async function loginWithPhone(phoneNumber) {
   var confirmation = null;

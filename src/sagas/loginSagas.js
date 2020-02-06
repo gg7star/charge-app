@@ -1,11 +1,8 @@
-import { put, takeLatest, call } from 'redux-saga/effects';
+import { takeLatest, call } from 'redux-saga/effects';
 import { Actions } from 'react-native-router-flux';
-import * as virtualAccount from '~/common/utils/virtualAccount';
-import {loginActionTypes, mapActionTypes} from '~/actions/types';
-import { attemptSignInWithEmail } from '~/common/services/rn-firebase/auth';
-// import { getCurrentUserInfo } from '~/common/services/rn-firebase/database';
+import { loginActionTypes } from '~/actions/types';
+import { PhoneAuth } from '~/common/services/rn-firebase/auth';
 import {
-  getCurrentUserInfo,
   createAccount,
   createSocialAccount
 } from '~/common/services/rn-firebase/database';
@@ -26,16 +23,31 @@ export default function* watcher() {
   // yield takeLastest(loginActionTypes.RECEIVED_FCM, receivedFcm);
 }
 
-export function* processLoadDataOnFirstRunning() {
-  Actions['home']();
+export function* processLoadDataOnFirstRunning(action) {
+  if (
+    action.payload && action.payload.auth &&
+    action.payload.auth.credential && action.payload.auth.credential.user
+  ) {
+    const { providerData, email } = action.payload.auth.credential.user;
+    const authProvider = providerData[0] ? providerData[0].providerId : null;
+    if((authProvider === PhoneAuth.AUTH_PROVIDER) && !email)
+      Actions['set_user_info']();
+    else Actions['home']();
+  }
 }
 
 export function* processLoginSuccess(action) {
   const { credential } = action.payload;
   
-  const resCreateUser = yield call(createAccount, {credential});
+  const resCreateUser = yield call(createAccount, credential);
   console.log('===== resCreateUser: ', resCreateUser);
-  if(resCreateUser) Actions['home']();
+  if(resCreateUser) {
+    const { providerData, email } = resCreateUser;
+    const authProvider = providerData[0] ? providerData[0].providerId : null;
+    if((authProvider === PhoneAuth.AUTH_PROVIDER) && !email)
+      Actions['set_user_info']();
+    else Actions['home']();
+  }
 }
 
 export function* processSocialLoginSuccess(action) {

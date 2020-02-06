@@ -1,34 +1,66 @@
-import React from 'react'
-import { View, Text,  } from 'react-native'
-import { Toast } from 'native-base'
-import SetWrapper from '../../common/wrappers/SetWrapper'
-import { Actions } from 'react-native-router-flux'
-import moduleStyles from '../../common/styles'
-import { em } from '~/common/constants'
-import { Spacer, Button, ToastShow } from '~/common/components'
-import DatePicker from 'react-native-date-picker'
-import moment from 'moment'
+import React from 'react';
+import { View, Text,  } from 'react-native';
+import SetWrapper from '../../common/wrappers/SetWrapper';
+import { Actions } from 'react-native-router-flux';
+import moduleStyles from '../../common/styles';
+import { em } from '~/common/constants';
+import { Spacer, Button } from '~/common/components';
+import DatePicker from 'react-native-date-picker';
+import moment from 'moment';
+import { setUserInfo } from '~/common/services/rn-firebase/database';
 
 export default class ScreenView extends React.Component {
   state = {
     birthday: new Date(),
-    toastShow: true,
+    loading: false,
     adjust: {
       fixedBottom: 40*em
     }    
+  };
+
+  onGoBack = () => {
+    const { displayName, email } = this.props;
+    Actions['signup_set_email']({ displayName, email});
+  }
+
+  onFinish = async () => {    
+    const { birthday } = this.state;
+    const { displayName, email, auth } = this.props;
+    const birthday_ = moment(new Date(birthday)).format('YYYY-MM-DD');
+    const { credential } = auth;
+    const userInfo = { displayName, email, birthday: birthday_ };
+    
+    this.setState({ loading: true });
+    const res = await setUserInfo({credential, userInfo});
+    this.setState({loading: false});
+    if (res) {
+      Actions['hint']();
+    } else {
+      Alert.alert(
+        _t('Failed to save user info.'),
+        _t('We can not save your info. Please try again later.'),
+        [
+          {text: _t('OK'), onPress: () => console.log('==== clicked Ok.')},
+        ],
+        {cancelable: true},
+      );
+    }
+  }
+
+  onPass = () => {
+    this.onFinish();
   }
 
   render() {
-    const { _t } = this.props.appActions
-    const { statusMessage, statusMessageType, isFetching } = this.props.signup
+    const { _t } = this.props.appActions;
+    const { loading } = this.state;
 
     return (
-      <SetWrapper onGoBack={this.onGoBack} onPass={this.onPass} passText={_t('Pass')}>
-        {/* <ToastShow 
-          message={_t(statusMessage)}
-          messageType={statusMessageType}
-          onClearMessage={this.props.signupActions.clearMessage}
-        /> */}
+      <SetWrapper
+        onGoBack={this.onGoBack}
+        onPass={this.onPass}
+        passText={_t('Pass')}
+      >
         <Text style={moduleStyles.text.title}>
           {_t('What is your date of birth?')}
         </Text>
@@ -37,35 +69,18 @@ export default class ScreenView extends React.Component {
           date={this.state.birthday}
           mode={'date'}
           textColor={'#ffffff'}
-          onDateChange={ birthday => this.setState({ ...this.state, birthday }) }
+          onDateChange={ birthday => this.setState({ birthday }) }
           style={[moduleStyles.input.setField, {backgroundColor: 'transparent'}]}
         />
         <View style={[moduleStyles.bottomActionBar, {bottom: this.state.adjust.fixedBottom}]}>
           <Button
             onPress={this.onFinish}
             caption={_t('Finish')}
-            loading={isFetching}
-            disabled={isFetching}
+            loading={loading}
+            disabled={loading}
           />
         </View>
       </SetWrapper>
     )
-  } 
-
-  onGoBack = () => {
-    Actions['signup_set_email']()
   }
-
-  onFinish = () => {    
-    const { birthday } = this.state;
-    let birthday_ = new Date(birthday)
-    birthday_ = moment(birthday_).format('YYYY-MM-DD')
-    this.props.signupActions.setBirthday(birthday_)
-    this.props.signupActions.trySignup(this.props.signup)
-  }
-
-  onPass = () => {
-    Actions['signup_hint_find_station']()
-  }
-
 }

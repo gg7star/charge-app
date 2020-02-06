@@ -20,16 +20,12 @@ export default class View extends React.Component {
     )
   }
 
-  onGoBack = () => {
-    Actions['signup_hint_find_station']()
-  }
+  onGoBack = () => Actions['signup_hint_find_station']();
 
   onClose = () => {
-    // Actions['authorized']()
-    Actions.map()
-  }
+    Actions.reset('hint');
+    Actions['home']();
+  };
 
-  onGoNext = () => {
-    Actions['signup_hint_saved']()
-  }
+  onGoNext = () => Actions['signup_hint_saved']();
 }

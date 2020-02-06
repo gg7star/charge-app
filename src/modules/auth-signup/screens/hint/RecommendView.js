@@ -4,6 +4,16 @@ import HintView from '../../../../common/components/HintView'
 import { Actions } from 'react-native-router-flux'
 
 export default class View extends React.Component {
+
+  onGoBack = () => Actions['signup_hint_bringback']();
+
+  onClose = () => {
+    Actions.reset('hint');
+    Actions['home']();
+  };
+
+  onGoNext = () => this.onClose();
+
   render() {
     const { _t } = this.props.appActions
 
@@ -18,19 +28,5 @@ export default class View extends React.Component {
         />        
       </HintWrapper>
     )
-  }
-
-  onGoBack = () => {
-    Actions['signup_hint_bringback']()
-  }
-
-  onClose = () => {
-    // Actions['authorized']()
-    Actions.map()
-  }
-
-  onGoNext = () => {
-    // Actions['authorized']()
-    Actions.map()
   }
 }

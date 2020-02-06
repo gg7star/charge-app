@@ -20,15 +20,12 @@ export default class View extends React.Component {
     )
   }
 
-  onGoBack = () => {
-    Actions['signup_hint_saved']()
-  }
+  onGoBack = () => Actions['signup_hint_saved']();
 
   onClose = () => {
-    Actions.map();
-  }
+    Actions.reset('hint');
+    Actions['home']();
+  };
 
-  onGoNext = () => {
-    Actions['signup_hint_recommend']()
-  }
+  onGoNext = () => Actions['signup_hint_recommend']();
 }

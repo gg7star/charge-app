@@ -25,9 +25,9 @@ export default class View extends React.Component {
   }
 
   onClose = () => {
-    // Actions['authorized']()
-    Actions.map()
-  }
+    Actions.reset('hint');
+    Actions['home']();
+  };
 
   onGoNext = () => {
     Actions['signup_hint_scan_qr']()

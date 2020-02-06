@@ -13,84 +13,7 @@ export async function onlineDatabase() {
   await firebase.database().goOnline();
 }
 
-// export async function createAccount(accountInfo) {
-//   const { countryCode, phoneNumber, name, birthday } = accountInfo;
-//   const userEmail = accountInfo.email;
-//   // Get the users ID
-//   const uid = firebase.auth().currentUser.uid;
-//   if (uid) {
-//     var userData = {
-//       uid,
-//       isFirst: true,
-//       actived: true,
-//       countryCode: countryCode,
-//       phoneNumber: phoneNumber,
-//       name,
-//       email: userEmail,
-//       birthday: birthday,
-//       isSocialUser: false,
-//       signedUp: firebase.database.ServerValue.TIMESTAMP,
-//       lastLoggedIn: firebase.database.ServerValue.TIMESTAMP
-//     };
-//     try {
-//       return firebase.database().ref(`users/${uid}`).set(userData).then(() => {
-//         return userData;
-//       });
-//     } catch (e) {
-//       console.log('==== error: ', e)
-//       return null
-//     }
-//   }
-//   return null;
-// }
-
-// export async function createFacebookAccount(fbProfile) {
-//   const { id, name, birthday, avatar } = fbProfile
-//   const userEmail = fbProfile.email
-//   // Get the users ID
-//   const uid = firebase.auth().currentUser.uid;
-//   if (uid) {
-//     var userData = {
-//       uid,
-//       isFirst: true,
-//       actived: true,
-//       countryCode: '',
-//       phoneNumber: '',
-//       name,
-//       email: userEmail,
-//       birthday: birthday || '',
-//       isSocialUser: true,
-//       facbookId: fbProfile.id,
-//       avatar,
-//       signedUp: firebase.database.ServerValue.TIMESTAMP,
-//       lastLoggedIn: firebase.database.ServerValue.TIMESTAMP
-//     }
-//     try {
-//       return firebase.database().ref(`users/${uid}`).set(userData).then(() => {
-//         return userData;
-//       });
-//     } catch (e) {
-//       console.log('==== error: ', e)
-//       return null
-//     }
-//   }
-//   return null;
-// }
-
-// export function getUserInfo(uid) {
-//   return firebase.database().ref(`users/${uid}`).once('value').then((snapshot) => {
-//     if (snapshot.exists) {
-//       firebase.database().ref(`users/${uid}`).update({
-//         isFirst: false
-//       });
-//       return snapshot.val();
-//     } else {
-//       return null;
-//     }
-//   });
-// }
-
-export async function createAccount({credential, signupInfo}) {
+export async function createAccount(credential) {
   const user = credential.user._user;
   const { uid } = user;
   if (uid) {
@@ -100,23 +23,10 @@ export async function createAccount({credential, signupInfo}) {
       signedUp: firebase.database.ServerValue.TIMESTAMP,
       lastLoggedIn: firebase.database.ServerValue.TIMESTAMP,
       isSocialUser: false,
-      firstName: null,
-      lastName: null,
       birthday: null,
       ...user,
     };
-    if (signupInfo) {
-      const { firstName, lastName, email, birthday } = signupInfo;
-      userData.email = email;
-      userData = {
-        ...userData,
-        email,
-        firstName,
-        lastName,
-        birthday,
-      };
-    }
-    
+
     try {
       return firebase.database().ref(`${USER_TABLE_NAME}/${uid}`)
         .set(userData).then(() => {
@@ -157,6 +67,35 @@ export async function createSocialAccount(credential) {
   return null;
 }
 
+
+export async function setUserInfo({credential, userInfo}) {
+  const user = credential.user._user ? credential.user._user : credential.user;
+  const { uid } = user;
+  if (uid) {
+    var userData = {
+      uid,
+      actived: true,
+      signedUp: firebase.database.ServerValue.TIMESTAMP,
+      lastLoggedIn: firebase.database.ServerValue.TIMESTAMP,
+      isSocialUser: false,
+      birthday: null,
+      ...user,
+      ...userInfo
+    };
+    
+    try {
+      return firebase.database().ref(`${USER_TABLE_NAME}/${uid}`)
+        .set(userData).then(() => {
+          return userData;
+        });
+    } catch (e) {
+      console.log('==== error: ', e)
+      return null
+    }
+  }
+  return null;
+}
+
 export function getUserInfo(uid) {
   return firebase.database()
     .ref(`users/${uid}`)
@@ -183,13 +122,33 @@ export async function getPlances() {
   })
 }
 
+export async function checkIfUserExistsByPhoneNumber(phoneNumber) {
+  return firebase.database().ref()
+    .child(`users`)
+    .once('value')
+    .then((snapshot) => {
+      if (snapshot.exists) {
+        const users = snapshot.val();
+        const uuids = Object.keys(users);
+        for (var i = 0; i < uuids.length; i++) {
+          const user = users[uuids[i]];
+          if (user.phoneNumber === phoneNumber){
+            return true;
+          }
+        }
+      }
+      return false;
+    });
+}
+
+
 export async function searchPlances(searchKey) {
   return firebase.database().ref().child(`places`).once('value').then((snapshot) => {
-    console.log('===== searchPlances: ', snapshot)
     if (snapshot.exists) {
-      return snapshot.val()
+      return snapshot.val();
     } else {
-      throw new Error('account info does not exist')
+      console.log('===== places info does not exist');
+      return null;
     }
-  })
+  });
 }

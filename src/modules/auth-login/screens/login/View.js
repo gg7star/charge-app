@@ -1,23 +1,20 @@
 import React from 'react';
-import { TouchableOpacity, View, Text, Alert } from 'react-native';
+import { TouchableOpacity, Text, Alert } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import Modal from "react-native-modal";
-import { Spacer, Button } from '~/common/components';
-import commonStyles from '~/common/styles';
-import PhoneNumberInput from '~/common/components/PhoneNumberInput';
+import { Spacer, Button, PhoneNumberInput } from '~/common/components';
 import { PhoneAuth, FacebookAuth } from '~/common/services/rn-firebase/auth';
+import { checkIfUserExistsByPhoneNumber } from '~/common/services/rn-firebase/database';
 import { W, H, em } from '~/common/constants';
+import commonStyles from '~/common/styles';
 import FirstWrapper from '../../common/wrappers/FirstWrapper';
 import { convertLanguage2CallingCode } from '~/common/utils/country';
 import SetConfirmCode from '../../confirm-code/ViewContainer';
-
 
 const { loginWithPhone, confirmWithPhone } = PhoneAuth;
 const { loginWithFacebook } = FacebookAuth;
 const FACEBOOK_IMAGE = require('~/common/assets/images/facebook.png');
 
-
-export default class ScreenView extends React.Component {
+export default class LoginView extends React.Component {
   state = {
     phoneNumber: '',
     countryCode: convertLanguage2CallingCode(this.props.app.language) || '33',
@@ -29,24 +26,41 @@ export default class ScreenView extends React.Component {
   onLogin = async () => {
     const { _t } = this.props.appActions;
     const { countryCode, phoneNumber } = this.state;
+    const fullPhoneNumber = `+${countryCode}${phoneNumber}`;
+
     this.setState({phoneLogining: true});
-    const res = await loginWithPhone(`+${countryCode}${phoneNumber}`);
-    this.setState({phoneLogining: false});
-    if (res.confirmation) {
-      this.setState({
-        confirmation: res.confirmation,
-        showConfirmCodeModal: true
+    const isExistUser = await checkIfUserExistsByPhoneNumber(fullPhoneNumber);
+    if (!isExistUser) {
+      this.setState({phoneLogining: false}, () => {
+        Alert.alert(
+          _t('Failed to login.'),
+          _t('Your phone number was not registered yet. Would you register now?'),
+          [
+            {text: _t('Cancel'), onPress: () => console.log('Cancel Pressed')},
+            {text: _t('OK'), onPress: () => this.goSignup()},
+          ],
+          {cancelable: true},
+        );  
       });
     } else {
-      Alert.alert(
-        _t('Failed to login'),
-        _t(res.error),
-        [
-          {text: _t('OK'), onPress: () => console.log('OK Pressed')},
-        ],
-        {cancelable: false},
-      );
+      const res = await loginWithPhone(fullPhoneNumber);
       this.setState({phoneLogining: false});
+      if (res.confirmation) {
+        this.setState({
+          confirmation: res.confirmation,
+          showConfirmCodeModal: true
+        });
+      } else {
+        Alert.alert(
+          _t('Failed to login'),
+          _t(res.error),
+          [
+            {text: _t('OK'), onPress: () => console.log('OK Pressed')},
+          ],
+          {cancelable: false},
+        );
+        this.setState({phoneLogining: false});
+      }
     }
   }
 
@@ -63,9 +77,7 @@ export default class ScreenView extends React.Component {
     }
   }
 
-  goSignup = () => {
-    Actions['signup_first']();
-  }
+  goSignup = () => Actions['signup_first']();
 
   onChangeCountry = (country, code) => {
     this.setState({countryCode: code}, () => {
@@ -75,10 +87,9 @@ export default class ScreenView extends React.Component {
 
   onCloseConfirmCodeModal = () => {
     this.setState({showConfirmCodeModal: false});
-  }
+  };
 
   onConfirmedCode = (res) => {
-    console.log('===== res: ', res);
     if (!res.error) {
       const credentail = {
         additionalUserInfo: {},
@@ -87,7 +98,7 @@ export default class ScreenView extends React.Component {
       this.props.authActions.loginSuccess(credentail);
     }
     this.onCloseConfirmCodeModal();
-  }
+  };
 
   render() {
     const {
@@ -98,7 +109,6 @@ export default class ScreenView extends React.Component {
       confirmation
     } = this.state;
     const { _t } = this.props.appActions;
-    const { auth } = this.props;
 
     return (
       <FirstWrapper>
@@ -139,7 +149,8 @@ export default class ScreenView extends React.Component {
             {_t("or")}
           </Text>
           <Spacer size={10*em} />
-          <Button onPress={this.onFacebookLogin} 
+          <Button
+            onPress={this.onFacebookLogin} 
             caption={_t('Continue with facebook')} 
             icon={FACEBOOK_IMAGE}
             textColor='#fff'
