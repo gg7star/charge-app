@@ -69,9 +69,16 @@ export function doLogout() {
   }
 }
 
-export function loadPrevState (prevState) {
+export function loadPrevState(prevState) {
   return {
     type: types.LOGIN_LOAD_PREV_STATE,
     payload: { prevState }
+  }
+}
+
+export function updatedUserInfo(userInfo) {
+  return {
+    type: types.UPDATED_USER_INFO,
+    payload: { userInfo }
   }
 }

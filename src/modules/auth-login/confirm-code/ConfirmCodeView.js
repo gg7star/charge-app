@@ -23,17 +23,16 @@ export default class ConfirmCodeView extends React.Component {
     const { confirmCode } = this.state ;
 
     this.setState({isConfirming: true});
-    try {
       const res = await confirmFunc(confirmation, confirmCode);
-      this.setState({isConfirming: false}, () => onConfirmed(res));
-    } catch (e) {
-      console.log('===== failed to confirm code: ', e);
-      Alert.alert(
-        _t('Failed to confirm your code.'),
-        _t('Input valid correct confirm code.'),
-      );
       this.setState({isConfirming: false});
-    }
+      if (res.error) {
+        Alert.alert(
+          _t('Failed to confirm your code.'),
+          _t(res.error),
+          // _t('Input valid correct confirm code.'),
+        );
+      } else
+        onConfirmed(res);
   };
 
   render() {

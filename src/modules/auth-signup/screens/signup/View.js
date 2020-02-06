@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, Text } from 'react-native';
+import { TouchableOpacity, Text, Alert } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import FirstWrapper from '~/modules/auth-login/common/wrappers/FirstWrapper';
 import {
@@ -20,7 +20,7 @@ const FACEBOOK_IMAGE = require('~/common/assets/images/facebook.png');
 
 export default class SignupView extends React.Component {
   state = {
-    phoneNumber: '',
+    phoneNumber: this.props.phoneNumber || '',
     countryCode: convertLanguage2CallingCode(this.props.app.language) || '33',
     facebookSigning: false,
     phoneSigning: false,
@@ -92,7 +92,7 @@ export default class SignupView extends React.Component {
     }
   };
 
-  goLogin = () => Actions['login']();
+  goLogin = () => Actions['login']({phoneNumber: this.state.phoneNumber});
 
   onChangeCountry = (country, code) => {
     this.setState({countryCode: code}, () => {
@@ -128,64 +128,64 @@ export default class SignupView extends React.Component {
     return (
       <FirstWrapper>
         <React.Fragment>
-            <Text style={[commonStyles.text.titleWhite, {fontSize: 26*em, textAlign: 'center'}]}>
-              {_t("Register yourself")}
+          <Text style={[commonStyles.text.titleWhite, {fontSize: 26*em, textAlign: 'center'}]}>
+            {_t("Register yourself")}
+          </Text>
+          <Spacer size={20*em} />
+          <PhoneNumberInput
+            defaultCountry={this.props.app.language.toUpperCase()}
+            placeholder={_t('Mobile number')}
+            phoneNumber={phoneNumber}
+            onChangeCountry={this.onChangeCountry}
+            onChangePhoneNumber={(phoneNumber) => this.setState({phoneNumber})}
+          />
+          <Spacer size={20*em} />
+          <Button
+            onPress={this.onSignup}
+            caption={_t('Next')}
+            loading={phoneSigning}
+            disabled={phoneSigning}
+          />
+          <Text style={[commonStyles.text.defaultWhite, {textAlign: 'center', fontSize: 12*em}]}>
+            {_t("We will send you an SMS to check your number")}
+          </Text>
+          <Spacer size={10*em} />
+          <Text style={[commonStyles.text.defaultWhite, {textAlign: 'center'}]}>
+            {_t("or")}
+          </Text>
+          <Spacer size={10*em} />
+          <Button
+            onPress={this.onFacebookSignup} 
+            caption={_t('Continue with facebook')} 
+            icon={FACEBOOK_IMAGE}
+            textColor='#fff'
+            bgGradientStart='#48bff3'
+            bgGradientEnd='#00a9f2'
+            loading={facebookSigning}
+            disabled={facebookSigning}
+          />
+          <Spacer size={10*em} />
+          <TouchableOpacity
+            style={{width: '100%', alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}
+            onPress={this.goLogin}
+          >
+            <Text style={[commonStyles.text.defaultWhite, {fontSize: 14*em}]}>
+              {_t("Already have an account?")}
             </Text>
-            <Spacer size={20*em} />
-            <PhoneNumberInput
-              defaultCountry={this.props.app.language.toUpperCase()}
-              placeholder={_t('Mobile number')}
-              phoneNumber={phoneNumber}
-              onChangeCountry={this.onChangeCountry}
-              onChangePhoneNumber={(phoneNumber) => this.setState({phoneNumber})}
-            />
-            <Spacer size={20*em} />
-            <Button
-              onPress={this.onSignup}
-              caption={_t('Next')}
-              loading={phoneSigning}
-              disabled={phoneSigning}
-            />
-            <Text style={[commonStyles.text.defaultWhite, {textAlign: 'center', fontSize: 12*em}]}>
-              {_t("We will send you an SMS to check your number")}
+            <Text style={[commonStyles.text.defaultWhite, {fontSize: 14*em, fontWeight: 'bold'}]}>
+              {` ${_t('Connect yourself')}`}
             </Text>
-            <Spacer size={10*em} />
-            <Text style={[commonStyles.text.defaultWhite, {textAlign: 'center'}]}>
-              {_t("or")}
-            </Text>
-            <Spacer size={10*em} />
-            <Button
-              onPress={this.onFacebookSignup} 
-              caption={_t('Continue with facebook')} 
-              icon={FACEBOOK_IMAGE}
-              textColor='#fff'
-              bgGradientStart='#48bff3'
-              bgGradientEnd='#00a9f2'
-              loading={facebookSigning}
-              disabled={facebookSigning}
-            />
-            <Spacer size={10*em} />
-            <TouchableOpacity
-              style={{width: '100%', alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}
-              onPress={this.goLogin}
-            >
-              <Text style={[commonStyles.text.defaultWhite, {fontSize: 14*em}]}>
-                {_t("Already have an account?")}
-              </Text>
-              <Text style={[commonStyles.text.defaultWhite, {fontSize: 14*em, fontWeight: 'bold'}]}>
-                {` ${_t('Connect yourself')}`}
-              </Text>
-            </TouchableOpacity>
-            <Spacer size={60*em} />
+          </TouchableOpacity>
+          <Spacer size={60*em} />
 
-            <SetConfirmCode
-              isVisible={showConfirmCodeModal}
-              confirmation={confirmation}
-              confirmFunc={confirmWithPhone}
-              onClose={this.onCloseConfirmCodeModal}
-              onConfirmed={this.onConfirmedCode} 
-            />
-          </React.Fragment>
+          <SetConfirmCode
+            isVisible={showConfirmCodeModal}
+            confirmation={confirmation}
+            confirmFunc={confirmWithPhone}
+            onClose={this.onCloseConfirmCodeModal}
+            onConfirmed={this.onConfirmedCode} 
+          />
+        </React.Fragment>
       </FirstWrapper>
     )
   }

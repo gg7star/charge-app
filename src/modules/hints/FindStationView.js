@@ -5,7 +5,8 @@ import HintView from '~/common/components/HintView';
 
 export default class View extends React.Component {
   render() {
-    const { _t } = this.props.appActions
+    const { appActions } = this.props;
+    const { _t } = appActions;
 
     return (
       <HintWrapper onClose={this.onClose}>

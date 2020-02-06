@@ -17,27 +17,27 @@ const initialState = {
 
 export default function reducer(state = initialState, action) {
   const { payload } = action;
-
+  const types = loginActionTypes;
   switch(action.type) {
-    case loginActionTypes.LOGIN_INIT:
+    case types.LOGIN_INIT:
       return {
         ...initialState
       }
-    case loginActionTypes.TRY_SOCIAL_LOGIN_REQUEST:
+    case types.TRY_SOCIAL_LOGIN_REQUEST:
       return {
         ...state,
         isFetching: true,
         authProvider: payload.authProvider
       }
-    case loginActionTypes.LOGIN_REQUEST:
+    case types.LOGIN_REQUEST:
       return {
         ...state,
         isFetching: true,
         isSocial: false,
         authProvider: payload.authProvider
       }
-    case loginActionTypes.LOGIN_SUCCESS:
-    case loginActionTypes.SOCIAL_LOGIN_SUCCESS:
+    case types.LOGIN_SUCCESS:
+    case types.SOCIAL_LOGIN_SUCCESS:
       var providerData = (
           payload.credential && 
           payload.credential.user
@@ -51,20 +51,20 @@ export default function reducer(state = initialState, action) {
           ? providerData[0].providerId
           : 'password'
       };
-    case loginActionTypes.LOGIN_FAILURE:
+    case types.LOGIN_FAILURE:
       return {
         ...state,
         isFetching: false,
         statusMessage: payload.statusMessage
       }
-    case loginActionTypes.LOGIN_CANCELED:
+    case types.LOGIN_CANCELED:
         return {
           ...state,
           isFetching: false,
           statusMessage: null,
           isSocial: false
         }
-    case loginActionTypes.LOGOUT_DONE:
+    case types.LOGOUT_DONE:
       const logout_state = {
         ...state,
         isAuthenticated: false,
@@ -74,17 +74,17 @@ export default function reducer(state = initialState, action) {
         fbId: null
       }
       return logout_state;
-    case loginActionTypes.CLEAR_MESSAGE:
+    case types.CLEAR_MESSAGE:
       return {
         ...state,
         statusMessage: null
       }
-    case loginActionTypes.SET_FCM_TOKEN:
+    case types.SET_FCM_TOKEN:
       return {
         ...state,
         fcm: {token: payload.fcmToken}
       }
-    case loginActionTypes.SET_FCM_LISTENER:
+    case types.SET_FCM_LISTENER:
       return {
         ...state,
         fcm: {
@@ -93,7 +93,7 @@ export default function reducer(state = initialState, action) {
           lastMessage: state.fcm.lastMessage,
         }
       }
-    case loginActionTypes.RECEIVED_FCM:
+    case types.RECEIVED_FCM:
       return {
         ...state,
         fcm: {
@@ -102,9 +102,19 @@ export default function reducer(state = initialState, action) {
           lastMessage: payload.messsage
         }
       }
-    case loginActionTypes.LOGIN_LOAD_PREV_STATE:
+    case types.LOGIN_LOAD_PREV_STATE:
       return {
         ...payload.prevState
+      }
+    case types.UPDATED_USER_INFO:
+      return {
+        ...state,
+        credential: {
+          ...state.credential,
+          user: {
+            ...payload.userInfo
+          }
+        }
       }
     default: 
       return state

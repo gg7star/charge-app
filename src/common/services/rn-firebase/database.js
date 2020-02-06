@@ -23,7 +23,6 @@ export async function createAccount(credential) {
       signedUp: firebase.database.ServerValue.TIMESTAMP,
       lastLoggedIn: firebase.database.ServerValue.TIMESTAMP,
       isSocialUser: false,
-      birthday: null,
       ...user,
     };
 
@@ -133,11 +132,11 @@ export async function checkIfUserExistsByPhoneNumber(phoneNumber) {
         for (var i = 0; i < uuids.length; i++) {
           const user = users[uuids[i]];
           if (user.phoneNumber === phoneNumber){
-            return true;
+            return user;
           }
         }
       }
-      return false;
+      return null;
     });
 }
 

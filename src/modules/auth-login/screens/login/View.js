@@ -16,7 +16,7 @@ const FACEBOOK_IMAGE = require('~/common/assets/images/facebook.png');
 
 export default class LoginView extends React.Component {
   state = {
-    phoneNumber: '',
+    phoneNumber: this.props.phoneNumber || '',
     countryCode: convertLanguage2CallingCode(this.props.app.language) || '33',
     facebookLogining: false,
     phoneLogining: false,
@@ -43,6 +43,7 @@ export default class LoginView extends React.Component {
         );  
       });
     } else {
+      console.log('==== try to send confirm code: ', fullPhoneNumber);
       const res = await loginWithPhone(fullPhoneNumber);
       this.setState({phoneLogining: false});
       if (res.confirmation) {
@@ -57,7 +58,7 @@ export default class LoginView extends React.Component {
           [
             {text: _t('OK'), onPress: () => console.log('OK Pressed')},
           ],
-          {cancelable: false},
+          {cancelable: true},
         );
         this.setState({phoneLogining: false});
       }
@@ -77,7 +78,7 @@ export default class LoginView extends React.Component {
     }
   }
 
-  goSignup = () => Actions['signup_first']();
+  goSignup = () => Actions['signup_first']({phoneNumber: this.state.phoneNumber});
 
   onChangeCountry = (country, code) => {
     this.setState({countryCode: code}, () => {
@@ -109,7 +110,6 @@ export default class LoginView extends React.Component {
       confirmation
     } = this.state;
     const { _t } = this.props.appActions;
-
     return (
       <FirstWrapper>
         <React.Fragment>

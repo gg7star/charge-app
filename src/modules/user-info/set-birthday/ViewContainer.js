@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { compose } from 'recompose';
-import { AppActions, SignupActions } from '~/actions';
+import { AppActions, LoginActions, SignupActions } from '~/actions';
 import View from './View';
 
 const mapStateToProps = state => ({
@@ -11,6 +11,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   appActions: bindActionCreators(AppActions, dispatch),
+  authActions: bindActionCreators(LoginActions, dispatch),
   signupActions: bindActionCreators(SignupActions, dispatch),
 });
 

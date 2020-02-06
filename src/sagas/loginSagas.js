@@ -1,20 +1,19 @@
-import { takeLatest, call } from 'redux-saga/effects';
+import { takeLatest, call, put } from 'redux-saga/effects';
 import { Actions } from 'react-native-router-flux';
+import { LOAD } from 'redux-storage';
 import { loginActionTypes } from '~/actions/types';
 import { PhoneAuth } from '~/common/services/rn-firebase/auth';
 import {
   createAccount,
-  createSocialAccount
+  createSocialAccount,
+  checkIfUserExistsByPhoneNumber
 } from '~/common/services/rn-firebase/database';
 
 import { createFcmToken, saveFcmToken, startReceiveFcm } from '~/common/services/rn-firebase/message';
 import { AppActions, LoginActions, RentActions, MapActions } from '~/actions';
 
-const { setGlobalNotification } = AppActions;
-const { loginSuccess, loginFailed, setFcmToken, setFcmListener } = LoginActions;
-const { getAllStations } = MapActions;
+const { updatedUserInfo } = LoginActions;
 const { rentSuccess } = RentActions;
-import { LOAD } from 'redux-storage';
 
 export default function* watcher() {
   yield takeLatest(LOAD, processLoadDataOnFirstRunning);
@@ -28,9 +27,9 @@ export function* processLoadDataOnFirstRunning(action) {
     action.payload && action.payload.auth &&
     action.payload.auth.credential && action.payload.auth.credential.user
   ) {
-    const { providerData, email } = action.payload.auth.credential.user;
+    const { providerData, displayName } = action.payload.auth.credential.user;
     const authProvider = providerData[0] ? providerData[0].providerId : null;
-    if((authProvider === PhoneAuth.AUTH_PROVIDER) && !email)
+    if((authProvider === PhoneAuth.AUTH_PROVIDER) && !displayName)
       Actions['set_user_info']();
     else Actions['home']();
   }
@@ -38,22 +37,60 @@ export function* processLoadDataOnFirstRunning(action) {
 
 export function* processLoginSuccess(action) {
   const { credential } = action.payload;
-  
-  const resCreateUser = yield call(createAccount, credential);
-  console.log('===== resCreateUser: ', resCreateUser);
-  if(resCreateUser) {
-    const { providerData, email } = resCreateUser;
+  const phoneNumber = credential.user.phoneNumber;
+  var providerData = null;
+  var email = null;
+  var authProvider = null;
+
+  var user = yield call(checkIfUserExistsByPhoneNumber, phoneNumber);
+  if (!user) {
+    user = yield call(createAccount, credential);
+    console.log('===== createAccount: ', user);
+  } else {
+    const { displayName, email, birthday } = user;
+    const userInfo = { displayName, email, birthday };
+    yield put(updatedUserInfo({credential, userInfo}));
+  }
+
+  if (user) {
+    const { providerData, email } = user;
     const authProvider = providerData[0] ? providerData[0].providerId : null;
+
     if((authProvider === PhoneAuth.AUTH_PROVIDER) && !email)
       Actions['set_user_info']();
     else Actions['home']();
   }
+
+  // if (existUser) {
+  //   providerData = existUser.providerData;
+  //   email = existUser.email;
+  //   authProvider = providerData[0] ? providerData[0].providerId : null;
+  // } else {
+  //   const resCreateUser = yield call(createAccount, credential);
+  //   console.log('===== resCreateUser: ', resCreateUser);
+  //   if(resCreateUser) {
+  //     const { providerData, email } = resCreateUser;
+  //     const authProvider = providerData[0] ? providerData[0].providerId : null;
+  //     if((authProvider === PhoneAuth.AUTH_PROVIDER) && !email)
+  //       Actions['set_user_info']();
+  //     else Actions['home']();
+  //   }
+  // }
+  // if((authProvider === PhoneAuth.AUTH_PROVIDER) && !email)
+  //   Actions['set_user_info']();
+  // else Actions['home']();
 }
 
 export function* processSocialLoginSuccess(action) {
   const { credential } = action.payload;
   const resCreateUser = yield call(createSocialAccount, credential);
-  if(resCreateUser) Actions['home']();
+  if(resCreateUser) {
+    if(
+      credential.additionalUserInfo && 
+      credential.additionalUserInfo.isNewUser
+    ) Actions['hint']();
+    else Actions['home']();
+  };
 }
 
 function receivedFcm(fcmMsg) {
