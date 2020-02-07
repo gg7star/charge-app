@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import app from './appReducer';
-import stripe from './stripeReducer';
+import stripePayment from './stripeReducer';
 import auth from './loginReducer';
 import signup from './signupReducer';
 import map from './mapReducer';
@@ -14,5 +14,5 @@ export default combineReducers({
   profile,
   rent,
   signup,
-  stripe
+  stripePayment
 });

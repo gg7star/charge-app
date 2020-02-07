@@ -72,9 +72,19 @@ export default class CustomMapView extends React.Component {
     )
   };
 
+  calculateDegree = (l1, l2) => {
+    x = l2.latitude - l1.latitude;
+    y = l2.longitude - l1.longitude;
+    return Math.atan2(y, x) * 180 / Math.PI + 90;
+  };
+
   renderCurrentLocationMarker = () => {
     const currentLocation = this.props.currentLocation || defaultCurrentLocation;
-
+    const { directionCoordinates } = this.state;
+    const degree = (directionCoordinates.length > 2)
+      ? this.calculateDegree(directionCoordinates[0], directionCoordinates[1])
+      : 90;
+    
     return (
       <MapView.Marker
         key={'my-location'}
@@ -84,7 +94,7 @@ export default class CustomMapView extends React.Component {
       >
         <Image
           source={CURRENT_LOCATION_IMAGE}
-          style={{width: 44, height: 40}}
+          style={{width: 44, height: 40, transform: [{rotate: `${degree}deg`}],}}
         />
       </MapView.Marker>
     )

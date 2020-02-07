@@ -10,7 +10,9 @@ export default class ProfileWrapper extends React.Component {
           paddingTop: 40, paddingHorizontal: 10,
           width: W, height: H,
           backgroundColor: 'white',
-          position: 'relative'
+          position: 'relative',
+          paddingLeft: 20,
+          paddingRight: 20
         }
       }>
         {this.props.children}

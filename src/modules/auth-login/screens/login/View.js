@@ -29,6 +29,7 @@ export default class LoginView extends React.Component {
     const fullPhoneNumber = `+${countryCode}${phoneNumber}`;
 
     this.setState({phoneLogining: true});
+    console.log('==== onLogin: checking user by phone number: ', fullPhoneNumber);
     const isExistUser = await checkIfUserExistsByPhoneNumber(fullPhoneNumber);
     if (!isExistUser) {
       this.setState({phoneLogining: false}, () => {

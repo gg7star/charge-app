@@ -271,10 +271,9 @@ export default class FirstScreenView extends React.Component {
   }
 
   onUnlock = () => {
-    const { auth, map, stripeActions } = this.props;
+    const { auth, map, stripeActions, stripePayment } = this.props;
     const { scannedQrCode } = map;
-    const stripeProps = this.props.stripe;
-    if (stripeProps.customer && stripeProps.customer.id) {
+    if (stripePayment.customer && stripePayment.customer.id) {
       Actions['map_scan_qr']();
     } else {
       // setup card info
@@ -284,7 +283,8 @@ export default class FirstScreenView extends React.Component {
                 // call payment function
                 stripeActions.registerCardRequest({
                   email: auth.credential.user.email,
-                  tokenId: stripeTokenInfo.tokenId
+                  tokenId: stripeTokenInfo.tokenId,
+                  stripeTokenInfo
                 })
               })
               .catch(error => {

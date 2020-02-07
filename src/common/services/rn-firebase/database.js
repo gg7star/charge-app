@@ -4,6 +4,7 @@ import firebaseConfig from '~/common/config/firebase';
 
 const USER_TABLE_NAME = 'users';
 const PLACES_TABLE_NAME = 'places';
+const CARD_TABLE_NAME = 'cards';
 
 export async function onlineDatabase() {
   if (!firebase.apps.length) {
@@ -65,7 +66,6 @@ export async function createSocialAccount(credential) {
   }
   return null;
 }
-
 
 export async function setUserInfo({credential, userInfo}) {
   const user = credential.user._user ? credential.user._user : credential.user;
@@ -150,4 +150,21 @@ export async function searchPlances(searchKey) {
       return null;
     }
   });
+}
+
+export async function saveCreditCard(cardInfo) {
+  console.log('====== saveCreditCard: cardInfo: ', cardInfo)
+  const uid = firebase.auth().currentUser.uid
+  if (uid) {
+    try {
+      return firebase.database().ref(`${CARD_TABLE_NAME}/${uid}`)
+        .set(cardInfo).then(() => {
+          return cardInfo;
+        });
+    } catch (e) {
+      console.log('==== error: ', e)
+      return null
+    }
+  }
+  return null;
 }

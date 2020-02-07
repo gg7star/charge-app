@@ -7,6 +7,7 @@ export async function loginWithPhone(phoneNumber) {
   var errorMessage = null;
   var errorType = null;
   try {
+    console.log('==== loginWithPhone phoneNumber: ', phoneNumber)
     confirmation = await firebase.auth().signInWithPhoneNumber(phoneNumber);
     console.log('===== confirmation: ', confirmation);
   } catch (error) {
@@ -42,4 +43,8 @@ export async function confirmWithPhone(confirmation, confirmCode) {
     console.log('===== Phone number confirmation error: ', error);
     return { user: null, error: error.message, errorType: error.code };
   }
+}
+
+export async function logoutWithPhone() {
+  return await firebase.auth().signOut();
 }

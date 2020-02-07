@@ -89,6 +89,10 @@ export async function loginWithFacebook() {
   }
 }
 
+export function logoutWithFacebook() {
+  LoginManager.logOut();
+}
+
 export async function fetchProfile (token) {
   return new Promise((resolve, reject) => {
     const request = new GraphRequest(

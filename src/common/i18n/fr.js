@@ -187,5 +187,6 @@ export default {
   'Mes points': 'My points',
   'Vos arbres plantés': 'Your planted trees',
   'Nothing': 'Rien',
-  'Not sure': 'Pas certain'
+  'Not sure': 'Pas certain',
+  'Bank info': 'Infos bancaires'
 };

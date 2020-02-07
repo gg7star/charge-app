@@ -4,6 +4,7 @@ import { processRequest } from '~/common/services/api';
 import serverUrls from '~/common/constants/api';
 import { AppActions, StripeActions } from '~/actions';
 import { stripeActionTypes } from '~/actions/types';
+import { saveCreditCard } from '~/common/services/rn-firebase/database';
 
 const {
   doPaymentSuccess,
@@ -52,19 +53,17 @@ export function* doPayment(action) {
 export function* saveCardInfo(action) {
   try {
     // Get a list of all stationSn
-    console.log('===== calling saveCardInfo')
+    console.log('===== calling saveCardInfo: ', action);
     const response = yield call(
       processRequest,
       `${serverUrls.apiGatewayServerURL}/payment/stripe/save_card`,
       'POST',
       action.payload
     );
+
     if (response.data.status === 200) {
       yield put(registerCardSuccess(response.data.data));
-      // yield put(setGlobalNotification({
-      //   message: 'You saved card info succefully. Thank you!',
-      //   type: 'success'
-      // }));
+      yield call(saveCreditCard, response.data.data);
       Actions['map_scan_qr']();
     } else {
       yield put(registerCardFailure({errorMessage: response.data.message}));

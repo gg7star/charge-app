@@ -28,7 +28,7 @@ export function* processLoadDataOnFirstRunning(action) {
     action.payload.auth.credential && action.payload.auth.credential.user
   ) {
     const { providerData, displayName } = action.payload.auth.credential.user;
-    const authProvider = providerData[0] ? providerData[0].providerId : null;
+    const authProvider = (providerData && providerData[0]) ? providerData[0].providerId : null;
     if((authProvider === PhoneAuth.AUTH_PROVIDER) && !displayName)
       Actions['set_user_info']();
     else Actions['home']();
@@ -49,7 +49,7 @@ export function* processLoginSuccess(action) {
   } else {
     const { displayName, email, birthday } = user;
     const userInfo = { displayName, email, birthday };
-    yield put(updatedUserInfo({credential, userInfo}));
+    yield put(updatedUserInfo(userInfo));
   }
 
   if (user) {

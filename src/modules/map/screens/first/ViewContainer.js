@@ -8,7 +8,7 @@ const mapStateToProps = state => ({
   app: state.app || {},
   map: state.map || {},
   auth: state.auth || {},
-  stripe: state.stripe || {}
+  stripePayment: state.stripePayment || {}
 });
 
 const mapDispatchToProps = dispatch => ({

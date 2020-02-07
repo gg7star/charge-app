@@ -112,6 +112,7 @@ export default function reducer(state = initialState, action) {
         credential: {
           ...state.credential,
           user: {
+            ...state.credential.user,
             ...payload.userInfo
           }
         }

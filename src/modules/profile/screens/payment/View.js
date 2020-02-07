@@ -7,24 +7,87 @@ import ProfileHeader from '../../common/headers/ProfileHeader'
 import { W, H, em } from '~/common/constants';
 import { Button, Spacer } from '~/common/components'
 
-export default class ScreenView extends React.Component {
+const AMERICAN_EXPRESS_CARD_IMAGE = require('~/common/assets/images/cards/american-express.png');
+const DISCOVER_CARD_IMAGE = require('~/common/assets/images/cards/discover.png');
+const MASTER_CARD_IMAGE = require('~/common/assets/images/cards/master-card.png');
+const VISA_CARD_IMAGE = require('~/common/assets/images/cards/visa.png');
+
+const CARDS = [
+  {
+    type: 'American Express',
+    image: AMERICAN_EXPRESS_CARD_IMAGE
+  },
+  {
+    type: 'Discover',
+    image: DISCOVER_CARD_IMAGE
+  },
+  {
+    type: 'Mastercard',
+    image: MASTER_CARD_IMAGE
+  },
+  {
+    type: 'Visa',
+    image: VISA_CARD_IMAGE
+  },
+]
+
+
+export default class PaymentSettingView extends React.Component {
   state = {
+  };
+
+  goBack = () => {
+    Actions.map()
+    Actions['map_first']()
   }
 
-  render() {
-    const { _t } = this.props.appActions;
+  addCreditCard = () => {
+    const { auth, profileActions, stripeActions } = this.props;
+    return stripe.paymentRequestWithCardForm()
+      .then(stripeTokenInfo => {
+        console.log('Token created: ', stripeTokenInfo);
+        stripeActions.registerCardRequest({
+          email: auth.credential.user.email,
+          tokenId: stripeTokenInfo.tokenId,
+        });
+      })
+      .catch(error => {
+        console.warn('Payment failed', { error });
+      });
+  };
 
+  onClearCard = () => this.props.stripeActions.initStripe();
+
+  renderCardInfo = (customer) => {
+    const cardInfo = customer.sources.data[0];
+    const {brand, exp_month, exp_year, funding, last4} = cardInfo;
     return (
-      <ProfileWrapper>
-        <ProfileHeader title={_t('Payment')} onPress={this.goBack} />
-        {this.renderList()}
-        {this.renderActionBar()}
-      </ProfileWrapper>
-    )
-  }
+      <View style={{ flexDirection: 'row', marginVertical: 20 }}>
+        <View style={{flex: 1, marginRight: 10}}>
+          <Image
+            source={require('~/common/assets/images/stripe.jpeg')}
+            resizeMode='cover'
+            borderRadius={7}
+            style={{width:35, height: 35}}
+          />
+        </View>
+        <View style={{flex: 7}}>
+          <Text>{'Stripe'}</Text>
+          <Text style={{ color: '#9f9f9f'}}>
+            {`${brand}  XXXX${last4}  ${exp_month}/${exp_year}  ${funding}`}
+          </Text>
+        </View>
+        <TouchableOpacity style={{flex: 1, alignItems: 'center'}} onPress={this.onClearCard}>
+          <Image source={require('~/common/assets/images/png/remove.png')} />
+        </TouchableOpacity>
+      </View>
+    );
+  };
 
-  renderList() {
-    const { _t } = this.props.appActions;
+  renderList = () => {
+    const { stripePayment, appActions } = this.props;
+    const { _t } = appActions;
+    const { customer } = stripePayment;
 
     return (
       <View>
@@ -35,27 +98,15 @@ export default class ScreenView extends React.Component {
             </Text>
           </TouchableOpacity>
         </View>
-        <View style={{ flexDirection: 'row', marginVertical: 10 }}>
-          <View style={{flex: 1, marginRight: 10}}>
-            <Image source={require('~/common/assets/images/png/Lydia-add.png')} />
-          </View>          
-          <View style={{flex: 7}}>
-            <Text>Lydia</Text>
-            <Text style={{ color: '#9f9f9f'}}>theorouilly@nono.fr</Text>
-          </View>
-          <View style={{flex: 1, alignItems: 'center'}}>
-            <Image source={require('~/common/assets/images/png/remove.png' )} />
-          </View>
-        </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        { (customer && customer.sources) && this.renderCardInfo(customer) }
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 20 }}>
           <View style={{flex: 1, marginRight: 10, alignItems: 'center'}}>
-            <Image source={require('~/common/assets/images/png/add-card.png' )} 
-            />
+            <Image source={require('~/common/assets/images/png/add-card.png' )} />
           </View>
           <View style={{flex: 7, }}>
             <TouchableOpacity onPress={this.addCreditCard}>
               <Text style={{ fontSize: 16 }}>
-                {_t('Add a credit card')}
+                {customer ? _t('Edit a credit card') : _t('Add a credit card')}
               </Text>
             </TouchableOpacity>
           </View>
@@ -67,9 +118,9 @@ export default class ScreenView extends React.Component {
         </View>
       </View>
     )
-  }
+  };
 
-  renderActionBar() {
+  renderActionBar = () => {
     const { _t } = this.props.appActions
 
     return (
@@ -90,22 +141,17 @@ export default class ScreenView extends React.Component {
         />
       </View>
     )
-  }
+  };
 
-  goBack = () => {
-    Actions.map()
-    Actions['map_first']()
-  }
+  render() {
+    const { _t } = this.props.appActions;
 
-  addCreditCard = () => {
-    const { auth, profileActions } = this.props;
-    return stripe.paymentRequestWithCardForm()
-      .then(stripeTokenInfo => {
-        console.log('Token created: ', stripeTokenInfo);
-        profileActions.addCreditCard(stripeTokenInfo)
-      })
-      .catch(error => {
-        console.warn('Payment failed', { error });
-      });
+    return (
+      <ProfileWrapper>
+        <ProfileHeader title={_t('Payment')} onPress={this.goBack} />
+        {this.renderList()}
+        {this.renderActionBar()}
+      </ProfileWrapper>
+    )
   }
 }

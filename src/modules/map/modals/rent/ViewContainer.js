@@ -7,7 +7,7 @@ import View from './View';
 const mapStateToProps = state => ({
   app: state.app || {},
   map: state.map || {},
-  stripe: state.stripe || {}
+  stripePayment: state.stripePayment || {}
 });
 
 const mapDispatchToProps = dispatch => ({

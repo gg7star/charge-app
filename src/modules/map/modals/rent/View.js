@@ -11,11 +11,11 @@ export default class Dialog extends React.Component {
   }
 
   render() {
-    const { stripe } = this.props
+    const stripeProps = this.props.stripePayment
     return (
       <RentDialogWrapper>
         <Spinner
-          visible={stripe.isFetching}
+          visible={stripeProps.isFetching}
           textContent={'Doing payment...'}
           textStyle={{color: '#FFF'}}
         />

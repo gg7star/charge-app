@@ -4,7 +4,7 @@ import auth_signup from './signupSagas';
 import map from './mapSagas';
 import profile from './profileSagas';
 import rent from './rentSagas';
-import stripe from './stripeSagas';
+import stripePayment from './stripeSagas';
 
 export default function* root() {
   yield all([
@@ -13,6 +13,6 @@ export default function* root() {
     map(),
     profile(),
     rent(),
-    stripe(),
+    stripePayment(),
   ])
 }
