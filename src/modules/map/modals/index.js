@@ -19,5 +19,5 @@ export {
   NearPlacesDialog,
   FilterDialog,
   RentDialog,
-  FeedbackDialog
+  FeedbackDialog,
 };

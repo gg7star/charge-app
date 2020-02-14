@@ -1,14 +1,14 @@
 import React from 'react';
+import Modal from "react-native-modal";
 import { View, Text, Image } from 'react-native';
 import TouchableScale from 'react-native-touchable-scale';
 import { Actions } from 'react-native-router-flux';
 import LinearGradient from 'react-native-linear-gradient';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-// import Intl from 'react-native-intl'
-import { colors } from '~/common/constants';
-import BackWrapper from './wrappers/BackWrapper';
-import MenuWrapper from './wrappers/MenuWrapper';
-import MenuItem from './components/MenuItem';
+import BackWrapper from '~/modules/profile/modals/menu/wrappers/BackWrapper';
+import MenuWrapper from '~/modules/profile/modals/menu/wrappers/MenuWrapper';
+import MenuItem from '~/modules/profile/modals/menu/components/MenuItem';
+import { H, W } from '~/common/constants';
 import styles from './styles';
 
 const TREE_IMAGE = require('~/common/assets/images/png/tree.png');
@@ -24,10 +24,21 @@ const RIGHT_ARROW_IMAGE = require('~/common/assets/images/png/arrow.png');
 const LOGO_IMAGE = require('~/common/assets/images/png/logo.png');
 const NONO_IMAGE = require('~/common/assets/images/png/Union-32.png');
 
-export default class Menu extends React.Component {
+export default class ProfileMenuDialog extends React.Component {
+  state = {
+    
+  };
+
   handleClickOutside = () => {
-    Actions.map();
-    Actions['map_first']({profileOpened: false});
+    const { onClose } = this.props;
+    onClose && onClose();
+  }
+
+  onClickItem = (route) => {
+    const { onClose } = this.props;
+    onClose && onClose();
+    Actions.profile();
+    Actions[route]();
   }
 
   renderStartYourForest = () => {
@@ -85,64 +96,70 @@ export default class Menu extends React.Component {
     );
   };
 
-  render() {
-    const { isShowable } = this.props
+  renderView = () => {
     const { _t } = this.props.appActions
     const { credential } = this.props.auth
-
     return (
-      <React.Fragment>
-        { isShowable && 
-        <BackWrapper onPress={this.handleClickOutside}>
-          <MenuWrapper onClose={this.props.onClose}>
-            <View>
-              <View style={styles.titleImageContainer}>
-                <Image source={LOGO_IMAGE} style={styles.logoImage} />
-              </View>
-              <View style={styles.titleImageContainer}>
-                <Image
-                  source={NONO_IMAGE}
-                  style={styles.titleImage}
-                />
-              </View>
-            </View>
-            <Text style={styles.displayName}>
-              {credential && credential.user.displayName}
-            </Text>
-            <View>
-              {/* {this.renderStartYourForest()} */}
-              {menuList.map((menu, k) => (
-                <View key={k}>
-                  <MenuItem
-                    image={menu.image}
-                    title={_t(menu.title)}
-                    disabled={menu.disabled}
-                    onPress={() => {
-                      Actions.profile();
-                      Actions[menu.route]();
-                    }}
-                  />
-                </View>
-              ))}
-            </View>
-            <View style={{position: 'absolute', bottom: 40, left: 20}}>
-              <MenuItem 
-                image={lastMenuItem.image} 
-                title={_t(lastMenuItem.title)}
-                disabled={lastMenuItem.disabled}
-                onPress={() => {
-                  Actions.profile();
-                  Actions[lastMenuItem.route]();
-                }}
+      <View style={styles.container}>
+        <View>
+          <View style={styles.titleImageContainer}>
+            <Image source={LOGO_IMAGE} style={styles.logoImage} />
+          </View>
+          <View style={styles.titleImageContainer}>
+            <Image
+              source={NONO_IMAGE}
+              style={styles.titleImage}
+            />
+          </View>
+        </View>
+        <Text style={styles.displayName}>
+          {credential && credential.user.displayName}
+        </Text>
+        <View>
+          {/* {this.renderStartYourForest()} */}
+          {menuList.map((menu, k) => (
+            <View key={k}>
+              <MenuItem
+                image={menu.image}
+                title={_t(menu.title)}
+                disabled={menu.disabled}
+                onPress={() => this.onClickItem(menu.route)}
               />
             </View>
-          </MenuWrapper>
-        </BackWrapper>
-        }
-      </React.Fragment>
+          ))}
+        </View>
+        <View style={{position: 'absolute', bottom: 40, left: 20}}>
+          <MenuItem 
+            image={lastMenuItem.image} 
+            title={_t(lastMenuItem.title)}
+            disabled={lastMenuItem.disabled}
+            onPress={() => this.onClickItem(lastMenuItem.route)}
+          />
+        </View>
+      </View>
+    );
+  }
+
+  render() {
+    const { isVisible, onClose } = this.props;
+
+    return (
+      <Modal
+        isVisible={isVisible}
+        animationIn={'slideInLeft'}
+        animationOut={'slideOutLeft'}
+        hasBackdrop
+        backdropOpacity={0.5}
+        coverScreen
+        style={{margin: 0}}
+        onBackdropPress={() => onClose()}
+      >
+        { this.renderView() }
+      </Modal>
     )
   }
 }
+
 
 const menuList = [
   {
@@ -195,3 +212,4 @@ const lastMenuItem = {
   route: 'profile_help',
   disabled: false
 }
+

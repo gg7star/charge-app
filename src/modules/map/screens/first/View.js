@@ -13,13 +13,14 @@ import {
   NearPlacesDialog,
   FilterDialog,
   RentDialog,
-  FeedbackDialog
+  FeedbackDialog,
 } from '~/modules/map/modals';
 import { W, H } from '~/common/constants';
 import { Spacer } from '~/common/components';
-import Menu from '~/modules/profile/modals/menu/ViewContainer';
 import MapButton from '~/modules/map/common/components/MapButton';
 import MapView from '~/modules/map/common/components/MapView';
+import ProfileMenuDialog from '~/modules/profile/modals/menu/ProfileMenuDialogContainer';
+
 import defaultCurrentLocation from '~/common/config/locations';
 
 const GEOLOCATION_OPTION = {
@@ -301,10 +302,11 @@ export default class FirstScreenView extends React.Component {
     const propsProfileOpened = this.props.profileOpened;
     return (
       <View style={{position: 'relative', width: W, height: H}}>
-        <Menu 
+        {/* <Menu 
           isShowable={profileOpened || propsProfileOpened} 
-          onClose={()=> {this.setState({...this.state, profileOpened: false })}}
-        />
+          
+        /> */}
+        <ProfileMenuDialog isVisible={profileOpened} onClose={()=> {this.setState({profileOpened: false })}} />
         <MapView
           mapType={Platform.OS == "android" ? "none" : "standard"}
           currentLocation={currentLocation}
@@ -321,7 +323,7 @@ export default class FirstScreenView extends React.Component {
               }
             }
           />
-          <MapButton name='tree' onPress={this.goGift}/>
+          {/* <MapButton name='tree' onPress={this.goGift}/> */}
           <MapButton name='refresh' onPress={this.onClickRefresh}/>
           <MapButton name='position' onPress={this.onClickPosition}/>
         </MapView>

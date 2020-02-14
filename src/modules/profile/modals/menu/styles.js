@@ -1,6 +1,17 @@
 import { W, H, em, colors } from '~/common/constants';
 
 export default {
+  container: {
+    borderTopRightRadius: 20,
+    borderBottomRightRadius: 20,
+    paddingTop: 40,
+    paddingBottom: 20,
+    paddingHorizontal: 20,
+    backgroundColor: '#FFFFFF',
+    height: H,
+    width: W/5*4,
+    left: 0
+  },
   logoImage: {
     height: 75*em,
     width: 76*em,

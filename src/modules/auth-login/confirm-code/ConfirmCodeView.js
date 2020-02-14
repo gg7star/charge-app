@@ -43,6 +43,7 @@ export default class ConfirmCodeView extends React.Component {
       <Modal
         isVisible={isVisible}
         animationIn={'slideInRight'}
+        animationOut={'slideOutLeft'}
         deviceWidth={W}
         deviceHeight={H}
         avoidKeyboard={true}
