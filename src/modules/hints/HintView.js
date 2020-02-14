@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, Animated } from 'react-native';
-import Button from './Button';
-import Spacer from './Spacer';
+import Button from '../../common/components/Button';
+import Spacer from '../../common/components/Spacer';
 import { colors } from '~/common/constants';
-import { em, W } from '~/common/constants';
+import { em, W, H } from '~/common/constants';
 
 export default class HintView extends React.Component {
   state = {
@@ -28,29 +28,31 @@ export default class HintView extends React.Component {
         },
       ],
     };
-  }
+  };
 
   render() {
     const { image, title, desc, nextButtonTitle } = this.props;
 
     return (
-      <View style={{ justifyContent: 'space-around' }}>
+      <View style={styles.container}>
         <Animated.View>
           <Animated.Image
             resizeMode="contain"
-            style={{ width: (W-40), height: 480/425*(W-40), marginVertical: 20 }}
+            style={styles.image}
             source={image}
           />
         </Animated.View>
         <Animated.View>
-          <Text style={{ color: '#313131', fontSize: 22, fontWeight: 'bold', textAlign: 'center' }}>
+          <Text style={styles.title}>
             {title}
           </Text>
           <Spacer size={10*em} />
-          <Text style={{ color: '#313131', fontSize: 15, textAlign: 'center' }}>
+          <Text style={styles.description}>
             {desc}
           </Text>
           <Spacer size={25*em} />
+        </Animated.View>
+        <Animated.View>
           <Button
             bgColor={colors.primaryBackground}
             textColor={'white'}
@@ -62,3 +64,20 @@ export default class HintView extends React.Component {
     );
   }
 }
+
+const styles = {
+  container: {
+    justifyContent: 'space-around'
+  },
+  image: {
+    width: (W-40), height: H/5 * 3, marginVertical: 10
+  },
+  title: {
+    color: '#313131', fontSize: 22, fontWeight: 'bold', textAlign: 'center',
+    paddingLeft: 20*em, paddingRight: 20*em
+  },
+  description: {
+    color: '#313131', fontSize: 15, textAlign: 'center',
+    paddingLeft: 30*em, paddingRight: 30*em
+  }
+};

@@ -37,8 +37,8 @@ export default class PaymentSettingView extends React.Component {
   };
 
   goBack = () => {
-    Actions.map()
-    Actions['map_first']()
+    Actions.map();
+    Actions['map_first']({profileOpened: true});
   }
 
   addCreditCard = () => {

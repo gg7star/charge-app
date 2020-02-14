@@ -60,25 +60,6 @@ export function* processLoginSuccess(action) {
       Actions['set_user_info']();
     else Actions['home']();
   }
-
-  // if (existUser) {
-  //   providerData = existUser.providerData;
-  //   email = existUser.email;
-  //   authProvider = providerData[0] ? providerData[0].providerId : null;
-  // } else {
-  //   const resCreateUser = yield call(createAccount, credential);
-  //   console.log('===== resCreateUser: ', resCreateUser);
-  //   if(resCreateUser) {
-  //     const { providerData, email } = resCreateUser;
-  //     const authProvider = providerData[0] ? providerData[0].providerId : null;
-  //     if((authProvider === PhoneAuth.AUTH_PROVIDER) && !email)
-  //       Actions['set_user_info']();
-  //     else Actions['home']();
-  //   }
-  // }
-  // if((authProvider === PhoneAuth.AUTH_PROVIDER) && !email)
-  //   Actions['set_user_info']();
-  // else Actions['home']();
 }
 
 export function* processSocialLoginSuccess(action) {
@@ -89,6 +70,7 @@ export function* processSocialLoginSuccess(action) {
       credential.additionalUserInfo && 
       credential.additionalUserInfo.isNewUser
     ) Actions['hint']();
+    // else Actions['hint']();
     else Actions['home']();
   };
 }

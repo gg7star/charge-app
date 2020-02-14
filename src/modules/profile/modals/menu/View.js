@@ -9,6 +9,7 @@ import { colors } from '~/common/constants';
 import BackWrapper from './wrappers/BackWrapper';
 import MenuWrapper from './wrappers/MenuWrapper';
 import MenuItem from './components/MenuItem';
+import styles from './styles';
 
 const TREE_IMAGE = require('~/common/assets/images/png/tree.png');
 const NOTIFICATION_IMAGE = require('~/common/assets/images/menu-notification.png');
@@ -18,12 +19,71 @@ const HISTORY_IMAGE = require('~/common/assets/images/menu-history.png');
 const SETTINGS_IMAEG = require('~/common/assets/images/menu-settings.png');
 const ABOUT_US_IMAGE = require('~/common/assets/images/menu-aboutus.png');
 const NEED_HELP_IMAGE = require('~/common/assets/images/menu-help.png');
+const CARD_IMAEG = require('~/common/assets/images/menu-payment_h20.png');
+const RIGHT_ARROW_IMAGE = require('~/common/assets/images/png/arrow.png');
+const LOGO_IMAGE = require('~/common/assets/images/png/logo.png');
+const NONO_IMAGE = require('~/common/assets/images/png/Union-32.png');
 
 export default class Menu extends React.Component {
   handleClickOutside = () => {
     Actions.map();
     Actions['map_first']({profileOpened: false});
   }
+
+  renderStartYourForest = () => {
+    return (
+      <View>
+        <TouchableScale
+          onPress={() => {
+            Actions.profile();
+            Actions['profile_create_team']();
+          }}
+        >
+          <LinearGradient
+            colors={['#07e28e', '#36f7ad']}
+            style={{
+              paddingVertical: 10,
+              paddingLeft: 8,
+              borderRadius: 15, 
+              flexDirection: 'row',
+              width: '100%',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}
+          >
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              <Image
+                source={TREE_IMAGE} 
+                style={{ marginLeft: 5, marginRight: 5}}
+              />
+              <Text
+                style={{
+                  color: 'white', fontSize: 16, fontWeight: '600', paddingLeft: 5,
+                  justifyContent: 'center', alignContent: 'center', alignItems: 'center'
+                }}
+              >
+                {_t('Start your forest')}
+              </Text>
+            </View>                    
+            <MaterialIcon
+              name='chevron-right'
+              style={{
+                backgroundColor: 'transparent',
+                color: 'white',
+                fontSize: 24,
+              }}
+            />
+          </LinearGradient>
+        </TouchableScale>
+      </View>
+    );
+  };
 
   render() {
     const { isShowable } = this.props
@@ -35,68 +95,22 @@ export default class Menu extends React.Component {
         { isShowable && 
         <BackWrapper onPress={this.handleClickOutside}>
           <MenuWrapper onClose={this.props.onClose}>
-            <Text
-              style={{ 
-                fontSize: 23,
-                color: colors.primary,
-                fontWeight: '600',
-                marginVertical: 10,
-                marginLeft: 5
-              }}
-            >
+            <View>
+              <View style={styles.titleImageContainer}>
+                <Image source={LOGO_IMAGE} style={styles.logoImage} />
+              </View>
+              <View style={styles.titleImageContainer}>
+                <Image
+                  source={NONO_IMAGE}
+                  style={styles.titleImage}
+                />
+              </View>
+            </View>
+            <Text style={styles.displayName}>
               {credential && credential.user.displayName}
             </Text>
             <View>
-              <View style={{}}>
-                <TouchableScale
-                  onPress={() => {
-                    Actions.profile();
-                    Actions['profile_create_team']();
-                  }}
-                >
-                  <LinearGradient
-                    colors={['#07e28e', '#36f7ad']}
-                    style={{
-                      paddingVertical: 10,
-                      paddingLeft: 8,
-                      borderRadius: 15, 
-                      flexDirection: 'row',
-                      width: '100%',
-                      justifyContent: 'space-between',
-                      alignItems: 'center'
-                    }}
-                  >
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                      }}
-                    >
-                      <Image
-                        source={TREE_IMAGE} 
-                        style={{ marginLeft: 5, marginRight: 5}}
-                      />
-                      <Text
-                        style={{
-                          color: 'white', fontSize: 16, fontWeight: '600', paddingLeft: 5,
-                          justifyContent: 'center', alignContent: 'center', alignItems: 'center'
-                        }}
-                      >
-                        {_t('Start your forest')}
-                      </Text>
-                    </View>                    
-                    <MaterialIcon
-                      name='chevron-right'
-                      style={{
-                        backgroundColor: 'transparent',
-                        color: 'white',
-                        fontSize: 24,
-                      }}
-                    />
-                  </LinearGradient>
-                </TouchableScale>
-              </View>
+              {/* {this.renderStartYourForest()} */}
               {menuList.map((menu, k) => (
                 <View key={k}>
                   <MenuItem
@@ -137,22 +151,28 @@ const menuList = [
     route: 'profile_notification',
     disabled: false
   },
-  {
-    title: 'My points',
-    image: MEDAL_IMAGE,
-    route: 'profile_history',
-    disabled: true
-  },
-  {
-    title: 'Your planted trees',
-    image: PLANT_IMAGE,
-    route: 'profile_history',
-    disabled: true
-  },
+  // {
+  //   title: 'My points',
+  //   image: MEDAL_IMAGE,
+  //   route: 'profile_history',
+  //   disabled: true
+  // },
+  // {
+  //   title: 'Your planted trees',
+  //   image: PLANT_IMAGE,
+  //   route: 'profile_history',
+  //   disabled: true
+  // },
   {
     title: 'Histories',
     image: HISTORY_IMAGE,
     route: 'profile_history',
+    disabled: false
+  },
+  {
+    title: 'Bank info',
+    image: CARD_IMAEG,
+    route: 'profile_payment',
     disabled: false
   },
   {

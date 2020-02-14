@@ -1,47 +1,29 @@
-import React from 'react'
-import { View, Image, Text, TouchableOpacity } from 'react-native'
-import { colors } from '~/common/constants'
+import React from 'react';
+import { View, Image, Text, TouchableOpacity } from 'react-native';
+import { colors } from '~/common/constants';
+import styles from './styles';
 
 const MenuItem = (props) => (
   <TouchableOpacity
-    style={{
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      paddingVertical: 15,
-    }}
+    style={styles.container}
     disabled={props.disabled}
     onPress={props.onPress}
   >
-    <View style={{marginRight: 10, flexDirection: 'row'}}>
+    <View style={styles.titleContainer}>
       <Image
         source={props.image}
-        style={{
-          width: 20,
-          marginRight: 5,
-          marginLeft: 5,
-          opacity: props.disabled ? 0.5: 1
-        }}
+        style={[
+          styles.rightImage,
+          { opacity: props.disabled ? 0.5: 1 }
+        ]}
       />
-      <Text
-        style={{
-          fontSize: 16,
-          fontWeight: '400',
-          color: props.disabled ? '#BFBFC4' : '#36384A',
-          paddingLeft: 15
-        }}
-      >
+      <Text style={[styles.title, {color: props.disabled ? '#BFBFC4' : '#36384A'}]}>
         {props.title}
       </Text>
     </View>
     <View>
       {props.subtitle &&
-        <Text
-          style={{
-            fontSize: 13,
-            fontWeight: '300',
-            color: props.disabled ? '#BFBFC4' : '#36384A'
-          }}
-        >
+        <Text style={[styles.subTitle, {color: props.disabled ? '#BFBFC4' : '#36384A'}]}>
           {props.subtitle}
         </Text>
       }

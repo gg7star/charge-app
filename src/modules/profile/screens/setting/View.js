@@ -53,7 +53,7 @@ export default class ScreenView extends React.Component {
           <Text style={styles.title}>{_t('Birth date')}</Text>
           <Text style={styles.text}>{credential.user.birthday}</Text>
         </View>
-        <View style={styles.linkedItemContainer}>
+        {/* <View style={styles.linkedItemContainer}>
           <TouchableOpacity style={styles.linkedItemTouchable} onPress={this.onBankInfo}>
             <View style={{flexDirection: 'row'}}>
               <Image source={CARD_IMAEG} style={styles.linkedAvatar} />
@@ -61,7 +61,7 @@ export default class ScreenView extends React.Component {
             </View >
             <Image source={RIGHT_ARROW_IMAGE} style={styles.linkedArrow} />
           </TouchableOpacity>
-        </View>
+        </View> */}
         <View style={styles.linkedItemContainer}>
           <TouchableOpacity style={styles.linkedItemTouchable}>
             <Text style={styles.linkedTitle}>{_t('Terms of use')}</Text>

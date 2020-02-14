@@ -24,7 +24,7 @@ class NonoRoutes extends Component {
 						component={SignUp}
 					/>
 					{SetUserInfoStack}
-					{HintStack}					
+					{HintStack}
 					<Scene key='home' hideNavBar>
 						{MapStack}
 						{ProfileStack}
