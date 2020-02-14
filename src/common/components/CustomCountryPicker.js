@@ -11,6 +11,11 @@ export default class CustomCountryPicker extends React.Component {
     onSelect && onSelect(country);
   };
 
+  onClose = () => {
+    const { onClose } = this.props;
+    onClose && onClose();
+  };
+
   render() {
     const { isVisible } = this.props
     return (
@@ -23,6 +28,7 @@ export default class CustomCountryPicker extends React.Component {
         theme={DARK_THEME}
         visible={isVisible}
         onSelect={this.onSelect}
+        onClose={this.onClose}
       />
     );
   }
