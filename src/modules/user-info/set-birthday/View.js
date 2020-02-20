@@ -8,6 +8,7 @@ import { Spacer, Button } from '~/common/components';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import { setUserInfo } from '~/common/services/rn-firebase/database';
+import * as notifications from '~/common/services/onesignal/notifications';
 
 export default class ScreenView extends React.Component {
   state = {
@@ -35,7 +36,26 @@ export default class ScreenView extends React.Component {
     console.log('==== setUserInfo: res: ', res);
     this.setState({loading: false});
     if (res) {
+      // Save user info
       authActions.updatedUserInfo(res);
+      // Send notification
+      var contents = {
+        'en': `You are registered firstly with your Phone number: ${res.phoneNumber}.`,
+        'fr': `Vous êtes d'abord enregistré avec votre numéro de téléphone.`
+      }
+      var message = {
+        type: notifications.NONO_NOTIFICATION_TYPES.REGISTERED_FIRST
+      };
+      var otherParameters = {
+        headings: {
+          "en": "Welcome to Nono!",
+          "fr": "Bienvenue chez Nono!"
+        },
+      }
+      if (auth.oneSignalDevice && auth.oneSignalDevice.userId) {
+        notifications.postNotification(contents, message, action.payload.auth.oneSignalDevice.userId, otherParameters);
+      }
+      // Go to hint
       Actions['hint']();
     } else {
       Alert.alert(

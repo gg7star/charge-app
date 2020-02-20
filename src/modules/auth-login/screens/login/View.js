@@ -4,11 +4,13 @@ import { Actions } from 'react-native-router-flux';
 import { Spacer, Button, PhoneNumberInput } from '~/common/components';
 import { PhoneAuth, FacebookAuth } from '~/common/services/rn-firebase/auth';
 import { checkIfUserExistsByPhoneNumber } from '~/common/services/rn-firebase/database';
+import { sendFcmMessage } from '~/common/services/rn-firebase/message';
 import { W, H, em } from '~/common/constants';
 import commonStyles from '~/common/styles';
 import FirstWrapper from '../../common/wrappers/FirstWrapper';
 import { convertLanguage2CallingCode } from '~/common/utils/country';
 import SetConfirmCode from '../../confirm-code/ViewContainer';
+import * as notifications from '~/common/services/onesignal/notifications';
 
 const { loginWithPhone, confirmWithPhone } = PhoneAuth;
 const { loginWithFacebook } = FacebookAuth;
@@ -67,11 +69,34 @@ export default class LoginView extends React.Component {
   }
 
   onFacebookLogin = async () => {
-    const { authActions } = this.props;
+    const { auth, authActions } = this.props;
     this.setState({facebookLogining: true});
     const res = await loginWithFacebook();
     this.setState({facebookLogining: false});
     if (res.credential) {
+      // // Send notification
+      // var contents = {
+      //   'en': 'You are registered firstly with your Facebook account.',
+      //   'fr': 'Vous êtes d\'abord enregistré avec votre compte Facebook.'
+      // }
+      // var message = { 
+      //   type: notifications.NONO_NOTIFICATION_TYPES.REGISTERED_FIRST
+      // };
+      // var otherParameters = {
+      //   headings: {
+      //     "en": "Welcome to Nono!",
+      //     "fr": "Bienvenue chez Nono!"
+      //   },
+      // }
+      // if (auth && auth.oneSignalDevice && auth.oneSignalDevice.userId) {
+      //   notifications.postNotification(
+      //     contents,
+      //     message,
+      //     auth.oneSignalDevice.userId,
+      //     otherParameters
+      //   );
+      // }
+
       authActions.loginSuccessWithSocial(res.credential);
     } else {
       authActions.loginFailed(res.error);

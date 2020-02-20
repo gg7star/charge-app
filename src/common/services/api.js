@@ -9,10 +9,13 @@ function checkStatus(responseData) {
   throw error;  
 }
 
-export async function processRequest(url = '', method = 'GET', data = null) {
-  let headers = {
+export async function processRequest(url = '', method = 'GET', data = null, additionalHeaders = null) {
+  var headers = {
     'Content-Type': 'application/json'
   };
+  if(additionalHeaders) {
+    headers = {...headers, ...additionalHeaders}
+  }
   let request = {
     method,
     crossDomain: true,

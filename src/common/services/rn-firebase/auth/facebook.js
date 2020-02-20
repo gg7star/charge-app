@@ -84,7 +84,7 @@ export async function loginWithFacebook() {
     console.log('==== firebaseUserCredential: ', firebaseUserCredential);
     return {credential: firebaseUserCredential, error: null, errorType: null};
   } catch (e) {
-    console.error('==== fb-sdk: error: ', e);
+    console.log('==== fb-sdk: error: ', e);
     return {credential: null, error: e, errorType: 'something'};
   }
 }

@@ -58,13 +58,13 @@ export default class ScreenView extends React.Component {
               {_t('Place of taking')}
             </Text>
             <Text style={{ color: '#36384a', fontSize: 17, marginBottom: 30 }}>
-              {history.fromPlace}
+              {history.takePlace}
             </Text>
             <Text style={{ color: '#bfbfc4', fontSize: 15, marginBottom: 5}}>
               {_t('Place of deposit')}
             </Text>
             <Text style={{ color: '#36384a', fontSize: 17,  }}>
-              {history.toPlace}
+              {history.depositPlace}
             </Text>
           </View> 
         </View>

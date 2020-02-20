@@ -46,10 +46,13 @@ export default class PaymentSettingView extends React.Component {
     return stripe.paymentRequestWithCardForm()
       .then(stripeTokenInfo => {
         console.log('Token created: ', stripeTokenInfo);
-        stripeActions.registerCardRequest({
-          email: auth.credential.user.email,
-          tokenId: stripeTokenInfo.tokenId,
-        });
+        stripeActions.registerCardRequest(
+          {
+            email: auth.credential.user.email,
+            tokenId: stripeTokenInfo.tokenId,
+          },
+          auth
+        );
       })
       .catch(error => {
         console.warn('Payment failed', { error });

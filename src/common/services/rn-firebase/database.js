@@ -5,6 +5,8 @@ import firebaseConfig from '~/common/config/firebase';
 const USER_TABLE_NAME = 'users';
 const PLACES_TABLE_NAME = 'places';
 const CARD_TABLE_NAME = 'cards';
+const HISTORY_TABLE_NAME= 'histories';
+const NOTIFICATION_TABLE_NAME = 'notifications';
 
 export async function onlineDatabase() {
   if (!firebase.apps.length) {
@@ -112,13 +114,13 @@ export function getCurrentUserInfo() {
 }
 
 export async function getPlances() {
-  return firebase.database().ref(`/places`).once('value').then((snapshot) => {
+  return firebase.database().ref(`/${PLACES_TABLE_NAME}`).once('value').then((snapshot) => {
     if (snapshot.exists) {
       return snapshot.val()
     } else {
       return []
     }
-  })
+  });
 }
 
 export async function checkIfUserExistsByPhoneNumber(phoneNumber) {
@@ -164,6 +166,42 @@ export async function saveCreditCard(cardInfo) {
     } catch (e) {
       console.log('==== error: ', e)
       return null
+    }
+  }
+  return null;
+}
+
+export async function saveHistory(history) {
+  console.log('====== saveHistory: history: ', history)
+  const uid = firebase.auth().currentUser.uid
+  if (uid) {
+    try {
+      return firebase.database().ref(`${HISTORY_TABLE_NAME}/${uid}`)
+        .set(history).then(() => {
+          return history;
+        });
+    } catch (e) {
+      console.log('==== error: ', e)
+      return null
+    }
+  }
+  return null;
+}
+
+export async function loadHistories() {
+  const uid = firebase.auth().currentUser.uid
+  if (uid) {
+    try {
+      return firebase.database().ref(`/${HISTORY_TABLE_NAME}/${uid}`).once('value').then((snapshot) => {
+        if (snapshot.exists) {
+          return snapshot.val();
+        } else {
+          return [];
+        }
+      });
+    } catch (e) {
+      console.log('==== error: ', e);
+      return null;
     }
   }
   return null;

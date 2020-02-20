@@ -36,11 +36,12 @@ export function doPaymentFailure(result) {
 }
 
 
-export function registerCardRequest(data) {
+export function registerCardRequest(data, auth) {
   return {
     type: types.REGISTER_CARD_REQUEST,
     payload: {
-      ...data
+      customer: {...data},
+      auth
     }
   };
 }

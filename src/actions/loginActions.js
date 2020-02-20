@@ -28,6 +28,14 @@ export function receivedFcm(message) {
   }
 }
 
+export function setOnesignalDevice(oneSignalDevice) {
+  console.log('===== OneSignal Device: ', oneSignalDevice);
+  return {
+    type: types.SET_ONE_SIGNAL_DEVICE,
+    payload: { oneSignalDevice }
+  }
+}
+
 export function loginSuccess(credential) {
   return {
     type: types.LOGIN_SUCCESS,
@@ -35,10 +43,10 @@ export function loginSuccess(credential) {
   }
 }
 
-export function loginSuccessWithSocial(credential) {
+export function loginSuccessWithSocial(credential, auth) {
   return {
     type: types.SOCIAL_LOGIN_SUCCESS,
-    payload: { credential }
+    payload: { credential, auth }
   }
 }
 

@@ -12,7 +12,8 @@ const initialState = {
     token: null,
     fcmListener: null,
     lastMessage: null
-  }
+  },
+  oneSignalDevice: null
 }
 
 export default function reducer(state = initialState, action) {
@@ -101,6 +102,11 @@ export default function reducer(state = initialState, action) {
           fcmListener: state.fcm.fcmListener,
           lastMessage: payload.messsage
         }
+      }
+    case types.SET_ONE_SIGNAL_DEVICE:
+      return {
+        ...state,
+        oneSignalDevice: payload.oneSignalDevice
       }
     case types.LOGIN_LOAD_PREV_STATE:
       return {

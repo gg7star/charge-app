@@ -8,7 +8,7 @@ import {
   createSocialAccount,
   checkIfUserExistsByPhoneNumber
 } from '~/common/services/rn-firebase/database';
-
+import * as notifications from '~/common/services/onesignal/notifications';
 import { createFcmToken, saveFcmToken, startReceiveFcm } from '~/common/services/rn-firebase/message';
 import { AppActions, LoginActions, RentActions, MapActions } from '~/actions';
 
@@ -23,14 +23,16 @@ export default function* watcher() {
 }
 
 export function* processLoadDataOnFirstRunning(action) {
+  const { payload } = action;
   if (
-    action.payload && action.payload.auth &&
-    action.payload.auth.credential && action.payload.auth.credential.user
+    payload && payload.auth &&
+    payload.auth.credential && payload.auth.credential.user
   ) {
     const { providerData, displayName } = action.payload.auth.credential.user;
     const authProvider = (providerData && providerData[0]) ? providerData[0].providerId : null;
-    if((authProvider === PhoneAuth.AUTH_PROVIDER) && !displayName)
+    if((authProvider === PhoneAuth.AUTH_PROVIDER) && !displayName){
       Actions['set_user_info']();
+    }
     else Actions['home']();
   }
 }
@@ -63,15 +65,44 @@ export function* processLoginSuccess(action) {
 }
 
 export function* processSocialLoginSuccess(action) {
-  const { credential } = action.payload;
+  const { credential, auth } = action.payload;
   const resCreateUser = yield call(createSocialAccount, credential);
   if(resCreateUser) {
     if(
       credential.additionalUserInfo && 
       credential.additionalUserInfo.isNewUser
-    ) Actions['hint']();
+    ) {
+      // Send notification
+      var contents = {
+        'en': 'You are registered firstly with your Facebook account.',
+        'fr': 'Vous êtes d\'abord enregistré avec votre compte Facebook.'
+      }
+      var message = { 
+        type: notifications.NONO_NOTIFICATION_TYPES.REGISTERED_FIRST
+      };
+      var otherParameters = {
+        headings: {
+          "en": "Welcome to Nono!",
+          "fr": "Bienvenue chez Nono!"
+        },
+      }
+      if (auth && auth.oneSignalDevice && auth.oneSignalDevice.userId) {
+        notifications.postNotification(
+          contents,
+          message,
+          auth.oneSignalDevice.userId,
+          otherParameters
+        );
+      }
+      // Go to Hint screen
+      console.log('==== Go to Hint.');
+      Actions['hint']();
+    }
     // else Actions['hint']();
-    else Actions['home']();
+    else{
+      console.log('==== Go to Home.');
+      Actions['home']();
+    }
   };
 }
 

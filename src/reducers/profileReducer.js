@@ -59,28 +59,34 @@ const initialState = {
 }
 
 export default function reducer(state = initialState, action) {
+  const types = profileActionTypes;
   switch(action.type) {
-    case profileActionTypes.ADD_COUPON_SUCCESS:
+    case types.ADD_COUPON_SUCCESS:
       return addCoupon(state, action.payload.couponCode)
-    case profileActionTypes.LOAD_HISTORY_SUCCESS:
+    case types.LOAD_HISTORY_SUCCESS:
       return {
         ...state,
         histories: action.payload.histories
       }
-    case profileActionTypes.SELECT_HISTORY:
+    case types.SELECT_HISTORY:
       return {
         ...state,
         history: state.histories[action.payload.index]
       }
-    case profileActionTypes.SELECT_PAY_PRICE:
+    case types.SELECT_PAY_PRICE:
       return {
         ...state,
         payment: action.payload.payment
       }
-    case profileActionTypes.ADD_CREDIT_CARD:
+    case types.ADD_CREDIT_CARD:
       return {
         ...state,
         cardInfo: action.payload.cardInfo
+      }
+    case types.ADD_NOTIFICATION:
+      return {
+        ...state,
+        notifications: [action.payload.notification, ...state.notifications]
       }
     default: 
       return state

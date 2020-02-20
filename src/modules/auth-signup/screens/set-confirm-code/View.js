@@ -32,7 +32,7 @@ export default class SetConfirmCodeView extends React.Component {
       if (isSignup) Actions['signup_set_name']();
       else Actions['home']();
     } catch (e) {
-      console.error('===== failed to confirm code: ', e);
+      console.log('===== failed to confirm code: ', e);
       Alert.alert(
         _t('Failed to confirm your code.'),
         _t('Input valid correct confirm code.'),

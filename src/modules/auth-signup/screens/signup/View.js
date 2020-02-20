@@ -85,7 +85,7 @@ export default class SignupView extends React.Component {
     const res = await loginWithFacebook();
     this.setState({facebookSigning: false});
     if (res.credential) {
-      authActions.loginSuccessWithSocial(res.credential);
+      authActions.loginSuccessWithSocial(res.credential, auth);
     } else {
       authActions.loginFailed(res.error);
       Alert(res.error);

@@ -66,7 +66,7 @@ export function* getAllStations(action) {
     }
   } catch(error) {
     console.log('==== getAllStations response error: ', error);
-    yield put(requestGetAllStationsFailure(error.data));
+    yield put(requestGetAllStationsFailure(error ? error.data : ''));
   }
 }
 

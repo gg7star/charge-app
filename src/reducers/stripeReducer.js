@@ -50,7 +50,7 @@ export default function StripeStateReducer(
     case stripeActionTypes.REGISTER_CARD_REQUEST:
       return {
         ...state,
-        customer: {...action.payload},
+        customer: {...action.payload.customer},
         isFetching: true,
       };
     case stripeActionTypes.REGISTER_CARD_SUCCESS:

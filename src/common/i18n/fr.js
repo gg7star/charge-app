@@ -191,5 +191,6 @@ export default {
   'Vos arbres plantés': 'Your planted trees',
   'Nothing': 'Rien',
   'Not sure': 'Pas certain',
-  'Bank info': 'Infos bancaires'
+  'Bank info': 'Infos bancaires',
+  'Failed to return the buttery. Please try again.': 'Impossible de retourner le beurre. Veuillez réessayer.'
 };

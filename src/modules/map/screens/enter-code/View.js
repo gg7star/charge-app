@@ -9,9 +9,11 @@ import {
   Alert,
   Platform
 } from 'react-native';
-import { Spacer } from '~/common/components';
 import { Actions } from 'react-native-router-flux';
+import Torch from 'react-native-torch';
+import { Spacer } from '~/common/components';
 import { W, H, colors, em } from '~/common/constants';
+import { rentButtery } from '~/common/services/station-gateway/gateway';
 
 export default class ScreenView extends React.Component {
   state = {
@@ -19,13 +21,16 @@ export default class ScreenView extends React.Component {
       containerHeight: H
     },
     // codes: ['', '', '', '', '', '']
-    code: ''
+    code: '',
+    isTorchOn: false
   }
 
   onClickFlash = () => {
-
+    const { isTorchOn } = this.state;
+    Torch.switchState(!isTorchOn);
+    this.setState({ isTorchOn: !isTorchOn });
   }
-
+  
   onClickCross = () => {
     Actions['map_scan_qr']()
   }
@@ -128,14 +133,33 @@ export default class ScreenView extends React.Component {
           // Check stationSN validation
           if (stationSnList && stationSnList.find(e => e.stationSn === code)) {
             this.props.mapActions.scannedQrCode(code);
-            this.props.rentActions.rentStation({
+            const res = rentButtery({
               stationSn: code,
               uuid: auth.credential.user.uid,
               pushToken: auth.fcm.token,
-              deviceType: Platform.OS
-            })
-            // For test
-            Actions['map_first']({initialModal: 'rent'});
+              deviceType: Platform.OS,
+              onesignalUserId: auth.oneSignalDevice.userId
+            });
+            if (res.error) {
+              Alert.alert(
+                'Failed to rent the buttery',
+                `Failed to rent the buttery. Please try, again, later.`,
+                [
+                  {text: 'OK', onPress: () => {}}
+                ],
+                {cancelable: false},
+              );
+            } else {
+              // For test
+              Actions['map_first']({initialModal: 'rent'});
+            }
+            // this.props.rentActions.rentStation({
+            //   stationSn: code,
+            //   uuid: auth.credential.user.uid,
+            //   pushToken: auth.fcm.token,
+            //   deviceType: Platform.OS,
+            //   onesignalUserId: auth.oneSignalDevice.userId
+            // })
           } else {
             Alert.alert(
               'Invalid QR code',

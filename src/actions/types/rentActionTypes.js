@@ -1,4 +1,5 @@
-export const RENT_INIT = 'map/RENT_INIT';
-export const RENT_REQUEST = 'map/RENT_REQUEST';
-export const RENT_SUCCESS = 'map/RENT_SUCCESS';
-export const RENT_FAILURE = 'map/RENT_FAILURE';
+export const RENT_INIT = 'rent/RENT_INIT';
+export const RENT_REQUEST = 'rent/RENT_REQUEST';
+export const RENT_SUCCESS = 'rent/RENT_SUCCESS';
+export const RENT_FAILURE = 'rent/RENT_FAILURE';
+export const RENT_RETURNED_BUTTERY = 'rent/RENT_RETURNED_BUTTERY';

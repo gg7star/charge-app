@@ -5,6 +5,7 @@ import serverUrls from '~/common/constants/api';
 import { AppActions, StripeActions } from '~/actions';
 import { stripeActionTypes } from '~/actions/types';
 import { saveCreditCard } from '~/common/services/rn-firebase/database';
+import * as notifications from '~/common/services/onesignal/notifications';
 
 const {
   doPaymentSuccess,
@@ -54,16 +55,42 @@ export function* saveCardInfo(action) {
   try {
     // Get a list of all stationSn
     console.log('===== calling saveCardInfo: ', action);
+    const { customer, auth } = action.payload;
     const response = yield call(
       processRequest,
       `${serverUrls.apiGatewayServerURL}/payment/stripe/save_card`,
       'POST',
-      action.payload
+      customer
     );
 
     if (response.data.status === 200) {
-      yield put(registerCardSuccess(response.data.data));
-      yield call(saveCreditCard, response.data.data);
+      const customer = response.data.data;
+      const cardInfo = customer.sources.data[0];
+      const {brand, exp_month, exp_year, funding, last4} = cardInfo;
+
+      // Send notification
+      var contents = {
+        'en': `Your credt xxxx${last4} card was registered successfully.`,
+        'fr': `Vous êtes d\'abord enregistré avec votre compte Facebook.`
+      }
+      var message = { 
+        type: notifications.NONO_NOTIFICATION_TYPES.CONNECTED_CARD
+      };
+      var otherParameters = {
+        headings: {
+          "en": "Credit Card",
+          "fr": "Carte de crédit"
+        },
+      }
+      if (auth && auth.oneSignalDevice && auth.oneSignalDevice.userId) {
+        notifications.postNotification(
+          contents, message, 
+          auth.oneSignalDevice.userId, otherParameters
+        );
+      }
+      
+      yield put(registerCardSuccess(customer));
+      yield call(saveCreditCard, customer);
       Actions['map_scan_qr']();
     } else {
       yield put(registerCardFailure({errorMessage: response.data.message}));

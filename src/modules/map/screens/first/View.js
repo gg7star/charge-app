@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Platform } from 'react-native';
+import { View, Platform, Alert } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import stripe from 'tipsi-stripe';
 import Geolocation from 'react-native-geolocation-service';
@@ -20,7 +20,7 @@ import { Spacer } from '~/common/components';
 import MapButton from '~/modules/map/common/components/MapButton';
 import MapView from '~/modules/map/common/components/MapView';
 import ProfileMenuDialog from '~/modules/profile/modals/menu/ProfileMenuDialogContainer';
-
+import { returnButtery } from '~/common/services/station-gateway/gateway';
 import defaultCurrentLocation from '~/common/config/locations';
 
 const GEOLOCATION_OPTION = {
@@ -40,7 +40,8 @@ const GEOLOCATION_WATCH_OPTION = {
 export default class FirstScreenView extends React.Component {
   state = {
     profileOpened: false,
-    activedModal: 'unlock'
+    activedModal: 'unlock',
+    depositingButtery: false
   }
 
   async componentDidMount() {
@@ -61,7 +62,7 @@ export default class FirstScreenView extends React.Component {
     }
     this.setState({...newState});
 
-    await this.initGeoLocation();
+    // await this.initGeoLocation();
   }
 
   async componentWillUnmount() {
@@ -259,8 +260,26 @@ export default class FirstScreenView extends React.Component {
   }
 
   onDeposit = async () => {
-    const { auth, stripeActions, rentActions } = this.props;
-    Actions['admob']({adMode: 'reward'});
+    const { auth, rent, stripeActions, rentActions, appActions } = this.props;
+    const { _t } = appActions;
+    // rentActions.returnedButtery(rent, auth);
+    this.setState({depositingButtery: true});
+    const res = await returnButtery(rent, auth);
+    console.log('===== res: ', res);
+    if (res.error) {
+      Alert.alert(
+        _t('Failed to return the buttery. Please try again.'),
+        _t(res.errorMessage),
+        [
+          {text: _t('OK'), onPress: () => console.log('OK Pressed')},
+        ],
+        {cancelable: true},
+      );
+      this.setState({depositingButtery: false});
+      return;
+    } else {
+      Actions['admob']({adMode: 'reward'});
+    }
   }
 
   openFeedbackDialog = () => {
@@ -282,11 +301,14 @@ export default class FirstScreenView extends React.Component {
               .then(stripeTokenInfo => {
                 console.log('Token created: ', stripeTokenInfo);
                 // call payment function
-                stripeActions.registerCardRequest({
-                  email: auth.credential.user.email,
-                  tokenId: stripeTokenInfo.tokenId,
-                  stripeTokenInfo
-                })
+                stripeActions.registerCardRequest(
+                  {
+                    email: auth.credential.user.email,
+                    tokenId: stripeTokenInfo.tokenId,
+                    stripeTokenInfo
+                  },
+                  auth
+                )
               })
               .catch(error => {
                 console.log('Register card failed', { error });
@@ -367,7 +389,7 @@ export default class FirstScreenView extends React.Component {
         }
         {activedModal=='rent' && 
           // <RentDialog onBuy={this.openFeedbackDialog} onDeposit={this.openFeedbackDialog} />
-          <RentDialog onBuy={this.onBuy} onDeposit={this.onDeposit} />
+          <RentDialog onBuy={this.onBuy} onDeposit={this.onDeposit} loading={this.depositingButtery}/>
         }
         {activedModal=='feedback' && 
           <FeedbackDialog onClose={this.closeFeedbackDialog} />

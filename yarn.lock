@@ -7610,6 +7610,11 @@ react-native-text-size@^2.0.4:
   resolved "https://registry.yarnpkg.com/react-native-text-size/-/react-native-text-size-2.1.1.tgz#e26823c4504576964acc258db44009df81189332"
   integrity sha512-dkzmfFiKY4iwk73cvgrbUZ5HFB8ZdOFErRVhDWKBNxML/59dDkzTITBaZ8GKwsfGxNHKOXdHD2JdOoPRwAE+yQ==
 
+react-native-torch@^1.1.5:
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/react-native-torch/-/react-native-torch-1.1.5.tgz#165a8b22b66c2b55e188d38604318712282ca0cf"
+  integrity sha512-o6L/HBb9MhDF59ite09RSDmdZSlgrM8ARPPV236Insg8Tt6Qw+sqnojDdXbPYbg0ZjmPZ9KMe6JAlCq+v/dAvg==
+
 react-native-touchable-scale@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/react-native-touchable-scale/-/react-native-touchable-scale-2.1.0.tgz#65d143f9ead9f0eb8f62489264c814312009bf84"

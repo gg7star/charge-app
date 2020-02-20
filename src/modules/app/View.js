@@ -12,16 +12,18 @@ import {
   saveFcmToken
 } from '~/common/services/rn-firebase/message';
 import { SplashView } from '~/common/components';
+import { NONO_NOTIFICATION_TYPES } from '~/common/services/onesignal/notifications';
+import { rentSuccess } from '~/actions/rentActions';
 
 export default class AppView extends Component {
   state = {
     fcmListener: null,
     fcmToken: null,
-    loaded: false
+    loaded: false,
   };
 
   componentDidMount() {
-    
+    _app = this;
   }
   
   async UNSAFE_componentWillReceiveProps(nextProps) {
@@ -36,11 +38,12 @@ export default class AppView extends Component {
   }
 
   async componentWillUnmount() {
+    const { auth, loginActions, profileActions } = this.props;
     OneSignal.removeEventListener('received', this.onReceived);
     OneSignal.removeEventListener('opened', this.onOpened);
-    OneSignal.removeEventListener('ids', this.onIds);
-
-    const { auth } = this.props;
+    OneSignal.removeEventListener('ids', loginActions.setOnesignalDevice);
+    OneSignal.removeEventListener('inAppMessageClicked', this.onInAppClicked);
+    
     (auth && auth.fcm && auth.fcm.fcmListener) && auth.fcm.fcmListener();
 
     // Geolocation.stopObserving();
@@ -53,8 +56,8 @@ export default class AppView extends Component {
       signup,
       appActions,
       loginActions,
-      signupActions,
-      mapActions
+      mapActions,
+      profileActions
     } = this.props;
 
     appActions.setLanguage(app.language || 'fr');
@@ -64,13 +67,18 @@ export default class AppView extends Component {
     // Check permissions
     const cameraStatus = await request(PERMISSIONS.IOS.CAMERA);
     // Onsignal
-    OneSignal.init(onesignalConfig.key);
+    OneSignal.init(onesignalConfig.appId);
+    OneSignal.inFocusDisplaying(2);
     OneSignal.addEventListener('received', this.onReceived);
     OneSignal.addEventListener('opened', this.onOpened);
-    OneSignal.addEventListener('ids', this.onIds);
+    OneSignal.addEventListener('ids', loginActions.setOnesignalDevice);
+    OneSignal.addEventListener('inAppMessageClicked', this.onInAppClicked);
 
     // Fcm
     const fcmToken = await createFcmToken();
+    const notificationListiner = await startReceiveFcm(
+      profileActions.addNotification
+    );
     loginActions.setFcmToken(fcmToken);
 
     // Map
@@ -83,20 +91,35 @@ export default class AppView extends Component {
     // }
   }
 
-  onReceived(notification) {
-    console.log("Notification received: ", notification);
+  onReceived = (notification) => {
+    console.log("==== Notification received: ", notification);
+    console.log('==== this: ', this);
+    this.props.profileActions.addNotification(notification);
+    const { additionalData } = notification;
+    if (additionalData) {
+      const { p2p_notification } = additionalData;
+      if (p2p_notification.type === NONO_NOTIFICATION_TYPES.RENT_BATTERY) {
+        console.log('==== received rent battery response: message: ', p2p_notification.data);
+        rentSuccess({...p2p_notification.data}, auth);
+      }
+    }
   }
 
-  onOpened(openResult) {
+  onOpened = (openResult) => {
     console.log('Message: ', openResult.notification.payload.body);
     console.log('Data: ', openResult.notification.payload.additionalData);
     console.log('isActive: ', openResult.notification.isAppInFocus);
     console.log('openResult: ', openResult);
-  }
+  };
 
-  onIds(device) {
-    console.log('Device info: ', device);
-  }
+  onIds = (device) => {
+    console.log('==== Device info: ', device);
+    this.props.loginActions.setOnesignalDevice(device);
+  };
+
+  onInAppClicked = (message) => {
+    console.log('===== message: ', message);
+  };
 
   setFcmListiner = (fcmListener) => {
     console.log('===== fcmListener: ', fcmListener);

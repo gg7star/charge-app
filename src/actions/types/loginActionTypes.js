@@ -12,6 +12,7 @@ export const SOCIAL_LOGIN_SUCCESS = 'auth/SOCIAL_LOGIN_SUCCESS';
 export const SOCIAL_LOGIN_FAILED = 'auth/SOCIAL_LOGIN_FAILED';
 export const SET_FCM_TOKEN = 'auth/SET_FCM_TOKEN';
 export const SET_FCM_LISTENER = 'auth/SET_FCM_LISTENER';
+export const SET_ONE_SIGNAL_DEVICE = 'auth/SET_ONE_SIGNAL_DEVICE';
 export const RECEIVED_FCM = 'auth/RECEIVED_FCM';
 export const LOGIN_LOAD_PREV_STATE = 'auth/LOGIN_LOAD_PREV_STATE';
 export const UPDATED_USER_INFO = 'auth/UPDATED_USER_INFO';
