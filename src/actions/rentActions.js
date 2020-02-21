@@ -17,6 +17,7 @@ export function rentSuccess({tradeNo, powerBankSn, slotNum, msg}, auth) {
 }
 
 export function rentFailure({error}) {
+  console.log('===== rentFailure');
   return {
     type: types.RENT_FAILURE,
     payload: { statusMessage: error }

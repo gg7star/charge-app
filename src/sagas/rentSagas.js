@@ -13,6 +13,7 @@ const { setGlobalNotification } = AppActions;
 export default function* watcher() {
   // yield takeLatest(rentActionTypes.RENT_REQUEST, rentStationProcess);
   yield takeLatest(rentActionTypes.RENT_SUCCESS, rentSuccessProcess);
+  yield takeLatest(rentActionTypes.RENT_FAILURE, rentFailedProcess);
   yield takeLatest(rentActionTypes.RENT_RETURNED_BUTTERY, rentReturnButteryProcess);
 }
 
@@ -47,28 +48,33 @@ export default function* watcher() {
 
 export function* rentSuccessProcess(action) {
   const { powerBankSn, slotNum, auth } = action.payload;
-  // Send notification
-  var contents = {
-    'en': `You rented a buttery. powerBank: ${powerBankSn}, slotNumber: ${slotNum}`,
-    'fr': `Vous avez loué un beurre. powerBank: ${powerBankSn}, slotNumber: ${slotNum}`
-  };
-  var message = {
-    type: notifications.NONO_NOTIFICATION_TYPES.RENT_BUTTERY
-  };
-  var otherParameters = {
-    headings: {
-      "en": "Rent buttery",
-      "fr": "Louer beurre"
-    },
-  };
-  if (auth && auth.oneSignalDevice && auth.oneSignalDevice.userId) {
-    notifications.postNotification(
-      contents, message, 
-      auth.oneSignalDevice.userId, otherParameters
-    );
-  }
+  // // Send notification
+  // var contents = {
+  //   'en': `You rented a buttery. powerBank: ${powerBankSn}, slotNumber: ${slotNum}`,
+  //   'fr': `Vous avez loué un beurre. powerBank: ${powerBankSn}, slotNumber: ${slotNum}`
+  // };
+  // var message = {
+  //   type: notifications.NONO_NOTIFICATION_TYPES.RENT_BUTTERY
+  // };
+  // var otherParameters = {
+  //   headings: {
+  //     "en": "Rent buttery",
+  //     "fr": "Louer beurre"
+  //   },
+  // };
+  // if (auth && auth.oneSignalDevice && auth.oneSignalDevice.userId) {
+  //   notifications.postNotification(
+  //     contents, message, 
+  //     auth.oneSignalDevice.userId, otherParameters
+  //   );
+  // }
 
   Actions['map_first']({initialModal: 'rent'});
+}
+
+export function* rentFailedProcess(action) {
+  console.log('==== Go to map_scan_qr');
+  Actions['map_scan_qr']()
 }
 
 export function* rentReturnButteryProcess(action) {

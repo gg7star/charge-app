@@ -13,7 +13,7 @@ import {
 } from '~/common/services/rn-firebase/message';
 import { SplashView } from '~/common/components';
 import { NONO_NOTIFICATION_TYPES } from '~/common/services/onesignal/notifications';
-import { rentSuccess } from '~/actions/rentActions';
+// import { rentSuccess, rentFailure } from '~/actions/rentActions';
 
 export default class AppView extends Component {
   state = {
@@ -69,7 +69,7 @@ export default class AppView extends Component {
     // Onsignal
     OneSignal.init(onesignalConfig.appId);
     OneSignal.inFocusDisplaying(2);
-    OneSignal.addEventListener('received', this.onReceived);
+    OneSignal.addEventListener('received', (notification) => this.onReceived(this, notification));
     OneSignal.addEventListener('opened', this.onOpened);
     OneSignal.addEventListener('ids', loginActions.setOnesignalDevice);
     OneSignal.addEventListener('inAppMessageClicked', this.onInAppClicked);
@@ -91,16 +91,27 @@ export default class AppView extends Component {
     // }
   }
 
-  onReceived = (notification) => {
-    console.log("==== Notification received: ", notification);
-    console.log('==== this: ', this);
+  onReceived = (_this, notification) => {
+    console.log("==== Notification received: ", notification, _this);
     this.props.profileActions.addNotification(notification);
-    const { additionalData } = notification;
+    const { additionalData } = notification.payload;
+    console.log('=== additionalData: ', additionalData);
     if (additionalData) {
-      const { p2p_notification } = additionalData;
-      if (p2p_notification.type === NONO_NOTIFICATION_TYPES.RENT_BATTERY) {
-        console.log('==== received rent battery response: message: ', p2p_notification.data);
-        rentSuccess({...p2p_notification.data}, auth);
+      const notificationData = additionalData.p2p_notification ? additionalData.p2p_notification : additionalData;
+      console.log('=== notificationData: ', notificationData);
+      const { type } = notificationData;
+      console.log('====== type: ', type, NONO_NOTIFICATION_TYPES.FAILED_RENT_BATTERY)
+      switch(type) {
+        case NONO_NOTIFICATION_TYPES.RENT_BATTERY:
+          console.log('==== received rent battery response: message: ', notificationData.data);
+          _this.onRentSuccess({...notificationData.data});
+          break;
+        case NONO_NOTIFICATION_TYPES.FAILED_RENT_BATTERY:
+          console.log('==== received failed to rent battery response: message: ', notificationData.data);
+          _this.onRentFailure({error: notificationData.data.msg});
+          break;
+        default:
+          break;
       }
     }
   }
@@ -124,6 +135,16 @@ export default class AppView extends Component {
   setFcmListiner = (fcmListener) => {
     console.log('===== fcmListener: ', fcmListener);
     this.setState({fcmListener});
+  }
+
+  onRentSuccess = (data) => {
+    const { auth, rentActions } = this.props;
+    rentActions.rentSuccess(data, auth);
+  }
+
+  onRentFailure = (error) => {
+    const { auth, rentActions } = this.props;
+    rentActions.rentFailure(error);
   }
 
   render() {

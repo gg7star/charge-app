@@ -53,6 +53,12 @@ open other console and run this command
   $ react-native run-ios
 ```
 
+or with device 
+
+```
+  $ react-native run-ios --device --udid 00008020-001939191138002E
+```
+
 ### Troubleshooting
 
 * Failed `pod install`

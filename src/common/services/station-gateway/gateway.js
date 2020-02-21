@@ -13,7 +13,7 @@ export async function rentButtery(data, auth) {
   // const data = {
   //   stationSn: stationSn,
   //   tradeNo: tradeNo,
-  //   soltNum: slotNum,
+  //   slotNum: slotNum,
   //   pushToken: auth.fcm.token,
   //   uuid: auth.credential.user.uid,
   //   onesignalUserId: auth.oneSignalDevice.userId
@@ -40,7 +40,7 @@ export async function returnButtery(rent, auth) {
   const data = {
     stationSn: stationSn,
     tradeNo: tradeNo,
-    soltNum: slotNum,
+    slotNum: slotNum,
     pushToken: auth.fcm.token,
     uuid: auth.credential.user.uid,
     onesignalUserId: auth.oneSignalDevice.userId

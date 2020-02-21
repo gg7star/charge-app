@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { bindActionCreators } from 'redux';
-import { AppActions, LoginActions, SignupActions, MapActions, ProfileActions } from '~/actions';
+import { AppActions, LoginActions, SignupActions, MapActions, ProfileActions, RentActions } from '~/actions';
 import AppView from './View';
 
 const mapStateToProps = state => ({
@@ -16,7 +16,8 @@ const mapDispatchToProps = dispatch => ({
   loginActions: bindActionCreators(LoginActions, dispatch),
   signupActions: bindActionCreators(SignupActions, dispatch),
   mapActions: bindActionCreators(MapActions, dispatch),
-  profileActions: bindActionCreators(ProfileActions, dispatch)
+  profileActions: bindActionCreators(ProfileActions, dispatch),
+  rentActions: bindActionCreators(RentActions, dispatch),
 });
 
 export default compose(
