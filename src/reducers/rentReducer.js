@@ -12,7 +12,7 @@ const initialState = {
   // callback data
   tradeNo: null,
   powerBankSn: null,
-  slotNum: 0,
+  slotNum: -1,
   msg: 0,
   // check doing
   isFetching: false,
@@ -37,6 +37,9 @@ export default function reducer(state = initialState, action) {
         deviceType: action.payload.deviceType,
         onesignalUserId: action.payload.onesignalUserId,
         isFetching: true,
+        tradeNo: null,
+        powerBankSn: null,
+        slotNum: -1,
         statusMessage: 'During rent device...'
       }
     case rentActionTypes.RENT_SUCCESS:
@@ -49,14 +52,12 @@ export default function reducer(state = initialState, action) {
           slotNum: action.payload.slotNum,
           msg: action.payload.msg,
           statusMessage: 'rented this device.',
-          startTime: moment().format('DD/MM/YY LT'),
+          startTime: moment().format('DD/MM/YY LTS'),
           endTime: null
         }
     case rentActionTypes.RENT_FAILURE:
       return {
-        ...state,
-        isRented: false,
-        isFetching: false,
+        ...initialState,
         statusMessage: action.payload.statusMessage
       }
     case rentActionTypes.RENT_RETURNED_BUTTERY:
@@ -64,7 +65,7 @@ export default function reducer(state = initialState, action) {
         ...state,
         isRented: false,
         isFetching: false,
-        endTime: moment().format('DD/MM/YY LT')
+        endTime: moment().format('DD/MM/YY LTS')
       }
     default: 
       return state

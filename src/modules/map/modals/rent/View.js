@@ -4,14 +4,55 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import RentDialogWrapper from '../../common/wrappers/RentDialogWrapper'
 import { Spacer, Button } from '~/common/components'
 import { colors, W, H, em } from '~/common/constants'
+import moment from 'moment';
 
-export default class Dialog extends React.Component {  
+export default class RentDialog extends React.Component {  
   state = {
-    time: '00:02'
+    duration: '00:00:00',
+    calcuating: true
   }
 
+  componentDidMount() {
+    this.onTimer();
+  };
+
+  onTimer = () => {
+    const _this = this;
+    setTimeout(() => {
+      this.setState({duration: this.calculateDuration}, () => {
+        if (_this.state.calcuating) _this.onTimer();
+      });
+    }, 1000);
+  };
+
+  componentWillUnmount = () => {
+    this.setState({calcuating: false});
+  }
+
+  calculateDuration = () => {
+    const { rent } = this.props;
+    
+    if (!rent.startTime) return `00:00:00`;
+
+    var startTime = moment(rent.startTime);
+    // var startTime = this.state.startTime;
+    var endTime = moment(); 
+    // calculate total duration
+    var duration = moment.duration(endTime.diff(startTime));
+    var hours = parseInt(duration.asHours());
+    var minutes = parseInt(duration.asMinutes())%60;
+    var seconds = parseInt(duration.asSeconds())%60;
+
+    var strHours = ("0" + hours).slice(-2);
+    var strMinues = ("0" + minutes).slice(-2);
+    var strSeconds = ("0" + seconds).slice(-2);
+
+    return `${strHours}:${strMinues}:${strSeconds}`;
+  };
+
   render() {
-    const stripeProps = this.props.stripePayment
+    const stripeProps = this.props.stripePayment;
+    
     return (
       <RentDialogWrapper>
         <Spinner
@@ -43,7 +84,7 @@ export default class Dialog extends React.Component {
           color: '#fff', fontSize: 36, fontWeight: 'bold',
           lineHeight: 70
         }}>
-          {this.state.time}
+          {this.calculateDuration()}
         </Text>
       </View>
     )

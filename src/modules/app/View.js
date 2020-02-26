@@ -100,7 +100,6 @@ export default class AppView extends Component {
       const notificationData = additionalData.p2p_notification ? additionalData.p2p_notification : additionalData;
       console.log('=== notificationData: ', notificationData);
       const { type } = notificationData;
-      console.log('====== type: ', type, NONO_NOTIFICATION_TYPES.FAILED_RENT_BATTERY)
       switch(type) {
         case NONO_NOTIFICATION_TYPES.RENT_BATTERY:
           console.log('==== received rent battery response: message: ', notificationData.data);

@@ -2,6 +2,12 @@ import { rentActionTypes } from './types';
 
 const types = rentActionTypes;
 
+export function rentInit() {
+  return {
+    type: types.RENT_INIT
+  }
+}
+
 export function rentStation({stationSn, uuid, pushToken, deviceType, onesignalUserId}) {
   return {
     type: types.RENT_REQUEST,
@@ -27,6 +33,13 @@ export function rentFailure({error}) {
 export function returnedButtery(rent, auth) {
   return {
     type: types.RENT_RETURNED_BUTTERY,
+    payload: { rent, auth }
+  }
+}
+
+export function returnedButteryFailed(rent, auth) {
+  return {
+    type: types.RENT_RETURNED_BUTTERY_FAILED,
     payload: { rent, auth }
   }
 }

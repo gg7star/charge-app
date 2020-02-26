@@ -62,7 +62,7 @@ export default class FirstScreenView extends React.Component {
     }
     this.setState({...newState});
 
-    // await this.initGeoLocation();
+    await this.initGeoLocation();
   }
 
   async componentWillUnmount() {

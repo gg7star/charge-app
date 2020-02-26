@@ -3,6 +3,7 @@ import { View, ScrollView, Image, Text, TouchableOpacity, Alert, Platform } from
 import { Actions } from 'react-native-router-flux';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Torch from 'react-native-torch';
+import Spinner from 'react-native-loading-spinner-overlay';
 import { W, H, em } from '~/common/constants';
 import { Spacer } from '~/common/components';
 import QRScanner from './components/QRScanner';
@@ -12,8 +13,18 @@ export default class ScanQRView extends React.Component {
   state = {
     qrCode: '',
     scanBarAnimateReverse: true,
-    isTorchOn: false
+    isTorchOn: false,
+    rentingButtery: false,
+    startRentTime: null
   };
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    const { rent } = nextProps;
+    const { isRented, isFetching } = rent;
+    const { rentingButtery } = this.state;
+    
+    this.setState({ rentingButtery: isFetching });
+  }
 
   onFlash = () => {
     const { isTorchOn } = this.state;
@@ -21,12 +32,18 @@ export default class ScanQRView extends React.Component {
     this.setState({ isTorchOn: !isTorchOn });
   };
 
-
   onClickClose = () => {
-    Actions['map_first']()
+    Actions['map_first']();
   };
 
+  onRentTimedOut = () => {
+    console.log('===== this.onRentTimedOut');
+    this.setState({rentingButtery: false});
+    this.props.rentActions.rentFailure({error: 'Timed out'});
+  }
+
   onReceivedQRCode = (scanedQrCode, callbackResumScan) => {
+    const _this = this;
     this.setState({qrCode: scanedQrCode, scanBarAnimateReverse: false}, () => {
       var temp = scanedQrCode.split(' ');
       // For test
@@ -37,6 +54,7 @@ export default class ScanQRView extends React.Component {
       const { stationSnList } = map;
       if (stationSnList && stationSnList.find(e => e.stationSn === parsedStationSn)) {
         mapActions.scannedQrCode(parsedStationSn);
+        this.setState({rentingButtery: true});
         const res = rentButtery({
           stationSn: parsedStationSn,
           uuid: auth.credential.user.uid,
@@ -49,21 +67,36 @@ export default class ScanQRView extends React.Component {
             'Failed to rent the buttery',
             `Failed to rent the buttery. Please try, again, later.`,
             [
-              {text: 'OK', onPress: () => {}}
+              {text: 'OK', onPress: this.onRentTimedOut}
             ],
             {cancelable: false},
           );
         } else {
+          setTimeout(() => {
+            if (_this.state.rentingButtery) {
+              Alert.alert(
+                'Renting timed out', 
+                'Timed out to rent buttery. Please try later.'
+                [
+                  {text: 'OK', onPress: () => this.onRentTimedOut()}
+                ],
+                {cancelable: false},
+              );
+              this.onRentTimedOut();
+            }
+          }, 30000);
+          rentActions.rentStation({
+            stationSn: parsedStationSn,
+            uuid: auth.credential.user.uid,
+            pushToken: auth.fcm.token,
+            deviceType: Platform.OS,
+            onesignalUserId: auth.oneSignalDevice.userId
+          });
+         
           // For test
           Actions['map_first']({initialModal: 'rent'});
         }
-        // rentActions.rentStation({
-        //   stationSn: parsedStationSn,
-        //   uuid: auth.credential.user.uid,
-        //   pushToken: auth.fcm.token,
-        //   deviceType: Platform.OS,
-        //   onesignalUserId: auth.oneSignalDevice.userId
-        // });
+        
       } else {
         Alert.alert(
           'Invalid QR code',
@@ -174,7 +207,7 @@ export default class ScanQRView extends React.Component {
   };
 
   render = () => {
-    const { qrCode } = this.state;
+    const { qrCode, rentingButtery } = this.state;
     const { onSwitchToQRCodeInput, appActions } = this.props;
     const { _t } = appActions;
     return (
@@ -185,6 +218,11 @@ export default class ScanQRView extends React.Component {
           renderFooterView={ <this.renderBottom onSwitchToQRCodeInput={onSwitchToQRCodeInput}/>}
           scanBarAnimateReverse={ true }
           hintText={`${_t('QR code not detected?')} ${_t('Enter the number of the station')}`}
+        />
+        <Spinner
+          visible={rentingButtery}
+          textContent={_t('Renting a buttery...')}
+          textStyle={{color: '#FFF'}}
         />
       </View>
     )
