@@ -3,6 +3,7 @@ import HintWrapper from './HintWrapper'
 import HintView from './HintView'
 import { Actions } from 'react-native-router-flux'
 
+const SCAN_IMAGE = require('~/common/assets/images/png/guide-scan.png')
 export default class View extends React.Component {
   render() {
     const { _t } = this.props.appActions
@@ -11,7 +12,7 @@ export default class View extends React.Component {
       <HintWrapper onGoBack={this.onGoBack} onClose={this.onClose}>
         <HintView
           onGoNext={this.onGoNext}
-          image={require('~/common/assets/images/png/guide-scan.png')}
+          image={SCAN_IMAGE}
           title={_t('Scan and unlock a nono')}
           desc={_t('Scan the QR code on the station.')+' '+_t('Your nono is unlocked!')}
           nextButtonTitle={_t('Next')}

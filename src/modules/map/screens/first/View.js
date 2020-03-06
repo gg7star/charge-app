@@ -63,6 +63,7 @@ export default class FirstScreenView extends React.Component {
     this.setState({...newState});
 
     await this.initGeoLocation();
+    this.onClickPosition();
   }
 
   async componentWillUnmount() {
@@ -76,17 +77,17 @@ export default class FirstScreenView extends React.Component {
       // Map
       const _this = this;
       // Get current location
-      Geolocation.getCurrentPosition(
-        (position) => { _this.handleGetCurrentLocation(position) },
-        (error) => { _this.handleCurrentLocationError(error) },
-        GEOLOCATION_OPTION
-      );
+      // Geolocation.getCurrentPosition(
+      //   (position) => { _this.handleGetCurrentLocation(position) },
+      //   (error) => { _this.handleCurrentLocationError(error) },
+      //   GEOLOCATION_OPTION
+      // );
 
-      Geolocation.watchPosition(
-        (position) => { _this.handleGetCurrentLocation(position) },
-        (error) => { _this.handleCurrentLocationError(error) },
-        GEOLOCATION_WATCH_OPTION
-      );
+      // Geolocation.watchPosition(
+      //   (position) => { _this.handleGetCurrentLocation(position) },
+      //   (error) => { _this.handleCurrentLocationError(error) },
+      //   GEOLOCATION_WATCH_OPTION
+      // );
     }
   }
 
@@ -117,13 +118,26 @@ export default class FirstScreenView extends React.Component {
     return false;
   }
 
-  handleGetCurrentLocation = (position) => {
+  handleGetCurrentLocationFromGoogleMap = (coordinate) => {
     const { mapActions } = this.props;
     const newLocation = {
       name: "My location",
       coordinate: {
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
+        ...coordinate,
+        error: null,
+      }
+    };
+    mapActions.changedCurrentLocation(newLocation);
+    mapActions.searchPlaces('', newLocation, null);
+  }
+
+  handleGetCurrentLocation = (position) => {
+    console.log('===== handleGetCurrentLocatioin: position: ', position);
+    const { mapActions } = this.props;
+    const newLocation = {
+      name: "My location",
+      coordinate: {
+        ...position.coords,
         error: null,
       }
     };
@@ -336,6 +350,7 @@ export default class FirstScreenView extends React.Component {
           selectedPlace={place}
           onSelectMarker={this.openNearPlacesDialog}
           onDetectDirection={this.handleDetectDirection}
+          onDetectCurrentLocation={this.handleGetCurrentLocationFromGoogleMap}
           ref={c => this.mapView = c}
         >
           <MapButton

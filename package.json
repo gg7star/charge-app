@@ -24,6 +24,7 @@
     "babel": "^6.23.0",
     "babel-plugin-module-alias": "^1.6.0",
     "buffer": "^5.4.3",
+    "convert-units": "^2.3.4",
     "firebase": "^7.5.0",
     "i18n-js": "^3.5.0",
     "jetifier": "^1.6.5",

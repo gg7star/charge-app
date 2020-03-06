@@ -14,10 +14,10 @@ export default class Dialog extends React.Component {
         <View style={{ flexDirection: 'row' }}>
           <View style={{width: 250*em}}>
             <Text style={{ fontWeight: 'bold', fontSize: 22, color: colors.primary }}>
-              {`${direction.duration} min`}
+              {`${direction.duration}`}
             </Text>
             <Text style={{ fontSize: 15*em, color: '#7e888d'}}>
-              {`${direction.duration}mn - ${direction.distance}m`}
+              {`${direction.duration} - ${direction.distance}`}
             </Text>
           </View>
           <View style={{ width: 70*em }}>

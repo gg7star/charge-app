@@ -2,7 +2,7 @@
 import OneSignal from 'react-native-onesignal';
 import onesignalConfig from '~/common/config/onesignal';
 
-export const postNotification = (contents, data, playerId, otherParameters) =>{
+export const postNotification = (contents, data, playerId, otherParameters) => {
   try {
     OneSignal.postNotification(contents, data, playerId, otherParameters);//, otherParameters);
   } catch (error) {

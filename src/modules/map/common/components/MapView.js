@@ -3,6 +3,7 @@ import MapView, { PROVIDER_GOOGLE, Polyline } from 'react-native-maps';
 import { Dimensions, View, Image, Platform } from 'react-native';
 import MapViewDirections from 'react-native-maps-directions';
 import googleMapConfig from '~/common/config/googleMap';
+import convertUnits from 'convert-units';
 import { W, H } from '~/common/constants';
 import { generateColor } from '~/common/utils/gradientColor';
 import defaultCurrentLocation from '~/common/config/locations';
@@ -20,7 +21,9 @@ const CURRENT_LOCATION_IMAGE = require('~/common/assets/images/png/currentLocati
 export default class CustomMapView extends React.Component {
   state = {
     mapView: null,
-    directionCoordinates: []
+    directionCoordinates: [],
+    degree: 0,
+    currentLocation: this.props.currentLocation
   }
 
   onGoToLocation = (coordinate) => {
@@ -32,10 +35,9 @@ export default class CustomMapView extends React.Component {
     });  
   };
 
-
   renderMarkers = () => {
     const { places, selectedPlace } = this.props
-    const currentLocation = this.props.currentLocation || defaultCurrentLocation;
+    // const currentLocation = this.state.currentLocation;
     const selectedIndex = places.findIndex(p => {
         return selectedPlace && p.name === selectedPlace.name
       });
@@ -61,13 +63,13 @@ export default class CustomMapView extends React.Component {
                 <Image
                   source={placeImage}
                   style={{width: 40, height: 40}}
-                />            
+                />
               </MapView.Marker>
               );
             }
           })
         }
-        { currentLocation.coordinate && this.renderCurrentLocationMarker() }
+       {/* { (currentLocation && currentLocation.coordinate) && this.renderCurrentLocationMarker() } */}
       </React.Fragment>
     )
   };
@@ -78,25 +80,36 @@ export default class CustomMapView extends React.Component {
     return Math.atan2(y, x) * 180 / Math.PI + 90;
   };
 
+  onUserLocationChange = async (currLoc) => {
+    // console.log('====== onUserLocationChange: currLoc: ', currLoc.nativeEvent);
+    if (currLoc.nativeEvent && currLoc.nativeEvent.coordinate) {
+      const { onDetectCurrentLocation } = this.props;
+      onDetectCurrentLocation && onDetectCurrentLocation(currLoc.nativeEvent.coordinate);
+      this.setState({currentLocation: {coordinate: currLoc.nativeEvent.coordinate}})
+    }
+  };
+
   renderCurrentLocationMarker = () => {
-    const currentLocation = this.props.currentLocation || defaultCurrentLocation;
+    const currentLocation = this.state.currentLocation;
     const { directionCoordinates } = this.state;
-    const degree = (directionCoordinates.length > 2)
-      ? this.calculateDegree(directionCoordinates[0], directionCoordinates[1])
-      : 90;
+    // const degree = (directionCoordinates.length > 2)
+    //   ? this.calculateDegree(directionCoordinates[0], directionCoordinates[1])
+    //   : 90;
     
     return (
-      <MapView.Marker
+      <MapView.Marker.Animated
         key={'my-location'}
         coordinate={currentLocation.coordinate}
         anchor={{x: 0.5, y: 0.5}}
-        // title={'Me'}
+        rotation={130}
       >
-        <Image
+       <Image
           source={CURRENT_LOCATION_IMAGE}
-          style={{width: 44, height: 40, transform: [{rotate: `${degree}deg`}],}}
+          style={{width: 44, height: 40,
+            // transform: [{rotate: `${degree}deg`}],
+          }}
         />
-      </MapView.Marker>
+      </MapView.Marker.Animated>
     )
   };
 
@@ -117,22 +130,23 @@ export default class CustomMapView extends React.Component {
         strokeColor={startColor}
         strokeColors={strokeColors}
       />
-    )
+    );
   };
 
   render() {
-    const { children } = this.props;
-    const { selectedPlace, onDetectDirection } = this.props;
-    const currentLocation = this.props.currentLocation || defaultCurrentLocation;
+    const { directionCoordinates, currentLocation } = this.state;
+    const { selectedPlace, onDetectDirection, children } = this.props;
     const GOOGLE_MAPS_APIKEY = Platform.OS === 'ios' 
       ? googleMapConfig.IOS_GOOGLE_MAPS_APIKEY
       : googleMapConfig.ANDROID_GOOGLE_MAPS_APIKEY;
-    const region = {
-      latitude: currentLocation.coordinate.latitude,
-      longitude: currentLocation.coordinate.longitude,
-      latitudeDelta: LATITUDE_DELTA,
-      longitudeDelta: LONGITUDE_DELTA,
-    };
+    var region = null;
+    if (currentLocation)
+      region = {
+        latitude: currentLocation.coordinate.latitude,
+        longitude: currentLocation.coordinate.longitude,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA,
+      };
 
     return (
       <View 
@@ -147,14 +161,16 @@ export default class CustomMapView extends React.Component {
             initialRegion={region}
             provider={PROVIDER_GOOGLE}
             mapType={Platform.OS == "android" ? "terrain" : "standard"}
-            // showsUserLocation={true}
-            // showsMyLocationButton={true}
+            showsUserLocation={true}
             // followsUserLocation={true}
             showsCompass={true}
             rotateEnabled={true}
             loadingEnabled={true}
             showsBuildings={true}
             pitchEnabled={true}
+            rotateEnabled={true}
+            onUserLocationChange={this.onUserLocationChange}
+            zoomTapEnabled={false}
             ref={c => this.mapView = c}
           >
             { this.renderMarkers() }
@@ -163,7 +179,7 @@ export default class CustomMapView extends React.Component {
                 origin={currentLocation.coordinate}
                 destination={selectedPlace.coordinate}
                 apikey={GOOGLE_MAPS_APIKEY}
-                mode={'WALKING'}
+                mode={"WALKING"}
                 strokeWidth={0}
                 strokeColor="hotpink"
                 optimizeWaypoints={true}
@@ -172,12 +188,21 @@ export default class CustomMapView extends React.Component {
                   console.log(`Started routing between "${params.origin}" and "${params.destination}"`);
                 }}
                 onReady={result => {
-                  console.log(`==== Distance: ${result.distance} km`)
-                  console.log(`==== Duration: ${result.duration} min.`)
                   console.log('====== result: ', result);
+                  if (!result) {
+                    console.log('====== reset direction');
+                    this.setState({directionCoordinates: []});
+                    onDetectDirection && onDetectDirection({
+                      distance: null,
+                      duration: null
+                    });
+                    return;
+                  }
+                  var distance = convertUnits(result.distance).from('km').toBest({ cutOffNumber: 1 });
+                  var duration = convertUnits(result.duration).from('min').toBest({ cutOffNumber: 1 });
                   onDetectDirection && onDetectDirection({
-                    distance: Math.round(result.distance * 100),
-                    duration: Math.round(result.duration)
+                    distance: `${Math.round(distance.val * 100)/100} ${distance.unit}`,
+                    duration: `${Math.round(duration.val)} ${duration.unit}`
                   })
                   var directionCoordinates = [];
                   directionCoordinates.push(currentLocation.coordinate);
@@ -187,26 +212,31 @@ export default class CustomMapView extends React.Component {
                   }
                   directionCoordinates.push(selectedPlace.coordinate);
                   const counts = directionCoordinates.length;
-                  this.mapView && this.mapView.fitToCoordinates(directionCoordinates, {
-                    edgePadding: {
-                      right: (width / 10),
-                      bottom: (height / 5 * 2),
-                      left: (width / 10),
-                      top: (height / 7),
-                    }
-                  });
+                  // this.mapView && this.mapView.fitToCoordinates(directionCoordinates, {
+                  //   edgePadding: {
+                  //     right: (width / 10),
+                  //     bottom: (height / 5 * 2),
+                  //     left: (width / 10),
+                  //     top: (height / 7),
+                  //   }
+                  // });
                   this.setState({directionCoordinates});
                 }}
                 onError={(errorMessage) => {
                   console.log('==== GOT AN ERROR');
+                  onDetectDirection && onDetectDirection({
+                    distance: null,
+                    duration: null
+                  });
+                  this.setState({directionCoordinates: []});
                 }}
               />
             }
-            { selectedPlace && this.renderCustomDirection() }
+            { selectedPlace && (directionCoordinates.length > 0) && this.renderCustomDirection() }
           </MapView>
           { children && children }
         </React.Fragment>
-      </View>      
+      </View>
     )
   }
 }

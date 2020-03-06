@@ -25,9 +25,6 @@ export default class Dialog extends React.Component {
               <Text style={{ fontSize: 18, color: '#fff', fontWeight: 'bold' }}>
                 {direction.distance}
               </Text>
-              <Text style={{ fontSize: 18, color: '#fff', fontWeight: 'bold', opacity: 0.5 }}>
-                m
-              </Text>
             </View>
           </View>
           <View>

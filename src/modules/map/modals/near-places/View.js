@@ -1,19 +1,18 @@
-import React from 'react'
-import Dialog2Wrapper from '../../common/wrappers/Dialog2Wrapper'
-import FilterDialog2Wrapper from '../../common/wrappers/FilterDialog2Wrapper'
-import { View, Text } from 'react-native'
-import { Spacer } from '~/common/components'
-import { colors, W, H } from '~/common/constants'
-import ActionBar from '../detail/components/ActionBarContainer'
-import PlacesList from '../reserve/components/PlacesListContainer'
-import { Button } from '~/common/components'
+import React from 'react';
+import Dialog2Wrapper from '../../common/wrappers/Dialog2Wrapper';
+import FilterDialog2Wrapper from '../../common/wrappers/FilterDialog2Wrapper';
+import { View, Text } from 'react-native';
+import { Spacer } from '~/common/components';
+import { colors, W, H } from '~/common/constants';
+import ActionBar from '../detail/components/ActionBarContainer';
+import PlacesList from '../reserve/components/PlacesListContainer';
+import { Button } from '~/common/components';
 
 export default class Dialog extends React.Component {
   render() {
-    const { _t } = this.props.appActions
-    const { places, searchLimit, place, direction, stationSnList } = this.props.map
-    const price = 1
-
+    const { _t } = this.props.appActions;
+    const { places, searchLimit, place, direction, stationSnList } = this.props.map;
+    const price = 1;
     return (
       <FilterDialog2Wrapper 
         onClose={this.props.onClose}
@@ -39,7 +38,7 @@ export default class Dialog extends React.Component {
               bgGradientStart='#ff52a8' bgGradientEnd='#ffdf00'
               caption={
                 direction.duration ? 
-                `Go ${direction.duration} min - ${direction.distance} m` 
+                `Go ${direction.duration} - ${direction.distance}` 
                 : _t('Not sure')
               }
               onPress={() => this.props.onFinish()}

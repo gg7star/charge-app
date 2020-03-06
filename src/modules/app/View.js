@@ -81,14 +81,18 @@ export default class AppView extends Component {
     );
     loginActions.setFcmToken(fcmToken);
 
-    // Map
-    // await this.initGeoLocation();
-
     mapActions.loadPlacesOnMap();
     mapActions.getAllStations();
-    // if (auth.isAuthenticated && auth.credential && auth.credential.user) {
-    //   Actions['home'];
-    // }
+    // Setup auto-refresh to get all stations
+    this.getAllStations();
+  }
+
+  getAllStations = () => {
+    const _this = this;
+    setTimeout(() => {
+      _this.props.mapActions.getAllStations();
+      _this.getAllStations();
+    }, 3000000)
   }
 
   onReceived = (_this, notification) => {

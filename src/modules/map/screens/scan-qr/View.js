@@ -9,6 +9,8 @@ import { Spacer } from '~/common/components';
 import QRScanner from './components/QRScanner';
 import { rentButtery } from '~/common/services/station-gateway/gateway';
 
+const RENT_EXPIRE_TIMEOUT = 30000;
+
 export default class ScanQRView extends React.Component {
   state = {
     qrCode: '',
@@ -84,7 +86,7 @@ export default class ScanQRView extends React.Component {
               );
               this.onRentTimedOut();
             }
-          }, 30000);
+          }, RENT_EXPIRE_TIMEOUT);
           rentActions.rentStation({
             stationSn: parsedStationSn,
             uuid: auth.credential.user.uid,

@@ -101,7 +101,6 @@ export default class PlacesList extends React.Component {
   render() {
     const { searchedPlaces, place } = this.props.map;
     const itemIndex = searchedPlaces.findIndex(p => {return p.name === place.name});
-    console.log('===== itemIndex: ', itemIndex, searchedPlaces[itemIndex]);
     return (
       <View style={{ marginHorizontal: -20 }}>
         {this.renderListItem({item: searchedPlaces[itemIndex], index: itemIndex})}
@@ -110,7 +109,7 @@ export default class PlacesList extends React.Component {
           renderItem={this.renderListItem}
           keyExtractor={this._keyExtractor}
           horizontal
-          getItemLayout={(data, index) => this.getItemLayout(data, index)}
+          getItemLayout={(data, index) => this.getItemLayout(dat  a, index)}
           initialScrollIndex={itemIndex}
           ref={ref => (this.flatList = ref)}
         />        */}

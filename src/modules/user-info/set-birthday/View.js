@@ -24,7 +24,7 @@ export default class ScreenView extends React.Component {
     Actions['signup_set_email']({ displayName, email});
   }
 
-  onFinish = async () => {    
+  onFinish = async () => {
     const { birthday } = this.state;
     const { displayName, email, auth, authActions } = this.props;
     const birthday_ = moment(new Date(birthday)).format('YYYY-MM-DD');
@@ -53,7 +53,7 @@ export default class ScreenView extends React.Component {
         },
       }
       if (auth.oneSignalDevice && auth.oneSignalDevice.userId) {
-        notifications.postNotification(contents, message, action.payload.auth.oneSignalDevice.userId, otherParameters);
+        notifications.postNotification(contents, message, auth.oneSignalDevice.userId, otherParameters);
       }
       // Go to hint
       Actions['hint']();
