@@ -29,3 +29,31 @@ export function openHourStatus(openHours) {
   
   return { openStatus, hour };
 }
+
+export function calculateDurationString(start_time, end_time) {
+  if (!start_time) return `00:00:00`;
+  var startTime = moment(start_time, 'DD/MM/YY hh:mm:ss a');
+  // calculate total duration
+  var duration = moment.duration(end_time.diff(startTime));
+  var hours = parseInt(duration.asHours());
+  var minutes = parseInt(duration.asMinutes())%60;
+  var seconds = parseInt(duration.asSeconds())%60;
+
+  var strHours = ("0" + hours).slice(-2);
+  var strMinues = ("0" + minutes).slice(-2);
+  var strSeconds = ("0" + seconds).slice(-2);
+  // console.log(`${strHours}:${strMinues}:${strSeconds}`);
+  return `${strHours}:${strMinues}:${strSeconds}`;
+}
+
+export function calculateDurationWithMins(start_time, end_time) {
+  console.log('===== start_time, end_time: ', start_time, end_time);
+  if (!start_time || !end_time) return `0 min`;
+  var startTime = moment(start_time, 'DD/MM/YY hh:mm:ss a');
+  var endTime = moment(end_time, 'DD/MM/YY hh:mm:ss a');
+  // calculate total duration
+  var duration = moment.duration(endTime.diff(startTime)).as('minutes');
+  duration = Math.round(duration);
+  console.log('===== duration: ', duration);
+  return `${duration} ${(duration > 1) ? 'mins' : 'min'}`;
+}

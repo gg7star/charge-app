@@ -113,6 +113,10 @@ export default class AppView extends Component {
           console.log('==== received failed to rent battery response: message: ', notificationData.data);
           _this.onRentFailure({error: notificationData.data.msg});
           break;
+        case NONO_NOTIFICATION_TYPES.RETURNED_BATTERY:
+          console.log('==== received to return battery: message: ', notificationData.data);
+          _this.onReturnSuccess({...notificationData.data});
+          break;
         default:
           break;
       }
@@ -138,17 +142,22 @@ export default class AppView extends Component {
   setFcmListiner = (fcmListener) => {
     console.log('===== fcmListener: ', fcmListener);
     this.setState({fcmListener});
-  }
+  };
 
   onRentSuccess = (data) => {
     const { auth, rentActions } = this.props;
     rentActions.rentSuccess(data, auth);
-  }
+  };
 
   onRentFailure = (error) => {
     const { auth, rentActions } = this.props;
     rentActions.rentFailure(error);
-  }
+  };
+
+  onReturnSuccess = (data) => {
+    const { auth, rentActions } = this.props;
+    rentActions.returnedButtery(data, auth);
+  };
 
   render() {
     const { loaded } = this.state;

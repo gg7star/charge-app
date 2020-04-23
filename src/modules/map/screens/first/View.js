@@ -127,8 +127,8 @@ export default class FirstScreenView extends React.Component {
         error: null,
       }
     };
-    mapActions.changedCurrentLocation(newLocation);
-    mapActions.searchPlaces('', newLocation, null);
+    // mapActions.changedCurrentLocation(newLocation);
+    // mapActions.searchPlaces('', newLocation, null);
   }
 
   handleGetCurrentLocation = (position) => {
@@ -276,24 +276,24 @@ export default class FirstScreenView extends React.Component {
   onDeposit = async () => {
     const { auth, rent, stripeActions, rentActions, appActions } = this.props;
     const { _t } = appActions;
-    // rentActions.returnedButtery(rent, auth);
-    this.setState({depositingButtery: true});
-    const res = await returnButtery(rent, auth);
-    console.log('===== res: ', res);
-    if (res.error) {
-      Alert.alert(
-        _t('Failed to return the buttery. Please try again.'),
-        _t(res.errorMessage),
-        [
-          {text: _t('OK'), onPress: () => console.log('OK Pressed')},
-        ],
-        {cancelable: true},
-      );
-      this.setState({depositingButtery: false});
-      return;
-    } else {
-      Actions['admob']({adMode: 'reward'});
-    }
+    // this.setState({depositingButtery: true});
+    // const res = await returnButtery(rent, auth);
+    // console.log('===== res: ', res);
+    // if (res.error) {
+    //   Alert.alert(
+    //     _t('Failed to return the buttery. Please try again.'),
+    //     _t(res.errorMessage),
+    //     [
+    //       {text: _t('OK'), onPress: () => console.log('OK Pressed')},
+    //     ],
+    //     {cancelable: true},
+    //   );
+    //   this.setState({depositingButtery: false});
+    //   return;
+    // } else {
+    //   Actions['admob']({adMode: 'reward'});
+    // }
+    Actions['admob']({adMode: 'reward'});
   }
 
   openFeedbackDialog = () => {
@@ -332,6 +332,7 @@ export default class FirstScreenView extends React.Component {
 
   render() {
     const { currentLocation, places, searchedPlaces, place } = this.props.map;
+    const { enabledDeposit } = this.props.rent;
     const { _t } = this.props.appActions;
     const { profileOpened } = this.state;
     const { activedModal } = this.state;
@@ -404,7 +405,7 @@ export default class FirstScreenView extends React.Component {
         }
         {activedModal=='rent' && 
           // <RentDialog onBuy={this.openFeedbackDialog} onDeposit={this.openFeedbackDialog} />
-          <RentDialog onBuy={this.onBuy} onDeposit={this.onDeposit} loading={this.depositingButtery}/>
+          <RentDialog onBuy={this.onBuy} onDeposit={this.onDeposit} loading={this.depositingButtery} enabledDeposit={enabledDeposit}/>
         }
         {activedModal=='feedback' && 
           <FeedbackDialog onClose={this.closeFeedbackDialog} />

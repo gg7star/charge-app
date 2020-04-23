@@ -1,9 +1,10 @@
 import React from 'react'
 import { View, Text, TouchableOpacity, Image } from 'react-native'
 import Spinner from 'react-native-loading-spinner-overlay';
-import RentDialogWrapper from '../../common/wrappers/RentDialogWrapper'
-import { Spacer, Button } from '~/common/components'
-import { colors, W, H, em } from '~/common/constants'
+import RentDialogWrapper from '../../common/wrappers/RentDialogWrapper';
+import { Spacer, Button } from '~/common/components';
+import { colors, W, H, em } from '~/common/constants';
+import { calculateDurationString } from '~/common/utils/time';
 import moment from 'moment';
 
 export default class RentDialog extends React.Component {  
@@ -19,7 +20,7 @@ export default class RentDialog extends React.Component {
   onTimer = () => {
     const _this = this;
     setTimeout(() => {
-      this.setState({duration: this.calculateDuration}, () => {
+      this.setState({duration: this.calculateDuration()}, () => {
         if (_this.state.calcuating) _this.onTimer();
       });
     }, 1000);
@@ -29,25 +30,17 @@ export default class RentDialog extends React.Component {
     this.setState({calcuating: false});
   }
 
+  componentWillReceiveProps = (nextProps) => {
+    const { rent } = nextProps;
+    this.setState({calcuating: rent.isRene})
+  }
+
   calculateDuration = () => {
     const { rent } = this.props;
     
-    if (!rent.startTime) return `00:00:00`;
+    if (!rent.startTime) return `00:00:00 `;
 
-    var startTime = moment(rent.startTime);
-    // var startTime = this.state.startTime;
-    var endTime = moment(); 
-    // calculate total duration
-    var duration = moment.duration(endTime.diff(startTime));
-    var hours = parseInt(duration.asHours());
-    var minutes = parseInt(duration.asMinutes())%60;
-    var seconds = parseInt(duration.asSeconds())%60;
-
-    var strHours = ("0" + hours).slice(-2);
-    var strMinues = ("0" + minutes).slice(-2);
-    var strSeconds = ("0" + seconds).slice(-2);
-
-    return `${strHours}:${strMinues}:${strSeconds}`;
+    return calculateDurationString(rent.startTime, moment());
   };
 
   render() {
@@ -84,7 +77,7 @@ export default class RentDialog extends React.Component {
           color: '#fff', fontSize: 36, fontWeight: 'bold',
           lineHeight: 70
         }}>
-          {this.calculateDuration()}
+          {this.state.duration}
         </Text>
       </View>
     )
@@ -160,14 +153,15 @@ export default class RentDialog extends React.Component {
               caption={_t('Buy')}
               onPress={this.props.onBuy}
             />
-          </View>        
+          </View>
           <View style={{ width: 150*em}}>
             <Button 
               textColor='#ff52ab' bgColor='white' borderRadius={15}
-              caption={_t('Deposit')}
-              icon={require('~/common/assets/images/png/arrow-direction.png')}
-              iconColor='#ff52a8' iconAlign='right'
+              caption={_t('Finish')}
+              // icon={require('~/common/assets/images/png/arrow-direction.png')}
+              // iconColor='#ff52a8' iconAlign='right'
               onPress={this.props.onDeposit}
+              disabled
             />
           </View>
         </View>

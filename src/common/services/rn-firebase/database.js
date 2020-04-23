@@ -1,5 +1,6 @@
 import firebase from '@react-native-firebase/app';
 import '@react-native-firebase/database';
+import moment from 'moment';
 import firebaseConfig from '~/common/config/firebase';
 
 const USER_TABLE_NAME = 'users';
@@ -176,7 +177,8 @@ export async function saveHistory(history) {
   const uid = firebase.auth().currentUser.uid
   if (uid) {
     try {
-      return firebase.database().ref(`${HISTORY_TABLE_NAME}/${uid}`)
+      const dateKey = moment(history.startTime, 'DD/MM/YY LTS').format('DD-MM-YYYY LTS');
+      return firebase.database().ref(`${HISTORY_TABLE_NAME}/${uid}/${dateKey}`)
         .set(history).then(() => {
           return history;
         });
@@ -194,7 +196,12 @@ export async function loadHistories() {
     try {
       return firebase.database().ref(`/${HISTORY_TABLE_NAME}/${uid}`).once('value').then((snapshot) => {
         if (snapshot.exists) {
-          return snapshot.val();
+          const dbHistories = snapshot.val();
+          var histories = [];
+          Object.keys(dbHistories).map((key) => {
+            histories.push(dbHistories[key]);
+          });
+          return histories;
         } else {
           return [];
         }

@@ -10,6 +10,9 @@ import admob, {
   MaxAdContentRating
 } from '@react-native-firebase/admob';
 import admobConfig from '~/common/config/admob';
+import { saveHistory } from '~/common/services/rn-firebase/database';
+import { calculateDurationWithMins } from '~/common/utils/time';
+
 
 export default class ScreenView extends React.Component {
   state = {
@@ -19,7 +22,27 @@ export default class ScreenView extends React.Component {
     adMode: this.props.adMode || 'reward'
   }
 
+  saveRentHistory = () => {
+    const { rent } = this.props;
+    console.log('===== saveRentHistory: rent: ', rent);
+    // Save history
+    const history = {
+      ...rent,
+      price: "0.00€",
+      duration: `${calculateDurationWithMins(rent.startTime, rent.endTime)}`,
+      takePlace: "79 Rue de seins.sadsa",
+      depositPlace: "155 Bouelvard Saint Gernmarenw",
+      cost: 0.00,
+      credit: 0,
+      points: 123
+    };
+    console.log('====== saving history');
+    saveHistory(history);
+  }
+
   async componentDidMount() {
+    this.saveRentHistory();
+
     await admob().setRequestConfiguration({
       setRequestConfiguration: MaxAdContentRating.PG,
       tagForChildDirectedTreatment: true,
@@ -68,13 +91,13 @@ export default class ScreenView extends React.Component {
       });
     }
     advert.load();
-    this.setState({advert, unsubscribe})
+    this.setState({advert, unsubscribe});
   }
 
   onClickScreen = () => {
     const { unsubscribe } = this.state;
     console.log('==== unsubscribe admob');
-    unsubscribe()
+    unsubscribe && unsubscribe();
     Actions['map_first']({initialModal: 'feedback'});
   }
 

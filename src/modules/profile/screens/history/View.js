@@ -8,7 +8,7 @@ import HistoryListItem from './components/HistoryListItem';
 
 export default class ScreenView extends React.Component {
   componentDidMount() {
-    this.props.profileActions.loadHistories();    
+    this.props.profileActions.loadHistories();
   }
 
   goBack = () => {
@@ -24,6 +24,7 @@ export default class ScreenView extends React.Component {
   render() {
     const { _t } = this.props.appActions;
     const { histories } = this.props.profile;
+    console.log('===== histories: ', histories);
     return (
       <ProfileWrapper>
         <ProfileHeader title={_t('History')} onPress={this.goBack} />

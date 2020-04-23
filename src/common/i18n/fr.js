@@ -99,6 +99,7 @@ export default {
   'Rent another battery': 'Loue une autre batterie',
   'Buy': 'Acheter',
   'Deposit': 'Déposer',
+  'Finish': 'Terminer',
   'Do you like our service?': 'Tu aimes notre service ?',
   'Click on the stars to rate our application.': 'Clique sur les étoiles pour noter notre application.',
   'Later': 'Plus tard',

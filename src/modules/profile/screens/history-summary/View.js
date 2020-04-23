@@ -20,7 +20,7 @@ export default class ScreenView extends React.Component {
         {history &&
         <>
           {this.renderSummaryTable()}
-          {this.renderConsumeTable()}
+          {/* {this.renderConsumeTable()} */}
         </>
         }
       </ProfileWrapper>
@@ -161,7 +161,6 @@ export default class ScreenView extends React.Component {
   }
 
   goBack = () => {
-    Actions.map();
-    Actions['map_first']({profileOpened: true});
+    Actions.pop();
   }
 }

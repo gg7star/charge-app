@@ -1,4 +1,4 @@
-import { put, takeLatest } from 'redux-saga/effects';
+import { put, takeLatest, call } from 'redux-saga/effects';
 import { Actions } from 'react-native-router-flux';
 import { profileFirebaseService } from '~/common/services/firebase';
 import { profileActionTypes } from '~/actions/types';
@@ -26,6 +26,7 @@ export function* loadHistoriesProcess(action) {
     const histories = yield call(loadHistories);
     yield put({ type: profileActionTypes.LOAD_HISTORY_SUCCESS, payload: { histories } });
   } catch (e) {
+    console.log('======= error: loadHistoriesProcess: ', e);
     yield put({ type: profileActionTypes.LOAD_HISTORY_FAILURE });
   }
 }

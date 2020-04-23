@@ -14,6 +14,7 @@ const initialState = {
   powerBankSn: null,
   slotNum: -1,
   msg: 0,
+  enabledDeposit: false,
   // check doing
   isFetching: false,
   statusMessage: '',
@@ -40,7 +41,8 @@ export default function reducer(state = initialState, action) {
         tradeNo: null,
         powerBankSn: null,
         slotNum: -1,
-        statusMessage: 'During rent device...'
+        statusMessage: 'During rent device...',
+        enabledDeposit: false,
       }
     case rentActionTypes.RENT_SUCCESS:
         return {
@@ -53,7 +55,8 @@ export default function reducer(state = initialState, action) {
           msg: action.payload.msg,
           statusMessage: 'rented this device.',
           startTime: moment().format('DD/MM/YY LTS'),
-          endTime: null
+          endTime: null,
+          enabledDeposit: false,
         }
     case rentActionTypes.RENT_FAILURE:
       return {
@@ -63,9 +66,12 @@ export default function reducer(state = initialState, action) {
     case rentActionTypes.RENT_RETURNED_BUTTERY:
       return {
         ...state,
+        ...action.payload.rent,
         isRented: false,
         isFetching: false,
-        endTime: moment().format('DD/MM/YY LTS')
+        enabledDeposit: true,
+        endTime: moment().format('DD/MM/YY LTS'),
+        stationSn: action.payload.rent.stationNo
       }
     default: 
       return state

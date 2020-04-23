@@ -13,11 +13,11 @@ export default class HistoryListItem extends React.Component {
         <View style={{flexDirection: 'row', justifyContent: "space-between"}}>
           <View style={{justifyContent: 'center', alignItems: 'center'}}>
             <Text style={{color: '#9F9F9F', fontSize: 17}}>
-              {history.date}
+              {history.startTime}
             </Text>
           </View>
           <View style={{flexDirection: 'row'}}>
-            <View style={{justifyContent: 'flex-end', alignItems: 'center'}}>
+            {/* <View style={{justifyContent: 'flex-end', alignItems: 'center'}}>
               <Text style={{color: '#36384A', fontSize: 17, marginLeft: 10}}>
                 {history.points ? history.points : 0}
               </Text>
@@ -26,7 +26,7 @@ export default class HistoryListItem extends React.Component {
               <Text style={{color: '#36384A', fontSize: 12, marginLeft: 10, alignItems: 'flex-start'}}>
                 {'points'}
               </Text>
-            </View>
+            </View> */}
             <View style={{justifyContent: 'center', alignItems: 'center'}}>
               <Image
                 source={require('~/common/assets/images/png/arrow.png')} 

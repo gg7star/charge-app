@@ -6,6 +6,7 @@ import ScreenView from './View';
 
 const mapStateToProps = state => ({
   app: state.app || {},
+  rent: state.rent || {}
 });
 
 const mapDispatchToProps = dispatch => ({
