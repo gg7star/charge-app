@@ -26,8 +26,8 @@ export default class DetailInfo extends React.Component {
           <View style={{ flexDirection: 'row', marginVertical: 5 }}>
             <Text style={{ color: (hourStatus.openStatus ? '#1be497' : '#c9c9ce') }}>
               {hourStatus.openStatus
-                ? `${_t('Opened at')} ${hourStatus.hour}`
-                : `${_t('Closed at')} ${hourStatus.hour}`
+                ? `${_t('Opened')}`
+                : `${_t('Closed')}`
               }
             </Text>
           </View>
@@ -55,11 +55,10 @@ export default class DetailInfo extends React.Component {
           <View style={{flexDirection: 'row'}}>
             <Text style={{ fontSize: 16, color: (hourStatus.openStatus ? '#36384a' : '#c9c9ce')}}>
               {hourStatus.openStatus
-                ? `${_t('Opened at')} ${hourStatus.hour}`
-                : `${_t('Closed at')} ${hourStatus.hour}`
+                ? `${_t('Opened')}`
+                : `${_t('Closed')}`
               }
             </Text>
-
             <Image source={require('~/common/assets/images/png/arrow2.png')} 
               style={{ marginLeft: 10, marginTop: 6 }}
             />
@@ -107,7 +106,7 @@ export default class DetailInfo extends React.Component {
       subAddress = `Located in ${address.split(',')[0]}`;
     } else {
       address = data.description ? data.description : data.title;
-      subAddress = `${data.coordinate.latitude}, ${data.coordinate.longitude}`
+      subAddress = data.location; //`${data.coordinate.latitude}, ${data.coordinate.longitude}`
     }
 
     return (
@@ -115,15 +114,17 @@ export default class DetailInfo extends React.Component {
         {this.renderSummary()}
         <View style={styles.row}>
           <View style={styles.col1}>
-            <Image source={require('~/common/assets/images/png/marker.png')} 
-              style={{tintColor: '#5ed8fc'}}              
+            <Image
+              source={require('~/common/assets/images/png/marker.png')} 
+              style={{tintColor: '#5ed8fc'}}
             />
           </View>
           <View style={styles.col2}>
             <Text style={{ fontSize: 16 }}>
               {address}
             </Text>
-            <Text style={{ fontSize: 16, color: '#c9c9ce', marginTop: 10}}>
+            <Text
+              style={{ fontSize: 16, color: '#c9c9ce', marginTop: 10}}>
               {subAddress}
             </Text>
           </View>
@@ -131,18 +132,19 @@ export default class DetailInfo extends React.Component {
 
         <View style={styles.row}>
           <View style={styles.col1}>
-            <Image source={require('~/common/assets/images/png/hours.png')} 
-              style={{tintColor: '#5ed8fc'}}              
+            <Image
+              source={require('~/common/assets/images/png/hours.png')} 
+              style={{tintColor: '#5ed8fc'}}
             />
           </View>
           <View style={styles.col2}>
-            {this.renderOpenHours()}        
+            {this.renderOpenHours()}
           </View>
         </View>
         <View style={styles.row}>
           <View style={styles.col1}>
             <Image source={require('~/common/assets/images/png/call.png')} 
-              style={{tintColor: '#5ed8fc'}}              
+              style={{tintColor: '#5ed8fc'}}
             />
           </View>
           <View style={styles.col2}>
@@ -154,7 +156,7 @@ export default class DetailInfo extends React.Component {
         <View style={styles.row}>
           <View style={styles.col1}>
             <Image source={require('~/common/assets/images/png/website.png')} 
-              style={{tintColor: '#5ed8fc'}}              
+              style={{tintColor: '#5ed8fc'}}
             />
           </View>
           <View style={styles.col2}>

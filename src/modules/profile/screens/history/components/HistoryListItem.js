@@ -1,19 +1,21 @@
 import React from 'react';
 import { TouchableOpacity, View, Text, Image } from 'react-native'
+import moment from 'moment';
 
 export default class HistoryListItem extends React.Component {
   
   render() {
     const history = this.props.history;
+
     return (
       <TouchableOpacity
         style={{ marginVertical: 13, marginLeft:14 }}
         onPress={this.props.onPress}
-      >        
+      >
         <View style={{flexDirection: 'row', justifyContent: "space-between"}}>
           <View style={{justifyContent: 'center', alignItems: 'center'}}>
             <Text style={{color: '#9F9F9F', fontSize: 17}}>
-              {history.startTime}
+              {moment(history.startTime, 'DD/MM/YY LTS').format('DD/MM/YY LT')}
             </Text>
           </View>
           <View style={{flexDirection: 'row'}}>

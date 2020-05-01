@@ -4,11 +4,23 @@ import { Actions } from 'react-native-router-flux';
 import ProfileWrapper from '../../common/wrappers/ProfileWrapper';
 import ProfileHeader from '../../common/headers/ProfileHeader';
 import { W, H, em } from '~/common/constants';
-import HistoryListItem from './components/HistoryListItem';
+import HistoryListItemContainer from './components/HistoryListItemContainer';
+import moment from 'moment';
+import 'moment/min/moment-with-locales';
+// import 'moment/locale/en-gb';
+import 'moment/locale/fr';
 
-export default class ScreenView extends React.Component {
+export default class HistoryView extends React.Component {
   componentDidMount() {
     this.props.profileActions.loadHistories();
+    // const { language } = this.props.app;
+    // if (language == 'fr') {
+    //   console.log('==== Setting up moment locale to fr');
+    //   moment().locale('fr');
+    // } else {
+    //   console.log('==== Setting up moment locale to en-gb');
+    //   moment().locale('en-gb');
+    // }
   }
 
   goBack = () => {
@@ -31,7 +43,7 @@ export default class ScreenView extends React.Component {
         <ScrollView style={{height: Platform.OS=='ios'?(H-60):(H-40)}}>
           {(histories && histories.length > 0) ? 
             histories.map((history, k) => (
-              <HistoryListItem history={history} key={k} onPress={() => this.goSummary(k)}/>
+              <HistoryListItemContainer history={history} key={k} onPress={() => this.goSummary(k)}/>
             )) :
             <Text style={{color: '#9F9F9F', fontSize: 15, marginLeft: 10}}>
               {_t('Nothing')}

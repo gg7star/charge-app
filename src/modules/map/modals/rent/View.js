@@ -26,13 +26,16 @@ export default class RentDialog extends React.Component {
     }, 1000);
   };
 
-  componentWillUnmount = () => {
+  componentWillUnmount() {
     this.setState({calcuating: false});
   }
 
-  componentWillReceiveProps = (nextProps) => {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { rent } = nextProps;
-    this.setState({calcuating: rent.isRene})
+    const calcuating = (rent.isRented && !rent.isFetching);
+    const duration = calcuating ? this.state.duration : '00:00:00';
+    console.log('==== componentWillReceiveProps: ', calcuating, duration);
+    this.setState({calcuating, duration});
   }
 
   calculateDuration = () => {

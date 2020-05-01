@@ -48,3 +48,7 @@ export function filterPlaces(places, value, currentLocation, radius) {
   });
   return filteredPlaces
 }
+
+export function getPlace(places, stationSn) {
+  
+}

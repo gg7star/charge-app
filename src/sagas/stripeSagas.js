@@ -2,10 +2,11 @@ import { put, takeLatest, call } from 'redux-saga/effects';
 import { Actions } from 'react-native-router-flux';
 import { processRequest } from '~/common/services/api';
 import serverUrls from '~/common/constants/api';
-import { AppActions, StripeActions } from '~/actions';
+import { AppActions, StripeActions, MapActions } from '~/actions';
 import { stripeActionTypes } from '~/actions/types';
 import { saveCreditCard } from '~/common/services/rn-firebase/database';
 import * as notifications from '~/common/services/onesignal/notifications';
+import MAP_MODAL from '~/common/constants/map';
 
 const {
   doPaymentSuccess,
@@ -13,6 +14,7 @@ const {
   registerCardSuccess,
   registerCardFailure
 } = StripeActions;
+const { setActiveModal } = MapActions;
 const { setGlobalNotification } = AppActions;
 
 export default function* watcher() {
@@ -35,14 +37,18 @@ export function* doPayment(action) {
         message: 'You paid succefully. Thank you!',
         type: 'success'
       }));
-      Actions['map_first']({initialModal: 'feedback'});
+      yield put(setActiveModal(MAP_MODAL.FEEDBACK));
+      Actions['map_first']();
+      // Actions['map_first']({initialModal: 'feedback'});
     } else {
       yield put(doPaymentFailure({errorMessage: response.data.message}));
       yield put(setGlobalNotification({
         message: 'Your payment was failed. Please try later.',
         type: 'danger'}
       ));
-      Actions['map_first']({initialModal: 'rent'});
+      yield put(setActiveModal(MAP_MODAL.RENT));
+      Actions['map_first']();
+      // Actions['map_first']({initialModal: 'rent'});
     }
   } catch(error) {
     console.log('==== doPayment response error: ', error);

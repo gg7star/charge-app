@@ -14,6 +14,7 @@ import Torch from 'react-native-torch';
 import { Spacer } from '~/common/components';
 import { W, H, colors, em } from '~/common/constants';
 import { rentButtery } from '~/common/services/station-gateway/gateway';
+import MAP_MODAL from '~/common/constants/map';
 
 export default class ScreenView extends React.Component {
   state = {
@@ -118,7 +119,7 @@ export default class ScreenView extends React.Component {
   enterCode = () => {
     const { code } = this.state;
     const { stationSnList } = this.props.map;
-    const { auth } = this.props;
+    const { auth, mapActions } = this.props;
 
     Alert.alert(
       'Entered QR Code',
@@ -151,7 +152,9 @@ export default class ScreenView extends React.Component {
               );
             } else {
               // For test
-              Actions['map_first']({initialModal: 'rent'});
+              mapActions.setActiveModal(MAP_MODAL.RENT);
+              Actions['map_first']();
+              // Actions['map_first']({initialModal: MAP_MODAL.RENT});
             }
             // this.props.rentActions.rentStation({
             //   stationSn: code,

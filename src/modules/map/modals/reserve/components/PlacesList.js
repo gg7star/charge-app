@@ -80,8 +80,8 @@ export default class PlacesList extends React.Component {
                 <View style={{ flexDirection: 'row', marginVertical: 5 }}>
                   <Text style={{ color: (hourStatus.openStatus ? '#1be497' : '#c9c9ce') }}>
                     {hourStatus.openStatus
-                      ? `${_t('Opened at')} ${hourStatus.hour}`
-                      : `${_t('Closed at')} ${hourStatus.hour}`
+                      ? `${_t('Opened')}`
+                      : `${_t('Closed')}`
                     }
                   </Text>
                 </View>

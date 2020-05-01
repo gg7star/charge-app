@@ -14,6 +14,7 @@ import {
 import { SplashView } from '~/common/components';
 import { NONO_NOTIFICATION_TYPES } from '~/common/services/onesignal/notifications';
 // import { rentSuccess, rentFailure } from '~/actions/rentActions';
+import MAP_MODAL from '~/common/constants/map';
 
 export default class AppView extends Component {
   state = {
@@ -124,10 +125,13 @@ export default class AppView extends Component {
   }
 
   onOpened = (openResult) => {
+    console.log('==== onOpened: this: ', this);
     console.log('Message: ', openResult.notification.payload.body);
     console.log('Data: ', openResult.notification.payload.additionalData);
     console.log('isActive: ', openResult.notification.isAppInFocus);
     console.log('openResult: ', openResult);
+    // Handle notification
+    this.onReceived(this, openResult.notification);
   };
 
   onIds = (device) => {
@@ -145,8 +149,11 @@ export default class AppView extends Component {
   };
 
   onRentSuccess = (data) => {
-    const { auth, rentActions } = this.props;
+    const { auth, rentActions, mapActions } = this.props;
     rentActions.rentSuccess(data, auth);
+    // mapActions.setActiveModal(MAP_MODAL.RENT);
+    // Actions['map_first']();
+    // Actions['map_first']({initialModal: MAP_MODAL.RENT});
   };
 
   onRentFailure = (error) => {
@@ -156,7 +163,12 @@ export default class AppView extends Component {
 
   onReturnSuccess = (data) => {
     const { auth, rentActions } = this.props;
-    rentActions.returnedButtery(data, auth);
+    var returnedData = {
+      ...data,
+      placeOfDeposit: data.stationNo
+    }
+    rentActions.returnedButtery(returnedData, auth);
+    // Actions['admob']({adMode: 'reward'});
   };
 
   render() {

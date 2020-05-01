@@ -6,73 +6,14 @@ import ProfileHeader from '../../common/headers/ProfileHeader'
 import { W, H, em } from '~/common/constants';
 import LinearGradient from 'react-native-linear-gradient'
 
-export default class ScreenView extends React.Component {
+export default class HistorySummaryView extends React.Component {
   componentDidMount() {
     this.props.profileActions.loadHistories();    
   }
 
-  render() {
-    const { _t } = this.props.appActions;
-    const { history } = this.props.profile;
-    return (
-      <ProfileWrapper>
-        <ProfileHeader title={_t('Summary')} onPress={this.goBack} />
-        {history &&
-        <>
-          {this.renderSummaryTable()}
-          {/* {this.renderConsumeTable()} */}
-        </>
-        }
-      </ProfileWrapper>
-    )
-  }
+  goBack = () => Actions.pop();
 
-  renderSummaryTable() {
-    const { _t } = this.props.appActions
-    const { history } = this.props.profile
-    return (
-      <View style={{}}>
-        <View style={{ flexDirection: 'row' }}>
-          <View style={{ width: 50*em, marginTop: 10 }}>
-            <Image source={require('~/common/assets/images/png/hours.png')}
-              style={{tintColor: '#35cdfa'}}
-            />
-          </View>
-          <View style={{ width: 290*em }}>
-            <Text style={{ color: '#bfbfc4', marginBottom: 5}}>
-              {_t('Duration')}
-            </Text>
-            <Text style={{ color: '#36384a', fontSize: 36, }}>
-              {history.duration}
-            </Text>
-          </View> 
-        </View>
-        <View style={{ flexDirection: 'row', marginTop: 20 }}>
-          <View style={{ width: 50*em, marginTop: 10 }}>
-            <Image source={require('~/common/assets/images/png/line21.png')}
-              style={{tintColor: '#35cdfa'}}
-            />
-          </View>
-          <View style={{ width: 290*em }}>
-            <Text style={{ color: '#bfbfc4', mfontSize: 15, arginBottom: 5}}>
-              {_t('Place of taking')}
-            </Text>
-            <Text style={{ color: '#36384a', fontSize: 17, marginBottom: 30 }}>
-              {history.takePlace}
-            </Text>
-            <Text style={{ color: '#bfbfc4', fontSize: 15, marginBottom: 5}}>
-              {_t('Place of deposit')}
-            </Text>
-            <Text style={{ color: '#36384a', fontSize: 17,  }}>
-              {history.depositPlace}
-            </Text>
-          </View> 
-        </View>
-      </View>
-    )
-  }
-
-  renderConsumeTable() {
+  renderConsumeTable = () => {
     const { history } = this.props.profile
     const { _t } = this.props.appActions
 
@@ -158,9 +99,66 @@ export default class ScreenView extends React.Component {
         </LinearGradient>    
       </View>
     )
-  }
+  };
 
-  goBack = () => {
-    Actions.pop();
+  renderSummaryTable = () => {
+    const { _t } = this.props.appActions
+    const { history } = this.props.profile
+    return (
+      <View style={{}}>
+        <View style={{ flexDirection: 'row' }}>
+          <View style={{ width: 50*em, marginTop: 10 }}>
+            <Image source={require('~/common/assets/images/png/hours.png')}
+              style={{tintColor: '#35cdfa'}}
+            />
+          </View>
+          <View style={{ width: 290*em }}>
+            <Text style={{ color: '#bfbfc4', marginBottom: 5}}>
+              {_t('Duration')}
+            </Text>
+            <Text style={{ color: '#36384a', fontSize: 36, }}>
+              {history.duration}
+            </Text>
+          </View> 
+        </View>
+        <View style={{ flexDirection: 'row', marginTop: 20 }}>
+          <View style={{ width: 50*em, marginTop: 10 }}>
+            <Image source={require('~/common/assets/images/png/line21.png')}
+              style={{tintColor: '#35cdfa'}}
+            />
+          </View>
+          <View style={{ width: 290*em }}>
+            <Text style={{ color: '#bfbfc4', mfontSize: 15, arginBottom: 5}}>
+              {_t('Place of taking')}
+            </Text>
+            <Text style={{ color: '#36384a', fontSize: 17, marginBottom: 30 }}>
+              {history.rentedPlaceAddress || ''}
+            </Text>
+            <Text style={{ color: '#bfbfc4', fontSize: 15, marginBottom: 5}}>
+              {_t('Place of deposit')}
+            </Text>
+            <Text style={{ color: '#36384a', fontSize: 17,  }}>
+              {history.returnedPlaceAddress || ''}
+            </Text>
+          </View> 
+        </View>
+      </View>
+    )
+  };
+
+  render() {
+    const { _t } = this.props.appActions;
+    const { history } = this.props.profile;
+    return (
+      <ProfileWrapper>
+        <ProfileHeader title={_t('Summary')} onPress={this.goBack} />
+        {history &&
+        <>
+          {this.renderSummaryTable()}
+          {/* {this.renderConsumeTable()} */}
+        </>
+        }
+      </ProfileWrapper>
+    )
   }
 }

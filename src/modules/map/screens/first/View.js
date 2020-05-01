@@ -22,6 +22,7 @@ import MapView from '~/modules/map/common/components/MapView';
 import ProfileMenuDialog from '~/modules/profile/modals/menu/ProfileMenuDialogContainer';
 import { returnButtery } from '~/common/services/station-gateway/gateway';
 import defaultCurrentLocation from '~/common/config/locations';
+import MAP_MODAL from '~/common/constants/map';
 
 const GEOLOCATION_OPTION = {
   enableHighAccuracy: true,
@@ -40,17 +41,19 @@ const GEOLOCATION_WATCH_OPTION = {
 export default class FirstScreenView extends React.Component {
   state = {
     profileOpened: false,
-    activedModal: 'unlock',
+    activeModal: 'unlock',
     depositingButtery: false
   }
 
   async componentDidMount() {
-    const { initialModal, profileOpened } = this.props
+    const { initialModal, profileOpened, map } = this.props
     var newState = {...this.state};
-    if (initialModal) {
+    console.log('==== componentDidMount: map.activeModal: ', map.activeModal)
+    if (map.activeModal) {
+      // this.setState({activeModal: map.activeModal})
       newState = {
         ...newState,
-        activedModal: initialModal
+        activeModal: map.activeModal
       }
     }
 
@@ -68,6 +71,15 @@ export default class FirstScreenView extends React.Component {
 
   async componentWillUnmount() {
     Geolocation.stopObserving();
+  }
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    const { map } = nextProps;
+    if (!map) return;
+    const { activeModal } = map;
+    if (this.state.activeModal === activeModal) return;
+    console.log('===== activeModal: ', this.state.activeModal, activeModal);
+    this.setState({activeModal: activeModal})
   }
 
   async initGeoLocation() {
@@ -184,16 +196,19 @@ export default class FirstScreenView extends React.Component {
   }
 
   openSearchDialog = () => {
-    this.setState({...this.state, activedModal: 'search'})
+    this.props.mapActions.setActiveModal(MAP_MODAL.SEARCH);
+    // this.setState({activeModal: MAP_MODAL.SEARCH});
   }
 
   closeSearchDialog = () => {
-    this.setState({...this.state, activedModal: 'unlock'});
+    this.props.mapActions.setActiveModal(MAP_MODAL.UNLOCK);
+    // this.setState({activeModal: MAP_MODAL.UNLOCK});
   }
 
   selectPlace = (index) => {
     this.props.mapActions.selectPlace(index);
-    this.setState({ ...this.state, activedModal: 'detail' });
+    this.props.mapActions.setActiveModal(MAP_MODAL.DETAIL);
+    // this.setState({activeModal: MAP_MODAL.DETAIL});
   }
   //onSelectPlace
   onSelectPlace = (index) => {
@@ -201,48 +216,60 @@ export default class FirstScreenView extends React.Component {
   }
 
   closeDetailDialog = () => {
-    this.setState({...this.state, activedModal: 'unlock'}, () => {
-      this.props.mapActions.selectPlace(-1);
-    });
+    this.props.mapActions.setActiveModal(MAP_MODAL.UNLOCK);
+    this.props.mapActions.selectPlace(-1);
+    // this.setState({activeModal: MAP_MODAL.UNLOCK}, () => {
+    //   this.props.mapActions.selectPlace(-1);
+    // });
   }
 
   openFinishDialog = () => {
-    this.setState({...this.state, activedModal: 'finish'});
+    this.props.mapActions.setActiveModal(MAP_MODAL.FINISH);
+    // this.setState({activeModal: 'finish'});
   }
 
   closeFinishDialog = () => {
-    this.setState({
-      ...this.state, activedModal: 'unlock'},
-      () => this.props.mapActions.selectPlace(-1)
-    );
+    this.props.mapActions.setActiveModal(MAP_MODAL.UNLOCK);
+    this.props.mapActions.selectPlace(-1);
+    // this.setState({
+    //   ...this.state, activeModal: 'unlock'},
+    //   () => this.props.mapActions.selectPlace(-1)
+    // );
   }
 
   openReserveDialog = () => {
-    this.setState({...this.state, activedModal: 'reserve'});
+    this.props.mapActions.setActiveModal(MAP_MODAL.RESERVE);
+    // this.setState({activeModal: 'reserve'});
   }
 
   closeReserveDialog = () => {
-    this.setState({...this.state, activedModal: 'unlock'});
+    this.props.mapActions.setActiveModal(MAP_MODAL.UNLOCK);
+    // this.setState({activeModal: 'unlock'});
   }
 
   openNearPlacesDialog = (index) => {
     this.props.mapActions.selectPlace(index);
-    this.setState({...this.state, activedModal: 'near-places'});
+    this.props.mapActions.setActiveModal(MAP_MODAL.NEARE_PLACE);
+    // this.setState({activeModal: 'near-places'});
   }
 
   closeNearPlacesDialog = () => {
     const _this = this;
-    this.setState({...this.state, activedModal: 'unlock'}, () => {
-      _this.props.mapActions.selectPlace(-1);
-    });
+    this.props.mapActions.setActiveModal(MAP_MODAL.UNLOCK);
+    _this.props.mapActions.selectPlace(-1);
+    // this.setState({activeModal: 'unlock'}, () => {
+    //   _this.props.mapActions.selectPlace(-1);
+    // });
   }
 
   openFilterDialog = (index) => {
-    this.setState({...this.state, activedModal: 'filter'});
+    this.props.mapActions.setActiveModal(MAP_MODAL.FILTER);
+    // this.setState({activeModal: 'filter'});
   }
 
   closeFilterDialog = () => {
-    this.setState({...this.state, activedModal: 'unlock'});
+    this.props.mapActions.setActiveModal(MAP_MODAL.UNLOCK);
+    // this.setState({activeModal: 'unlock'});
   }
 
   filterSearch = () => {
@@ -297,11 +324,13 @@ export default class FirstScreenView extends React.Component {
   }
 
   openFeedbackDialog = () => {
-    this.setState({...this.state, activedModal: 'feedback'})
+    this.props.mapActions.setActiveModal(MAP_MODAL.FEEDBACK);
+    // this.setState({activeModal: 'feedback'})
   }
 
   closeFeedbackDialog = () => {
-    this.setState({...this.state, activedModal: 'unlock'})
+    this.props.mapActions.setActiveModal(MAP_MODAL.UNLOCK);
+    // this.setState({activeModal: 'unlock'})
   }
 
   onUnlock = () => {
@@ -335,8 +364,9 @@ export default class FirstScreenView extends React.Component {
     const { enabledDeposit } = this.props.rent;
     const { _t } = this.props.appActions;
     const { profileOpened } = this.state;
-    const { activedModal } = this.state;
+    const { activeModal } = this.state;
     const propsProfileOpened = this.props.profileOpened;
+
     return (
       <View style={{position: 'relative', width: W, height: H}}>
         {/* <Menu 
@@ -357,7 +387,7 @@ export default class FirstScreenView extends React.Component {
           <MapButton
             name='profile'
             onPress={() => {
-                this.setState({...this.state, profileOpened: true});
+                this.setState({profileOpened: true});
               }
             }
           />
@@ -366,29 +396,29 @@ export default class FirstScreenView extends React.Component {
           <MapButton name='position' onPress={this.onClickPosition}/>
         </MapView>
         <Spacer size={20} />
-        {activedModal=='unlock' && <UnlockDialog onClickUnlock={this.onUnlock} />}
-        {activedModal=='search' && <SearchDialog onCancel={this.closeSearchDialog} 
+        {activeModal== MAP_MODAL.UNLOCK && <UnlockDialog onClickUnlock={this.onUnlock} />}
+        {activeModal== MAP_MODAL.SEARCH && <SearchDialog onCancel={this.closeSearchDialog} 
           selectPlace={this.selectPlace} />
         }
-        {activedModal=='detail' && <DetailDialog
+        {activeModal== MAP_MODAL.DETAIL && <DetailDialog
             onClose={this.closeDetailDialog} 
             onFinish={this.openFinishDialog}
             onReserve={this.openReserveDialog}
           />
         }
-        {activedModal=='finish' && 
+        {activeModal==MAP_MODAL.FINISH && 
           <React.Fragment>
             <FinishTopDialog />
             <FinishDialog onFinish={this.closeFinishDialog} />
           </React.Fragment>
         }
-        {activedModal=='reserve' && 
+        {activeModal==MAP_MODAL.RESERVE && 
           <ReserveDialog
             onClose={this.closeReserveDialog} 
             onSelectPlace={this.selectPlace}
           />
         }
-        {activedModal=='near-places' && 
+        {activeModal==MAP_MODAL.NEARE_PLACE && 
           <NearPlacesDialog
             onClose={this.closeNearPlacesDialog} 
             onSelectPlace={this.onSelectPlace}
@@ -397,17 +427,22 @@ export default class FirstScreenView extends React.Component {
             onOpenFilter={this.openFilterDialog}
           />
         }
-        {activedModal=='filter' && 
+        {activeModal==MAP_MODAL.FILTER && 
           <FilterDialog
             onClose={this.closeNearPlacesDialog} 
             onFilter={this.filterSearch}
           />
         }
-        {activedModal=='rent' && 
+        {activeModal==MAP_MODAL.RENT && 
           // <RentDialog onBuy={this.openFeedbackDialog} onDeposit={this.openFeedbackDialog} />
-          <RentDialog onBuy={this.onBuy} onDeposit={this.onDeposit} loading={this.depositingButtery} enabledDeposit={enabledDeposit}/>
+          <RentDialog
+            onBuy={this.onBuy}
+            onDeposit={this.onDeposit}
+            loading={this.depositingButtery}
+            enabledDeposit={enabledDeposit}
+          />
         }
-        {activedModal=='feedback' && 
+        {activeModal==MAP_MODAL.FEEDBACK && 
           <FeedbackDialog onClose={this.closeFeedbackDialog} />
         }
       </View>

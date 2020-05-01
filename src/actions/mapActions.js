@@ -91,3 +91,12 @@ export function scannedQrCode(qrCode) {
     }
   }
 }
+
+export function setActiveModal(name) {
+  return {
+    type: types.ACTIVE_MODAL,
+    payload: {
+      activeModal: name
+    }
+  }
+}

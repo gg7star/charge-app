@@ -110,6 +110,6 @@ function receivedFcm(fcmMsg) {
   console.log('==== receivedFcm: fcmMsg: ', fcmMsg);
   if(fcmMsg.type === 'lend_result') {
     rentSuccess({...fcmMsg.data});
-    Actions['map_first']({initialModal: 'rent'});
+    // Actions['map_first']({initialModal: 'rent'});
   }
 }

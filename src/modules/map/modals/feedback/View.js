@@ -5,6 +5,7 @@ import { Actions } from 'react-native-router-flux'
 import { Button, Spacer } from '~/common/components'
 import { colors, W, H } from '~/common/constants'
 import StarRating from 'react-native-star-rating'
+import MAP_MODAL from '~/common/constants/map';
 
 export default class Dialog extends React.Component {
   state = {
@@ -12,8 +13,10 @@ export default class Dialog extends React.Component {
       marginBottom: 0
     },
     status: 'until',
-    rating: 0
+    rating: 0,
+    enabledComment: false
   }
+
   render() {
     const { _t } = this.props.appActions
     const { place } = this.props.map
@@ -22,135 +25,111 @@ export default class Dialog extends React.Component {
     return (
       <FeedbackDialogWrapper>
         <View style={{marginBottom: this.state.adjust.marginBottom}}>
-          {status=='until' &&
+          {/* {status=='until' &&
           this.renderWhenUntil()
           }
           {(status=='rated' || status=='write_review') &&
           this.renderWhenRated()
-          }
+          } */}
+          {this.renderWhenRated()}
         </View>
       </FeedbackDialogWrapper>
     )
   }
 
-  renderWhenUntil() {
-    const { _t } = this.props.appActions
-    const { rating, } = this.state
+  renderComment = () => {
+    const { _t } = this.props.appActions;
+    const { enabledComment, rating } = this.state;
+    if (enabledComment) {
+      return (
+        <TextInput
+          style={{
+            borderRadius: 20, width: '100%', height: 90,
+            backgroundColor: 'rgba(191, 191, 196, 0.1)',
+            color: '#9f9f9f',
+            textAlign: 'center', fontSize: 15
+          }} 
+          onFocus={this.adjustOnFocus}
+          onBlur={this.adjustOnBlur}
+        />
+      )
+    } else {
+      if (rating > 0 ) {
+        return (
+          <TouchableOpacity onPress={() => this.setState({enabledComment: true})}>
+            <Text style={{fontSize: 13, color: colors.primary, textAlign: 'center'}}>
+              {_t('Write a comment')}
+            </Text>
+          </TouchableOpacity>
+        );
+      } else {
+        <View />
+      }
+    }
+  };
+
+  renderWhenRated = () => {
+    const { _t } = this.props.appActions;
+    const { rating } = this.state;
 
     return (
       <React.Fragment>
         <View style={{ alignItems: 'center' }}>
-          <Image source={require('~/common/assets/images/png/logo-color.png')} />
+          {rating > 3 
+            ? <Image source={require('~/common/assets/images/png/happy-nono.png')} />
+            : <Image source={require('~/common/assets/images/png/nono.sad.png')} />
+          }
         </View>
         <View style={{ alignItems: 'center' }}>
           <Text style={{ 
             fontSize: 22, fontWeight: 'bold', textAlign: 'center',
             marginVertical: 10, marginHorizontal: 20
           }}>
-            {_t('Do you like our service?')}
+            {((rating > 3) || (rating === 0))
+              ? _t('Do you like our service?')
+              : _t('We are sorry.')
+            }
           </Text>
-          <Text style={{
-            fontSize: 15, lineHeight: 22, textAlign: 'center',
-            marginHorizontal: 40
-          }}>
-            {_t('Click on the stars to rate our application.')}
-          </Text>
+          { rating === 0 && <Text style={{
+              fontSize: 15, lineHeight: 22,
+              textAlign: 'center', marginHorizontal: 40
+            }}>
+              {_t('Click on the stars to rate our application.')}
+            </Text>
+          }
         </View>
-        <View style={{ 
-          alignItems: 'center', 
-          marginVertical: 20, marginHorizontal: 10
-        }}>
+        <View style={{alignItems: 'center', marginVertical: 20, marginHorizontal: 10}}>
           <StarRating
             starSize={30}
+            // disabled={true}
             selectedStar={this.setRating}
             rating={rating}
             fullStarColor='#ffdf00' emptyStarColor='#bfbfc4'
           />
         </View>
-        <View style={{ 
-          alignItems: 'center', 
-          marginVertical: 10
-        }}>
-          <TouchableOpacity onPress={this.props.onClose}>
-            <Text style={{
-              fontSize: 17, color: colors.primary, textAlign: 'center'
-            }}>
-              {_t('Later')}
-            </Text>
-          </TouchableOpacity>
+        <View style={{alignItems: 'center', marginVertical: 10}}>
+          {this.renderComment()}
         </View>
-      </React.Fragment>
-    )
-  }
-
-  renderWhenRated() {
-    const { _t } = this.props.appActions
-    const { rating, status } = this.state
-
-    return (
-      <React.Fragment>
-        <View style={{ alignItems: 'center' }}>
-          {rating>3?
-          <Image source={require('~/common/assets/images/png/happy-nono.png')} />
-          :
-          <Image source={require('~/common/assets/images/png/nono.sad.png')} />
-          }
-          
-        </View>
-        <View style={{ alignItems: 'center' }}>
-          <Text style={{ 
-            fontSize: 22, fontWeight: 'bold', textAlign: 'center',
-            marginVertical: 10, marginHorizontal: 20
-          }}>
-            {rating>3?
-            _t('Do you like our service?')
-            :
-            _t('We are sorry.')
-            }
-          </Text>
-        </View>
-        <View style={{ 
-          alignItems: 'center', 
-          marginVertical: 20, marginHorizontal: 10
-        }}>
-          <StarRating
-            starSize={30} disabled={true}
-            rating={rating}
-            fullStarColor='#ffdf00' emptyStarColor='#bfbfc4'
-          />
-        </View>
-        <View style={{ 
-          alignItems: 'center', 
-          marginVertical: 10
-        }}>
-          {status=='rated'?
-          <TouchableOpacity onPress={() => this.setState({...this.state, status: 'write_review'})}>
-            <Text style={{
-              fontSize: 13, color: colors.primary, textAlign: 'center'
-            }}>
-              {_t('Write a comment')}
-            </Text>
-          </TouchableOpacity>
-          :
-          <TextInput style={{
-            borderRadius: 20, width: '100%', height: 90,
-            backgroundColor: 'rgba(191, 191, 196, 0.1)', color: '#9f9f9f',
-            textAlign: 'center', fontSize: 15
-          }} 
-            onFocus={this.adjustOnFocus} onBlur={this.adjustOnBlur}
-          />
-          }
-        </View>
-        <View style={{ alignItems: 'center' }}>
-          <View style={{width: 180}}>
-            <Button 
-              caption={_t('Send')}
-              icon={require('~/common/assets/images/png/send.png')} iconColor='#fff'
-              textColor='#fff' bgColor='#35cdfa'
-              containerHeight={50}
-              onPress={this.sendRate}
-            />
-          </View>
+        <View style={{alignItems: 'center'}}>
+          { rating > 0 ? (
+            <View style={{width: 180}}>
+              <Button 
+                caption={_t('Send')}
+                icon={require('~/common/assets/images/png/send.png')} iconColor='#fff'
+                textColor='#fff' bgColor='#35cdfa'
+                containerHeight={50}
+                onPress={this.sendRate}
+              />
+            </View>
+          ) : (
+            <View style={{alignItems: 'center', marginVertical: 10}}>
+              <TouchableOpacity onPress={this.props.onClose}>
+                <Text style={{fontSize: 17, color: colors.primary, textAlign: 'center'}}>
+                  {_t('Later')}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
       </React.Fragment>
     )
@@ -174,6 +153,7 @@ export default class Dialog extends React.Component {
   }
 
   sendRate = () => {
-    Actions['map_first']()
+    this.props.mapActions.setActiveModal(MAP_MODAL.UNLOCK);
+    // Actions['map_first']()
   }
 }

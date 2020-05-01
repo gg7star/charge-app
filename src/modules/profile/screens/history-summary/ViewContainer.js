@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { compose } from 'recompose';
 import { AppActions, LoginActions, ProfileActions } from '~/actions';
-import ScreenView from './View';
+import HistorySummaryView from './View';
 
 const mapStateToProps = state => ({
   app: state.app || {},
@@ -19,4 +19,4 @@ export default compose(
     mapStateToProps,
     mapDispatchToProps
   )
-)(ScreenView);
+)(HistorySummaryView);

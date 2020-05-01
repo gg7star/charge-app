@@ -1,0 +1,489 @@
+{
+  "79 Rue de Seine" : {
+    "address" : "79 Rue de Seine, 75006 Paris",
+    "batteries" : 18,
+    "coordinate" : {
+      "latitude" : 37.351996988,
+      "longitude" : -122.0487472123455
+    },
+    "image" : "https://homepages.cae.wisc.edu/~ece533/images/airplane.png",
+    "isOpened" : true,
+    "location" : "79 Rue de Seine, 75006 Paris",
+    "name" : "79 Rue de Seine",
+    "openHour" : "22:00",
+    "openHours" : [ null, {
+      "closeHour" : "22:00",
+      "day" : "Monday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Tuesday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Wednesday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Thirsday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Friday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Saturday",
+      "openHour" : "07:00"
+    }, {
+      "day" : "Sunday",
+      "notOpen" : true
+    } ],
+    "phone" : "0575432211",
+    "places" : 6,
+    "title" : "79 Rue de Seine",
+    "web" : "www.supermarche.fr"
+  },
+  "Big Fernand" : {
+    "address" : "Talley Student Union, 2610 Cates Ave Suite 2210, Raleigh, NC 27695",
+    "batteries" : 24,
+    "coordinate" : {
+      "latitude" : 48.884138,
+      "longitude" : 2.264485
+    },
+    "image" : "https://lh5.googleusercontent.com/p/AF1QipO1ZVq7w7yTmlFIBoeVTq069pEJe0wXGkJeuBQn=w426-h240-k-no",
+    "isOpened" : true,
+    "name" : "Big Fernand",
+    "openHour" : "12:00",
+    "openHours" : [ null, {
+      "closeHour" : "22:30",
+      "day" : "Monday",
+      "openHour" : "12:00"
+    }, {
+      "closeHour" : "22:30",
+      "day" : "Tuesday",
+      "openHour" : "12:00"
+    }, {
+      "closeHour" : "22:300",
+      "day" : "Wednesday",
+      "openHour" : "12:00"
+    }, {
+      "closeHour" : "22:30",
+      "day" : "Thursday",
+      "openHour" : "12:00"
+    }, {
+      "closeHour" : "22:30",
+      "day" : "Friday",
+      "openHour" : "12:00"
+    }, {
+      "closeHour" : "22:30",
+      "day" : "Saturday",
+      "openHour" : "12:00"
+    }, {
+      "closeHour" : "22:30",
+      "day" : "Sunday",
+      "openHour" : "12:00"
+    } ],
+    "phone" : "+33 1 85 15 23 61",
+    "places" : 6,
+    "title" : "Big Fernand",
+    "web" : "bigfernand.com"
+  },
+  "Cupertino, California" : {
+    "address" : "21593 La Playa Ct, Cupertino, CA 95014",
+    "batteries" : 12,
+    "coordinate" : {
+      "latitude" : 37.301996988,
+      "longitude" : -122.0525472123455
+    },
+    "image" : "https://homepages.cae.wisc.edu/~ece533/images/baboon.png",
+    "isOpened" : false,
+    "location" : "21593 La Playa Ct, Cupertino, CA 95014",
+    "name" : "Cupertino, California",
+    "openHour" : "22:00",
+    "openHours" : [ null, {
+      "closeHour" : "22:00",
+      "day" : "Monday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Tuesday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Wednesday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Thirsday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Friday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Saturday",
+      "openHour" : "07:00"
+    }, {
+      "day" : "Sunday",
+      "notOpen" : true
+    } ],
+    "phone" : "0575432211",
+    "places" : 3,
+    "title" : "Cupertino, California",
+    "web" : "www.supermarche.fr"
+  },
+  "Club Neuilly Escrime" : {
+    "address" : "Complexe Sportif, Ile du Pont de Neuilly, 92200 Neuilly-sur-Seine, France",
+    "batteries" : 6,
+    "coordinate" : {
+      "latitude" : 48.885576,
+      "longitude" : 2.253706
+    },
+    "image" : "https://www.google.com/maps/place/Club+Neuilly+Escrime/@48.8861555,2.2541674,18.1z/data=!4m13!1m7!3m6!1s0x47e6656373e396b5:0xdc39759cf532b397!2sNeuilly-sur-Seine,+France!3b1!8m2!3d48.884831!4d2.26851!3m4!1s0x47e66513ac9cfaf9:0x5905beb424c6c66b!8m2!3d48.8855042!4d2.2537315#",
+    "isOpened" : true,
+    "name" : "Club Neuilly Escrime",
+    "openHour" : "22:00",
+    "openHours" : [ null, {
+      "closeHour" : "22:00",
+      "day" : "Monday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Tuesday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Wednesday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Thirsday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Friday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Saturday",
+      "openHour" : "07:00"
+    }, {
+      "day" : "Sunday",
+      "notOpen" : true
+    } ],
+    "phone" : "+33 6 03 24 81 63",
+    "places" : 4,
+    "title" : "Club Neuilly Escrime",
+    "web" : "neuillyescrime92.com"
+  },
+  "Yukon" : {
+    "address" : "Янтарная улица, Dnipro, Dnipropetrovsk Oblast, Ukraine, 49000",
+    "batteries" : 12,
+    "coordinate" : {
+      "latitude" : 48.517586,
+      "longitude" : 35.044859
+    },
+    "image" : "https://www.google.com/maps/place/Yukon/@48.5174022,35.0448489,3a,75y,90t/data=!3m8!1e2!3m6!1sAF1QipNDYQSgmmExq_PAqB9JZwTogLs9cguQcPRLEMmd!2e10!3e12!6shttps:%2F%2Flh5.googleusercontent.com%2Fp%2FAF1QipNDYQSgmmExq_PAqB9JZwTogLs9cguQcPRLEMmd%3Dw140-h186-k-no!7i3120!8i4160!4m13!1m7!3m6!1s0x0:0x0!2zNDjCsDMxJzAzLjMiTiAzNcKwMDInNDEuNSJF!3b1!8m2!3d48.517586!4d35.044859!3m4!1s0x40d95896604ae41f:0x3ffca871d7b8605c!8m2!3d48.5175229!4d35.0448391#",
+    "isOpened" : true,
+    "name" : "Yukon",
+    "openHour" : "22:00",
+    "openHours" : [ null, {
+      "closeHour" : "22:00",
+      "day" : "Monday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Tuesday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Wednesday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Thirsday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Friday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Saturday",
+      "openHour" : "07:00"
+    }, {
+      "day" : "Sunday",
+      "notOpen" : true
+    } ],
+    "phone" : "+33 509 893 893",
+    "places" : 4,
+    "title" : "Yukon",
+    "web" : "avias.com.ua"
+  },
+  "Atb-Market Mahazyn Tov" : {
+    "address" : "Akademika Obraztsova St, 2, Dnipro, Дніпропетровська, Ukraine, 49000",
+    "batteries" : 6,
+    "coordinate" : {
+      "latitude" : 48.51553,
+      "longitude" : 35.052894
+    },
+    "image" : "https://www.google.com/maps/place/Atb-Market+Mahazyn+Tov/@48.5152989,35.0529202,3a,75y,90t/data=!3m8!1e2!3m6!1sAF1QipMjZE-cD_OQhpo3iv3xMAMs5Mb_wJD3W8AZyjdy!2e10!3e12!6shttps:%2F%2Flh5.googleusercontent.com%2Fp%2FAF1QipMjZE-cD_OQhpo3iv3xMAMs5Mb_wJD3W8AZyjdy%3Dw160-h120-k-no!7i4032!8i3024!4m13!1m7!3m6!1s0x0:0x0!2zNDjCsDMwJzU1LjkiTiAzNcKwMDMnMTAuNCJF!3b1!8m2!3d48.51553!4d35.052894!3m4!1s0x40d95893b2d4b8a5:0x3434e4e5a023fd9e!8m2!3d48.5152989!4d35.0529199#",
+    "isOpened" : true,
+    "name" : "Atb-Market Mahazyn Tov",
+    "openHour" : "22:00",
+    "openHours" : [ null, {
+      "closeHour" : "22:00",
+      "day" : "Monday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Tuesday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Wednesday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Thirsday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Friday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Saturday",
+      "openHour" : "07:00"
+    }, {
+      "day" : "Sunday",
+      "notOpen" : true
+    } ],
+    "phone" : "+380 56 374 6679",
+    "places" : 4,
+    "title" : "Atb-Market Mahazyn Tov",
+    "web" : "nono-chargeme.com"
+  },
+  "11 Boulevard du Général Koenig" : {
+    "address" : "11 Boulevard du Général Koenig, 11 Boulevard du Général Koenig, France",
+    "batteries" : 12,
+    "coordinate" : {
+      "latitude" : 48.884651,
+      "longitude" : 2.255631
+    },
+    "image" : "https://www.google.com/maps/place/11+Boulevard+du+G%C3%A9n%C3%A9ral+Koenig,+92200+Neuilly-sur-Seine,+France/@48.8847977,2.2553867,3a,75y,164.44h,90t/data=!3m7!1e1!3m5!1sIf8bWYwDCuLVc93R846k0w!2e0!6s%2F%2Fgeo0.ggpht.com%2Fcbk%3Fpanoid%3DIf8bWYwDCuLVc93R846k0w%26output%3Dthumbnail%26cb_client%3Dsearch.gws-prod.gps%26thumb%3D2%26w%3D86%26h%3D86%26yaw%3D164.43668%26pitch%3D0%26thumbfov%3D100!7i16384!8i8192!4m5!3m4!1s0x47e6651340acb793:0xc2b9185f4199ce1e!8m2!3d48.88465!4d2.2554538#",
+    "isOpened" : true,
+    "name" : "11 Boulevard du Général Koenig",
+    "openHour" : "22:00",
+    "openHours" : [ null, {
+      "closeHour" : "22:00",
+      "day" : "Monday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Tuesday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Wednesday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Thirsday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Friday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Saturday",
+      "openHour" : "07:00"
+    }, {
+      "day" : "Sunday",
+      "notOpen" : true
+    } ],
+    "phone" : "+33 609 568 6893",
+    "places" : 4,
+    "title" : "11 Boulevard du Général Koenig",
+    "web" : "nono-chargeme.com"
+  },
+  "Shinjuku" : {
+    "address" : "2 Rue de Longchamp, 92200 Neuilly-sur-Seine, France",
+    "batteries" : 12,
+    "coordinate" : {
+      "latitude" : 48.884817,
+      "longitude" : 2.25837
+    },
+    "image" : "https://www.google.com/maps/place/Shinjuku/@48.8848224,2.2584779,3a,75y,90t/data=!3m8!1e2!3m6!1sAF1QipMhrINkLX4zYQ9vREw_1Hr9xOwjkX4Dg7JeKBiB!2e10!3e12!6shttps:%2F%2Flh5.googleusercontent.com%2Fp%2FAF1QipMhrINkLX4zYQ9vREw_1Hr9xOwjkX4Dg7JeKBiB%3Dw112-h86-k-no!7i2048!8i1569!4m5!3m4!1s0x47e6656ce9b0d9c9:0xd514177b91efcae4!8m2!3d48.8848816!4d2.2583637#",
+    "isOpened" : true,
+    "name" : "Shinjuku",
+    "openHour" : "22:00",
+    "openHours" : [ null, {
+      "closeHour" : "22:00",
+      "day" : "Monday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Tuesday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Wednesday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Thirsday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Friday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Saturday",
+      "openHour" : "07:00"
+    }, {
+      "day" : "Sunday",
+      "notOpen" : true
+    } ],
+    "phone" : "+33 1 46 24 42 11",
+    "places" : 5,
+    "title" : "Shinjuku",
+    "web" : "shinjukusushi.fr"
+  },
+  "La Ferme de l'Aveyron" : {
+    "address": "186 Avenue Charles de Gaulle, 92200 Neuilly-sur-Seine, France",
+    "batteries" : 12,
+    "coordinate" : {
+      "latitude" : 48.886054,
+      "longitude" : 2.25816
+    },
+    "image" : "https://www.google.com/maps/place/La+Ferme+de+l'Aveyron/@48.8857672,2.2580792,3a,75y,90t/data=!3m8!1e2!3m6!1sAF1QipOUnnPbuCaqA4e7QslXMsVV5kD7IqCI280DsHGb!2e10!3e12!6shttps:%2F%2Flh5.googleusercontent.com%2Fp%2FAF1QipOUnnPbuCaqA4e7QslXMsVV5kD7IqCI280DsHGb%3Dw114-h86-k-no!7i4032!8i3024!4m13!1m7!3m6!1s0x0:0x0!2zNDjCsDUzJzA5LjgiTiAywrAxNScyOS40IkU!3b1!8m2!3d48.886054!4d2.25816!3m4!1s0x47e6656d2115becf:0xe5d10444c209f89!8m2!3d48.8858631!4d2.2581491#",
+    "isOpened" : true,
+    "name" : "La Ferme de l'Aveyron",
+    "openHour" : "22:00",
+    "openHours" : [ null, {
+      "closeHour" : "22:00",
+      "day" : "Monday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Tuesday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Wednesday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Thirsday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Friday",
+      "openHour" : "07:00"
+    }, {
+      "closeHour" : "22:00",
+      "day" : "Saturday",
+      "openHour" : "07:00"
+    }, {
+      "day" : "Sunday",
+      "notOpen" : true
+    } ],
+    "phone" : "+33 1 46 24 76 54",
+    "places" : 4,
+    "title" : "La Ferme de l'Aveyron",
+    "web" : "facebook.com"
+  },
+  "Wolf Village Apartments" : {
+    "address" : "North Carolina State University, 2730 Wolf Village Way, Raleigh, NC 27607",
+    "batteries" : 12,
+    "coordinate" : {
+      "latitude" : 35.786939,
+      "longitude" : -78.684624
+    },
+    "description" : "North Carolina State University, 2730 Wolf Village Way, Raleigh, NC 27607",
+    "image" : "https://www.google.com/maps/place/Wolf+Village+Apartments/@35.7862337,-78.6846148,3a,75y,90t/data=!3m8!1e2!3m6!1sAF1QipN1nMEzOU8SG-PTGH99K0SuwUZgl8LHtOg7FDTb!2e10!3e12!6s%2F%2Flh5.googleusercontent.com%2F-_1M6P-DkBrw%2FWMMbwZqi-PI%2FAAAAAAAAACk%2FboAlmJ-6NaI7DsY0P6XYX0aVZL_zq5phgCLIBGAYYCw%2Fw445-h298-k-no%2F!7i2048!8i1371!4m5!3m4!1s0x89acf5bc72789349:0x4c8c5edba54ccf7!8m2!3d35.7862337!4d-78.6846148#",
+    "isOpened" : true,
+    "name" : "Wolf Village Apartments",
+    "openHours" : [ null, {
+      "closeHour" : "17:00",
+      "day" : "Monday",
+      "openHour" : "08:00"
+    }, {
+      "closeHour" : "17:00",
+      "day" : "Tuesday",
+      "openHour" : "08:00"
+    }, {
+      "closeHour" : "17:00",
+      "day" : "Wednesday",
+      "openHour" : "08:00"
+    }, {
+      "closeHour" : "17:00",
+      "day" : "Thirsday",
+      "openHour" : "08:00"
+    }, {
+      "closeHour" : "17:00",
+      "day" : "Friday",
+      "openHour" : "08:00"
+    }, {
+      "closeHour" : "17:00",
+      "day" : "Saturday",
+      "openHour" : "08:00"
+    }, {
+      "day" : "Sunday",
+      "notOpen" : true
+    } ],
+    "phone" : "+1 (919) 513-9653",
+    "places" : 4,
+    "title" : "Wolf Village Apartments",
+    "web" : "housing.dasa.ncsu.edu"
+  },
+  "Wolfpack Outfitters" : {
+    "address" : "Talley Student Union, 2610 Cates Ave Suite 2210, Raleigh, NC 27695",
+    "batteries" : 12,
+    "coordinate" : {
+      "latitude" : 35.783656,
+      "longitude" : -78.670629
+    },
+    "description" : "Clothing store",
+    "image" : "https://www.google.com/maps/place/Wolfpack+Outfitters/@35.7834004,-78.671017,3a,75y,90t/data=!3m8!1e2!3m6!1sAF1QipM1Yo9XT5RDJzEn54Ea10AD67cgRv2lgc7MKqLq!2e10!3e12!6shttps:%2F%2Flh5.googleusercontent.com%2Fp%2FAF1QipM1Yo9XT5RDJzEn54Ea10AD67cgRv2lgc7MKqLq%3Dw86-h114-k-no!7i2448!8i3264!4m8!1m2!2m1!1sWolfpack+Outfitters!3m4!1s0x89acf591095ff5ed:0x6ab7f60b72349ae8!8m2!3d35.7836008!4d-78.6706383#",
+    "isOpened" : true,
+    "name" : "Wolfpack Outfitters",
+    "openHours" : [ null, {
+      "closeHour" : "20:00",
+      "day" : "Monday",
+      "openHour" : "08:00"
+    }, {
+      "closeHour" : "20:00",
+      "day" : "Tuesday",
+      "openHour" : "08:00"
+    }, {
+      "closeHour" : "20:00",
+      "day" : "Wednesday",
+      "openHour" : "08:00"
+    }, {
+      "closeHour" : "20:00",
+      "day" : "Thirsday",
+      "openHour" : "08:00"
+    }, {
+      "closeHour" : "20:00",
+      "day" : "Friday",
+      "openHour" : "08:00"
+    }, {
+      "closeHour" : "20:00",
+      "day" : "Saturday",
+      "openHour" : "08:00"
+    }, {
+      "day" : "Sunday",
+      "notOpen" : true
+    } ],
+    "phone" : "+1 (919) 515-2161",
+    "places" : 6,
+    "title" : "Wolfpack Outfitters",
+    "web" : "shop.ncsu.edu"
+  }
+}

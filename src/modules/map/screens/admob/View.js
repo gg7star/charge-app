@@ -12,7 +12,7 @@ import admob, {
 import admobConfig from '~/common/config/admob';
 import { saveHistory } from '~/common/services/rn-firebase/database';
 import { calculateDurationWithMins } from '~/common/utils/time';
-
+import MAP_MODAL from '~/common/constants/map';
 
 export default class ScreenView extends React.Component {
   state = {
@@ -30,8 +30,8 @@ export default class ScreenView extends React.Component {
       ...rent,
       price: "0.00€",
       duration: `${calculateDurationWithMins(rent.startTime, rent.endTime)}`,
-      takePlace: "79 Rue de seins.sadsa",
-      depositPlace: "155 Bouelvard Saint Gernmarenw",
+      takePlace: rent.depositPlace,
+      depositPlace: "",
       cost: 0.00,
       credit: 0,
       points: 123
@@ -95,10 +95,12 @@ export default class ScreenView extends React.Component {
   }
 
   onClickScreen = () => {
+    const { mapActions } = this.props;
     const { unsubscribe } = this.state;
     console.log('==== unsubscribe admob');
     unsubscribe && unsubscribe();
-    Actions['map_first']({initialModal: 'feedback'});
+    mapActions.setActiveModal(MAP_MODAL.FEEDBACK);
+    Actions['map_first']();
   }
 
   render() {

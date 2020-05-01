@@ -297,7 +297,7 @@ export default class QRScannerView extends Component {
   
   onScanResult = (e) => {
     _this = this;
-    
+    const { _t } = this.props.appActions;
     if (
       this.state.scanEnabled &&
       RNCamera.Constants.BarCodeType.qr === e.type
@@ -306,8 +306,8 @@ export default class QRScannerView extends Component {
       this.handleAppStateChange('stop');
       this.setState({scanEnabled: false, qrCode}, () => {
         Alert.alert(
-          'Scaned QR Code',
-          `${qrCode}. Are you sure to rent to this device?`,
+          _t('QR Code scanned'),
+          `${qrCode}. ${_t('Are you sure to rent a Nono power bank for 48 hours?')}`,
           [
             {
               text: 'Cancel',

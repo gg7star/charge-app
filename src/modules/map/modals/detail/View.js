@@ -35,7 +35,7 @@ export default class Dialog extends React.Component {
                 bgGradientStart='#ff52a8' bgGradientEnd='#ffdf00'
                 caption={
                   direction.duration
-                  ? `${direction.duration} mn - ${direction.distance} m`
+                  ? `${direction.duration} - ${direction.distance}`
                   : ''
                 }
                 onPress={() => this.props.onFinish()}

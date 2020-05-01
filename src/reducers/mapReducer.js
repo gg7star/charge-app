@@ -9,7 +9,8 @@ const initialState = {
   direction: {},
   searchLimit: '1km',
   stations: [],
-  scannedQrCode: ''
+  scannedQrCode: '',
+  activeModal: 'unlock'
 }
 
 export default function reducer(state = initialState, action) {
@@ -80,20 +81,30 @@ export default function reducer(state = initialState, action) {
       }
     case mapActionTypes.RECEIVED_STATION_DETAIL:
       var stations = state.stations;
-      const index = stations.findIndex((station) => station.stationSn === action.payload.station.stationSn);
+      console.log('==== action.payload.station.stationSn: ', action.payload.station.stationSn);
+      var index = stations.length > 0 ?
+        stations.findIndex((s) => s.stationSn === action.payload.station.stationSn) :
+        -1 ;
+      console.log('===== index: ', index);
       if (index > -1) {
+        console.log('===== Removing previous station: ');
         stations.splice(index, 1);
-      } else {
-        stations.push(action.payload.station)
       }
+      console.log('===== Adding this station: action.payload.station: ', action.payload.station);
+      stations.push(action.payload.station)
       return {
         ...state,
-        stations
+        stations: stations
       }
     case mapActionTypes.SCANNED_QR_CODE:
       return {
         ...state,
         scannedQrCode: action.payload.scannedQrCode
+      }
+    case mapActionTypes.ACTIVE_MODAL:
+      return {
+        ...state,
+        activeModal: action.payload.activeModal
       }
     default:
       return state

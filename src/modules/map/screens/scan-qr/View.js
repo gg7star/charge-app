@@ -6,10 +6,10 @@ import Torch from 'react-native-torch';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { W, H, em } from '~/common/constants';
 import { Spacer } from '~/common/components';
-import QRScanner from './components/QRScanner';
+import QRScannerContainer from './components/QRScannerContainer';
 import { rentButtery } from '~/common/services/station-gateway/gateway';
-
-const RENT_EXPIRE_TIMEOUT = 30000;
+import MAP_MODAL from '~/common/constants/map';
+import { RENT_EXPIRE_TIMEOUT } from '~/common/constants/rent';
 
 export default class ScanQRView extends React.Component {
   state = {
@@ -46,10 +46,11 @@ export default class ScanQRView extends React.Component {
 
   onReceivedQRCode = (scanedQrCode, callbackResumScan) => {
     const _this = this;
+    const { _t } = this.props.appActions;
     this.setState({qrCode: scanedQrCode, scanBarAnimateReverse: false}, () => {
       var temp = scanedQrCode.split(' ');
       // For test
-      const parsedStationSn = temp[temp.length-1]; //'T1219071904'; // need to parse from scanedQrCode
+      const parsedStationSn = temp[temp.length-1]; // need to parse from scanedQrCode
       console.log('==== QR code: ', scanedQrCode, parsedStationSn);
       // Check stationSN validation
       const { auth, map, mapActions, rentActions } = this.props;
@@ -66,8 +67,8 @@ export default class ScanQRView extends React.Component {
         });
         if (res.error) {
           Alert.alert(
-            'Failed to rent the buttery',
-            `Failed to rent the buttery. Please try, again, later.`,
+            _t('Failed to rent the buttery'), 
+            _t(`Failed to rent the buttery. Please try, again, later.`),
             [
               {text: 'OK', onPress: this.onRentTimedOut}
             ],
@@ -77,8 +78,8 @@ export default class ScanQRView extends React.Component {
           setTimeout(() => {
             if (_this.state.rentingButtery) {
               Alert.alert(
-                'Renting timed out', 
-                'Timed out to rent buttery. Please try later.'
+                _t('Renting timed out'), 
+                _t('Timed out to rent buttery. Please try later.')
                 [
                   {text: 'OK', onPress: () => this.onRentTimedOut()}
                 ],
@@ -96,13 +97,14 @@ export default class ScanQRView extends React.Component {
           });
          
           // For test
-          Actions['map_first']({initialModal: 'rent'});
+          mapActions.setActiveModal(MAP_MODAL.RENT);
+          Actions['map_first']();
+          // Actions['map_first']({initialModal: 'rent'});
         }
-        
       } else {
         Alert.alert(
-          'Invalid QR code',
-          `${scanedQrCode}. The code is invalid. Please enter correct QR code of this station, again.`,
+          _t('Invalid QR code'),
+          `${scanedQrCode}. ${_t('The code is invalid. Please enter correct QR code of this station, again.')}`,
           [
             {text: 'OK', onPress: () => {
               callbackResumScan();
@@ -214,7 +216,7 @@ export default class ScanQRView extends React.Component {
     const { _t } = appActions;
     return (
       <View style={{flex:1}}>
-        < QRScanner
+        < QRScannerContainer
           onScanResult={ this.onReceivedQRCode }
           renderHeaderView={ this.renderTitleBar }
           renderFooterView={ <this.renderBottom onSwitchToQRCodeInput={onSwitchToQRCodeInput}/>}

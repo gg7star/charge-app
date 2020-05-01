@@ -15,10 +15,10 @@ export function rentStation({stationSn, uuid, pushToken, deviceType, onesignalUs
   }
 }
 
-export function rentSuccess({tradeNo, powerBankSn, slotNum, msg}, auth) {
+export function rentSuccess({tradeNo, powerBankSn, slotNum, stationSn, rentedPlaceAddress, msg}, auth) {
   return {
     type: types.RENT_SUCCESS,
-    payload: { tradeNo, powerBankSn, slotNum, msg , auth}
+    payload: { tradeNo, powerBankSn, slotNum, msg, stationSn, rentedPlaceAddress, auth}
   }
 }
 
@@ -32,14 +32,14 @@ export function rentFailure({error}) {
 
 export function returnedButtery(rent, auth) {
   return {
-    type: types.RENT_RETURNED_BUTTERY,
+    type: types.RENT_RETURNED_BATTERY,
     payload: { rent, auth }
   }
 }
 
 export function returnedButteryFailed(rent, auth) {
   return {
-    type: types.RENT_RETURNED_BUTTERY_FAILED,
+    type: types.RENT_RETURNED_BATTERY_FAILED,
     payload: { rent, auth }
   }
 }
