@@ -10,32 +10,38 @@ import moment from 'moment';
 export default class RentDialog extends React.Component {  
   state = {
     duration: '00:00:00',
-    calcuating: true
+    calculating: true
   }
 
   componentDidMount() {
     this.onTimer();
+    const { rent } = this.props;
+    const calculating = (rent.isRented && !rent.isFetching);
+
+    // const duration = calculating ? this.state.duration : '00:00:00';
+    console.log('==== componentDidMount: ', calculating);
+    this.setState({calculating});
   };
 
   onTimer = () => {
     const _this = this;
     setTimeout(() => {
       this.setState({duration: this.calculateDuration()}, () => {
-        if (_this.state.calcuating) _this.onTimer();
+        if (_this.state.calculating) _this.onTimer();
       });
     }, 1000);
   };
 
   componentWillUnmount() {
-    this.setState({calcuating: false});
+    this.setState({calculating: false});
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     const { rent } = nextProps;
-    const calcuating = (rent.isRented && !rent.isFetching);
-    const duration = calcuating ? this.state.duration : '00:00:00';
-    console.log('==== componentWillReceiveProps: ', calcuating, duration);
-    this.setState({calcuating, duration});
+    const calculating = (rent.isRented && !rent.isFetching);
+    const duration = calculating ? this.state.duration : '00:00:00';
+    console.log('==== componentWillReceiveProps: ', calculating, duration);
+    this.setState({calculating, duration});
   }
 
   calculateDuration = () => {
@@ -44,6 +50,13 @@ export default class RentDialog extends React.Component {
     if (!rent.startTime) return `00:00:00 `;
 
     return calculateDurationString(rent.startTime, moment());
+  };
+
+  onClickFinish = () => {
+    const _this = this;
+    this.setState({calculating: false, duration: '00:00:00'}, () => {
+      _this.props.onDeposit();
+    })
   };
 
   render() {
@@ -144,6 +157,7 @@ export default class RentDialog extends React.Component {
 
   renderActions() {
     const { _t } = this.props.appActions
+    const { map } = this.props;
 
     return (
       <View>
@@ -159,12 +173,10 @@ export default class RentDialog extends React.Component {
           </View>
           <View style={{ width: 150*em}}>
             <Button 
-              textColor='#ff52ab' bgColor='white' borderRadius={15}
+              textColor={map.viewedAdmob ? '#ff52ab' : '#cccccc'} bgColor='white' borderRadius={15}
               caption={_t('Finish')}
-              // icon={require('~/common/assets/images/png/arrow-direction.png')}
-              // iconColor='#ff52a8' iconAlign='right'
-              onPress={this.props.onDeposit}
-              disabled
+              onPress={this.onClickFinish}
+              disabled={!map.viewedAdmob}
             />
           </View>
         </View>

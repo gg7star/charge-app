@@ -99,7 +99,8 @@ export default class ScreenView extends React.Component {
     const { unsubscribe } = this.state;
     console.log('==== unsubscribe admob');
     unsubscribe && unsubscribe();
-    mapActions.setActiveModal(MAP_MODAL.FEEDBACK);
+    mapActions.setViewedAdmob(true);
+    mapActions.setActiveModal(MAP_MODAL.RENT);
     Actions['map_first']();
   }
 

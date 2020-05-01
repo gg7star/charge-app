@@ -301,7 +301,7 @@ export default class FirstScreenView extends React.Component {
   }
 
   onDeposit = async () => {
-    const { auth, rent, stripeActions, rentActions, appActions } = this.props;
+    const { auth, rent, stripeActions, rentActions, mapActions, appActions } = this.props;
     const { _t } = appActions;
     // this.setState({depositingButtery: true});
     // const res = await returnButtery(rent, auth);
@@ -320,7 +320,9 @@ export default class FirstScreenView extends React.Component {
     // } else {
     //   Actions['admob']({adMode: 'reward'});
     // }
-    Actions['admob']({adMode: 'reward'});
+    mapActions.setActiveModal(MAP_MODAL.FEEDBACK);
+    // Actions['map_first']();
+    // Actions['admob']({adMode: 'reward'});
   }
 
   openFeedbackDialog = () => {

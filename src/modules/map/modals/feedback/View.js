@@ -25,12 +25,6 @@ export default class Dialog extends React.Component {
     return (
       <FeedbackDialogWrapper>
         <View style={{marginBottom: this.state.adjust.marginBottom}}>
-          {/* {status=='until' &&
-          this.renderWhenUntil()
-          }
-          {(status=='rated' || status=='write_review') &&
-          this.renderWhenRated()
-          } */}
           {this.renderWhenRated()}
         </View>
       </FeedbackDialogWrapper>
@@ -68,6 +62,20 @@ export default class Dialog extends React.Component {
     }
   };
 
+  renderRatingImage = () => {
+    const { rating } = this.state;
+    if (rating > 3) return <Image source={require('~/common/assets/images/png/happy-nono.png')} />
+    if (rating === 0) return <Image source={require('~/common/assets/images/png/happy-nono.png')} />
+    return <Image source={require('~/common/assets/images/png/nono.sad.png')} />
+  };
+
+  renderTitle = () => {
+    const { _t } = this.props.appActions;
+    const { rating } = this.state;
+    if ((rating > 3) || (rating === 0)) return _t('Do you like our service?');
+    return _t('We are sorry.');
+  };
+
   renderWhenRated = () => {
     const { _t } = this.props.appActions;
     const { rating } = this.state;
@@ -75,22 +83,16 @@ export default class Dialog extends React.Component {
     return (
       <React.Fragment>
         <View style={{ alignItems: 'center' }}>
-          {rating > 3 
-            ? <Image source={require('~/common/assets/images/png/happy-nono.png')} />
-            : <Image source={require('~/common/assets/images/png/nono.sad.png')} />
-          }
+          {this.renderRatingImage()}
         </View>
         <View style={{ alignItems: 'center' }}>
           <Text style={{ 
             fontSize: 22, fontWeight: 'bold', textAlign: 'center',
             marginVertical: 10, marginHorizontal: 20
           }}>
-            {((rating > 3) || (rating === 0))
-              ? _t('Do you like our service?')
-              : _t('We are sorry.')
-            }
+            {this.renderTitle()}
           </Text>
-          { rating === 0 && <Text style={{
+          {rating === 0 && <Text style={{
               fontSize: 15, lineHeight: 22,
               textAlign: 'center', marginHorizontal: 40
             }}>
@@ -101,7 +103,6 @@ export default class Dialog extends React.Component {
         <View style={{alignItems: 'center', marginVertical: 20, marginHorizontal: 10}}>
           <StarRating
             starSize={30}
-            // disabled={true}
             selectedStar={this.setRating}
             rating={rating}
             fullStarColor='#ffdf00' emptyStarColor='#bfbfc4'

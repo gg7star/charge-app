@@ -10,7 +10,8 @@ const initialState = {
   searchLimit: '1km',
   stations: [],
   scannedQrCode: '',
-  activeModal: 'unlock'
+  activeModal: 'unlock',
+  viewedAdmob: false
 }
 
 export default function reducer(state = initialState, action) {
@@ -105,6 +106,11 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         activeModal: action.payload.activeModal
+      }
+    case mapActionTypes.VIEWED_ADMOB:
+      return {
+        ...state,
+        viewedAdmob: action.payload.viewedAdmob
       }
     default:
       return state

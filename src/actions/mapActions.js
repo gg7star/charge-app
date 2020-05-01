@@ -100,3 +100,10 @@ export function setActiveModal(name) {
     }
   }
 }
+
+export function setViewedAdmob(viewedAdmob) {
+  return {
+    type: types.VIEWED_ADMOB,
+    payload: {viewedAdmob}
+  }
+}
