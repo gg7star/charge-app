@@ -60,15 +60,15 @@ PODS:
     - GoogleUtilities/AppDelegateSwizzler (~> 6.2)
     - GoogleUtilities/Environment (~> 6.2)
     - GTMSessionFetcher/Core (~> 1.1)
-  - FirebaseAuthInterop (1.0.0)
+  - FirebaseAuthInterop (1.1.0)
   - FirebaseCore (6.4.0):
     - FirebaseCoreDiagnostics (~> 1.0)
     - FirebaseCoreDiagnosticsInterop (~> 1.0)
     - GoogleUtilities/Environment (~> 6.2)
     - GoogleUtilities/Logger (~> 6.2)
-  - FirebaseCoreDiagnostics (1.2.0):
+  - FirebaseCoreDiagnostics (1.2.4):
     - FirebaseCoreDiagnosticsInterop (~> 1.2)
-    - GoogleDataTransportCCTSupport (~> 1.3)
+    - GoogleDataTransportCCTSupport (~> 3.0)
     - GoogleUtilities/Environment (~> 6.5)
     - GoogleUtilities/Logger (~> 6.5)
     - nanopb (~> 0.3.901)
@@ -116,7 +116,7 @@ PODS:
     - GoogleMaps
   - Google-Maps-iOS-Utils/QuadTree (2.1.0):
     - GoogleMaps
-  - Google-Mobile-Ads-SDK (7.53.1):
+  - Google-Mobile-Ads-SDK (7.59.0):
     - GoogleAppMeasurement (~> 6.0)
   - GoogleAppMeasurement (6.1.6):
     - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
@@ -124,34 +124,35 @@ PODS:
     - GoogleUtilities/Network (~> 6.0)
     - "GoogleUtilities/NSData+zlib (~> 6.0)"
     - nanopb (= 0.3.9011)
-  - GoogleDataTransport (3.3.0)
-  - GoogleDataTransportCCTSupport (1.3.0):
-    - GoogleDataTransport (~> 3.3)
+  - GoogleDataTransport (6.1.0)
+  - GoogleDataTransportCCTSupport (3.0.0):
+    - GoogleDataTransport (~> 6.0)
     - nanopb (~> 0.3.901)
   - GoogleMaps (3.2.0):
     - GoogleMaps/Maps (= 3.2.0)
   - GoogleMaps/Base (3.2.0)
   - GoogleMaps/Maps (3.2.0):
     - GoogleMaps/Base
-  - GoogleUtilities/AppDelegateSwizzler (6.5.0):
+  - GoogleUtilities/AppDelegateSwizzler (6.6.0):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
     - GoogleUtilities/Network
-  - GoogleUtilities/Environment (6.5.0)
-  - GoogleUtilities/Logger (6.5.0):
+  - GoogleUtilities/Environment (6.6.0):
+    - PromisesObjC (~> 1.2)
+  - GoogleUtilities/Logger (6.6.0):
     - GoogleUtilities/Environment
-  - GoogleUtilities/MethodSwizzler (6.5.0):
+  - GoogleUtilities/MethodSwizzler (6.6.0):
     - GoogleUtilities/Logger
-  - GoogleUtilities/Network (6.5.0):
+  - GoogleUtilities/Network (6.6.0):
     - GoogleUtilities/Logger
     - "GoogleUtilities/NSData+zlib"
     - GoogleUtilities/Reachability
-  - "GoogleUtilities/NSData+zlib (6.5.0)"
-  - GoogleUtilities/Reachability (6.5.0):
+  - "GoogleUtilities/NSData+zlib (6.6.0)"
+  - GoogleUtilities/Reachability (6.6.0):
     - GoogleUtilities/Logger
-  - GoogleUtilities/UserDefaults (6.5.0):
+  - GoogleUtilities/UserDefaults (6.6.0):
     - GoogleUtilities/Logger
-  - GTMSessionFetcher/Core (1.3.1)
+  - GTMSessionFetcher/Core (1.4.0)
   - leveldb-library (1.22)
   - nanopb (0.3.9011):
     - nanopb/decode (= 0.3.9011)
@@ -163,8 +164,9 @@ PODS:
     - RNPermissions
   - Permission-Notifications (2.0.8):
     - RNPermissions
-  - PersonalizedAdConsent (1.0.4)
-  - Protobuf (3.11.2)
+  - PersonalizedAdConsent (1.0.5)
+  - PromisesObjC (1.2.8)
+  - Protobuf (3.11.4)
   - RCTRequired (0.61.5)
   - RCTTypeSafety (0.61.5):
     - FBLazyVector (= 0.61.5)
@@ -448,7 +450,7 @@ PODS:
     - React
   - RNVectorIcons (6.6.0):
     - React
-  - Stripe (14.0.0)
+  - Stripe (14.0.1)
   - tipsi-stripe (7.5.1):
     - React
     - Stripe (~> 14.0.0)
@@ -511,6 +513,7 @@ DEPENDENCIES:
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
+  - Stripe (~> 14.0.1)
   - tipsi-stripe (from `../node_modules/tipsi-stripe`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -543,6 +546,7 @@ SPEC REPOS:
     - nanopb
     - OneSignal
     - PersonalizedAdConsent
+    - PromisesObjC
     - Protobuf
     - Stripe
 
@@ -667,9 +671,9 @@ SPEC CHECKSUMS:
   FirebaseAnalytics: 45f36d9c429fc91d206283900ab75390cd05ee8a
   FirebaseAnalyticsInterop: 3f86269c38ae41f47afeb43ebf32a001f58fcdae
   FirebaseAuth: ce45d7c5d46bed90159f3a73b6efbe8976ed3573
-  FirebaseAuthInterop: 0ffa57668be100582bb7643d4fcb7615496c41fc
+  FirebaseAuthInterop: a0f37ae05833af156e72028f648d313f7e7592e9
   FirebaseCore: 307ea2508df730c5865334e41965bd9ea344b0e5
-  FirebaseCoreDiagnostics: 5e78803ab276bc5b50340e3c539c06c3de35c649
+  FirebaseCoreDiagnostics: b59c024493a409f8aecba02c99928d0d8431d159
   FirebaseCoreDiagnosticsInterop: 296e2c5f5314500a850ad0b83e9e7c10b011a850
   FirebaseDatabase: 0144e0706a4761f1b0e8679572eba8095ddb59be
   FirebaseInstanceID: ebd2ea79ee38db0cb5f5167b17a0d387e1cc7b6e
@@ -677,20 +681,21 @@ SPEC CHECKSUMS:
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
   Google-Maps-iOS-Utils: c32891ff472eaaa1fca032beedafa1a013af7875
-  Google-Mobile-Ads-SDK: fac081606dbd438d8db57198b83ba8b5f875a601
+  Google-Mobile-Ads-SDK: 118217ac8b80e28aabe0c00aedab1cd885857776
   GoogleAppMeasurement: dfe55efa543e899d906309eaaac6ca26d249862f
-  GoogleDataTransport: 574a983e829327d7c18f2627f65d9e80164ea8a4
-  GoogleDataTransportCCTSupport: cad3cd6cdbdbad6b5c2c9206ec413402755faaaa
+  GoogleDataTransport: f6f8eba931df03ebd2232ff4645aa85f8f47b5ab
+  GoogleDataTransportCCTSupport: 0f39025e8cf51f168711bd3fb773938d7e62ddb5
   GoogleMaps: 5046d7edfe381c1a0b20fdaf293915a375c3122b
-  GoogleUtilities: f8de7ddf8c706f58e9b405d53e38bbdaa2731e5a
-  GTMSessionFetcher: cea130bbfe5a7edc8d06d3f0d17288c32ffe9925
+  GoogleUtilities: 39530bc0ad980530298e9c4af8549e991fd033b1
+  GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
   OneSignal: b2c1511c6b5db2d3b0ce1859f574dcf190dde5f3
   Permission-Camera: f9a7b0b01c71febe320436aa74630f23c9483547
   Permission-Notifications: 0722c1cd783b86d2ae77a1a0c925d525f9170e7d
-  PersonalizedAdConsent: 4b87320b7a0f22576bec530ae3b7adba88a24c78
-  Protobuf: dd1aaea7140debfe4dd0683fb8ef208e527ae153
+  PersonalizedAdConsent: dbecabb3467df967c16d9cebc2ef4a8890e4bbd8
+  PromisesObjC: c119f3cd559f50b7ae681fa59dc1acd19173b7e6
+  Protobuf: 176220c526ad8bd09ab1fb40a978eac3fef665f7
   RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
   RCTTypeSafety: 9aa1b91d7f9310fc6eadc3cf95126ffe818af320
   React: b6a59ef847b2b40bb6e0180a97d0ca716969ac78
@@ -734,10 +739,10 @@ SPEC CHECKSUMS:
   RNPermissions: 923c1506d0bde387fbcfc18a8f87945806d03c19
   RNSVG: 8ba35cbeb385a52fd960fd28db9d7d18b4c2974f
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
-  Stripe: db29ad197c74aca6fb981e4e8355cf7ebd0fca5a
+  Stripe: 4305b646743612854819fb5d5cf67aaeb93577c0
   tipsi-stripe: 61c247493a58d7e8e0bf6ee6b014271f473d2b11
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: 95d60647e5cd5fca45bc8c1bd6b209814dbb2094
+PODFILE CHECKSUM: dfa82fe284a6eac3c9385cf64ddf3708fc785ec1
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.9.1
