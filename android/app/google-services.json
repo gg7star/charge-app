@@ -1,0 +1,57 @@
+{
+  "project_info": {
+    "project_number": "725402495129",
+    "firebase_url": "https://nono-app-a7dde.firebaseio.com",
+    "project_id": "nono-app-a7dde",
+    "storage_bucket": "nono-app-a7dde.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:725402495129:android:742ead3f38f7f04345f008",
+        "android_client_info": {
+          "package_name": "com.chargeme.nono"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "725402495129-1sgbdva4gsgkddk4fh34ob36357ne5vh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chargeme.nono",
+            "certificate_hash": "0e6734029d9711b02ebfaff0eee9e48869cd4be5"
+          }
+        },
+        {
+          "client_id": "725402495129-hd96c761p7795gm9gibh3l9d78druq1d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBn6cZU4C8V8AG0HtZNcUk5U1FpGMPQr8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "725402495129-hd96c761p7795gm9gibh3l9d78druq1d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "725402495129-6pccjqd3lt4u1ohp4u5ji5lmiliitvuk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.chargeme.nono",
+                "app_store_id": "1490620593"
+              }
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-9857774334300015~5150013736"
+    }
+  ],
+  "configuration_version": "1"
+}

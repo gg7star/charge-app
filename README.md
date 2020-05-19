@@ -86,3 +86,6 @@ Close the iPhone simulation
 ```
   npx react-native-clean-project --remove-iOS-build --remove-iOS-pods
 ```
+
+* Android
+  - keystone password: `chargeme`

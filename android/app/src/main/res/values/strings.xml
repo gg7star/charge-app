@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">nono</string>
+    <string name="app_name">Nono</string>
+    <string name="facebook_app_id">411769359503356</string>
+    <string name="fb_login_protocol_scheme">fb411769359503356</string>
 </resources>
