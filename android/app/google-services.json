@@ -15,14 +15,6 @@
       },
       "oauth_client": [
         {
-          "client_id": "725402495129-1sgbdva4gsgkddk4fh34ob36357ne5vh.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.chargeme.nono",
-            "certificate_hash": "0e6734029d9711b02ebfaff0eee9e48869cd4be5"
-          }
-        },
-        {
           "client_id": "725402495129-hd96c761p7795gm9gibh3l9d78druq1d.apps.googleusercontent.com",
           "client_type": 3
         }
