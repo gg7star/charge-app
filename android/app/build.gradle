@@ -1,3 +1,4 @@
+apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
 apply plugin: "com.android.application"
 
 import com.android.build.OutputFile
@@ -178,10 +179,15 @@ android {
 
         }
     }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
 }
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation 'com.android.support:support-v4:28.0.3'
     implementation "com.android.support:appcompat-v7:23.0.1" // Add for react-native-google-signin
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
@@ -230,5 +236,4 @@ buildscript {
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
 
 apply plugin: "com.google.firebase.firebase-perf"
-apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
 apply plugin: 'com.google.gms.google-services'

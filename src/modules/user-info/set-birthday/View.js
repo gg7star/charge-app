@@ -26,10 +26,11 @@ export default class ScreenView extends React.Component {
 
   onFinish = async () => {
     const { birthday } = this.state;
-    const { displayName, email, auth, authActions } = this.props;
+    const { displayName, email, auth, authActions, appActions } = this.props;
     const birthday_ = moment(new Date(birthday)).format('YYYY-MM-DD');
     const { credential } = auth;
     const userInfo = { displayName, email, birthday: birthday_ };
+    const { _t } = appActions;
     
     this.setState({ loading: true });
     const res = await setUserInfo({credential, userInfo});

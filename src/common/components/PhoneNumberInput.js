@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TextInput, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Image, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { em, colors } from '~/common/constants';
 import commonStyles from '~/common/styles';
 import CustomCountryPicker from './CustomCountryPicker';
@@ -169,12 +169,12 @@ const styles = StyleSheet.create({
     marginLeft: 4*em
   },
   numberInputContainer: {
-    paddingVertical: 16*em,
+    paddingTop: Platform.OS === 'ios' ? 16*em : 10,
     paddingHorizontal: 12*em
   },
   numberInputText: {
     backgroundColor: 'transparent',
-    height: 17*em,
+    height: Platform.OS === 'ios' ? 17*em : 40,
     fontSize: 17*em
   }
  });

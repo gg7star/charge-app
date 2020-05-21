@@ -7585,10 +7585,10 @@ react-native-nav@^2.0.2:
   resolved "https://registry.yarnpkg.com/react-native-nav/-/react-native-nav-2.0.2.tgz#280be2c9b2ecb5c10e57f8b1833aa1ac9c5c1101"
   integrity sha512-t5BOIMRU5vMzMOtuUUuYxd59ipwRe8v1H7NTk8Z0elvBf8hCwYSsnRFDIYk35k/ZbbKZcODmd74P4x1zLTsDyA==
 
-react-native-onesignal@^3.6.0:
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/react-native-onesignal/-/react-native-onesignal-3.6.0.tgz#775f33ba7b4fcd825d142df24ffe8c6b1b9ec009"
-  integrity sha512-MwHFI//EoaDCaDEroQPSnaqwWRhOm6CSO55wGhxfvL4YJ+Zedmw6UXw/xj7/MHhQNvDZFOxqeYmBWNABra9WwQ==
+react-native-onesignal@^3.7.3:
+  version "3.7.3"
+  resolved "https://registry.yarnpkg.com/react-native-onesignal/-/react-native-onesignal-3.7.3.tgz#95b65ba6b612126127d878382c5a263265faea62"
+  integrity sha512-zBrf6uXQG6D2VSatZ8cxSmvW5YcSNU5eiGL3qdhjp/0BHFXC/ZFN7pdZ3lcgM2Q/ddb9Vtb7+DrycRk1UnRBdQ==
   dependencies:
     invariant "^2.2.2"
 

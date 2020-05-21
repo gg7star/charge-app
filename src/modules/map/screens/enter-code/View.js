@@ -119,18 +119,18 @@ export default class ScreenView extends React.Component {
   enterCode = () => {
     const { code } = this.state;
     const { stationSnList } = this.props.map;
-    const { auth, mapActions } = this.props;
-
+    const { auth, mapActions, appActions } = this.props;
+    const { _t } = appActions;
     Alert.alert(
-      'Entered QR Code',
-      `${code}. Are you sure to rent to this device?`,
+      _t('Entered QR Code'),
+      `${code}. ${_t('Are you sure to rent to this device?')}`,
       [
         {
-          text: 'Cancel',
+          text: _t('Cancel'),
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
-        {text: 'OK', onPress: () => {
+        {text: _t('OK'), onPress: () => {
           // Check stationSN validation
           if (stationSnList && stationSnList.find(e => e.stationSn === code)) {
             this.props.mapActions.scannedQrCode(code);
@@ -143,10 +143,10 @@ export default class ScreenView extends React.Component {
             });
             if (res.error) {
               Alert.alert(
-                'Failed to rent the buttery',
-                `Failed to rent the buttery. Please try, again, later.`,
+                _t('Failed to rent the buttery'),
+                _t(`Failed to rent the buttery. Please try, again, later.`),
                 [
-                  {text: 'OK', onPress: () => {}}
+                  {text: _t('OK'), onPress: () => {}}
                 ],
                 {cancelable: false},
               );
@@ -154,21 +154,13 @@ export default class ScreenView extends React.Component {
               // For test
               mapActions.setActiveModal(MAP_MODAL.RENT);
               Actions['map_first']();
-              // Actions['map_first']({initialModal: MAP_MODAL.RENT});
             }
-            // this.props.rentActions.rentStation({
-            //   stationSn: code,
-            //   uuid: auth.credential.user.uid,
-            //   pushToken: auth.fcm.token,
-            //   deviceType: Platform.OS,
-            //   onesignalUserId: auth.oneSignalDevice.userId
-            // })
           } else {
             Alert.alert(
-              'Invalid QR code',
-              `${code}. The code is invalid. Please enter correct QR code of this station, again.`,
+              _t('Invalid QR code'),
+              `${code}. ${_t('The code is invalid. Please enter correct QR code of this station, again.')}`,
               [
-                {text: 'OK', onPress: () => {}}
+                {text: _t('OK'), onPress: () => {}}
               ],
               {cancelable: false},
             );

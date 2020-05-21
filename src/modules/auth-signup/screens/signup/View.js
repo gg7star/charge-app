@@ -80,7 +80,8 @@ export default class SignupView extends React.Component {
   };
 
   onFacebookSignup = async () => {
-    const { authActions } = this.props;
+    const { authActions, appActions } = this.props;
+    const { _t } = appActions;
     this.setState({facebookSigning: true});
     const res = await loginWithFacebook();
     this.setState({facebookSigning: false});
@@ -89,6 +90,14 @@ export default class SignupView extends React.Component {
     } else {
       authActions.loginFailed(res.error);
       Alert(res.error);
+      Alert.alert(
+        _t('Failed to sign up with Facebook account up'),
+        _t(res.error),
+        [
+          {text: _t('OK'), onPress: () => console.log('OK Pressed')},
+        ],
+        {cancelable: false},
+      );
     }
   };
 

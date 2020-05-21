@@ -36,6 +36,10 @@ export default class SetConfirmCodeView extends React.Component {
       Alert.alert(
         _t('Failed to confirm your code.'),
         _t('Input valid correct confirm code.'),
+        [
+          { text: _t('OK'), onPress: () => console.log("OK Pressed") }
+        ],
+        { cancelable: true }
       );
     }
     this.setState({isConfirming: true});

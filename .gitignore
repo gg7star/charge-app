@@ -30,7 +30,7 @@ local.properties
 *.iml
 *.log
 *.hprof
-
+android/app/src/main/assets/index.android.bundle
 # node.js
 #
 node_modules/

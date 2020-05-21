@@ -2,6 +2,12 @@
   package="com.chargeme.nono"
   xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+
 
     <application
       android:name=".MainApplication"
@@ -10,7 +16,8 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
       android:theme="@style/AppTheme"
-      android:largeHeap="true">
+      android:largeHeap="true"
+      android:usesCleartextTraffic="true">
         <!--        tools:replace="android:value"-->
       <activity
         android:name=".MainActivity"
@@ -28,6 +35,9 @@
       <meta-data
         android:name="com.google.android.gms.ads.APPLICATION_ID"
         android:value="ca-app-pub-9857774334300015~5150013736"/>
+      <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="725402495129-1sgbdva4gsgkddk4fh34ob36357ne5vh.apps.googleusercontent.com"/>
 
       <meta-data android:name="com.facebook.sdk.ApplicationId"
         android:value="@string/facebook_app_id"/>

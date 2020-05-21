@@ -72,7 +72,7 @@ or with device
 
 Close the iPhone simulation
 ```shell
-  yarn cache clean && \
+  $ yarn cache clean && \
     watchman watch-del-all && \
     rm -rf node_modules && \
     rm -rf /tmp/metro-bundler-cache-* && \
@@ -84,8 +84,17 @@ Close the iPhone simulation
 
 * Clean build
 ```
-  npx react-native-clean-project --remove-iOS-build --remove-iOS-pods
+  $ npx react-native-clean-project --remove-iOS-build --remove-iOS-pods
 ```
 
 * Android
   - keystone password: `chargeme`
+
+* Build Android APK
+```
+  $ mkdir -p android/app/src/main/assets
+  $ react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res
+  $ curl "http://localhost:8081/index.bundle?platform=android" -o "android/app/src/main/assets/index.android.bundle"
+  $ cd android && ./gradlew clean assembleDebug
+```
+  - Get APK on `./android/app/build/outputs/apk/debug`

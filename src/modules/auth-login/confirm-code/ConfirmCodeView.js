@@ -28,8 +28,11 @@ export default class ConfirmCodeView extends React.Component {
       if (res.error) {
         Alert.alert(
           _t('Failed to confirm your code.'),
-          _t(res.error),
-          // _t('Input valid correct confirm code.'),
+          _t(res.error), // _t('Input valid correct confirm code.'),
+          [
+            { text: _t('OK'), onPress: () => console.log("OK Pressed") }
+          ],
+          { cancelable: true }
         );
       } else
         onConfirmed(res);

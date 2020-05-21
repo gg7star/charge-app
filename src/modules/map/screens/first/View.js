@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Platform, Alert } from 'react-native';
+import { View, Platform, Alert, PermissionsAndroid } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import stripe from 'tipsi-stripe';
 import Geolocation from 'react-native-geolocation-service';

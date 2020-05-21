@@ -69,38 +69,23 @@ export default class LoginView extends React.Component {
   }
 
   onFacebookLogin = async () => {
-    const { auth, authActions } = this.props;
+    const { auth, authActions, appActions } = this.props;
+    const { _t } = appActions;
     this.setState({facebookLogining: true});
     const res = await loginWithFacebook();
     this.setState({facebookLogining: false});
     if (res.credential) {
-      // // Send notification
-      // var contents = {
-      //   'en': 'You are registered firstly with your Facebook account.',
-      //   'fr': 'Vous êtes d\'abord enregistré avec votre compte Facebook.'
-      // }
-      // var message = { 
-      //   type: notifications.NONO_NOTIFICATION_TYPES.REGISTERED_FIRST
-      // };
-      // var otherParameters = {
-      //   headings: {
-      //     "en": "Welcome to Nono!",
-      //     "fr": "Bienvenue chez Nono!"
-      //   },
-      // }
-      // if (auth && auth.oneSignalDevice && auth.oneSignalDevice.userId) {
-      //   notifications.postNotification(
-      //     contents,
-      //     message,
-      //     auth.oneSignalDevice.userId,
-      //     otherParameters
-      //   );
-      // }
-
       authActions.loginSuccessWithSocial(res.credential);
     } else {
       authActions.loginFailed(res.error);
-      Alert(res.error);
+      Alert.alert(
+        _t('Failed to login.'),
+        _t(res.error),
+        [
+          { text: _t('OK'), onPress: () => console.log("OK Pressed") }
+        ],
+        { cancelable: true }
+      );
     }
   }
 
