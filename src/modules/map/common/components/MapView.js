@@ -174,7 +174,7 @@ export default class CustomMapView extends React.Component {
             ref={c => this.mapView = c}
           >
             { this.renderMarkers() }
-            {(selectedPlace && selectedPlace.coordinate && currentLocation.coordinate) && 
+            {(selectedPlace && selectedPlace.coordinate && currentLocation && currentLocation.coordinate) && 
               <MapViewDirections
                 origin={currentLocation.coordinate}
                 destination={selectedPlace.coordinate}

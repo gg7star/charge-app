@@ -131,7 +131,7 @@ export default class PaymentSettingView extends React.Component {
         position: 'absolute', left: 10, bottom: 40,
         width: W-20,        
       }}>
-        <Button caption={_t('Add a Lydia account')}
+        {/* <Button caption={_t('Add a Lydia account')}
           bgColor='#00a0f1' textColor='#fff' borderRadius={15}
           icon={require('~/common/assets/images/png/lydia.png')} iconColor='#fff'
           containerHeight={40}
@@ -141,7 +141,7 @@ export default class PaymentSettingView extends React.Component {
           bgColor='#36384a' textColor='#fff' borderRadius={15}
           icon={require('~/common/assets/images/png/apple.png')} iconColor='#fff'
           containerHeight={40}
-        />
+        /> */}
       </View>
     )
   };

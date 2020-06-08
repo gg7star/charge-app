@@ -2,6 +2,7 @@ import { put, takeLatest, call } from 'redux-saga/effects';
 import { Actions } from 'react-native-router-flux';
 import { rentActionTypes } from '~/actions/types';
 import MAP_MODAL from '~/common/constants/map';
+import admobConfig from '~/common/config/admob';
 import { MapActions } from '~/actions';
 const { setActiveModal, setViewedAdmob } = MapActions;
 
@@ -28,5 +29,5 @@ export function* rentReturnButteryProcess(action) {
   console.log('==== Go to admob');
   // yield put(setActiveModal(MAP_MODAL.FEEDBACK));
   yield put(setViewedAdmob(false));
-  Actions['admob']({adMode: 'reward'});
+  Actions['admob']({adMode: admobConfig.defaultAdMob});
 }

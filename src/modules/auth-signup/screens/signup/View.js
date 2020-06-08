@@ -7,16 +7,21 @@ import {
   Spacer,
   PhoneNumberInput
 } from '~/common/components';
-import { PhoneAuth, FacebookAuth } from '~/common/services/rn-firebase/auth';
+import { PhoneAuth, FacebookAuth, AppleAuth } from '~/common/services/rn-firebase/auth';
 import { checkIfUserExistsByPhoneNumber } from '~/common/services/rn-firebase/database';
 import { em, colors } from '~/common/constants';
 import commonStyles from '~/common/styles';
 import { convertLanguage2CallingCode } from '~/common/utils/country';
 import SetConfirmCode from '~/modules/auth-login/confirm-code/ViewContainer';
+import appleAuth, {
+  AppleButton
+} from '@invertase/react-native-apple-authentication';
 
 const { loginWithPhone, confirmWithPhone } = PhoneAuth;
 const { loginWithFacebook } = FacebookAuth;
+const { loginWithApple } = AppleAuth;
 const FACEBOOK_IMAGE = require('~/common/assets/images/facebook.png');
+const APPLE_IMAGE = require('~/common/assets/images/png/apple.png');
 
 export default class SignupView extends React.Component {
   state = {
@@ -24,6 +29,7 @@ export default class SignupView extends React.Component {
     countryCode: convertLanguage2CallingCode(this.props.app.language) || '33',
     facebookSigning: false,
     phoneSigning: false,
+    appleSigning: false,
     showConfirmCodeModal: false,
     adjust: {
       mostTop: 180*em
@@ -72,6 +78,28 @@ export default class SignupView extends React.Component {
     }
   };
 
+  onAppleSignup = async () => {
+    const { authActions, appActions, auth } = this.props;
+    const { _t } = appActions;
+    this.setState({appleSigning: true});
+    const res = await loginWithApple();
+    this.setState({appleSigning: false});
+    if (res.credential) {
+      authActions.loginSuccessWithSocial(res.credential, auth);
+    } else {
+      authActions.loginFailed(res.error);
+      Alert(res.error);
+      Alert.alert(
+        _t('Failed to sign up with Apple account.'),
+        _t(res.error),
+        [
+          {text: _t('OK'), onPress: () => console.log('OK Pressed')},
+        ],
+        {cancelable: false},
+      );
+    }
+  };
+
   isInvalid = () => {
     const { phoneNumber } = this.state
     if (phoneNumber == '') return true
@@ -80,7 +108,7 @@ export default class SignupView extends React.Component {
   };
 
   onFacebookSignup = async () => {
-    const { authActions, appActions } = this.props;
+    const { authActions, appActions, auth } = this.props;
     const { _t } = appActions;
     this.setState({facebookSigning: true});
     const res = await loginWithFacebook();
@@ -172,6 +200,30 @@ export default class SignupView extends React.Component {
             bgGradientEnd='#00a9f2'
             loading={facebookSigning}
             disabled={facebookSigning}
+          />
+          <Spacer size={15*em} />
+          
+          {/* {appleAuth.isSupported && (
+            <AppleButton
+              cornerRadius={20*em}
+              style={{
+                width: '100%',
+                height: 50*em,
+                fontSize: 17*em,
+                fontWeight: 400
+              }}
+              buttonStyle={AppleButton.Style.BLACK}
+              buttonType={AppleButton.Type.CONTINUE}
+              onPress={() => this.onAppleSignup()}
+            />
+          )} */}
+          <Button
+            onPress={this.onAppleSignup}
+            caption={_t('Continue with Apple')}
+            bgColor='#36384a'
+            textColor='#fff'
+            icon={APPLE_IMAGE}
+            iconColor='#fff'
           />
           <Spacer size={10*em} />
           <TouchableOpacity

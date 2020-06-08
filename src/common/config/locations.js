@@ -1,6 +1,6 @@
 export default defaultCurrentLocation = {
   coordinate: {
-    latitude: 35.784657, //48.883758,
-    longitude: -78.682103 //2.254665
+    latitude: 48.8768005371094,
+    longitude: 2.24719190597534
   }
 };

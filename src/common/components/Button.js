@@ -26,8 +26,10 @@ export default class Button extends React.Component {
         activeOpacity={0.8}
         accessibilityTraits='button'
         style={{
-          width: '100%', height: containerHeight,
-          borderRadius, overflow: 'hidden',
+          width: '100%',
+          height: containerHeight,
+          borderRadius,
+          overflow: 'hidden',
         }}
         disabled={disabled}
       >
@@ -46,7 +48,8 @@ export default class Button extends React.Component {
       <View style={{
         flex: 1,
         flexDirection: 'row',
-        alignItems: 'center', justifyContent: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
         backgroundColor: bgColor,
         position: 'relative'
       }}>
@@ -61,7 +64,8 @@ export default class Button extends React.Component {
       <LinearGradient style={{
         flex: 1,
         flexDirection: 'row',
-        alignItems: 'center', justifyContent: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
         position: 'relative'
       }} start={{x: 0.5, y:1}} end={{x:1, y:1}} colors={[bgGradientStart, bgGradientEnd]}
       >

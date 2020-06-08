@@ -11,8 +11,10 @@
     "postinstall": "npx jetify"
   },
   "dependencies": {
+    "@invertase/react-native-apple-authentication": "^1.0.0",
     "@ptomasroos/react-native-multi-slider": "^1.0.0",
     "@react-native-community/async-storage": "^1.7.1",
+    "@react-native-community/cli-platform-android": "^4.9.0",
     "@react-native-community/geolocation": "^2.0.2",
     "@react-native-firebase/admob": "^6.2.0",
     "@react-native-firebase/analytics": "^6.2.0",

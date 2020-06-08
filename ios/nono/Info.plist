@@ -73,15 +73,15 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Nono application requires access to your phone’s camera.</string>
+	<string>Nono application requires access to your phone’s camera to scan QR code of each station device production.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Your location ia always required for Nono application.</string>
+	<string>Nono application is using Google Map and require your location to provide the distance service between you and each station devices.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Your location is always required for Nono application.</string>
+	<string>Nono application is using Google Map and require your location to provide the distance service between you and each station devices.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Your location is required for Nono application.</string>
+	<string>Nono application is using Google Map and require your location to provide the distance service between you and each station devices.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Nono application requires access to the photo library.</string>
+	<string>Nono application requires access to the photo library to save the scan QR codes.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
