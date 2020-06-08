@@ -128,10 +128,10 @@ PODS:
   - GoogleDataTransportCCTSupport (3.0.0):
     - GoogleDataTransport (~> 6.0)
     - nanopb (~> 0.3.901)
-  - GoogleMaps (3.2.0):
-    - GoogleMaps/Maps (= 3.2.0)
-  - GoogleMaps/Base (3.2.0)
-  - GoogleMaps/Maps (3.2.0):
+  - GoogleMaps (3.5.0):
+    - GoogleMaps/Maps (= 3.5.0)
+  - GoogleMaps/Base (3.5.0)
+  - GoogleMaps/Maps (3.5.0):
     - GoogleMaps/Base
   - GoogleUtilities/AppDelegateSwizzler (6.6.0):
     - GoogleUtilities/Environment
@@ -159,7 +159,7 @@ PODS:
     - nanopb/encode (= 0.3.9011)
   - nanopb/decode (0.3.9011)
   - nanopb/encode (0.3.9011)
-  - OneSignal (2.12.2)
+  - OneSignal (2.13.1)
   - Permission-Camera (2.0.8):
     - RNPermissions
   - Permission-Notifications (2.0.8):
@@ -330,13 +330,13 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
   - React-jsinspector (0.61.5)
-  - react-native-camera (3.14.0):
+  - react-native-camera (3.26.0):
     - React
-    - react-native-camera/RCT (= 3.14.0)
-    - react-native-camera/RN (= 3.14.0)
-  - react-native-camera/RCT (3.14.0):
+    - react-native-camera/RCT (= 3.26.0)
+    - react-native-camera/RN (= 3.26.0)
+  - react-native-camera/RCT (3.26.0):
     - React
-  - react-native-camera/RN (3.14.0):
+  - react-native-camera/RN (3.26.0):
     - React
   - react-native-date-picker (2.7.0):
     - React
@@ -356,14 +356,14 @@ PODS:
     - React
   - react-native-geolocation (2.0.2):
     - React
-  - react-native-google-maps (0.26.1):
+  - react-native-google-maps (0.27.1):
     - Google-Maps-iOS-Utils (= 2.1.0)
-    - GoogleMaps (= 3.2.0)
+    - GoogleMaps (= 3.5.0)
     - React
-  - react-native-maps (0.26.1):
+  - react-native-maps (0.27.1):
     - React
-  - react-native-onesignal (3.6.0):
-    - OneSignal (= 2.12.2)
+  - react-native-onesignal (3.7.3):
+    - OneSignal (= 2.13.1)
     - React (< 1.0.0, >= 0.13.0)
   - react-native-splash-screen (3.2.0):
     - React
@@ -407,6 +407,8 @@ PODS:
   - ReactNativeUiLib (3.41.0):
     - React
   - rn-range-slider (1.3.0):
+    - React
+  - RNAppleAuthentication (1.0.0):
     - React
   - RNAwesomeCardIO (0.8.2):
     - React
@@ -500,6 +502,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - ReactNativeUiLib (from `../node_modules/react-native-ui-lib`)
   - rn-range-slider (from `../node_modules/rn-range-slider`)
+  - "RNAppleAuthentication (from `../node_modules/@invertase/react-native-apple-authentication`)"
   - RNAwesomeCardIO (from `../node_modules/react-native-awesome-card-io`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - "RNFBAdMob (from `../node_modules/@react-native-firebase/admob`)"
@@ -627,6 +630,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-ui-lib"
   rn-range-slider:
     :path: "../node_modules/rn-range-slider"
+  RNAppleAuthentication:
+    :path: "../node_modules/@invertase/react-native-apple-authentication"
   RNAwesomeCardIO:
     :path: "../node_modules/react-native-awesome-card-io"
   RNCAsyncStorage:
@@ -685,12 +690,12 @@ SPEC CHECKSUMS:
   GoogleAppMeasurement: dfe55efa543e899d906309eaaac6ca26d249862f
   GoogleDataTransport: f6f8eba931df03ebd2232ff4645aa85f8f47b5ab
   GoogleDataTransportCCTSupport: 0f39025e8cf51f168711bd3fb773938d7e62ddb5
-  GoogleMaps: 5046d7edfe381c1a0b20fdaf293915a375c3122b
+  GoogleMaps: 32ca02de09de357a10ac773f2c70f1986751392d
   GoogleUtilities: 39530bc0ad980530298e9c4af8549e991fd033b1
   GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
-  OneSignal: b2c1511c6b5db2d3b0ce1859f574dcf190dde5f3
+  OneSignal: fa98eaa90372bb367b6a4a1c1622ffb9832c7600
   Permission-Camera: f9a7b0b01c71febe320436aa74630f23c9483547
   Permission-Notifications: 0722c1cd783b86d2ae77a1a0c925d525f9170e7d
   PersonalizedAdConsent: dbecabb3467df967c16d9cebc2ef4a8890e4bbd8
@@ -705,13 +710,13 @@ SPEC CHECKSUMS:
   React-jsi: cb2cd74d7ccf4cffb071a46833613edc79cdf8f7
   React-jsiexecutor: d5525f9ed5f782fdbacb64b9b01a43a9323d2386
   React-jsinspector: fa0ecc501688c3c4c34f28834a76302233e29dc0
-  react-native-camera: 9f79d18f91fc8c35d693f1846d84a8b9094bcc65
+  react-native-camera: 2b74be8edc1103c4c46d1f4e5f41723d9ff052cc
   react-native-date-picker: 648606a44e21d15725a61cc9f28e864f40ae8cdd
   react-native-fbsdk: b94a83971c496a35803f38b921aec6d637ba07b5
   react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
-  react-native-google-maps: 2e2e697dab576abd5809d78cd74e775865b62bf7
-  react-native-maps: 6e499eee4eabf422ba8b6f94e993cc768bf35153
-  react-native-onesignal: 39d79554037ec5842a810efe1bb0343e332c757d
+  react-native-google-maps: 0a989abda71059db2caa98b9dacca7a8f38a47d0
+  react-native-maps: f4b89da81626ad7f151a8bfcb79733295d31ce5c
+  react-native-onesignal: 417b2ae5c3148a47a6ef70b6af443186048b2022
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-torch: bff9b2c4230e183b8cc74c4f0c4cca70bcf16170
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
@@ -726,6 +731,7 @@ SPEC CHECKSUMS:
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
   ReactNativeUiLib: 52606c273a072841c6fc5cfc9bd617fc87e5ca15
   rn-range-slider: 0b4800dcb93cfdc3a79bfe31a34a3132acaeb150
+  RNAppleAuthentication: 954b347c26ffb638265c828a5003ce1fa6971120
   RNAwesomeCardIO: caa47eefd8b6ae1986af25df3b86f9d8fbae9bb8
   RNCAsyncStorage: 44395cb9c7c1523104c2b499eb426ef7aff82bca
   RNFBAdMob: 6bd7b601928d23a0b454252172fedbe746b0f7cc

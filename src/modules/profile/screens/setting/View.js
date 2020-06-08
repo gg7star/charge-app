@@ -1,5 +1,5 @@
 import React from 'react'
-import { TouchableOpacity, View, Text, Image } from 'react-native'
+import { TouchableOpacity, View, Text, Image, Linking } from 'react-native'
 import { Actions } from 'react-native-router-flux'
 import ProfileWrapper from '../../common/wrappers/ProfileWrapper'
 import ProfileHeader from '../../common/headers/ProfileHeader'
@@ -23,13 +23,25 @@ export default class ScreenView extends React.Component {
     Actions['profile_payment']();
   };
 
-  signout = async () => {
+  onSignOut = async () => {
     const { authProvider } = this.props.auth;
-    const res = await PhoneAuth.logoutWithPhone();
-    if (authProvider === FacebookAuth.AUTH_PROVIDER) FacebookAuth.logoutWithFacebook();
+    try {
+      const res = await PhoneAuth.logoutWithPhone();
+      if (authProvider === FacebookAuth.AUTH_PROVIDER) FacebookAuth.logoutWithFacebook(); 
+    } catch (e) {
+      console.log('==== SignOut Error: ', e);
+    }
     this.props.authActions.doLogout();
     Actions.login();
   }
+
+  onTermsOfUse = () => {
+    Linking.openURL('https://nono-chargeme.com/cgu/');
+  };
+
+  onPrivacyOfPolicy = () => {
+    Linking.openURL('https://nono-chargeme.com/politique-de-confidentialite/');
+  };
 
   renderSettingTable() {
     const { credential } = this.props.auth
@@ -63,13 +75,13 @@ export default class ScreenView extends React.Component {
           </TouchableOpacity>
         </View> */}
         <View style={styles.linkedItemContainer}>
-          <TouchableOpacity style={styles.linkedItemTouchable}>
+          <TouchableOpacity style={styles.linkedItemTouchable} onPress={this.onTermsOfUse}>
             <Text style={styles.linkedTitle}>{_t('Terms of use')}</Text>
             <Image source={RIGHT_ARROW_IMAGE} style={styles.linkedArrow} />
           </TouchableOpacity>
         </View>
         <View style={styles.linkedItemContainer}>
-          <TouchableOpacity style={styles.linkedItemTouchable}>
+          <TouchableOpacity style={styles.linkedItemTouchable} onPress={this.onPrivacyOfPolicy}>
             <Text style={styles.linkedTitle}>{_t('Privacy of policy')}</Text>
             <Image source={RIGHT_ARROW_IMAGE} style={styles.linkedArrow} />
           </TouchableOpacity>
@@ -87,7 +99,7 @@ export default class ScreenView extends React.Component {
         position: 'absolute', left: 0, bottom: 40, zIndex: 30,
         alignItems: 'center'        
       }}>
-        <TouchableOpacity onPress={this.signout}>
+        <TouchableOpacity onPress={this.onSignOut}>
           <Text style={{ color: '#fe000c', fontSize: 17 }}>
             {_t('Sign Out')}
           </Text>

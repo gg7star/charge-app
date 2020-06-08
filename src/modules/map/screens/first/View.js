@@ -15,7 +15,7 @@ import {
   RentDialog,
   FeedbackDialog,
 } from '~/modules/map/modals';
-import { W, H } from '~/common/constants';
+import { W, H, em } from '~/common/constants';
 import { Spacer } from '~/common/components';
 import MapButton from '~/modules/map/common/components/MapButton';
 import MapView from '~/modules/map/common/components/MapView';
@@ -48,7 +48,7 @@ export default class FirstScreenView extends React.Component {
   async componentDidMount() {
     const { initialModal, profileOpened, map } = this.props
     var newState = {...this.state};
-    console.log('==== componentDidMount: map.activeModal: ', map.activeModal)
+    console.log('==== componentDidMount: map.activeModal: ', map.activeModal);
     if (map.activeModal) {
       // this.setState({activeModal: map.activeModal})
       newState = {
@@ -85,23 +85,31 @@ export default class FirstScreenView extends React.Component {
   async initGeoLocation() {
     const hasPermission = await this.hasLocationPermission();
     if(hasPermission) {
-      Geolocation.requestAuthorization();
-      // Map
-      const _this = this;
-      // Get current location
-      Geolocation.getCurrentPosition(
-        (position) => { _this.handleGetCurrentLocation(position) },
-        (error) => { _this.handleCurrentLocationError(error) },
-        GEOLOCATION_OPTION
-      );
+      // Enable Geolocation
 
-      Geolocation.watchPosition(
-        (position) => { _this.handleGetCurrentLocation(position) },
-        (error) => { _this.handleCurrentLocationError(error) },
-        GEOLOCATION_WATCH_OPTION
-      );
+      // Geolocation.requestAuthorization();
+      // // Map
+      // const _this = this;
+      // // Get current location
+      // Geolocation.getCurrentPosition(
+      //   (position) => { _this.handleGetCurrentLocation(position) },
+      //   (error) => { _this.handleCurrentLocationError(error) },
+      //   GEOLOCATION_OPTION
+      // );
+
+      // Geolocation.watchPosition(
+      //   (position) => { _this.handleGetCurrentLocation(position) },
+      //   (error) => { _this.handleCurrentLocationError(error) },
+      //   GEOLOCATION_WATCH_OPTION
+      // );
     }
   }
+
+  // initModalStatusFromProps = () => {
+  //   const { rent } = this.props;
+  //   if (rent.isRented) return MAP_MODAL.RENT;
+  //   return 
+  // }
 
   hasLocationPermission = async () => {
     if (Platform.OS === 'ios' ||

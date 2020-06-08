@@ -63,7 +63,7 @@ export default class AppView extends Component {
 
     appActions.setLanguage(app.language || 'fr');
     appActions.setGlobalNotification({message: null, type: ''});
-    mapActions.initMap();
+    // mapActions.initMap();
 
     // Check permissions
     const cameraPermission  = Platform.OS === 'ios' ? PERMISSIONS.IOS.CAMERA : PERMISSIONS.ANDROID.CAMERA;

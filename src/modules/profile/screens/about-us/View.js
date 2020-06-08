@@ -1,5 +1,5 @@
 import React from 'react'
-import { TouchableOpacity, View, Text, ScrollView, Image } from 'react-native'
+import { TouchableOpacity, View, Text, ScrollView, Image, Linking } from 'react-native'
 import { Actions } from 'react-native-router-flux'
 import ProfileWrapper from '../../common/wrappers/ProfileWrapper'
 import ProfileHeader from '../../common/headers/ProfileHeader'
@@ -7,6 +7,10 @@ import { W, H, em } from '~/common/constants';
 
 export default class ScreenView extends React.Component {
   state = {
+  }
+
+  onClickSiteUrl = () => {
+    Linking.openURL('https://nono-chargeme.com');
   }
 
   render() {
@@ -43,7 +47,7 @@ export default class ScreenView extends React.Component {
           </Text>
         </View>
 
-        <View style = {{flex: 1, flexDirection: 'row', justifyContent: 'center', top: 15}}>
+        {/* <View style = {{flex: 1, flexDirection: 'row', justifyContent: 'center', top: 15}}>
           <Image source={require('~/common/assets/images/png/Bio-bee-box.png')} style={{margin: 15}} />
           <Image source={require('~/common/assets/images/png/beeandgo.png')} style={{margin: 15}} />
           <Image source={require('~/common/assets/images/png/tree-nation.png')} style={{margin: 15}}/>
@@ -51,13 +55,15 @@ export default class ScreenView extends React.Component {
         <View style = {{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
           <Image source={require('~/common/assets/images/png/screlec.png')} style={{margin: 15 }}/>
           <Image source={require('~/common/assets/images/png/batribox.png')} style={{margin: 15}}/>
-        </View>
+        </View> */}
 
         <View>
           <Text style={{textAlign: 'center', marginTop: 15, fontSize: 14}}> 
             {_t('Discover more about our partners on our website.')}
           </Text>
-          <Text style={{textAlign: 'center', marginTop: 15, fontSize: 14, color: '#35CDFA'}}> {_t('www.nono.fr')}</Text>
+          <TouchableOpacity  onPress={this.onClickSiteUrl}>
+            <Text style={{textAlign: 'center', marginTop: 15, fontSize: 14, color: '#35CDFA'}}> {_t('nono-chargeme.com')}</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     )

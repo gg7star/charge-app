@@ -2,7 +2,7 @@ import React from 'react';
 import { TouchableOpacity, Text, Alert } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { Spacer, Button, PhoneNumberInput } from '~/common/components';
-import { PhoneAuth, FacebookAuth } from '~/common/services/rn-firebase/auth';
+import { PhoneAuth, FacebookAuth, AppleAuth } from '~/common/services/rn-firebase/auth';
 import { checkIfUserExistsByPhoneNumber } from '~/common/services/rn-firebase/database';
 import { sendFcmMessage } from '~/common/services/rn-firebase/message';
 import { W, H, em } from '~/common/constants';
@@ -14,7 +14,9 @@ import * as notifications from '~/common/services/onesignal/notifications';
 
 const { loginWithPhone, confirmWithPhone } = PhoneAuth;
 const { loginWithFacebook } = FacebookAuth;
+const { loginWithApple } = AppleAuth;
 const FACEBOOK_IMAGE = require('~/common/assets/images/facebook.png');
+const APPLE_IMAGE = require('~/common/assets/images/png/apple.png');
 
 export default class LoginView extends React.Component {
   state = {
@@ -87,7 +89,29 @@ export default class LoginView extends React.Component {
         { cancelable: true }
       );
     }
-  }
+  };
+
+  onAppleLogin = async () => {
+    const { authActions, appActions, auth } = this.props;
+    const { _t } = appActions;
+    this.setState({appleSigning: true});
+    const res = await loginWithApple();
+    this.setState({appleSigning: false});
+    if (res.credential) {
+      authActions.loginSuccessWithSocial(res.credential, auth);
+    } else {
+      authActions.loginFailed(res.error);
+      Alert(res.error);
+      Alert.alert(
+        _t('Failed to sign up with Apple account.'),
+        _t(res.error),
+        [
+          {text: _t('OK'), onPress: () => console.log('OK Pressed')},
+        ],
+        {cancelable: false},
+      );
+    }
+  };
 
   goSignup = () => Actions['signup_first']({phoneNumber: this.state.phoneNumber});
 
@@ -170,6 +194,15 @@ export default class LoginView extends React.Component {
             loading={facebookLogining}
             disabled={facebookLogining}
           />
+          <Spacer size={15*em} />
+          <Button
+            onPress={this.onAppleLogin}
+            caption={_t('Continue with Apple')}
+            bgColor='#36384a'
+            textColor='#fff'
+            icon={APPLE_IMAGE}
+            iconColor='#fff'
+          />
           <Spacer size={30*em} />
           <TouchableOpacity
             style={{
@@ -189,7 +222,7 @@ export default class LoginView extends React.Component {
                 {fontSize: 14*em, fontWeight: 'bold'}
               ]}
             >
-              {` ${_t('Register yourself')}`}              
+              {` ${_t('Register yourself')}`}
             </Text>
           </TouchableOpacity>
           <Spacer size={60*em} />
