@@ -98,3 +98,9 @@ Close the iPhone simulation
   $ cd android && ./gradlew clean assembleDebug
 ```
   - Get APK on `./android/app/build/outputs/apk/debug`
+
+
+* Keystore
+```
+  $ keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android
+```

@@ -89,17 +89,17 @@ export default class FirstScreenView extends React.Component {
       // Map
       const _this = this;
       // Get current location
-      // Geolocation.getCurrentPosition(
-      //   (position) => { _this.handleGetCurrentLocation(position) },
-      //   (error) => { _this.handleCurrentLocationError(error) },
-      //   GEOLOCATION_OPTION
-      // );
+      Geolocation.getCurrentPosition(
+        (position) => { _this.handleGetCurrentLocation(position) },
+        (error) => { _this.handleCurrentLocationError(error) },
+        GEOLOCATION_OPTION
+      );
 
-      // Geolocation.watchPosition(
-      //   (position) => { _this.handleGetCurrentLocation(position) },
-      //   (error) => { _this.handleCurrentLocationError(error) },
-      //   GEOLOCATION_WATCH_OPTION
-      // );
+      Geolocation.watchPosition(
+        (position) => { _this.handleGetCurrentLocation(position) },
+        (error) => { _this.handleCurrentLocationError(error) },
+        GEOLOCATION_WATCH_OPTION
+      );
     }
   }
 
