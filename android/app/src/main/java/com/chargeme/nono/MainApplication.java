@@ -8,7 +8,10 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.chargeme.nono.BuildConfig;
+//import com.facebook.react.BuildConfig;
+
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
+
 
 
 import java.lang.reflect.InvocationTargetException;
