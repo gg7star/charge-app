@@ -48,7 +48,7 @@ export default class FirstScreenView extends React.Component {
   async componentDidMount() {
     const { initialModal, profileOpened, map } = this.props
     var newState = {...this.state};
-    console.log('==== componentDidMount: map.activeModal: ', map.activeModal);
+    console.log('==== componentDidMount: map.activeModal: ', W, H, em, map.activeModal);
     if (map.activeModal) {
       // this.setState({activeModal: map.activeModal})
       newState = {
