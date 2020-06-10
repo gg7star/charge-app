@@ -87,21 +87,21 @@ export default class FirstScreenView extends React.Component {
     if(hasPermission) {
       // Enable Geolocation
 
-      // Geolocation.requestAuthorization();
-      // // Map
-      // const _this = this;
-      // // Get current location
-      // Geolocation.getCurrentPosition(
-      //   (position) => { _this.handleGetCurrentLocation(position) },
-      //   (error) => { _this.handleCurrentLocationError(error) },
-      //   GEOLOCATION_OPTION
-      // );
+      Geolocation.requestAuthorization();
+      // Map
+      const _this = this;
+      // Get current location
+      Geolocation.getCurrentPosition(
+        (position) => { _this.handleGetCurrentLocation(position) },
+        (error) => { _this.handleCurrentLocationError(error) },
+        GEOLOCATION_OPTION
+      );
 
-      // Geolocation.watchPosition(
-      //   (position) => { _this.handleGetCurrentLocation(position) },
-      //   (error) => { _this.handleCurrentLocationError(error) },
-      //   GEOLOCATION_WATCH_OPTION
-      // );
+      Geolocation.watchPosition(
+        (position) => { _this.handleGetCurrentLocation(position) },
+        (error) => { _this.handleCurrentLocationError(error) },
+        GEOLOCATION_WATCH_OPTION
+      );
     }
   }
 

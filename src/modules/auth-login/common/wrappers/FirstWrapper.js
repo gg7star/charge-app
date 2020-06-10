@@ -21,7 +21,7 @@ export default class FirstWrapper extends React.Component {
     isKeyboardVisible: false,
     keyboardHeight: 0,
     adjust: {
-      mostTop: 160*em
+      mostTop: Platform.OS === 'ios' ? 160*em : 100*em
     }
   };
 
@@ -110,22 +110,3 @@ export default class FirstWrapper extends React.Component {
     )
   }
 }
-
-// const FirstWrapper = ({ children }) => (
-//   <View style={{flex: 1, height: H}}>
-//     <ImageBackground
-//       source={require('~/common/assets/images/png/login-bg.jpg')}
-//       style={{
-//         flex: 1, height: H
-//       }}
-//       resizeMode='cover'
-//     />
-//     <ScrollView>
-//       {children}
-//     </ScrollView>
-      
-//     {/* </ImageBackground> */}
-//   </View>
-// )
-
-// export default FirstWrapper
