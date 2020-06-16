@@ -5,7 +5,7 @@ export default {
   "We will send you an SMS to check your number": "Nous allons vous envoyer un SMS pour vérifier votre numéro",
   "or": "ou",
   "Continue with facebook": "Continuer avec facebook",
-  "Continue with Apple": "Continue with Apple",
+  "Continue with Apple": "Continuer avec Apple",
   "Already have an account? Connect yourself": "Tu as déjà un compte ?  Connecte-toi",
   "Already have an account?": "Tu as déjà un compte ?",
   "Connect yourself": "Connecte-toi",
