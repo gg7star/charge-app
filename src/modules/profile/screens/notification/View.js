@@ -8,7 +8,7 @@ import NotificationListItem from './components/NotificationListItem';
 
 export default class ScreenView extends React.Component {
   componentDidMount() {
-    this.props.profileActions.loadHistories();    
+    this.props.profileActions.loadNotifications();
   }
 
   render() {

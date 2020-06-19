@@ -41,6 +41,12 @@ export function addNotification(notification, data, isActive) {
   console.log('===== notification: ', notification, data, isActive);
   return {
     type: types.ADD_NOTIFICATION,
-    payload: { notification :{...notification, date: moment().format('DD/MM/YY LT')} }
+    payload: { notification :{...notification, date: moment().format('DD/MM/YY LTS')} }
+  }
+}
+
+export function loadNotifications() {
+  return {
+    type: types.LOAD_NOTIFICATION_REQUEST
   }
 }

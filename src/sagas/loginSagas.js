@@ -87,15 +87,16 @@ export function* processSocialLoginSuccess(action) {
         },
       }
       if (auth && auth.oneSignalDevice && auth.oneSignalDevice.userId) {
+        console.log('====== notifications.postNotification: ', auth.oneSignalDevice.userId)
         notifications.postNotification(
           contents,
           message,
-          auth.oneSignalDevice.userId,
+          `${auth.oneSignalDevice.userId}`,
           otherParameters
         );
       }
       // Go to Hint screen
-      console.log('==== Go to Hint.');
+      console.log('==== Go to Hint.', auth, credential);
       Actions['hint']();
     }
     // else Actions['hint']();

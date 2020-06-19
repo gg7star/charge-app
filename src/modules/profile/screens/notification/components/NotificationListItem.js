@@ -1,5 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, View, Text, Image } from 'react-native';
+import moment from 'moment';
 
 export default class NotificationListItem extends React.Component {
   
@@ -13,7 +14,7 @@ export default class NotificationListItem extends React.Component {
           marginLeft: 14,
         }}
         onPress={this.props.onPress}
-      >        
+      >
         <View style={{flexDirection: 'row', justifyContent: "space-between"}}>
           <View style={{justifyContent: 'flex-start'}}>
             <Text style={{fontSize: 17, fontWeight: '500'}}>
@@ -22,7 +23,7 @@ export default class NotificationListItem extends React.Component {
           </View>
           <View style={{justifyContent: 'flex-end'}}>
             <Text style={{color: '#9F9F9F', fontSize: 15, marginLeft: 10}}>
-              {date}
+              {moment(date, 'DD/MM/YY LTS').format('DD/MM/YY LT')}
             </Text>
           </View>
         </View>

@@ -46,9 +46,8 @@ export function* doPayment(action) {
         message: 'Your payment was failed. Please try later.',
         type: 'danger'}
       ));
-      yield put(setActiveModal(MAP_MODAL.RENT));
+      // yield put(setActiveModal(MAP_MODAL.RENT));
       Actions['map_first']();
-      // Actions['map_first']({initialModal: 'rent'});
     }
   } catch(error) {
     console.log('==== doPayment response error: ', error);

@@ -47,7 +47,7 @@ export default class ScreenView extends React.Component {
         <Spacer size={80} />
         <TextInput placeholder={_t('First Name')} placeholderTextColor='#fff'
           style={moduleStyles.input.setField}
-          autoCapitalize='none' autoCorrect={false}          
+          autoCapitalize='none' autoCorrect={false}
           value={this.state.displayName}
           onChangeText={displayName => this.setState({ displayName })}
           onFocus={this.adjustOnFocus} onBlur={this.adjustOnBlur}

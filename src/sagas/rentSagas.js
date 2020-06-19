@@ -13,9 +13,8 @@ export default function* watcher() {
 }
 
 export function* rentSuccessProcess(action) {
-  yield put(setActiveModal(MAP_MODAL.RENT));
+  // yield put(setActiveModal(MAP_MODAL.RENT));
   yield put(setViewedAdmob(false));
-  // Actions['map_first']({initialModal: 'rent'});
 }
 
 export function* rentFailedProcess(action) {
