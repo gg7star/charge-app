@@ -43,3 +43,9 @@ export function returnedButteryFailed(rent, auth) {
     payload: { rent, auth }
   }
 }
+
+export function requireFeedback() {
+  return {
+    type: types.RENT_REQUIRED_FEEDBACK
+  }
+}

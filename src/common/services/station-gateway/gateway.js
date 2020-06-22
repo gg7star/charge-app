@@ -62,3 +62,22 @@ export async function returnButtery(rent, auth) {
     return { data: null, error: error.status, errorMessage: error.data.error };
   }
 }
+
+export function getStripeSettings() {
+  try {
+    // Get a butterry
+    const response = processRequest(
+      `${serverUrls.apiGatewayServerURL}/payment/stripe/settings`,
+      'GET',
+      null
+    );
+    console.log('==== getStripeSetting: response: ', response);
+    if (response.data.code != 200) {
+      return { error: response.data.code, errorMessage: '', data: null };
+    }
+    return { data: response.data, error: null, errorMessage: null };
+  } catch(error) {
+    console.log('==== return response error: ', error);
+    return { data: null, error: error.status, errorMessage: error.data.error };
+  }
+}

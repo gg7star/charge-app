@@ -17,18 +17,19 @@ export default class Dialog extends React.Component {
     enabledComment: false
   }
 
-  render() {
-    const { _t } = this.props.appActions
-    const { place } = this.props.map
-    const { status } = this.state
+  adjustOnFocus = () => {
+    console.log('asdasd')
+    this.setState({...this.state, adjust: {marginBottom: 280}})
+  }
 
-    return (
-      <FeedbackDialogWrapper>
-        <View style={{marginBottom: this.state.adjust.marginBottom}}>
-          {this.renderWhenRated()}
-        </View>
-      </FeedbackDialogWrapper>
-    )
+  adjustOnBlur = () => {
+    this.setState({...this.state, adjust: {marginBottom: 0}})
+  }
+
+  sendRate = () => {
+    const { mapActions, rentActions } = this.props;
+    mapActions.setActiveModal(MAP_MODAL.UNLOCK);
+    rentActions.rentInit();
   }
 
   renderComment = () => {
@@ -75,6 +76,14 @@ export default class Dialog extends React.Component {
     if ((rating > 3) || (rating === 0)) return _t('Do you like our service?');
     return _t('We are sorry.');
   };
+
+  setRating = (rating) => {
+    this.setState({
+      ...this.state,
+      rating,
+      status: 'rated'
+    })
+  }
 
   renderWhenRated = () => {
     const { _t } = this.props.appActions;
@@ -136,25 +145,17 @@ export default class Dialog extends React.Component {
     )
   }
 
-  setRating = (rating) => {
-    this.setState({
-      ...this.state,
-      rating,
-      status: 'rated'
-    })
-  }
+  render() {
+    const { _t } = this.props.appActions
+    const { place } = this.props.map
+    const { status } = this.state
 
-  adjustOnFocus = () => {
-    console.log('asdasd')
-    this.setState({...this.state, adjust: {marginBottom: 280}})
-  }
-
-  adjustOnBlur = () => {
-    this.setState({...this.state, adjust: {marginBottom: 0}})
-  }
-
-  sendRate = () => {
-    this.props.mapActions.setActiveModal(MAP_MODAL.UNLOCK);
-    // Actions['map_first']()
+    return (
+      <FeedbackDialogWrapper>
+        <View style={{marginBottom: this.state.adjust.marginBottom}}>
+          {this.renderWhenRated()}
+        </View>
+      </FeedbackDialogWrapper>
+    )
   }
 }

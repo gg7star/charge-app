@@ -30,7 +30,7 @@ export default function StripeStateReducer(
     case stripeActionTypes.DO_PAYMENT_REQUEST:
       return {
         ...state,
-        payment: {...action.payload},
+        payment: {...action.payload.data},
         isFetching: true,
       };
     case stripeActionTypes.DO_PAYMENT_SUCCESS:

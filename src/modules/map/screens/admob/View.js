@@ -49,8 +49,8 @@ export default class ScreenView extends React.Component {
     const { _t } = this.props.appActions;
 
     advert = RewardedAd.createForAdRequest(
-      TestIds.REWARDED,
-      // __DEV__ ? TestIds.REWARDED : admobConf.rewardUnitId,
+      // TestIds.REWARDED,
+      __DEV__ ? TestIds.REWARDED : admobConf.rewardUnitId,
       // admobConf.rewardUnitId,
       {requestNonPersonalizedAdsOnly: true,}
     );
@@ -83,8 +83,8 @@ export default class ScreenView extends React.Component {
     const { _t } = this.props.appActions;
 
     advert = InterstitialAd.createForAdRequest(
-      TestIds.INTERSTITIAL,
-      // __DEV__ ? TestIds.INTERSTITIAL : admobConf.interstitialUnitId,
+      // TestIds.INTERSTITIAL,
+      __DEV__ ? TestIds.INTERSTITIAL : admobConf.interstitialUnitId,
       // admobConf.interstitialUnitId,
       {requestNonPersonalizedAdsOnly: true,}
     );
@@ -142,7 +142,7 @@ export default class ScreenView extends React.Component {
     console.log('==== unsubscribe admob');
     unsubscribe && unsubscribe();
     mapActions.setViewedAdmob(true);
-    mapActions.setActiveModal(MAP_MODAL.RENT);
+    // mapActions.setActiveModal(MAP_MODAL.RENT);
     Actions['map_first']();
   }
 

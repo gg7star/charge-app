@@ -8,11 +8,12 @@ export function initStripe() {
   }
 }
 
-export function doPaymentRequest(data) {
+export function doPaymentRequest(data, auth) {
   return {
     type: types.DO_PAYMENT_REQUEST,
     payload: {
-      ...data
+      data,
+      auth
     }
   };
 }

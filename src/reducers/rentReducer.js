@@ -1,6 +1,7 @@
 import { rentActionTypes } from '~/actions/types';
 import { Actions } from 'react-native-router-flux';
 import moment from 'moment';
+import { RENT_STATUS } from '~/common/constants/rent';
 
 const initialState = {
   isRented: false,
@@ -22,7 +23,8 @@ const initialState = {
   isFetching: false,
   statusMessage: '',
   startTime: null,
-  endTime: null
+  endTime: null,
+  rentStatus: RENT_STATUS.INIT
 }
 
 export default function reducer(state = initialState, action) {
@@ -34,6 +36,7 @@ export default function reducer(state = initialState, action) {
     case rentActionTypes.RENT_REQUEST:
       return {
         ...state,
+        rentStatus: RENT_STATUS.RENT_REQUEST,
         isRented: false,
         stationSn: action.payload.stationSn,
         uuid: action.payload.uuid,
@@ -50,6 +53,7 @@ export default function reducer(state = initialState, action) {
     case rentActionTypes.RENT_SUCCESS:
         return {
           ...state,
+          rentStatus: RENT_STATUS.RENTED,
           isRented: true,
           isFetching: false,
           tradeNo: action.payload.tradeNo,
@@ -66,6 +70,7 @@ export default function reducer(state = initialState, action) {
     case rentActionTypes.RENT_FAILURE:
       return {
         ...initialState,
+        rentStatus: RENT_STATUS.RENT_FAILED,
         statusMessage: action.payload.statusMessage
       }
     case rentActionTypes.RENT_RETURNED_BATTERY:
@@ -73,11 +78,17 @@ export default function reducer(state = initialState, action) {
         ...state,
         ...action.payload.rent,
         // returnedPlaceAddress: action.payload.rent.returnedPlaceAddress,
+        rentStatus: RENT_STATUS.RETURNED,
         isRented: false,
         isFetching: false,
         enabledDeposit: true,
         endTime: moment().format('DD/MM/YY LTS'),
         // stationSn: action.payload.rent.stationNo
+      }
+    case rentActionTypes.RENT_REQUIRED_FEEDBACK:
+      return {
+        ...state,
+        rentStatus: RENT_STATUS.REQUIRED_FEEDBACK
       }
     default: 
       return state

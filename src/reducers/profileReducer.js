@@ -88,23 +88,26 @@ export default function reducer(state = initialState, action) {
         ...state,
         notifications: [action.payload.notification, ...state.notifications]
       }
+    case types.LOAD_NOTIFICATION_SUCCESS:
+      return {
+        ...state,
+        notifications: action.payload.notifications
+      }
     default: 
       return state
   }
 }
 
-function addCoupon (state, couponCode) {
-  let { cash } = state
-  cash.couponCode = couponCode
-  cash.couponCodeActived = true
-  return {
-    ...state,
-    cash
-  }
-}
+// function addCoupon (state, couponCode) {
+//   let { cash } = state
+//   cash.couponCode = couponCode
+//   cash.couponCodeActived = true
+//   return {
+//     ...state,
+//     cash
+//   }
+// }
 
-export function loadHistories(state, histories) {
-  console.log("sereerrererere");
-  console.log(histories);
-  
-}
+// export function loadHistories(state, histories) {
+//   console.log('===== loadHistories: ', histories);
+// }

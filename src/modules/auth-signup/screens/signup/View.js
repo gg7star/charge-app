@@ -202,7 +202,7 @@ export default class SignupView extends React.Component {
             disabled={facebookSigning}
           />
           <Spacer size={15*em} />
-          
+
           {/* {appleAuth.isSupported && (
             <AppleButton
               cornerRadius={20*em}

@@ -12,7 +12,7 @@ export default class Dialog extends React.Component {
     const { _t } = this.props.appActions
 
     return (
-      <DialogWrapper transparent={true}>
+      <DialogWrapper transparent={true} zIndex={10}>
         <Button
           bgColor={colors.primaryBackground}
           textColor={'#fff'}

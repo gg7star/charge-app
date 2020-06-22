@@ -90,12 +90,12 @@ export function* processSocialLoginSuccess(action) {
         notifications.postNotification(
           contents,
           message,
-          auth.oneSignalDevice.userId,
+          `${auth.oneSignalDevice.userId}`,
           otherParameters
         );
       }
       // Go to Hint screen
-      console.log('==== Go to Hint.');
+      console.log('==== Go to Hint.', auth, credential);
       Actions['hint']();
     }
     // else Actions['hint']();

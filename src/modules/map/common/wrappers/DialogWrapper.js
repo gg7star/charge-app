@@ -2,9 +2,9 @@ import React from 'react'
 import { View, TouchableOpacity, Image } from 'react-native'
 import { W } from '~/common/constants'
 
-const DialogWrapper = ({ children, onClose, transparent }) => (
+const DialogWrapper = ({ children, onClose, transparent, zIndex }) => (
   <View style={[{
-    position: 'absolute', bottom: 0, left: 0, zIndex: 30,
+    position: 'absolute', bottom: 0, left: 0, zIndex: (zIndex || 30),
     width: W, 
     borderTopLeftRadius: 20, borderTopRightRadius: 20,
     backgroundColor: transparent ? '#ffffff00' : '#ffffff',

@@ -19,6 +19,7 @@
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* nonoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = nonoTests.m; sourceTree = "<group>"; };
+		0421983B249D60F000F2FC4E /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* nono.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = nono.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = nono/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = nono/AppDelegate.m; sourceTree = "<group>"; };
@@ -201,6 +202,7 @@
 				English,
 				en,
 				Base,
+				fr,
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
@@ -327,6 +329,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				13B07FB21A68108700A75B9A /* Base */,
+				0421983B249D60F000F2FC4E /* fr */,
 			);
 			name = LaunchScreen.xib;
 			path = nono;
@@ -341,10 +344,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = nono/Nono.temp_caseinsensitive_rename.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development: yang changliu (6KY6Z42SU3)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development: yang changliu (6KY6Z42SU3)";
+				CODE_SIGN_IDENTITY = "Apple Distribution: G2R Conseils (RKJP96853R)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution: G2R Conseils (RKJP96853R)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1.0.34;
+				CURRENT_PROJECT_VERSION = 1.0.39;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = RKJP96853R;
 				HEADER_SEARCH_PATHS = (
@@ -399,7 +402,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.chargeme.nono;
 				PRODUCT_NAME = nono;
-				PROVISIONING_PROFILE_SPECIFIER = nono_chargeme_dev_060620;
+				PROVISIONING_PROFILE_SPECIFIER = nono_chargeme_prod_060620;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -410,10 +414,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = nono/Nono.temp_caseinsensitive_rename.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development: yang changliu (6KY6Z42SU3)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development: yang changliu (6KY6Z42SU3)";
+				CODE_SIGN_IDENTITY = "Apple Distribution: G2R Conseils (RKJP96853R)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution: G2R Conseils (RKJP96853R)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1.0.34;
+				CURRENT_PROJECT_VERSION = 1.0.39;
 				DEVELOPMENT_TEAM = RKJP96853R;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -467,7 +471,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.chargeme.nono;
 				PRODUCT_NAME = nono;
-				PROVISIONING_PROFILE_SPECIFIER = nono_chargeme_dev_060620;
+				PROVISIONING_PROFILE_SPECIFIER = nono_chargeme_prod_060620;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

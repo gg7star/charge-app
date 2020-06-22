@@ -5,7 +5,7 @@ export default {
   "We will send you an SMS to check your number": "Nous allons vous envoyer un SMS pour vérifier votre numéro",
   "or": "ou",
   "Continue with facebook": "Continuer avec facebook",
-  "Continue with Apple": "Continue with Apple",
+  "Continue with Apple": "Continuer avec Apple",
   "Already have an account? Connect yourself": "Tu as déjà un compte ?  Connecte-toi",
   "Already have an account?": "Tu as déjà un compte ?",
   "Connect yourself": "Connecte-toi",
@@ -21,11 +21,12 @@ export default {
   "Return the code": "Renvoyer le code",
   "Hello, what is your name?": "Bonjour, quel est votre prénom?",
   "First Name": "Prénom",
+  "Full Name": "Prénom",
   "Name": "Nom",
   "Pass": "Passer",
   "Hello": "Enchanté",
   "what is your email?": "quel est ton email ?",
-  "What is your date of birth?": "Théo, quelle est ta date de naissance ?",
+  "What is your date of birth?": "Quelle est votre date de naissance?",
   "Finish": "Terminer",
   "Find a station": "Trouve une station",
   "The app guides you to the nearest partner site": "L’application te guide jusqu’au site partenaire le plus proche",
@@ -216,5 +217,11 @@ export default {
 
   "Nono application requires access to your phone’s camera to scan QR code of each station device production.": "L'application Nono nécessite l'accès à la caméra de votre téléphone pour numériser le code QR de la production de chaque appareil.",
   "Nono application is using Google Map and require your location to provide the distance service between you and each station devices.": "L'application Nono utilise Google Map et nécessite votre emplacement pour fournir le service à distance entre vous et les appareils de chaque station.",
-  "Nono application requires access to the photo library to save the scan QR codes.": "L'application Nono nécessite un accès à la photothèque pour enregistrer les codes QR de numérisation."
+  "Nono application requires access to the photo library to save the scan QR codes.": "L'application Nono nécessite un accès à la photothèque pour enregistrer les codes QR de numérisation.",
+  "Are you sure you want to buy this battery for 20.00€ ?": "Etes-vous sur de vouloir acheter cette batterie au prix de 20.00€ ?",
+  "Yes, I want it!": "Oui, je la veux !",
+  "Confirm payment": "Confirmer le paiement",
+  "Failed payment": "Paiement échoué",
+  "Your payment was failed. Please try again later.": "Votre paiement a échoué. Veuillez réessayer plus tard.",
+  "Doing payment...": "Effectuer le paiement ..."
 };

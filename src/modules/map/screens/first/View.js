@@ -23,10 +23,11 @@ import ProfileMenuDialog from '~/modules/profile/modals/menu/ProfileMenuDialogCo
 import { returnButtery } from '~/common/services/station-gateway/gateway';
 import defaultCurrentLocation from '~/common/config/locations';
 import MAP_MODAL from '~/common/constants/map';
+import { RENT_STATUS } from '~/common/constants/rent';
 
 const GEOLOCATION_OPTION = {
   enableHighAccuracy: true,
-  timeout: 15000,
+  timeout: 20000,
   maximumAge: 10000,
   distanceFilter: 50,
   forceRequestLocation: true
@@ -34,23 +35,23 @@ const GEOLOCATION_OPTION = {
 const GEOLOCATION_WATCH_OPTION = {
   enableHighAccuracy: false,
   distanceFilter: 0,
-  interval: 5000,
-  fastestInterval: 3000
+  interval: 15000,
+  fastestInterval: 10000
 }
 
 export default class FirstScreenView extends React.Component {
   state = {
     profileOpened: false,
     activeModal: 'unlock',
-    depositingButtery: false
+    depositingButtery: false,
+    rentStatus: RENT_STATUS.INIT
   }
 
   async componentDidMount() {
-    const { initialModal, profileOpened, map } = this.props
-    var newState = {...this.state};
-    console.log('==== componentDidMount: map.activeModal: ', map.activeModal);
+    const { initialModal, profileOpened, map, rent } = this.props
+    var newState = {...this.state, rentStatus: rent.rentStatus};
+    console.log('==== componentDidMount: map.activeModal: ', W, H, em, map.activeModal);
     if (map.activeModal) {
-      // this.setState({activeModal: map.activeModal})
       newState = {
         ...newState,
         activeModal: map.activeModal
@@ -74,11 +75,12 @@ export default class FirstScreenView extends React.Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    const { map } = nextProps;
+    const { map, rent } = nextProps;
     if (!map) return;
     const { activeModal } = map;
+    const { rentStatus } = rent;
     if (this.state.activeModal === activeModal) return;
-    console.log('===== activeModal: ', this.state.activeModal, activeModal);
+    console.log('===== activeModal: ', this.state.activeModal, activeModal, rentStatus);
     this.setState({activeModal: activeModal})
   }
 
@@ -104,12 +106,6 @@ export default class FirstScreenView extends React.Component {
       );
     }
   }
-
-  // initModalStatusFromProps = () => {
-  //   const { rent } = this.props;
-  //   if (rent.isRented) return MAP_MODAL.RENT;
-  //   return 
-  // }
 
   hasLocationPermission = async () => {
     if (Platform.OS === 'ios' ||
@@ -284,28 +280,53 @@ export default class FirstScreenView extends React.Component {
     
   }
 
-  onBuy = () => {
-    const { auth, map, stripeActions } = this.props;
-    const { scannedQrCode } = map;
+  processPayment = () => {
+    const { auth, rent, stripeActions } = this.props;
     return stripe.paymentRequestWithCardForm()
       .then(stripeTokenInfo => {
-        console.log('Token created: ', stripeTokenInfo);
+        console.log('==== Token created: ', stripeTokenInfo);
         // call payment function
         stripeActions.doPaymentRequest({
-          amount: '50',
+          amount: '2000',
           tokenId: stripeTokenInfo.tokenId,
           email: auth.credential.user.email,
           telnumber: auth.credential.user.phoneNumber,
-          stationSn: scannedQrCode,
-          slotId: '1',
+          stationSn: rent.stationSn,
+          slotId: rent.slotNum,
+          powerBankSn: rent.powerBankSn,
+          tradeNo: rent.tradeNo,
+          rentedPlaceAddress: rent.rentedPlaceAddress,
           currency: 'eur',
-          description: `${auth.credential.user.diaplayName} payed via Nono application.`,
+          description: `${auth.credential.user.displayName || auth.credential.user.email} paid via Nono application.`,
           accessToken: null
-        });
+        },
+        auth
+        );
       })
       .catch(error => {
         console.warn('Payment failed', { error });
+        Alert.alert(
+          _t('Failed payment'),
+          _t('Your payment was failed. Please try again later.'),
+          [
+            {text: _t('Ok'), onPress: () => console.log('clicked ok.')}
+          ],
+          {cancelable: true},
+        );
       });
+  }
+
+  onBuy = () => {
+    const { _t } = this.props.appActions;
+    Alert.alert(
+      _t('Confirm payment'),
+      _t('Are you sure you want to buy this battery for 20.00€ ?'),
+      [
+        {text: _t('Cancel'), onPress: () => console.log('clicked cancel.')},
+        {text: _t('Yes, I want it!'), onPress: () => this.processPayment()},
+      ],
+      {cancelable: true},
+    );
   }
 
   onDeposit = async () => {
@@ -328,19 +349,18 @@ export default class FirstScreenView extends React.Component {
     // } else {
     //   Actions['admob']({adMode: 'reward'});
     // }
-    mapActions.setActiveModal(MAP_MODAL.FEEDBACK);
-    // Actions['map_first']();
-    // Actions['admob']({adMode: 'reward'});
+    
+    // mapActions.setActiveModal(MAP_MODAL.FEEDBACK);
+    rentActions.requireFeedback();
   }
 
   openFeedbackDialog = () => {
-    this.props.mapActions.setActiveModal(MAP_MODAL.FEEDBACK);
-    // this.setState({activeModal: 'feedback'})
+    // this.props.mapActions.setActiveModal(MAP_MODAL.FEEDBACK);
   }
 
   closeFeedbackDialog = () => {
-    this.props.mapActions.setActiveModal(MAP_MODAL.UNLOCK);
-    // this.setState({activeModal: 'unlock'})
+    // this.props.mapActions.setActiveModal(MAP_MODAL.UNLOCK);
+    this.props.rentActions.rentInit();
   }
 
   onUnlock = () => {
@@ -371,10 +391,9 @@ export default class FirstScreenView extends React.Component {
 
   render() {
     const { currentLocation, places, searchedPlaces, place } = this.props.map;
-    const { enabledDeposit } = this.props.rent;
+    const { enabledDeposit, rentStatus } = this.props.rent;
     const { _t } = this.props.appActions;
-    const { profileOpened } = this.state;
-    const { activeModal } = this.state;
+    const { profileOpened, activeModal } = this.state;
     const propsProfileOpened = this.props.profileOpened;
 
     return (
@@ -406,7 +425,8 @@ export default class FirstScreenView extends React.Component {
           <MapButton name='position' onPress={this.onClickPosition}/>
         </MapView>
         <Spacer size={20} />
-        {activeModal== MAP_MODAL.UNLOCK && <UnlockDialog onClickUnlock={this.onUnlock} />}
+        {/* {activeModal== MAP_MODAL.UNLOCK && <UnlockDialog onClickUnlock={this.onUnlock} />} */}
+        <UnlockDialog onClickUnlock={this.onUnlock} />
         {activeModal== MAP_MODAL.SEARCH && <SearchDialog onCancel={this.closeSearchDialog} 
           selectPlace={this.selectPlace} />
         }
@@ -443,8 +463,11 @@ export default class FirstScreenView extends React.Component {
             onFilter={this.filterSearch}
           />
         }
-        {activeModal==MAP_MODAL.RENT && 
-          // <RentDialog onBuy={this.openFeedbackDialog} onDeposit={this.openFeedbackDialog} />
+        {(((rentStatus == RENT_STATUS.RENTED) || (rentStatus == RENT_STATUS.RETURNED)) && 
+          (activeModal != MAP_MODAL.FINISH) &&
+          (activeModal!=MAP_MODAL.NEARE_PLACE) && 
+          (activeModal!=MAP_MODAL.DETAIL)
+          )&& 
           <RentDialog
             onBuy={this.onBuy}
             onDeposit={this.onDeposit}
@@ -452,7 +475,11 @@ export default class FirstScreenView extends React.Component {
             enabledDeposit={enabledDeposit}
           />
         }
-        {activeModal==MAP_MODAL.FEEDBACK && 
+        {((rentStatus == RENT_STATUS.REQUIRED_FEEDBACK) && 
+          (activeModal != MAP_MODAL.FINISH) && 
+          (activeModal!=MAP_MODAL.NEARE_PLACE) && 
+          (activeModal!=MAP_MODAL.DETAIL)
+          ) &&
           <FeedbackDialog onClose={this.closeFeedbackDialog} />
         }
       </View>

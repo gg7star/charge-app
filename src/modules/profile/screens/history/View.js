@@ -13,14 +13,6 @@ import 'moment/locale/fr';
 export default class HistoryView extends React.Component {
   componentDidMount() {
     this.props.profileActions.loadHistories();
-    // const { language } = this.props.app;
-    // if (language == 'fr') {
-    //   console.log('==== Setting up moment locale to fr');
-    //   moment().locale('fr');
-    // } else {
-    //   console.log('==== Setting up moment locale to en-gb');
-    //   moment().locale('en-gb');
-    // }
   }
 
   goBack = () => {

@@ -15,6 +15,7 @@ import { SplashView } from '~/common/components';
 import { NONO_NOTIFICATION_TYPES } from '~/common/services/onesignal/notifications';
 // import { rentSuccess, rentFailure } from '~/actions/rentActions';
 import MAP_MODAL from '~/common/constants/map';
+import { RENT_STATUS } from '~/common/constants/rent';
 
 export default class AppView extends Component {
   state = {
@@ -99,7 +100,7 @@ export default class AppView extends Component {
 
   onReceived = (_this, notification) => {
     console.log("==== Notification received: ", notification, _this);
-    this.props.profileActions.addNotification(notification);
+    this.props.profileActions.addNotification(notification, _this.props.app.language);
     const { additionalData } = notification.payload;
     console.log('=== additionalData: ', additionalData);
     if (additionalData) {
@@ -150,26 +151,33 @@ export default class AppView extends Component {
   };
 
   onRentSuccess = (data) => {
-    const { auth, rentActions, mapActions } = this.props;
-    rentActions.rentSuccess(data, auth);
-    // mapActions.setActiveModal(MAP_MODAL.RENT);
-    // Actions['map_first']();
-    // Actions['map_first']({initialModal: MAP_MODAL.RENT});
+    const { auth, rentActions, rent } = this.props;
+    // For test
+    if (__DEV__ && (rent.rentStatus == RENT_STATUS.INIT)) {
+      rentActions.rentSuccess(data, auth);
+    }
+
+    if ((rent.rentStatus == RENT_STATUS.RENT_REQUEST))
+      rentActions.rentSuccess(data, auth);
   };
 
   onRentFailure = (error) => {
     const { auth, rentActions } = this.props;
-    rentActions.rentFailure(error);
+    if ((rent.rentStatus == RENT_STATUS.RENT_REQUEST))
+      rentActions.rentFailure(error);
   };
 
   onReturnSuccess = (data) => {
-    const { auth, rentActions } = this.props;
+    const { auth, rent, rentActions } = this.props;
     var returnedData = {
       ...data,
       placeOfDeposit: data.stationNo
     }
-    rentActions.returnedButtery(returnedData, auth);
-    // Actions['admob']({adMode: 'reward'});
+    console.log('===== onReturnSuccess');
+    console.log('---- data: ', data);
+    console.log('---- rent: ', rent);
+    if ((rent.rentStatus == RENT_STATUS.RENTED) && (data.tradeNo == rent.tradeNo))
+      rentActions.returnedButtery(returnedData, auth);
   };
 
   render() {

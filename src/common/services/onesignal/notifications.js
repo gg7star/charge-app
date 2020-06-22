@@ -4,7 +4,8 @@ import onesignalConfig from '~/common/config/onesignal';
 
 export const postNotification = (contents, data, playerId, otherParameters) => {
   try {
-    OneSignal.postNotification(contents, data, playerId, otherParameters);//, otherParameters);
+    const ids = [playerId, ];
+    OneSignal.postNotification(contents, data, ids, otherParameters);
   } catch (error) {
     console.log('======= error: ', error);
   }  

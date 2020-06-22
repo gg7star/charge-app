@@ -152,7 +152,7 @@ export default class ScreenView extends React.Component {
               );
             } else {
               // For test
-              mapActions.setActiveModal(MAP_MODAL.RENT);
+              // mapActions.setActiveModal(MAP_MODAL.RENT);
               Actions['map_first']();
             }
           } else {

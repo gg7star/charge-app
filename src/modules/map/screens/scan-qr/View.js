@@ -97,9 +97,8 @@ export default class ScanQRView extends React.Component {
           });
          
           // For test
-          mapActions.setActiveModal(MAP_MODAL.RENT);
+          // mapActions.setActiveModal(MAP_MODAL.RENT);
           Actions['map_first']();
-          // Actions['map_first']({initialModal: 'rent'});
         }
       } else {
         Alert.alert(

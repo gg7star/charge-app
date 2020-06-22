@@ -213,3 +213,45 @@ export async function loadHistories() {
   }
   return null;
 }
+
+export async function saveNotification(notification) {
+  console.log('====== saveNotification: notification: ', notification)
+  const uid = firebase.auth().currentUser.uid
+  if (uid) {
+    try {
+      const dateKey = moment(notification.date, 'DD/MM/YY LTS').format('DD-MM-YYYY LTS');
+      return firebase.database().ref(`${NOTIFICATION_TABLE_NAME}/${uid}/${dateKey}`)
+        .set(notification).then(() => {
+          return notification;
+        });
+    } catch (e) {
+      console.log('==== error: ', e);
+      return null
+    }
+  }
+  return null;
+}
+
+export async function loadNotifications() {
+  const uid = firebase.auth().currentUser.uid
+  if (uid) {
+    try {
+      return firebase.database().ref(`/${NOTIFICATION_TABLE_NAME}/${uid}`).once('value').then((snapshot) => {
+        if (snapshot.exists) {
+          const dbNotifications = snapshot.val();
+          var notifications = [];
+          Object.keys(dbNotifications).map((key) => {
+            notifications.push(dbNotifications[key]);
+          });
+          return notifications;
+        } else {
+          return [];
+        }
+      });
+    } catch (e) {
+      console.log('==== error: ', e);
+      return null;
+    }
+  }
+  return null;
+}
