@@ -61,12 +61,12 @@ export default class RentDialog extends React.Component {
 
   render() {
     const stripeProps = this.props.stripePayment;
-    
+    const { _t } = this.props.appActions
     return (
       <RentDialogWrapper>
         <Spinner
           visible={stripeProps.isFetching}
-          textContent={'Doing payment...'}
+          textContent={_t('Doing payment...')}
           textStyle={{color: '#FFF'}}
         />
         {this.renderTitle()} 

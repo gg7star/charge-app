@@ -87,7 +87,6 @@ export function* processSocialLoginSuccess(action) {
         },
       }
       if (auth && auth.oneSignalDevice && auth.oneSignalDevice.userId) {
-        console.log('====== notifications.postNotification: ', auth.oneSignalDevice.userId)
         notifications.postNotification(
           contents,
           message,

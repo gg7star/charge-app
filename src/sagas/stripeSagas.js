@@ -2,9 +2,9 @@ import { put, takeLatest, call } from 'redux-saga/effects';
 import { Actions } from 'react-native-router-flux';
 import { processRequest } from '~/common/services/api';
 import serverUrls from '~/common/constants/api';
-import { AppActions, StripeActions, MapActions } from '~/actions';
+import { AppActions, StripeActions, MapActions, RentActions } from '~/actions';
 import { stripeActionTypes } from '~/actions/types';
-import { saveCreditCard } from '~/common/services/rn-firebase/database';
+import { saveCreditCard, saveHistory } from '~/common/services/rn-firebase/database';
 import * as notifications from '~/common/services/onesignal/notifications';
 import MAP_MODAL from '~/common/constants/map';
 
@@ -16,6 +16,7 @@ const {
 } = StripeActions;
 const { setActiveModal } = MapActions;
 const { setGlobalNotification } = AppActions;
+const { requireFeedback } = RentActions;
 
 export default function* watcher() {
   yield takeLatest(stripeActionTypes.REGISTER_CARD_REQUEST, saveCardInfo);
@@ -24,35 +25,68 @@ export default function* watcher() {
 
 export function* doPayment(action) {
   try {
+    const { data, auth } = action.payload;
+    console.log('==== data: ', data);
+    console.log('===== auth: ', auth);
     // Get a list of all stationSn
     const response = yield call(
       processRequest,
       `${serverUrls.apiGatewayServerURL}/payment/stripe/checkout`,
       'POST',
-      action.payload
+      data
     );
     if (response.data.status === 200) {
       yield put(doPaymentSuccess(response.data));
-      yield put(setGlobalNotification({
-        message: 'You paid succefully. Thank you!',
-        type: 'success'
-      }));
-      yield put(setActiveModal(MAP_MODAL.FEEDBACK));
+      // Send notification
+      var contents = {
+        'en': `You paid to buy a buttery in ${data.stationSn}, succefully. Traditional number is ${data.tradeNo}.`,
+        'fr': `Vous avez payé pour acheter un beurre dans ${data.stationSn}, avec succès. Le nombre traditionnel est ${data.tradeNo}.`
+      }
+      var message = { 
+        type: notifications.NONO_NOTIFICATION_TYPES.PAIED_TO_NONO
+      };
+      var otherParameters = {
+        headings: {
+          "en": "Payment",
+          "fr": "Paiement"
+        },
+      }
+      if (auth && auth.oneSignalDevice && auth.oneSignalDevice.userId) {
+        notifications.postNotification(
+          contents, message, 
+          auth.oneSignalDevice.userId, otherParameters
+        );
+      }
+      yield put(requireFeedback());
       Actions['map_first']();
-      // Actions['map_first']({initialModal: 'feedback'});
     } else {
       yield put(doPaymentFailure({errorMessage: response.data.message}));
-      yield put(setGlobalNotification({
-        message: 'Your payment was failed. Please try later.',
-        type: 'danger'}
-      ));
-      // yield put(setActiveModal(MAP_MODAL.RENT));
+      // Send notification
+      var contents = {
+        'en': `Your payment was failed to buy a buttery in ${data.stationSn}. Traditional number is ${data.tradeNo}.`,
+        'fr': `Votre paiement n'a pas pu acheter un beurre en ${data.stationSn}. Le nombre traditionnel est ${data.tradeNo}.`
+      }
+      var message = { 
+        type: notifications.NONO_NOTIFICATION_TYPES.PAIED_TO_NONO
+      };
+      var otherParameters = {
+        headings: {
+          "en": "Payment",
+          "fr": "Paiement"
+        },
+      }
+      if (auth && auth.oneSignalDevice && auth.oneSignalDevice.userId) {
+        notifications.postNotification(
+          contents, message, 
+          auth.oneSignalDevice.userId, otherParameters
+        );
+      }
       Actions['map_first']();
     }
   } catch(error) {
     console.log('==== doPayment response error: ', error);
     yield put(doPaymentFailure(error.data));
-    yield put(setGlobalNotification({message: 'Your payment was failed. Please try later.', type: 'danger'}));
+    // yield put(setGlobalNotification({message: 'Your payment was failed. Please try later.', type: 'danger'}));
   }
 }
 
@@ -76,7 +110,7 @@ export function* saveCardInfo(action) {
       // Send notification
       var contents = {
         'en': `Your credt xxxx${last4} card was registered successfully.`,
-        'fr': `Vous êtes d\'abord enregistré avec votre compte Facebook.`
+        'fr': `Votre carte de crédit xxxx${last4} a bien été enregistrée.`
       }
       var message = { 
         type: notifications.NONO_NOTIFICATION_TYPES.CONNECTED_CARD
@@ -99,14 +133,14 @@ export function* saveCardInfo(action) {
       Actions['map_scan_qr']();
     } else {
       yield put(registerCardFailure({errorMessage: response.data.message}));
-      yield put(setGlobalNotification({
-        message: 'Your card was failed to save. Please try later.',
-        type: 'danger'}
-      ));
+      // yield put(setGlobalNotification({
+      //   message: 'Your card was failed to save. Please try later.',
+      //   type: 'danger'}
+      // ));
     }
   } catch(error) {
     console.log('==== doPayment response error: ', error);
     yield put(registerCardFailure(error.data));
-    yield put(setGlobalNotification({message: 'Your card was failed to save. Please try later.', type: 'danger'}));
+    // yield put(setGlobalNotification({message: 'Your card was failed to save. Please try later.', type: 'danger'}));
   }
 }

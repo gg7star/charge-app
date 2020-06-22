@@ -100,7 +100,7 @@ export default class AppView extends Component {
 
   onReceived = (_this, notification) => {
     console.log("==== Notification received: ", notification, _this);
-    this.props.profileActions.addNotification(notification);
+    this.props.profileActions.addNotification(notification, _this.props.app.language);
     const { additionalData } = notification.payload;
     console.log('=== additionalData: ', additionalData);
     if (additionalData) {

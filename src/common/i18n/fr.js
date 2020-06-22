@@ -217,5 +217,11 @@ export default {
 
   "Nono application requires access to your phone’s camera to scan QR code of each station device production.": "L'application Nono nécessite l'accès à la caméra de votre téléphone pour numériser le code QR de la production de chaque appareil.",
   "Nono application is using Google Map and require your location to provide the distance service between you and each station devices.": "L'application Nono utilise Google Map et nécessite votre emplacement pour fournir le service à distance entre vous et les appareils de chaque station.",
-  "Nono application requires access to the photo library to save the scan QR codes.": "L'application Nono nécessite un accès à la photothèque pour enregistrer les codes QR de numérisation."
+  "Nono application requires access to the photo library to save the scan QR codes.": "L'application Nono nécessite un accès à la photothèque pour enregistrer les codes QR de numérisation.",
+  "Are you sure you want to buy this battery for 20.00€ ?": "Etes-vous sur de vouloir acheter cette batterie au prix de 20.00€ ?",
+  "Yes, I want it!": "Oui, je la veux !",
+  "Confirm payment": "Confirmer le paiement",
+  "Failed payment": "Paiement échoué",
+  "Your payment was failed. Please try again later.": "Votre paiement a échoué. Veuillez réessayer plus tard.",
+  "Doing payment...": "Effectuer le paiement ..."
 };

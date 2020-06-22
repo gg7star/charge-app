@@ -280,28 +280,53 @@ export default class FirstScreenView extends React.Component {
     
   }
 
-  onBuy = () => {
-    const { auth, map, stripeActions } = this.props;
-    const { scannedQrCode } = map;
+  processPayment = () => {
+    const { auth, rent, stripeActions } = this.props;
     return stripe.paymentRequestWithCardForm()
       .then(stripeTokenInfo => {
-        console.log('Token created: ', stripeTokenInfo);
+        console.log('==== Token created: ', stripeTokenInfo);
         // call payment function
         stripeActions.doPaymentRequest({
           amount: '2000',
           tokenId: stripeTokenInfo.tokenId,
           email: auth.credential.user.email,
           telnumber: auth.credential.user.phoneNumber,
-          stationSn: scannedQrCode,
-          slotId: '1',
+          stationSn: rent.stationSn,
+          slotId: rent.slotNum,
+          powerBankSn: rent.powerBankSn,
+          tradeNo: rent.tradeNo,
+          rentedPlaceAddress: rent.rentedPlaceAddress,
           currency: 'eur',
-          description: `${auth.credential.user.diaplayName ? auth.credential.user.diaplayName : auth.credential.user.email} paid via Nono application.`,
+          description: `${auth.credential.user.displayName || auth.credential.user.email} paid via Nono application.`,
           accessToken: null
-        });
+        },
+        auth
+        );
       })
       .catch(error => {
         console.warn('Payment failed', { error });
+        Alert.alert(
+          _t('Failed payment'),
+          _t('Your payment was failed. Please try again later.'),
+          [
+            {text: _t('Ok'), onPress: () => console.log('clicked ok.')}
+          ],
+          {cancelable: true},
+        );
       });
+  }
+
+  onBuy = () => {
+    const { _t } = this.props.appActions;
+    Alert.alert(
+      _t('Confirm payment'),
+      _t('Are you sure you want to buy this battery for 20.00€ ?'),
+      [
+        {text: _t('Cancel'), onPress: () => console.log('clicked cancel.')},
+        {text: _t('Yes, I want it!'), onPress: () => this.processPayment()},
+      ],
+      {cancelable: true},
+    );
   }
 
   onDeposit = async () => {
