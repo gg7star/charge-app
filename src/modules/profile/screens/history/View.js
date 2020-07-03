@@ -2,12 +2,11 @@ import React from 'react';
 import { ScrollView, Platform, Text } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import ProfileWrapper from '../../common/wrappers/ProfileWrapper';
-import ProfileHeader from '../../common/headers/ProfileHeader';
+import { ProfileHeader } from '~/common/components';
 import { W, H, em } from '~/common/constants';
 import HistoryListItemContainer from './components/HistoryListItemContainer';
 import moment from 'moment';
 import 'moment/min/moment-with-locales';
-// import 'moment/locale/en-gb';
 import 'moment/locale/fr';
 
 export default class HistoryView extends React.Component {

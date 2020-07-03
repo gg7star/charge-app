@@ -8,7 +8,7 @@ import { saveHistory } from '~/common/services/rn-firebase/database';
 
 const { rentFailure } = RentActions;
 
-export async function rentButtery(data, auth) {
+export async function rentBattery(data, auth) {
   const { sstationSn, uuid, pushToken, deviceType, onesignalUserId } = data;
   // const data = {
   //   stationSn: stationSn,
@@ -24,7 +24,7 @@ export async function rentButtery(data, auth) {
       'POST',
       data
     );
-    console.log('==== rentButtery: response: ', response);
+    console.log('==== rentBattery: response: ', response);
     if (response.data.code != 200) {
       return { error: response.data.code, errorMessage: '', data: null };
     }
@@ -35,7 +35,7 @@ export async function rentButtery(data, auth) {
   }
 }
 
-export async function returnButtery(rent, auth) {
+export async function returnBattery(rent, auth) {
   const { stationSn, powerBankSn, tradeNo, slotNum } = rent;
   const data = {
     stationSn: stationSn,
@@ -52,7 +52,7 @@ export async function returnButtery(rent, auth) {
       'POST',
       data
     );
-    console.log('==== returnButtery: response: ', response);
+    console.log('==== returnBattery: response: ', response);
     if (response.data.code != 200) {
       return { error: response.data.code, errorMessage: '', data: null };
     }

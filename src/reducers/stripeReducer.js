@@ -11,6 +11,7 @@ export const initialState = {
     currency: 'eur',
     description: '',
   },
+  cardInfo: false,
   customer: null,
   accessToken: false,
   isFetched: false,
@@ -50,12 +51,13 @@ export default function StripeStateReducer(
     case stripeActionTypes.REGISTER_CARD_REQUEST:
       return {
         ...state,
-        customer: {...action.payload.customer},
+        cardInfo: {...action.payload.cardInfo},
         isFetching: true,
       };
     case stripeActionTypes.REGISTER_CARD_SUCCESS:
       return {
         ...state,
+        // cardInfo: {...action.payload.cardInfo},
         customer: {...action.payload.customer},
         isFetched: true,
         isFetching: false
@@ -63,7 +65,8 @@ export default function StripeStateReducer(
     case stripeActionTypes.REGISTER_CARD_FAILURE:
       return {
         ...state,
-        customer: {...action.payload},
+        cardInfo: false,
+        cardInfo: {...action.payload},
         isFetched: true,
         isFetching: false
       }

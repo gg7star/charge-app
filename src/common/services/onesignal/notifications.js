@@ -35,7 +35,7 @@ export const NONO_NOTIFICATION_DATA = {
     otherParameters: {
       headings: {
         "en": "Welcome to Nono!",
-        "fr": "Bienvenue chez Nono!"
+        "fr": "Bienvenue sur l’application de Nono !"
       },
     }
   }

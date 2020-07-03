@@ -1,8 +1,8 @@
-import React from 'react'
-import { TouchableOpacity, View, Text, Image } from 'react-native'
-import { Actions } from 'react-native-router-flux'
-import ProfileWrapper from '../../common/wrappers/ProfileWrapper'
-import ProfileHeader from '../../common/headers/ProfileHeader'
+import React from 'react';
+import { TouchableOpacity, View, Text, Image } from 'react-native';
+import { Actions } from 'react-native-router-flux';
+import { ProfileHeader } from '~/common/components';
+import ProfileWrapper from '../../common/wrappers/ProfileWrapper';
 
 export default class ScreenView extends React.Component {
   state = {

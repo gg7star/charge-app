@@ -1,14 +1,13 @@
 import React from 'react'
-import { TouchableOpacity, View, Text, TextInput } from 'react-native'
-import { Actions } from 'react-native-router-flux'
-import ProfileWrapper from '../../common/wrappers/ProfileWrapper'
-import ProfileHeader from '../../common/headers/ProfileHeader'
-import PayBox from './components/PayBoxContainer'
-import AddCouponBox from './components/AddCouponBoxContainer'
-import CouponBox from './components/CouponBoxContainer'
-import PayActionBar from './components/PayActionBarContainer'
-import PayThanksDialog from './components/PayThanksDialogContainer'
-import { Spacer } from '~/common/components'
+import { TouchableOpacity, View, Text, TextInput } from 'react-native';
+import { Actions } from 'react-native-router-flux';
+import ProfileWrapper from '../../common/wrappers/ProfileWrapper';
+import PayBox from './components/PayBoxContainer';
+import AddCouponBox from './components/AddCouponBoxContainer';
+import CouponBox from './components/CouponBoxContainer';
+import PayActionBar from './components/PayActionBarContainer';
+import PayThanksDialog from './components/PayThanksDialogContainer';
+import { ProfileHeader, Spacer } from '~/common/components';
 
 export default class ScreenView extends React.Component {
   state = {

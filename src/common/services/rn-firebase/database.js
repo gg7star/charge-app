@@ -155,13 +155,17 @@ export async function searchPlances(searchKey) {
   });
 }
 
-export async function saveCreditCard(cardInfo) {
-  console.log('====== saveCreditCard: cardInfo: ', cardInfo)
+export async function saveCreditCard(cardInfo, customer) {
+  console.log('====== saveCreditCard: cardInfo: ', cardInfo, customer)
   const uid = firebase.auth().currentUser.uid
+  const cardData = {
+    cardInfo: cardInfo,
+    customer: customer
+  };
   if (uid) {
     try {
       return firebase.database().ref(`${CARD_TABLE_NAME}/${uid}`)
-        .set(cardInfo).then(() => {
+        .set(cardData).then(() => {
           return cardInfo;
         });
     } catch (e) {
@@ -201,7 +205,8 @@ export async function loadHistories() {
           Object.keys(dbHistories).map((key) => {
             histories.push(dbHistories[key]);
           });
-          return histories;
+          const sortedHistories = oerferByStarTime(histories);
+          return sortedHistories;
         } else {
           return [];
         }
@@ -243,7 +248,8 @@ export async function loadNotifications() {
           Object.keys(dbNotifications).map((key) => {
             notifications.push(dbNotifications[key]);
           });
-          return notifications;
+          const sortedNotifications = orderByDate(notifications);
+          return sortedNotifications;
         } else {
           return [];
         }
@@ -254,4 +260,26 @@ export async function loadNotifications() {
     }
   }
   return null;
+}
+
+function orderByDate(array) {
+  const sortedArray = array.sort((a, b) => {
+    const dateA = moment(a.date, 'DD/MM/YY LTS').format('YYYY-MM-DD LTS');
+    const dateB = moment(b.date, 'DD/MM/YY LTS').format('YYYY-MM-DD LTS');
+    if (dateA < dateB) return 1;
+    if (dateA > dateB) return -1;
+    return 0;
+  });
+  return sortedArray;
+}
+
+function oerferByStarTime(array) {
+  const sortedArray = array.sort((a, b) => {
+    const dateA = moment(a.startTime, 'DD/MM/YY LTS').format('YYYY-MM-DD LTS');
+    const dateB = moment(b.startTime, 'DD/MM/YY LTS').format('YYYY-MM-DD LTS');
+    if (dateA < dateB) return 1;
+    if (dateA > dateB) return -1;
+    return 0;
+  });
+  return sortedArray;
 }

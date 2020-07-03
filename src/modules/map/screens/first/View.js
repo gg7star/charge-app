@@ -14,13 +14,14 @@ import {
   FilterDialog,
   RentDialog,
   FeedbackDialog,
+  CreditCardDialog,
+  ConfirmAddCardDialog
 } from '~/modules/map/modals';
 import { W, H, em } from '~/common/constants';
 import { Spacer } from '~/common/components';
 import MapButton from '~/modules/map/common/components/MapButton';
 import MapView from '~/modules/map/common/components/MapView';
 import ProfileMenuDialog from '~/modules/profile/modals/menu/ProfileMenuDialogContainer';
-import { returnButtery } from '~/common/services/station-gateway/gateway';
 import defaultCurrentLocation from '~/common/config/locations';
 import MAP_MODAL from '~/common/constants/map';
 import { RENT_STATUS } from '~/common/constants/rent';
@@ -30,7 +31,8 @@ const GEOLOCATION_OPTION = {
   timeout: 20000,
   maximumAge: 10000,
   distanceFilter: 50,
-  forceRequestLocation: true
+  forceRequestLocation: true,
+  watchId: null
 };
 const GEOLOCATION_WATCH_OPTION = {
   enableHighAccuracy: false,
@@ -43,8 +45,10 @@ export default class FirstScreenView extends React.Component {
   state = {
     profileOpened: false,
     activeModal: 'unlock',
-    depositingButtery: false,
-    rentStatus: RENT_STATUS.INIT
+    depositingBattery: false,
+    rentStatus: RENT_STATUS.INIT,
+    showCreditSettingModal: false,
+    showConfirmAddCreditCardDialog: false
   }
 
   async componentDidMount() {
@@ -66,12 +70,17 @@ export default class FirstScreenView extends React.Component {
     }
     this.setState({...newState});
 
-    await this.initGeoLocation();
+    const watchId = await this.initGeoLocation();
     this.onClickPosition();
+    this.setState({ watchId });
   }
 
   async componentWillUnmount() {
-    Geolocation.stopObserving();
+    const { watchId } = this.state;
+    if (watchId) {
+      Geolocation.clearWatch(watchId);
+      Geolocation.stopObserving();
+    }
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -281,14 +290,37 @@ export default class FirstScreenView extends React.Component {
   }
 
   processPayment = () => {
-    const { auth, rent, stripeActions } = this.props;
-    return stripe.paymentRequestWithCardForm()
-      .then(stripeTokenInfo => {
-        console.log('==== Token created: ', stripeTokenInfo);
+    const { auth, rent, stripeActions, stripePayment } = this.props;
+    const { cardInfo, customer } = stripePayment;
+    const { _t } = this.props.appActions;
+
+    if (stripePayment.customer && stripePayment.customer.id) {
+      // call payment function
+      stripeActions.doPaymentRequest({
+          amount: '2000',
+          tokenId: cardInfo.tokenId,
+          customerId: customer.id,
+          email: auth.credential.user.email,
+          telnumber: auth.credential.user.phoneNumber,
+          stationSn: rent.stationSn,
+          slotId: rent.slotNum,
+          powerBankSn: rent.powerBankSn,
+          tradeNo: rent.tradeNo,
+          rentedPlaceAddress: rent.rentedPlaceAddress,
+          currency: 'eur',
+          description: `${auth.credential.user.displayName || auth.credential.user.email} ${_t('paid via Nono application.')}`,
+          accessToken: null
+        },
+        auth
+      );
+    } else {
+      return stripe.paymentRequestWithCardForm()
+      .then(cardInfo => {
+        console.log('==== Token created: ', cardInfo);
         // call payment function
         stripeActions.doPaymentRequest({
           amount: '2000',
-          tokenId: stripeTokenInfo.tokenId,
+          tokenId: cardInfo.tokenId,
           email: auth.credential.user.email,
           telnumber: auth.credential.user.phoneNumber,
           stationSn: rent.stationSn,
@@ -314,6 +346,7 @@ export default class FirstScreenView extends React.Component {
           {cancelable: true},
         );
       });
+    }
   }
 
   onBuy = () => {
@@ -332,19 +365,19 @@ export default class FirstScreenView extends React.Component {
   onDeposit = async () => {
     const { auth, rent, stripeActions, rentActions, mapActions, appActions } = this.props;
     const { _t } = appActions;
-    // this.setState({depositingButtery: true});
-    // const res = await returnButtery(rent, auth);
+    // this.setState({depositingBattery: true});
+    // const res = await returnBattery(rent, auth);
     // console.log('===== res: ', res);
     // if (res.error) {
     //   Alert.alert(
-    //     _t('Failed to return the buttery. Please try again.'),
+    //     _t('Failed to return the battery. Please try again.'),
     //     _t(res.errorMessage),
     //     [
     //       {text: _t('OK'), onPress: () => console.log('OK Pressed')},
     //     ],
     //     {cancelable: true},
     //   );
-    //   this.setState({depositingButtery: false});
+    //   this.setState({depositingBattery: false});
     //   return;
     // } else {
     //   Actions['admob']({adMode: 'reward'});
@@ -363,6 +396,41 @@ export default class FirstScreenView extends React.Component {
     this.props.rentActions.rentInit();
   }
 
+  hanldeValidateCreditCard = ({cardInfo, cardToken}) => {
+    const { stripeActions, auth } = this.props;
+    stripeActions.registerCardRequest(
+      {
+        email: auth.credential.user.email,
+        tokenId: cardToken.tokenId,
+        cardInfo,
+        cardToken
+      },
+      auth
+    );
+    this.setState({
+      showCreditSettingModal: false,
+      showConfirmAddCreditCardDialog: false
+    });
+  }
+
+  closeCreditCardDialog = () => {
+    this.setState({
+      showCreditSettingModal: false,
+      showConfirmAddCreditCardDialog: true
+    });
+  }
+
+  onAddCreditCard = () => {
+    this.setState({
+      showConfirmAddCreditCardDialog: false,
+      showCreditSettingModal: true
+    })
+  }
+
+  closeConfirmAddCreditCardDialog = () => {
+    this.setState({showConfirmAddCreditCardDialog: false})
+  }
+
   onUnlock = () => {
     const { auth, map, stripeActions, stripePayment } = this.props;
     const { scannedQrCode } = map;
@@ -370,22 +438,7 @@ export default class FirstScreenView extends React.Component {
       Actions['map_scan_qr']();
     } else {
       // setup card info
-      return stripe.paymentRequestWithCardForm()
-              .then(stripeTokenInfo => {
-                console.log('Token created: ', stripeTokenInfo);
-                // call payment function
-                stripeActions.registerCardRequest(
-                  {
-                    email: auth.credential.user.email,
-                    tokenId: stripeTokenInfo.tokenId,
-                    stripeTokenInfo
-                  },
-                  auth
-                )
-              })
-              .catch(error => {
-                console.log('Register card failed', { error });
-              });
+      this.setState({showConfirmAddCreditCardDialog: true});
     }
   }
 
@@ -393,7 +446,10 @@ export default class FirstScreenView extends React.Component {
     const { currentLocation, places, searchedPlaces, place } = this.props.map;
     const { enabledDeposit, rentStatus } = this.props.rent;
     const { _t } = this.props.appActions;
-    const { profileOpened, activeModal } = this.state;
+    const {
+      profileOpened, activeModal,
+      showCreditSettingModal, showConfirmAddCreditCardDialog
+    } = this.state;
     const propsProfileOpened = this.props.profileOpened;
 
     return (
@@ -471,7 +527,8 @@ export default class FirstScreenView extends React.Component {
           <RentDialog
             onBuy={this.onBuy}
             onDeposit={this.onDeposit}
-            loading={this.depositingButtery}
+            onAutoBuy={this.processPayment}
+            loading={this.depositingBattery}
             enabledDeposit={enabledDeposit}
           />
         }
@@ -482,7 +539,19 @@ export default class FirstScreenView extends React.Component {
           ) &&
           <FeedbackDialog onClose={this.closeFeedbackDialog} />
         }
+        {showConfirmAddCreditCardDialog &&
+          <ConfirmAddCardDialog
+            onCancel={this.closeConfirmAddCreditCardDialog}
+            onAdd={this.onAddCreditCard}
+          />
+        }
+        <CreditCardDialog
+          isVisible={showCreditSettingModal}
+          appActions={this.props.appActions}
+          onValidate={this.hanldeValidateCreditCard}
+          onCancel={this.closeCreditCardDialog}
+        />
       </View>
-    )
+    );
   }
 }

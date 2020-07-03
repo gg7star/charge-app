@@ -83,7 +83,7 @@ export function* processSocialLoginSuccess(action) {
       var otherParameters = {
         headings: {
           "en": "Welcome to Nono!",
-          "fr": "Bienvenue chez Nono!"
+          "fr": "Bienvenue sur l’application de Nono !"
         },
       }
       if (auth && auth.oneSignalDevice && auth.oneSignalDevice.userId) {

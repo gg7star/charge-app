@@ -9,7 +9,7 @@ import moment from 'moment';
 
 export default class RentDialog extends React.Component {  
   state = {
-    duration: '00:00:00',
+    duration: '48:00:00',
     calculating: true
   }
 
@@ -18,7 +18,6 @@ export default class RentDialog extends React.Component {
     const { rent } = this.props;
     const calculating = (rent.isRented && !rent.isFetching);
 
-    // const duration = calculating ? this.state.duration : '00:00:00';
     console.log('==== componentDidMount: ', calculating);
     this.setState({calculating});
   };
@@ -39,7 +38,7 @@ export default class RentDialog extends React.Component {
   UNSAFE_componentWillReceiveProps(nextProps) {
     const { rent } = nextProps;
     const calculating = (rent.isRented && !rent.isFetching);
-    const duration = calculating ? this.state.duration : '00:00:00';
+    const duration = calculating ? this.state.duration : '48:00:00';
     console.log('==== componentWillReceiveProps: ', calculating, duration);
     this.setState({calculating, duration});
   }
@@ -47,14 +46,20 @@ export default class RentDialog extends React.Component {
   calculateDuration = () => {
     const { rent } = this.props;
     
-    if (!rent.startTime) return `00:00:00 `;
+    if (!rent.startTime) return `48:00:00`;
 
-    return calculateDurationString(rent.startTime, moment());
+    const res = calculateDurationString(rent.startTime, moment());
+    if (res === '00:00:00') {
+      this.setState({calculating: false});
+      // Make auto-payment
+      this.props.onAutoBuy && this.props.onAutoBuy();
+    }
+    return res;
   };
 
   onClickFinish = () => {
     const _this = this;
-    this.setState({calculating: false, duration: '00:00:00'}, () => {
+    this.setState({calculating: false, duration: '48:00:00'}, () => {
       _this.props.onDeposit();
     })
   };
@@ -69,7 +74,7 @@ export default class RentDialog extends React.Component {
           textContent={_t('Doing payment...')}
           textStyle={{color: '#FFF'}}
         />
-        {this.renderTitle()} 
+        {this.renderTitle()}
         <Spacer size={20} />
         {this.renderActions()}
       </RentDialogWrapper>

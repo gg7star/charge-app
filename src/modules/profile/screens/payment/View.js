@@ -1,11 +1,10 @@
 import React from 'react'
-import { TouchableOpacity, View, Text, Image } from 'react-native'
-import { Actions } from 'react-native-router-flux'
-import stripe from 'tipsi-stripe';
+import { TouchableOpacity, View, Text, Image } from 'react-native';
+import { Actions } from 'react-native-router-flux';
 import ProfileWrapper from '../../common/wrappers/ProfileWrapper'
-import ProfileHeader from '../../common/headers/ProfileHeader'
+import { ProfileHeader } from '~/common/components';
 import { W, H, em } from '~/common/constants';
-import { Button, Spacer } from '~/common/components'
+import { Button, Spacer } from '~/common/components';
 
 const AMERICAN_EXPRESS_CARD_IMAGE = require('~/common/assets/images/cards/american-express.png');
 const DISCOVER_CARD_IMAGE = require('~/common/assets/images/cards/discover.png');
@@ -43,27 +42,14 @@ export default class PaymentSettingView extends React.Component {
 
   addCreditCard = () => {
     const { auth, profileActions, stripeActions } = this.props;
-    return stripe.paymentRequestWithCardForm()
-      .then(stripeTokenInfo => {
-        console.log('Token created: ', stripeTokenInfo);
-        stripeActions.registerCardRequest(
-          {
-            email: auth.credential.user.email,
-            tokenId: stripeTokenInfo.tokenId,
-          },
-          auth
-        );
-      })
-      .catch(error => {
-        console.warn('Payment failed', { error });
-      });
+    Actions['profile_payment_card']();
   };
 
   onClearCard = () => this.props.stripeActions.initStripe();
 
-  renderCardInfo = (customer) => {
-    const cardInfo = customer.sources.data[0];
-    const {brand, exp_month, exp_year, funding, last4} = cardInfo;
+  renderCardInfo = (cardInfo) => {
+    // const cardInfo = customer.sources.data[0];
+    const {brand, country, expMonth, expYear, funding, last4} = cardInfo;
     return (
       <View style={{ flexDirection: 'row', marginVertical: 20 }}>
         <View style={{flex: 1, marginRight: 10}}>
@@ -77,7 +63,7 @@ export default class PaymentSettingView extends React.Component {
         <View style={{flex: 7}}>
           <Text>{'Stripe'}</Text>
           <Text style={{ color: '#9f9f9f'}}>
-            {`${brand}  XXXX${last4}  ${exp_month}/${exp_year}  ${funding}`}
+            {`${country} ${brand} XXXX${last4}  ${expMonth}/${expYear}  ${funding}`}
           </Text>
         </View>
         <TouchableOpacity style={{flex: 1, alignItems: 'center'}} onPress={this.onClearCard}>
@@ -90,7 +76,8 @@ export default class PaymentSettingView extends React.Component {
   renderList = () => {
     const { stripePayment, appActions } = this.props;
     const { _t } = appActions;
-    const { customer } = stripePayment;
+    const { customer, cardInfo } = stripePayment;
+    console.log('===== stripePayment: ', stripePayment);
 
     return (
       <View>
@@ -101,7 +88,7 @@ export default class PaymentSettingView extends React.Component {
             </Text>
           </TouchableOpacity>
         </View>
-        { (customer && customer.sources) && this.renderCardInfo(customer) }
+        { (cardInfo && cardInfo.cardToken && cardInfo.cardToken.card) && this.renderCardInfo(cardInfo.cardToken.card) }
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 20 }}>
           <View style={{flex: 1, marginRight: 10, alignItems: 'center'}}>
             <Image source={require('~/common/assets/images/png/add-card.png' )} />

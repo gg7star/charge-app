@@ -31,13 +31,23 @@ export function openHourStatus(openHours) {
 }
 
 export function calculateDurationString(start_time, end_time) {
-  if (!start_time) return `00:00:00`;
+  if (!start_time) return `48:00:00`;
   var startTime = moment(start_time, 'DD/MM/YY hh:mm:ss a');
   // calculate total duration
   var duration = moment.duration(end_time.diff(startTime));
-  var hours = parseInt(duration.asHours());
-  var minutes = parseInt(duration.asMinutes())%60;
-  var seconds = parseInt(duration.asSeconds())%60;
+  // var hours = parseInt(duration.asHours());
+  // var minutes = parseInt(duration.asMinutes())%60;
+  // var seconds = parseInt(duration.asSeconds())%60;
+
+  // 48*3600 = 172800 milliseconds
+  var diff_duration = 172800 - parseInt(duration.as('seconds'));
+  if (diff_duration <= 0 ) {
+    return `00:00:00`;
+  }
+
+  var hours = Math.floor(diff_duration / 3600);
+  var minutes = Math.floor((diff_duration - hours * 3600) / 60);
+  var seconds =  Math.floor(diff_duration - hours * 3600 - minutes * 60);
 
   var strHours = ("0" + hours).slice(-2);
   var strMinues = ("0" + minutes).slice(-2);

@@ -31,7 +31,7 @@ export default class ProfileHeader extends React.Component {
               <Image source={require('~/common/assets/images/png/option3.png')}
               /> 
             </TouchableOpacity>
-          }          
+          }
         </View>
       </React.Fragment>
     )

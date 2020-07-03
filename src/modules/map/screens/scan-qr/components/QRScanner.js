@@ -298,6 +298,7 @@ export default class QRScannerView extends Component {
   onScanResult = (e) => {
     _this = this;
     const { _t } = this.props.appActions;
+    console.log('====== onScanResult: e: ', e);
     if (
       this.state.scanEnabled &&
       RNCamera.Constants.BarCodeType.qr === e.type
@@ -317,7 +318,7 @@ export default class QRScannerView extends Component {
               style: 'cancel',
             },
             {text: 'OK', onPress: () => {
-              _this.props.onScanResult(qrCode, this.resumeScan);
+              _this.props.onScanResult(qrCode, _this.resumeScan);
             }},
           ],
           {cancelable: false},
@@ -332,6 +333,7 @@ export default class QRScannerView extends Component {
   }
 
   resumeScan = () => {
+    console.log('==== resumeScan');
     _this.handleAppStateChange('active');
     _this.setState({scanEnabled: true});
   }

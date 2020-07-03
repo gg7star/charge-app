@@ -11,7 +11,7 @@ import { openHourStatus } from '~/common/utils/time';
 
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
-const LATITUDE_DELTA = 0.0922;
+const LATITUDE_DELTA = 60;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const PIN_OPEN_IMAGE = require('~/common/assets/images/png/pin-open.png');
 const PIN_CLOSE_IMAGE = require('~/common/assets/images/png/pin-close.png');

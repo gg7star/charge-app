@@ -42,7 +42,7 @@ export default class ScreenView extends React.Component {
       // Send notification
       var contents = {
         'en': `You are registered firstly with your Phone number: ${res.phoneNumber}.`,
-        'fr': `Vous êtes d'abord enregistré avec votre numéro de téléphone: ${res.phoneNumber}.`
+        'fr': `Merci de vous être enregistré(e) avec votre numéro de téléphone: ${res.phoneNumber}.`
       }
       var message = {
         type: notifications.NONO_NOTIFICATION_TYPES.REGISTERED_FIRST
@@ -50,7 +50,7 @@ export default class ScreenView extends React.Component {
       var otherParameters = {
         headings: {
           "en": "Welcome to Nono!",
-          "fr": "Bienvenue chez Nono!"
+          "fr": "Bienvenue sur l’application de Nono !"
         },
       }
       if (auth.oneSignalDevice && auth.oneSignalDevice.userId) {
