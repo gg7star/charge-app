@@ -95,7 +95,7 @@ export default class AppView extends Component {
     setTimeout(() => {
       _this.props.mapActions.getAllStations();
       _this.getAllStations();
-    }, 3000000)
+    }, 1800000)
   }
 
   onReceived = (_this, notification) => {

@@ -15,7 +15,6 @@ const HINT_RECHARGE_IMAGE = require('~/common/assets/images/png/guide-save.png')
 const HINT_BRING_BACK_IMAGE = require('~/common/assets/images/png/guide-bring-back.png')
 
 
-
 const hintRouts = [
   {
     routeName: 'hint_find_station',

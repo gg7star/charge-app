@@ -1,4 +1,5 @@
 import Button from './Button';
+import ConfirmCodeField from './ConfirmCodeField';
 import ConfirmCodeInput from './ConfirmCodeInput';
 import CustomCountryPicker from './CustomCountryPicker';
 import CustomCreditCard from './CustomCreditCard';
@@ -13,6 +14,7 @@ import SplashView from './SplashView';
 
 export {
   Button,
+  ConfirmCodeField,
   ConfirmCodeInput,
   CustomCountryPicker,
   CustomCreditCard,

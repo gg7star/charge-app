@@ -13,7 +13,7 @@ export default class ProfileHeader extends React.Component {
             <Image source={backImage} style={{tintColor: colors.primary}} />
           ) : (
             <Image source={BACK_IMAGE} style={{tintColor: colors.primary}}/>
-          )}          
+          )}
         </TouchableOpacity>
         <View
           style={{

@@ -17,8 +17,6 @@ export default class RentDialog extends React.Component {
     this.onTimer();
     const { rent } = this.props;
     const calculating = (rent.isRented && !rent.isFetching);
-
-    console.log('==== componentDidMount: ', calculating);
     this.setState({calculating});
   };
 

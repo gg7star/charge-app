@@ -4,7 +4,7 @@ import Modal from "react-native-modal";
 import SetWrapper from '~/modules/auth-signup/common/wrappers/SetWrapper';
 import moduleStyles from '~/modules/auth-signup/common/styles';
 import { W, H, em } from '~/common/constants';
-import { Spacer, Button, ConfirmCodeInput } from '~/common/components';
+import { Spacer, Button, ConfirmCodeInput, ConfirmCodeField } from '~/common/components';
 
 export default class ConfirmCodeView extends React.Component {
   state = {
@@ -15,7 +15,10 @@ export default class ConfirmCodeView extends React.Component {
 
   onGoBack = () => this.props.onClose();
 
-  changeConfirmCode = (confirmCode) => this.setState({ confirmCode });
+  changeConfirmCode = (confirmCode) => {
+    console.log('===== confirmCode: ', confirmCode);
+    this.setState({ confirmCode });
+  };
 
   onGoNext = async () => {
     const { confirmation, confirmFunc, onConfirmed, appActions } = this.props;
@@ -64,7 +67,9 @@ export default class ConfirmCodeView extends React.Component {
             {_t('Enter the 6-digit code sent to')}
           </Text>
           <Spacer size={30} />
-          <ConfirmCodeInput onFulfill={this.changeConfirmCode} />
+          {/* <ConfirmCodeInput onFulfill={this.changeConfirmCode} />
+          <Spacer size={50} /> */}
+          <ConfirmCodeField onFulfill={this.changeConfirmCode} />
           <View
             style={[
               moduleStyles.bottomActionBar,

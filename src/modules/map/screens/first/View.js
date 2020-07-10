@@ -21,6 +21,7 @@ import { W, H, em } from '~/common/constants';
 import { Spacer } from '~/common/components';
 import MapButton from '~/modules/map/common/components/MapButton';
 import MapView from '~/modules/map/common/components/MapView';
+import ClusterMapView from '~/modules/map/common/components/ClusterMapView';
 import ProfileMenuDialog from '~/modules/profile/modals/menu/ProfileMenuDialogContainer';
 import defaultCurrentLocation from '~/common/config/locations';
 import MAP_MODAL from '~/common/constants/map';
@@ -54,7 +55,6 @@ export default class FirstScreenView extends React.Component {
   async componentDidMount() {
     const { initialModal, profileOpened, map, rent } = this.props
     var newState = {...this.state, rentStatus: rent.rentStatus};
-    console.log('==== componentDidMount: map.activeModal: ', W, H, em, map.activeModal);
     if (map.activeModal) {
       newState = {
         ...newState,
@@ -84,12 +84,10 @@ export default class FirstScreenView extends React.Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    const { map, rent } = nextProps;
+    const { map } = nextProps;
     if (!map) return;
     const { activeModal } = map;
-    const { rentStatus } = rent;
     if (this.state.activeModal === activeModal) return;
-    console.log('===== activeModal: ', this.state.activeModal, activeModal, rentStatus);
     this.setState({activeModal: activeModal})
   }
 
@@ -172,18 +170,18 @@ export default class FirstScreenView extends React.Component {
 
   handleCurrentLocationError = (error) => {
     console.log('===== location error: ', error);
-    if (this.props.map.currentLocation) {
-      // Set previous location.
-      const prevCordinate = this.props.map.currentLocation.coordinate;
-      this.props.mapActions.changedCurrentLocation({
-        name: "My location",
-        coordinate: {
-          latitude: prevCordinate.latitude,
-          longitude: prevCordinate.longitude,
-          error: error.message,
-        }
-      });
-    }
+    // if (this.props.map.currentLocation) {
+    //   // Set previous location.
+    //   const prevCordinate = this.props.map.currentLocation.coordinate;
+    //   this.props.mapActions.changedCurrentLocation({
+    //     name: "My location",
+    //     coordinate: {
+    //       latitude: prevCordinate.latitude,
+    //       longitude: prevCordinate.longitude,
+    //       error: error.message,
+    //     }
+    //   });
+    // }
   }
 
   handleDetectDirection = ({distance, duration}) => 
@@ -442,7 +440,7 @@ export default class FirstScreenView extends React.Component {
     }
   }
 
-  render() {
+  renderMapView = () => {
     const { currentLocation, places, searchedPlaces, place } = this.props.map;
     const { enabledDeposit, rentStatus } = this.props.rent;
     const { _t } = this.props.appActions;
@@ -451,17 +449,12 @@ export default class FirstScreenView extends React.Component {
       showCreditSettingModal, showConfirmAddCreditCardDialog
     } = this.state;
     const propsProfileOpened = this.props.profileOpened;
+    const location = currentLocation || defaultCurrentLocation;
 
     return (
-      <View style={{position: 'relative', width: W, height: H}}>
-        {/* <Menu 
-          isShowable={profileOpened || propsProfileOpened} 
-          
-        /> */}
-        <ProfileMenuDialog isVisible={profileOpened} onClose={()=> {this.setState({profileOpened: false })}} />
-        <MapView
+      <MapView
           mapType={Platform.OS == "android" ? "none" : "standard"}
-          currentLocation={currentLocation}
+          currentLocation={location}
           places={searchedPlaces}
           selectedPlace={place}
           onSelectMarker={this.openNearPlacesDialog}
@@ -480,9 +473,58 @@ export default class FirstScreenView extends React.Component {
           <MapButton name='refresh' onPress={this.onClickRefresh}/>
           <MapButton name='position' onPress={this.onClickPosition}/>
         </MapView>
+    );
+  };
+
+  renderClusterMapView = () => {
+    const { currentLocation, searchedPlaces, place } = this.props.map;
+    const { activeModal } = this.state;
+    const location = currentLocation || defaultCurrentLocation;
+
+    return (
+      <ClusterMapView
+          mapType={Platform.OS == "android" ? "none" : "standard"}
+          currentLocation={location}
+          places={searchedPlaces}
+          selectedPlace={place}
+          onSelectMarker={this.openNearPlacesDialog}
+          onDetectDirection={this.handleDetectDirection}
+          onDetectCurrentLocation={this.handleGetCurrentLocationFromGoogleMap}
+          ref={c => this.mapView = c}
+        >
+          <MapButton
+            name='profile'
+            onPress={() => {
+                this.setState({profileOpened: true});
+              }
+            }
+          />
+          {/* <MapButton name='tree' onPress={this.goGift}/> */}
+          {activeModal!=MAP_MODAL.NEARE_PLACE && <MapButton name='refresh' onPress={this.onClickRefresh}/>}
+          {activeModal!=MAP_MODAL.NEARE_PLACE && <MapButton name='position' onPress={this.onClickPosition}/>}
+        </ClusterMapView>
+    );
+  }
+
+  render() {
+    const { enabledDeposit, rentStatus } = this.props.rent;
+    const {
+      profileOpened, activeModal,
+      showCreditSettingModal, showConfirmAddCreditCardDialog
+    } = this.state;
+
+    return (
+      <View style={{position: 'relative', width: W, height: H}}>
+        {/* <Menu 
+          isShowable={profileOpened || propsProfileOpened} 
+          
+        /> */}
+        <ProfileMenuDialog isVisible={profileOpened} onClose={()=> {this.setState({profileOpened: false })}} />
+        {/* { this.renderMapView() } */}
+        { this.renderClusterMapView() }
         <Spacer size={20} />
-        {/* {activeModal== MAP_MODAL.UNLOCK && <UnlockDialog onClickUnlock={this.onUnlock} />} */}
-        <UnlockDialog onClickUnlock={this.onUnlock} />
+        {activeModal!=MAP_MODAL.NEARE_PLACE && <UnlockDialog onClickUnlock={this.onUnlock} />}
+        {/* <UnlockDialog onClickUnlock={this.onUnlock} /> */}
         {activeModal== MAP_MODAL.SEARCH && <SearchDialog onCancel={this.closeSearchDialog} 
           selectPlace={this.selectPlace} />
         }
