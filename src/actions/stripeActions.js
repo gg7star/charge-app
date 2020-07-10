@@ -41,7 +41,7 @@ export function registerCardRequest(data, auth) {
   return {
     type: types.REGISTER_CARD_REQUEST,
     payload: {
-      customer: {...data},
+      cardInfo: {...data},
       auth
     }
   };

@@ -13,7 +13,7 @@ import { Actions } from 'react-native-router-flux';
 import Torch from 'react-native-torch';
 import { Spacer } from '~/common/components';
 import { W, H, colors, em } from '~/common/constants';
-import { rentButtery } from '~/common/services/station-gateway/gateway';
+import { rentBattery } from '~/common/services/station-gateway/gateway';
 import MAP_MODAL from '~/common/constants/map';
 
 export default class ScreenView extends React.Component {
@@ -134,7 +134,7 @@ export default class ScreenView extends React.Component {
           // Check stationSN validation
           if (stationSnList && stationSnList.find(e => e.stationSn === code)) {
             this.props.mapActions.scannedQrCode(code);
-            const res = rentButtery({
+            const res = rentBattery({
               stationSn: code,
               uuid: auth.credential.user.uid,
               pushToken: auth.fcm.token,
@@ -143,8 +143,8 @@ export default class ScreenView extends React.Component {
             });
             if (res.error) {
               Alert.alert(
-                _t('Failed to rent the buttery'),
-                _t(`Failed to rent the buttery. Please try, again, later.`),
+                _t('Failed to rent the battery'),
+                _t(`Failed to rent the battery. Please try, again, later.`),
                 [
                   {text: _t('OK'), onPress: () => {}}
                 ],

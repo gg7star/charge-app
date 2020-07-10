@@ -21,7 +21,7 @@ const MapStack = (
     <Scene 
       key='map_gift'
       hideNavBar
-      component={GiftScreen}      
+      component={GiftScreen}
     />
     <Scene 
       key='map_enter_code'

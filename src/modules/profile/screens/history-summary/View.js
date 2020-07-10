@@ -1,8 +1,8 @@
-import React from 'react'
-import { ScrollView, Platform, View, Image, Text } from 'react-native'
-import { Actions } from 'react-native-router-flux'
-import ProfileWrapper from '../../common/wrappers/ProfileWrapper'
-import ProfileHeader from '../../common/headers/ProfileHeader'
+import React from 'react';
+import { View, Image, Text } from 'react-native';
+import { Actions } from 'react-native-router-flux';
+import ProfileWrapper from '../../common/wrappers/ProfileWrapper';
+import { ProfileHeader } from '~/common/components';
 import { W, H, em } from '~/common/constants';
 import LinearGradient from 'react-native-linear-gradient'
 

@@ -95,7 +95,7 @@ export default class AppView extends Component {
     setTimeout(() => {
       _this.props.mapActions.getAllStations();
       _this.getAllStations();
-    }, 3000000)
+    }, 1800000)
   }
 
   onReceived = (_this, notification) => {
@@ -153,16 +153,16 @@ export default class AppView extends Component {
   onRentSuccess = (data) => {
     const { auth, rentActions, rent } = this.props;
     // For test
-    if (__DEV__ && (rent.rentStatus == RENT_STATUS.INIT)) {
-      rentActions.rentSuccess(data, auth);
-    }
+    // if (__DEV__ && (rent.rentStatus == RENT_STATUS.INIT)) {
+    //   rentActions.rentSuccess(data, auth);
+    // }
 
     if ((rent.rentStatus == RENT_STATUS.RENT_REQUEST))
       rentActions.rentSuccess(data, auth);
   };
 
   onRentFailure = (error) => {
-    const { auth, rentActions } = this.props;
+    const { auth, rent, rentActions } = this.props;
     if ((rent.rentStatus == RENT_STATUS.RENT_REQUEST))
       rentActions.rentFailure(error);
   };
@@ -177,7 +177,7 @@ export default class AppView extends Component {
     console.log('---- data: ', data);
     console.log('---- rent: ', rent);
     if ((rent.rentStatus == RENT_STATUS.RENTED) && (data.tradeNo == rent.tradeNo))
-      rentActions.returnedButtery(returnedData, auth);
+      rentActions.returnedBattery(returnedData, auth);
   };
 
   render() {

@@ -81,7 +81,7 @@ export default class ProfileMenuDialog extends React.Component {
               >
                 {_t('Start your forest')}
               </Text>
-            </View>                    
+            </View>
             <MaterialIcon
               name='chevron-right'
               style={{
@@ -128,14 +128,14 @@ export default class ProfileMenuDialog extends React.Component {
             </View>
           ))}
         </View>
-        <View style={{position: 'absolute', bottom: 40, left: 20}}>
+        {/* <View style={{position: 'absolute', bottom: 40, left: 20}}>
           <MenuItem 
             image={lastMenuItem.image} 
             title={_t(lastMenuItem.title)}
             disabled={lastMenuItem.disabled}
             onPress={() => this.onClickItem(lastMenuItem.route)}
           />
-        </View>
+        </View> */}
       </View>
     );
   }

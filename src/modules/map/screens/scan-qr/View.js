@@ -7,7 +7,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { W, H, em } from '~/common/constants';
 import { Spacer } from '~/common/components';
 import QRScannerContainer from './components/QRScannerContainer';
-import { rentButtery } from '~/common/services/station-gateway/gateway';
+import { rentBattery } from '~/common/services/station-gateway/gateway';
 import MAP_MODAL from '~/common/constants/map';
 import { RENT_EXPIRE_TIMEOUT } from '~/common/constants/rent';
 
@@ -16,16 +16,16 @@ export default class ScanQRView extends React.Component {
     qrCode: '',
     scanBarAnimateReverse: true,
     isTorchOn: false,
-    rentingButtery: false,
+    rentingBattery: false,
     startRentTime: null
   };
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     const { rent } = nextProps;
     const { isRented, isFetching } = rent;
-    const { rentingButtery } = this.state;
+    const { rentingBattery } = this.state;
     
-    this.setState({ rentingButtery: isFetching });
+    this.setState({ rentingBattery: isFetching });
   }
 
   onFlash = () => {
@@ -40,25 +40,28 @@ export default class ScanQRView extends React.Component {
 
   onRentTimedOut = () => {
     console.log('===== this.onRentTimedOut');
-    this.setState({rentingButtery: false});
+    this.setState({rentingBattery: false});
     this.props.rentActions.rentFailure({error: 'Timed out'});
   }
 
   onReceivedQRCode = (scanedQrCode, callbackResumScan) => {
     const _this = this;
     const { _t } = this.props.appActions;
-    this.setState({qrCode: scanedQrCode, scanBarAnimateReverse: false}, () => {
+    this.setState({qrCode: scanedQrCode, scanBarAnimateReverse: false});
+    // , () => {
       var temp = scanedQrCode.split(' ');
       // For test
       const parsedStationSn = temp[temp.length-1]; // need to parse from scanedQrCode
       console.log('==== QR code: ', scanedQrCode, parsedStationSn);
       // Check stationSN validation
-      const { auth, map, mapActions, rentActions } = this.props;
+      const { auth, map, mapActions, rentActions } = _this.props;
       const { stationSnList } = map;
       if (stationSnList && stationSnList.find(e => e.stationSn === parsedStationSn)) {
+        console.log('==== mapActions.scannedQrCode: ', parsedStationSn);
         mapActions.scannedQrCode(parsedStationSn);
-        this.setState({rentingButtery: true});
-        const res = rentButtery({
+        _this.setState({rentingBattery: true});
+        console.log('==== rentBattery ');
+        const res = rentBattery({
           stationSn: parsedStationSn,
           uuid: auth.credential.user.uid,
           pushToken: auth.fcm.token,
@@ -67,27 +70,29 @@ export default class ScanQRView extends React.Component {
         });
         if (res.error) {
           Alert.alert(
-            _t('Failed to rent the buttery'), 
-            _t(`Failed to rent the buttery. Please try, again, later.`),
+            _t('Failed to rent the battery'), 
+            _t(`Failed to rent the battery. Please try, again, later.`),
             [
-              {text: 'OK', onPress: this.onRentTimedOut}
+              {text: 'OK', onPress: _this.onRentTimedOut}
             ],
             {cancelable: false},
           );
         } else {
-          setTimeout(() => {
-            if (_this.state.rentingButtery) {
-              Alert.alert(
-                _t('Renting timed out'), 
-                _t('Timed out to rent buttery. Please try later.')
-                [
-                  {text: 'OK', onPress: () => this.onRentTimedOut()}
-                ],
-                {cancelable: false},
-              );
-              this.onRentTimedOut();
-            }
-          }, RENT_EXPIRE_TIMEOUT);
+          // setTimeout(() => {
+          //   console.log('==== setTimout, _this.state: ', _this.state)
+          //   if (_this.state.rentingBattery) {
+          //     Alert.alert(
+          //       _t('Renting timed out'), 
+          //       _t('Timed out to rent battery. Please try later.')
+          //       [
+          //         {text: 'OK', onPress: () => _this.onRentTimedOut()}
+          //       ],
+          //       {cancelable: false},
+          //     );
+          //     _this.onRentTimedOut();
+          //   }
+          // }, RENT_EXPIRE_TIMEOUT);
+
           rentActions.rentStation({
             stationSn: parsedStationSn,
             uuid: auth.credential.user.uid,
@@ -95,9 +100,7 @@ export default class ScanQRView extends React.Component {
             deviceType: Platform.OS,
             onesignalUserId: auth.oneSignalDevice.userId
           });
-         
-          // For test
-          // mapActions.setActiveModal(MAP_MODAL.RENT);
+
           Actions['map_first']();
         }
       } else {
@@ -112,7 +115,7 @@ export default class ScanQRView extends React.Component {
           {cancelable: false},
         );
       }
-    });
+    // });
   };
 
   renderTitleBar = () => {
@@ -122,7 +125,7 @@ export default class ScanQRView extends React.Component {
       <Text style={{color:'white',textAlign:'center',padding:16}}>
         {qrCode}
       </Text>
-    ) :(
+    ) : (
       <View>
         <Text style={{color:'white',textAlign:'center',padding:16}}>
           {_t('Last step')}
@@ -137,13 +140,8 @@ export default class ScanQRView extends React.Component {
 
   renderBottom = () => {
     return (
-      <View style={{
-        flex: 1,
-        flexDirection: 'column'
-      }}>
-        <View style={{
-          flex: 1, alignItems: 'flex-end'
-        }}>
+      <View style={{flex: 1, flexDirection: 'column'}}>
+        <View style={{flex: 1, alignItems: 'flex-end'}}>
           <TouchableOpacity
             style={{
               flex: 1, width: 40, height: 40, 
@@ -164,14 +162,11 @@ export default class ScanQRView extends React.Component {
           </TouchableOpacity>
         </View>
         <Spacer size={15}/>
-        <View style={{
-          flex: 1,
-          flexDirection: 'row'
-        }}>
-          <TouchableOpacity style={{
-            flex: 1,
-            alignItems: 'flex-start',            
-          }} onPress={() => this.onClickClose()}>
+        <View style={{flex: 1, flexDirection: 'row'}}>
+          <TouchableOpacity
+            style={{ flex: 1, alignItems: 'flex-start'}}
+            onPress={() => this.onClickClose()}
+          >
             <MaterialIcon name="close" style={{
               color: '#fff',
               width: 40, height: 40,
@@ -185,21 +180,25 @@ export default class ScanQRView extends React.Component {
               paddingTop: 10, paddingLeft: 10
             }} />
           </TouchableOpacity>
-          <TouchableOpacity style={{
-            flex: 1,
-            alignItems: 'flex-end'            
-          }} onPress={() => Actions['map_enter_code']()}>
-            <Text style={{
-              color: '#fff',
-              width: 40, height: 40,
-              backgroundColor: '#9b9b9b',
-              paddingLeft: 12, paddingTop: 13,              
-              fontSize: 10,
-              fontWeight: "400",
-              marginRight: 15,
-              borderRadius: 15,
-              overflow: 'hidden'
-            }}>123</Text>
+          <TouchableOpacity
+            style={{ flex: 1, alignItems: 'flex-end' }}
+            onPress={() => Actions['map_enter_code']()}
+          >
+            <Text
+              style={{
+                color: '#fff',
+                width: 40, height: 40,
+                backgroundColor: '#9b9b9b',
+                paddingLeft: 12, paddingTop: 13,
+                fontSize: 10,
+                fontWeight: "400",
+                marginRight: 15,
+                borderRadius: 15,
+                overflow: 'hidden'
+              }}
+            >
+              123
+            </Text>
           </TouchableOpacity>
         </View>
         <View style={{flex: 1}}>
@@ -210,7 +209,7 @@ export default class ScanQRView extends React.Component {
   };
 
   render = () => {
-    const { qrCode, rentingButtery } = this.state;
+    const { qrCode, rentingBattery } = this.state;
     const { onSwitchToQRCodeInput, appActions } = this.props;
     const { _t } = appActions;
     return (
@@ -223,8 +222,8 @@ export default class ScanQRView extends React.Component {
           hintText={`${_t('QR code not detected?')} ${_t('Enter the number of the station')}`}
         />
         <Spinner
-          visible={rentingButtery}
-          textContent={_t('Renting a buttery...')}
+          visible={rentingBattery}
+          textContent={_t('Renting a battery...')}
           textStyle={{color: '#FFF'}}
         />
       </View>

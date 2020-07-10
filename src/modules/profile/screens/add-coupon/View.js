@@ -1,9 +1,8 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, TextInput } from 'react-native';
 import { W, H, em } from '~/common/constants';
-import { Button } from '~/common/components';
-import ProfileWrapper from '../../common/wrappers/ProfileWrapper'
-import ProfileHeader from '../../common/headers/ProfileHeader'
+import { Button, ProfileHeader } from '~/common/components';
+import ProfileWrapper from '../../common/wrappers/ProfileWrapper';
 import { Actions } from 'react-native-router-flux';
 
 export default class ScreenView extends React.Component {

@@ -8,6 +8,8 @@ import NearPlacesDialog from './near-places/ViewContainer';
 import FilterDialog from './filter/ViewContainer';
 import RentDialog from './rent/ViewContainer';
 import FeedbackDialog from './feedback/ViewContainer';
+import CreditCardDialog from './credit-card/CreditCardDialog';
+import ConfirmAddCardDialog from './confirm-add-card/ViewContainer';
 
 export {
   UnlockDialog,
@@ -20,4 +22,6 @@ export {
   FilterDialog,
   RentDialog,
   FeedbackDialog,
+  CreditCardDialog,
+  ConfirmAddCardDialog
 };

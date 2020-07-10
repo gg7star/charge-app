@@ -40,7 +40,7 @@ export default class GeneralHintView extends React.Component {
           title={_t(title)}
           desc={_t(description)}
           nextButtonTitle={_t(buttonText)}
-        />        
+        />
       </HintWrapper>
     )
   }

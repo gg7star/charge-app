@@ -10,14 +10,14 @@ const FilterDialog2Wrapper = ({ children, onClose, onOpenFilter, onClear, _t }) 
       width: W, 
       borderTopLeftRadius: 20,
       borderTopRightRadius: 20,
-      backgroundColor: '#5ed8fc'
+      backgroundColor: '#ffffff00'
     }}
   >
     <View
       style={{
         borderTopLeftRadius: 20, borderTopRightRadius: 20,
-        backgroundColor: '#fff',
-        paddingHorizontal: 20, paddingBottom: 40
+        backgroundColor: '#ffffff00',
+        paddingHorizontal: 40, paddingBottom: 53
       }}
     >
       {onClose && 
@@ -26,7 +26,7 @@ const FilterDialog2Wrapper = ({ children, onClose, onOpenFilter, onClear, _t }) 
           style={{
             position: 'absolute',
             right: 0, top: 0, zIndex: 51,
-            paddingRight: 20, paddingTop: 20,
+            paddingRight: 57, paddingTop: 37,
             width: 50, height: 50,
             alignItems: 'flex-end'
           }}

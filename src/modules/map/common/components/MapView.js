@@ -8,11 +8,13 @@ import { W, H } from '~/common/constants';
 import { generateColor } from '~/common/utils/gradientColor';
 import defaultCurrentLocation from '~/common/config/locations';
 import { openHourStatus } from '~/common/utils/time';
+import { translate } from '~/common/i18n';
+import moment from 'moment';
 
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
-const LATITUDE_DELTA = 0.0922;
-const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+const LATITUDE_DELTA = 8.5;
+const LONGITUDE_DELTA = 8.5; //LATITUDE_DELTA * ASPECT_RATIO;
 const PIN_OPEN_IMAGE = require('~/common/assets/images/png/pin-open.png');
 const PIN_CLOSE_IMAGE = require('~/common/assets/images/png/pin-close.png');
 const PIN_SELECT_IMAGE = require('~/common/assets/images/png/pin-select.png');
@@ -36,7 +38,7 @@ export default class CustomMapView extends React.Component {
   };
 
   renderMarkers = () => {
-    const { places, selectedPlace } = this.props
+    const { places, selectedPlace } = this.props;
     // const currentLocation = this.state.currentLocation;
     const selectedIndex = places.findIndex(p => {
         return selectedPlace && p.name === selectedPlace.name
@@ -51,8 +53,13 @@ export default class CustomMapView extends React.Component {
             if (selectedPlace && (key === `${selectedIndex}`)) placeImage = PIN_SELECT_IMAGE;
             else {
               // placeImage = place.isOpened ? PIN_OPEN_IMAGE : PIN_CLOSE_IMAGE;
-              const hourStatus = openHourStatus(place.openHours);
-              placeImage = hourStatus.openStatus ? PIN_OPEN_IMAGE : PIN_CLOSE_IMAGE;
+              if (place.openHours) {
+                // const currentWeekDay = translate(moment().format('dddd'), 'fr');
+                const hourStatus = openHourStatus(place.openHours);
+                placeImage = hourStatus.openStatus ? PIN_OPEN_IMAGE : PIN_CLOSE_IMAGE;
+              } else {
+                placeImage = PIN_CLOSE_IMAGE;
+              }
             };
             return (
               <MapView.Marker

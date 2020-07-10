@@ -20,22 +20,30 @@ export default function* watcher() {
 }
 
 export function* loadPlacesOnMap(action) {
+  // // Get places from firebase
+  // try {
+  //   const places = yield call(getPlances);
+  //   yield put({ type: mapActionTypes.LOAD_PLACES_ON_MAP_SUCCESS, payload: { places } })
+  // } catch(e) {
+  //   console.log('====== error: ', e);
+  //   yield put({ type: mapActionTypes.LOAD_PLACES_ON_MAP_FAILURE })
+  // }
+
+  // Get places from API gateway
   try {
-    // const places = yield call(mapFirebaseService.getPlances);
-    const places = yield call(getPlances);
-    // For test
-    // const currentLocation = {
-    //   name: "My location",
-    //   coordinate: {
-    //     latitude: 2.253865,
-    //     longitude: 48.883758
-    //   }
-    // };
+    // Get a list of all stationSn
+    const response = yield call(
+      processRequest,
+      `${serverUrls.apiGatewayServerURL}/place/all`,
+      'GET',
+      null
+    );
+    const places = response.data;
     yield put({ type: mapActionTypes.LOAD_PLACES_ON_MAP_SUCCESS, payload: { places } })
-  } catch(e) {
-    console.log('====== error: ', e);
+  } catch(error) {
+    console.log('====== Get places: error: ', e);
     yield put({ type: mapActionTypes.LOAD_PLACES_ON_MAP_FAILURE })
-  }  
+  }
 }
 
 export function* getAllStations(action) {

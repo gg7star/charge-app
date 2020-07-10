@@ -30,14 +30,14 @@ export function rentFailure({error}) {
   }
 }
 
-export function returnedButtery(rent, auth) {
+export function returnedBattery(rent, auth) {
   return {
     type: types.RENT_RETURNED_BATTERY,
     payload: { rent, auth }
   }
 }
 
-export function returnedButteryFailed(rent, auth) {
+export function returnedBatteryFailed(rent, auth) {
   return {
     type: types.RENT_RETURNED_BATTERY_FAILED,
     payload: { rent, auth }

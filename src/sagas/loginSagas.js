@@ -72,18 +72,20 @@ export function* processSocialLoginSuccess(action) {
       credential.additionalUserInfo && 
       credential.additionalUserInfo.isNewUser
     ) {
+      var provideId = credential.additionalUserInfo.providerId;
+      var socialSiteName = (provideId === 'facebook.com') ? 'Facebook' : 'Apple';
       // Send notification
       var contents = {
-        'en': 'You are registered firstly with your Facebook account.',
-        'fr': 'Vous êtes d\'abord enregistré avec votre compte Facebook.'
+        'en': `You are registered firstly with your ${socialSiteName} account.`,
+        'fr': `Vous vous êtes inscrit avec votre compte ${socialSiteName}.`
       }
-      var message = { 
+      var message = {
         type: notifications.NONO_NOTIFICATION_TYPES.REGISTERED_FIRST
       };
       var otherParameters = {
         headings: {
           "en": "Welcome to Nono!",
-          "fr": "Bienvenue chez Nono!"
+          "fr": "Bienvenue sur l’application de Nono !"
         },
       }
       if (auth && auth.oneSignalDevice && auth.oneSignalDevice.userId) {

@@ -50,8 +50,8 @@ export default class ScreenView extends React.Component {
 
     advert = RewardedAd.createForAdRequest(
       // TestIds.REWARDED,
-      __DEV__ ? TestIds.REWARDED : admobConf.rewardUnitId,
-      // admobConf.rewardUnitId,
+      // __DEV__ ? TestIds.REWARDED : admobConf.rewardUnitId,
+      admobConf.rewardUnitId,
       {requestNonPersonalizedAdsOnly: true,}
     );
 
@@ -84,8 +84,8 @@ export default class ScreenView extends React.Component {
 
     advert = InterstitialAd.createForAdRequest(
       // TestIds.INTERSTITIAL,
-      __DEV__ ? TestIds.INTERSTITIAL : admobConf.interstitialUnitId,
-      // admobConf.interstitialUnitId,
+      // __DEV__ ? TestIds.INTERSTITIAL : admobConf.interstitialUnitId,
+      admobConf.interstitialUnitId,
       {requestNonPersonalizedAdsOnly: true,}
     );
 

@@ -9,7 +9,7 @@ const { setActiveModal, setViewedAdmob } = MapActions;
 export default function* watcher() {
   yield takeLatest(rentActionTypes.RENT_SUCCESS, rentSuccessProcess);
   yield takeLatest(rentActionTypes.RENT_FAILURE, rentFailedProcess);
-  yield takeLatest(rentActionTypes.RENT_RETURNED_BATTERY, rentReturnButteryProcess);
+  yield takeLatest(rentActionTypes.RENT_RETURNED_BATTERY, rentReturnBatteryProcess);
 }
 
 export function* rentSuccessProcess(action) {
@@ -24,7 +24,7 @@ export function* rentFailedProcess(action) {
   Actions['map_scan_qr']();
 }
 
-export function* rentReturnButteryProcess(action) {
+export function* rentReturnBatteryProcess(action) {
   console.log('==== Go to admob');
   // yield put(setActiveModal(MAP_MODAL.FEEDBACK));
   yield put(setViewedAdmob(false));

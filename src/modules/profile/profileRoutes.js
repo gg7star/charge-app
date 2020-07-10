@@ -6,6 +6,7 @@ import Notification from './screens/notification/ViewContainer';
 import History from './screens/history/ViewContainer';
 import HistorySummary from './screens/history-summary/ViewContainer';
 import Payment from './screens/payment/ViewContainer';
+import CardForm from './screens/card-form/ViewContainer';
 import Setting from './screens/setting/ViewContainer';
 import AboutUs from './screens/about-us/ViewContainer';
 import Help from './screens/help/ViewContainer';
@@ -49,10 +50,17 @@ const ProfileStack = (
       hideNavBar
       component={HistorySummary}
     />
-    <Scene 
+    <Scene
       key='profile_payment'
       hideNavBar
       component={Payment}
+    >
+       
+    </Scene>
+    <Scene 
+      key='profile_payment_card'
+      hideNavBar
+      component={CardForm}
     />
     <Scene 
       key='profile_setting'
