@@ -1,5 +1,6 @@
 import React from 'react'
 import { View, Platform, Alert, PermissionsAndroid } from 'react-native';
+import {check, PERMISSIONS} from 'react-native-permissions';
 import { Actions } from 'react-native-router-flux';
 import stripe from 'tipsi-stripe';
 import Geolocation from 'react-native-geolocation-service';
@@ -29,17 +30,17 @@ import { RENT_STATUS } from '~/common/constants/rent';
 
 const GEOLOCATION_OPTION = {
   enableHighAccuracy: true,
-  timeout: 20000,
-  maximumAge: 10000,
-  distanceFilter: 50,
+  timeout: 40000,
+  // maximumAge: 10000,
+  distanceFilter: 0,
   forceRequestLocation: true,
   watchId: null
 };
 const GEOLOCATION_WATCH_OPTION = {
   enableHighAccuracy: false,
   distanceFilter: 0,
-  interval: 15000,
-  fastestInterval: 10000
+  interval: 20000,
+  fastestInterval: 15000
 }
 
 export default class FirstScreenView extends React.Component {

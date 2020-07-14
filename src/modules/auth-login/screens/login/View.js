@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, Text, Alert } from 'react-native';
+import { TouchableOpacity, Text, Alert, Platform } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { Spacer, Button, PhoneNumberInput } from '~/common/components';
 import { PhoneAuth, FacebookAuth, AppleAuth } from '~/common/services/rn-firebase/auth';
@@ -194,15 +194,17 @@ export default class LoginView extends React.Component {
             loading={facebookLogining}
             disabled={facebookLogining}
           />
-          <Spacer size={15*em} />
-          <Button
-            onPress={this.onAppleLogin}
-            caption={_t('Continue with Apple')}
-            bgColor='#36384a'
-            textColor='#fff'
-            icon={APPLE_IMAGE}
-            iconColor='#fff'
-          />
+          { (Platform.OS === 'ios') &&
+            [<Spacer size={15*em} />, 
+            <Button
+              onPress={this.onAppleLogin}
+              caption={_t('Continue with Apple')}
+              bgColor='#36384a'
+              textColor='#fff'
+              icon={APPLE_IMAGE}
+              iconColor='#fff'
+            />]
+          }
           <Spacer size={30*em} />
           <TouchableOpacity
             style={{

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Linking } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Linking, Platform } from 'react-native';
 import DropDownItem from "react-native-drop-down-item";
 import moment from 'moment';
 import { em } from '~/common/constants';

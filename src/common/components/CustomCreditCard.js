@@ -89,7 +89,8 @@ ${_t('Please input a valid card.')}`,
     const { doingCreateCardToken } = this.state;
     const { onCancel } = this.props;
     return (
-      <View>
+      // <View style={{height: H+170}}>
+      <React.Fragment>
         <ProfileHeader title={_t('Add a card')} onPress={onCancel} />
         {this.renderContent()}
         <Spinner
@@ -97,7 +98,8 @@ ${_t('Please input a valid card.')}`,
           textContent={_t('Checking card...')}
           textStyle={{color: '#FFF'}}
         />
-      </View>
+    </React.Fragment>
+      // </View>
     )
   }
 
@@ -107,7 +109,7 @@ ${_t('Please input a valid card.')}`,
     const isValidCard = (cardInfo && cardInfo.valid);
 
     return (
-      <ScrollView style={{ height: H-100 }}>
+      <ScrollView style={{flex: 1}}>
         <Spacer size={30*em}/>
         <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center', paddingRight: 20 }}>
           <TouchableOpacity
@@ -175,8 +177,9 @@ ${_t('Please input a valid card.')}`,
             disabled={!isValidCard}
           />
         </View>
+        {Platform.OS === 'android' && <Spacer size={40*em} />}
       </ScrollView>
-    )
+    );
   }
 }
 

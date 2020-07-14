@@ -1,7 +1,7 @@
 import React from 'react';
 import { PROVIDER_GOOGLE, Polyline, Marker, AnimatedRegion } from 'react-native-maps';
 import { ClusterMap } from 'react-native-cluster-map';
-import { Dimensions, View, Image, Platform, Text } from 'react-native';
+import { Dimensions, View, Image, Platform, Text, StyleSheet } from 'react-native';
 import MapViewDirections from 'react-native-maps-directions';
 import googleMapConfig from '~/common/config/googleMap';
 import convertUnits from 'convert-units';
@@ -268,9 +268,9 @@ export default class ClusterMapView extends React.Component {
       <ClusterMap
         initialRegion={INITIALIZE_REGION}
         region={region}
-        style={{width: '100%', height: '100%'}}
+        style={styles.map}
         provider={PROVIDER_GOOGLE}
-        mapType={Platform.OS == "android" ? "terrain" : "standard"}
+        mapType={Platform.OS == "android" ? "none" : "standard"}
         showsUserLocation={true}
         showsCompass={true}
         rotateEnabled={true}
@@ -297,11 +297,12 @@ export default class ClusterMapView extends React.Component {
     const { children } = this.props;
 
     return (
-      <View 
-        style={{
-          position: 'absolute', left: 0, top: 0,
-          width: W, height: H, zIndex: 10
-        }}
+      <View style={styles.container}
+        // style={
+        //   {
+        //   position: 'absolute', left: 0, top: 0,
+        //   width: W, height: H, zIndex: 10
+        // }}
       >
         { this.renderClusterMap() }
         { children && children }
@@ -309,3 +310,22 @@ export default class ClusterMapView extends React.Component {
     )
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  map: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+});

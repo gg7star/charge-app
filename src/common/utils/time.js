@@ -12,6 +12,7 @@ export function openHourStatus(openHours) {
     for (var i = 0; i < openHours.length; i++) {
       const key = openHourKeys[i];
       const item = openHours[key];
+      if (!item) continue;
       const openHour = item.openHour;
       const closeHour = item.closeHour;
       // if (translate(item.week_day, 'fr').toLowerCase() === currentWeekDay.toLowerCase()) {
