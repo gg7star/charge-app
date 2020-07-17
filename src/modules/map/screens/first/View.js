@@ -8,6 +8,7 @@ import {
   UnlockDialog,
   SearchDialog,
   DetailDialog,
+  FindNearestDialog,
   FinishDialog,
   FinishTopDialog,
   ReserveDialog,
@@ -27,6 +28,8 @@ import ProfileMenuDialog from '~/modules/profile/modals/menu/ProfileMenuDialogCo
 import defaultCurrentLocation from '~/common/config/locations';
 import MAP_MODAL from '~/common/constants/map';
 import { RENT_STATUS } from '~/common/constants/rent';
+import { openHourStatus } from '~/common/utils/time';
+import { getDistance } from '~/common/utils/filterPlaces';
 
 const GEOLOCATION_OPTION = {
   enableHighAccuracy: true,
@@ -52,7 +55,7 @@ export default class FirstScreenView extends React.Component {
     showCreditSettingModal: false,
     showConfirmAddCreditCardDialog: false
   }
-
+  
   async componentDidMount() {
     const { initialModal, profileOpened, map, rent } = this.props
     var newState = {...this.state, rentStatus: rent.rentStatus};
@@ -171,18 +174,19 @@ export default class FirstScreenView extends React.Component {
 
   handleCurrentLocationError = (error) => {
     console.log('===== location error: ', error);
-    // if (this.props.map.currentLocation) {
-    //   // Set previous location.
-    //   const prevCordinate = this.props.map.currentLocation.coordinate;
-    //   this.props.mapActions.changedCurrentLocation({
-    //     name: "My location",
-    //     coordinate: {
-    //       latitude: prevCordinate.latitude,
-    //       longitude: prevCordinate.longitude,
-    //       error: error.message,
-    //     }
-    //   });
-    // }
+    const myLocation = this.props.map.currentLocation || defaultCurrentLocation;
+    if (myLocation) {
+      // Set previous location.
+      const prevCordinate = myLocation.coordinate;
+      this.props.mapActions.changedCurrentLocation({
+        name: "My location",
+        coordinate: {
+          latitude: prevCordinate.latitude,
+          longitude: prevCordinate.longitude,
+          error: error.message,
+        }
+      });
+    }
   }
 
   handleDetectDirection = ({distance, duration}) => 
@@ -284,8 +288,39 @@ export default class FirstScreenView extends React.Component {
     // this.setState({activeModal: 'unlock'});
   }
 
-  filterSearch = () => {
-    
+  filterSearch = () => {}
+
+  findNearest = () => {
+    const { map } = this.props;
+    const { places, currentLocation } = map;
+    var minDistance = null;
+    var minIndex = 0;
+    var myLocation = currentLocation || defaultCurrentLocation;
+    console.log('==== myLocation: ', myLocation);
+
+    for (var i = 0; i < places.length; i++) {
+      const place = places[i];
+      // Check stations in place
+      if (place.stations && (place.stations.length == 0)) continue;
+      // Check current opening status of place
+      const hourStatus = openHourStatus(place.openHours);
+      if (!hourStatus.openStatus) continue;
+      // Calculate minimum distance.
+      var placeDistance = getDistance(
+        myLocation.coordinate.latitude,
+        myLocation.coordinate.longitude,
+        place.coordinate.latitude,
+        place.coordinate.longitude,
+        'K'
+      );
+      if (!minDistance || (minDistance > placeDistance)) {
+        minDistance = placeDistance;
+        minIndex = i;
+      }
+    }
+    (this.mapView && this.mapView.onGoToLocation) &&
+      this.mapView.onGoToLocation(places[minIndex].coordinate);
+    this.openNearPlacesDialog(minIndex);
   }
 
   processPayment = () => {
@@ -501,6 +536,7 @@ export default class FirstScreenView extends React.Component {
             }
           />
           {/* <MapButton name='tree' onPress={this.goGift}/> */}
+          {/* <MapButton name='search' onPress={this.onClickRefresh} /> */}
           {activeModal!=MAP_MODAL.NEARE_PLACE && <MapButton name='refresh' onPress={this.onClickRefresh}/>}
           {activeModal!=MAP_MODAL.NEARE_PLACE && <MapButton name='position' onPress={this.onClickPosition}/>}
         </ClusterMapView>
@@ -516,14 +552,11 @@ export default class FirstScreenView extends React.Component {
 
     return (
       <View style={{position: 'relative', width: W, height: H}}>
-        {/* <Menu 
-          isShowable={profileOpened || propsProfileOpened} 
-          
-        /> */}
         <ProfileMenuDialog isVisible={profileOpened} onClose={()=> {this.setState({profileOpened: false })}} />
         {/* { this.renderMapView() } */}
         { this.renderClusterMapView() }
         <Spacer size={20} />
+        <FindNearestDialog onClickFind={this.findNearest} />
         {activeModal!=MAP_MODAL.NEARE_PLACE && <UnlockDialog onClickUnlock={this.onUnlock} />}
         {/* <UnlockDialog onClickUnlock={this.onUnlock} /> */}
         {activeModal== MAP_MODAL.SEARCH && <SearchDialog onCancel={this.closeSearchDialog} 
