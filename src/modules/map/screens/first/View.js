@@ -1,6 +1,6 @@
-import React from 'react'
+import React from 'react';
 import { View, Platform, Alert, PermissionsAndroid } from 'react-native';
-import {check, PERMISSIONS} from 'react-native-permissions';
+import { check, request, requestNotifications, openSettings, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import { Actions } from 'react-native-router-flux';
 import stripe from 'tipsi-stripe';
 import Geolocation from 'react-native-geolocation-service';
@@ -30,6 +30,11 @@ import MAP_MODAL from '~/common/constants/map';
 import { RENT_STATUS } from '~/common/constants/rent';
 import { openHourStatus } from '~/common/utils/time';
 import { getDistance } from '~/common/utils/filterPlaces';
+import {
+  requireCameraPermission,
+  requireLocationPermission,
+  requireNotificationPermission
+} from '~/common/utils/permissions';
 
 const GEOLOCATION_OPTION = {
   enableHighAccuracy: true,
@@ -77,6 +82,10 @@ export default class FirstScreenView extends React.Component {
     const watchId = await this.initGeoLocation();
     this.onClickPosition();
     this.setState({ watchId });
+
+    // Require notification permission again.
+    const { _t } = this.props.appActions;
+    const notificationPermisionStatus = await requireNotificationPermission(_t);
   }
 
   async componentWillUnmount() {
@@ -96,7 +105,9 @@ export default class FirstScreenView extends React.Component {
   }
 
   async initGeoLocation() {
-    const hasPermission = await this.hasLocationPermission();
+    // const hasPermission = await this.hasLocationPermission();
+    const { _t } = this.props.appActions;
+    const hasPermission = await requireLocationPermission(_t)
     if(hasPermission) {
       // Enable Geolocation
 
@@ -137,9 +148,9 @@ export default class FirstScreenView extends React.Component {
     if (status === PermissionsAndroid.RESULTS.GRANTED) return true;
 
     if (status === PermissionsAndroid.RESULTS.DENIED) {
-      ToastAndroid.show('Location permission denied by user.', ToastAndroid.LONG);
+      // ToastAndroid.show('Location permission denied by user.', ToastAndroid.LONG);
     } else if (status === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
-      ToastAndroid.show('Location permission revoked by user.', ToastAndroid.LONG);
+      // ToastAndroid.show('Location permission revoked by user.', ToastAndroid.LONG);
     }
 
     return false;
@@ -465,14 +476,35 @@ export default class FirstScreenView extends React.Component {
     this.setState({showConfirmAddCreditCardDialog: false})
   }
 
-  onUnlock = () => {
+  onUnlock = async () => {
     const { auth, map, stripeActions, stripePayment } = this.props;
     const { scannedQrCode } = map;
-    if (stripePayment.customer && stripePayment.customer.id) {
-      Actions['map_scan_qr']();
+    const { _t } = this.props.appActions;
+    const cameraPermissionStatus = await requireCameraPermission(_t);
+    const notificationPermisionStatus = await requireNotificationPermission(_t);
+
+    if (cameraPermissionStatus && notificationPermisionStatus) {
+      if (stripePayment.customer && stripePayment.customer.id) {
+        Actions['map_scan_qr']();
+      } else {
+        // setup card info
+        this.setState({ showConfirmAddCreditCardDialog: true });
+      }
     } else {
-      // setup card info
-      this.setState({showConfirmAddCreditCardDialog: true});
+      Alert.alert(
+        _t('Check permissions for camera and notification'),
+        _t('You must allow the permissions for camera and notification to rent a battery. Would you setup them on phone settings?'),
+        [
+          {
+            text: _t('Ok'),
+            onPress: () => {
+              // Open settings.
+              openSettings().catch(() => console.warn('cannot open settings'));
+            }
+          }
+        ],
+        { cancelable: false },
+      );
     }
   }
 

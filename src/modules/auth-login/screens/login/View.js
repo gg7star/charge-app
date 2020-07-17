@@ -195,7 +195,7 @@ export default class LoginView extends React.Component {
             disabled={facebookLogining}
           />
           { (Platform.OS === 'ios') &&
-            [<Spacer size={15*em} />, 
+            [<Spacer size={15*em} key={'AppleLoginButtonSpace'} />, 
             <Button
               onPress={this.onAppleLogin}
               caption={_t('Continue with Apple')}

@@ -7710,10 +7710,15 @@ react-native-paper@^3.2.1:
     color "^3.1.2"
     react-native-safe-area-view "^0.13.1"
 
-react-native-permissions@^2.0.2, react-native-permissions@^2.0.8:
+react-native-permissions@^2.0.2:
   version "2.0.8"
   resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-2.0.8.tgz#e6d20a7b6e3df5333a3d80cc83024686fa2f49e3"
   integrity sha512-qK8Thp+9PTl/YjhKkRr8LPHfX5Evv5Zj/3CmAiqE45qCTB5UbWTKBWUfg3iqfMrjv9nE2rcS1PrIjZCDh6s/gQ==
+
+react-native-permissions@^2.1.5:
+  version "2.1.5"
+  resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-2.1.5.tgz#6cfc4f1ab1590f4952299b7cdc9698525ad540e0"
+  integrity sha512-b9KO/4UEV9qddl+kcSybmdk8nlAifclSDBR2rSvc5KZM06vIaJWJNIzK2ZwPXqDQ5yD3CJLuKTRj7Fz+jM9qyQ==
 
 react-native-phone-input@^0.2.4:
   version "0.2.4"
