@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>en</string>
+	<string>fr_FR</string>
 	<key>CFBundleDisplayName</key>
 	<string>Nono</string>
 	<key>CFBundleExecutable</key>
@@ -73,15 +73,15 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Nono application requires access to your phone’s camera to scan QR code of each station device production.</string>
+	<string>L’application Nono souhaite accéder à votre caméra afin de pouvoir scanner le QR code nécessaire à location d’une batterie.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Nono application is using Google Map and require your location to provide the distance service between you and each station devices.</string>
+	<string>L’application Nono utilise Google Map et souhaite avoir accès à votre localisation afin de pouvoir vous guider aux stations les plus proches de vous.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Nono application is using Google Map and require your location to provide the distance service between you and each station devices.</string>
+	<string>L’application Nono utilise Google Map et souhaite avoir accès à votre localisation afin de pouvoir vous guider aux stations les plus proches de vous.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Nono application is using Google Map and require your location to provide the distance service between you and each station devices.</string>
+	<string>L’application Nono utilise Google Map et souhaite avoir accès à votre localisation afin de pouvoir vous guider aux stations les plus proches de vous.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Nono application requires access to the photo library to save the scan QR codes.</string>
+	<string>L’application Nono souhaite accéder à votre caméra afin de pouvoir scanner le QR code nécessaire à location d’une batterie.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>

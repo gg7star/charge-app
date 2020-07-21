@@ -158,9 +158,12 @@ export default class AppView extends Component {
   };
 
   onRentFailure = (error) => {
-    const { auth, rent, rentActions } = this.props;
-    if ((rent.rentStatus == RENT_STATUS.RENT_REQUEST))
+    const { auth, rent, rentActions, mapActions } = this.props;
+    if ((rent.rentStatus == RENT_STATUS.RENT_REQUEST)) {
       rentActions.rentFailure(error);
+      // Require all stations again.
+      mapActions.getAllStations();
+    }
   };
 
   onReturnSuccess = (data) => {

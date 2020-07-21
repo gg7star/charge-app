@@ -18,7 +18,7 @@ export default class FindNearestDialog extends React.Component {
           textColor='#fff'
           bgGradientStart='#ff52a8'
           bgGradientEnd='#ffdf00'
-          caption={_t('Trouver la station la plus proche')}
+          caption={_t('Find the nearest station')}
           onPress={() => onClickFind()}
           textSize={13}
           containerHeight={40}

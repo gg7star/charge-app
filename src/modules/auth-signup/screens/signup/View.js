@@ -66,8 +66,8 @@ export default class SignupView extends React.Component {
         });
       } else {
         Alert.alert(
-          _t('Failed to sign up'),
-          _t(res.error),
+          _t('Failed to sign up with phone number.'),
+          _t('s.'),
           [
             {text: _t('OK'), onPress: () => console.log('OK Pressed')},
           ],
@@ -119,7 +119,7 @@ export default class SignupView extends React.Component {
       authActions.loginFailed(res.error);
       Alert(res.error);
       Alert.alert(
-        _t('Failed to sign up with Facebook account up'),
+        _t('Failed to sign up with Facebook account.'),
         _t(res.error),
         [
           {text: _t('OK'), onPress: () => console.log('OK Pressed')},
