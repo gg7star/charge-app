@@ -1,6 +1,6 @@
-import React from 'react'
+import React from 'react';
 import { View, Platform, Alert, PermissionsAndroid } from 'react-native';
-import {check, PERMISSIONS} from 'react-native-permissions';
+import { check, request, requestNotifications, openSettings, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import { Actions } from 'react-native-router-flux';
 import stripe from 'tipsi-stripe';
 import Geolocation from 'react-native-geolocation-service';
@@ -8,6 +8,7 @@ import {
   UnlockDialog,
   SearchDialog,
   DetailDialog,
+  FindNearestDialog,
   FinishDialog,
   FinishTopDialog,
   ReserveDialog,
@@ -27,6 +28,13 @@ import ProfileMenuDialog from '~/modules/profile/modals/menu/ProfileMenuDialogCo
 import defaultCurrentLocation from '~/common/config/locations';
 import MAP_MODAL from '~/common/constants/map';
 import { RENT_STATUS } from '~/common/constants/rent';
+import { openHourStatus } from '~/common/utils/time';
+import { getDistance } from '~/common/utils/filterPlaces';
+import {
+  requireCameraPermission,
+  requireLocationPermission,
+  requireNotificationPermission
+} from '~/common/utils/permissions';
 
 const GEOLOCATION_OPTION = {
   enableHighAccuracy: true,
@@ -52,7 +60,7 @@ export default class FirstScreenView extends React.Component {
     showCreditSettingModal: false,
     showConfirmAddCreditCardDialog: false
   }
-
+  
   async componentDidMount() {
     const { initialModal, profileOpened, map, rent } = this.props
     var newState = {...this.state, rentStatus: rent.rentStatus};
@@ -74,6 +82,10 @@ export default class FirstScreenView extends React.Component {
     const watchId = await this.initGeoLocation();
     this.onClickPosition();
     this.setState({ watchId });
+
+    // Require notification permission again.
+    const { _t } = this.props.appActions;
+    const notificationPermisionStatus = await requireNotificationPermission(_t);
   }
 
   async componentWillUnmount() {
@@ -93,7 +105,9 @@ export default class FirstScreenView extends React.Component {
   }
 
   async initGeoLocation() {
-    const hasPermission = await this.hasLocationPermission();
+    // const hasPermission = await this.hasLocationPermission();
+    const { _t } = this.props.appActions;
+    const hasPermission = await requireLocationPermission(_t)
     if(hasPermission) {
       // Enable Geolocation
 
@@ -134,9 +148,9 @@ export default class FirstScreenView extends React.Component {
     if (status === PermissionsAndroid.RESULTS.GRANTED) return true;
 
     if (status === PermissionsAndroid.RESULTS.DENIED) {
-      ToastAndroid.show('Location permission denied by user.', ToastAndroid.LONG);
+      // ToastAndroid.show('Location permission denied by user.', ToastAndroid.LONG);
     } else if (status === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
-      ToastAndroid.show('Location permission revoked by user.', ToastAndroid.LONG);
+      // ToastAndroid.show('Location permission revoked by user.', ToastAndroid.LONG);
     }
 
     return false;
@@ -171,18 +185,19 @@ export default class FirstScreenView extends React.Component {
 
   handleCurrentLocationError = (error) => {
     console.log('===== location error: ', error);
-    // if (this.props.map.currentLocation) {
-    //   // Set previous location.
-    //   const prevCordinate = this.props.map.currentLocation.coordinate;
-    //   this.props.mapActions.changedCurrentLocation({
-    //     name: "My location",
-    //     coordinate: {
-    //       latitude: prevCordinate.latitude,
-    //       longitude: prevCordinate.longitude,
-    //       error: error.message,
-    //     }
-    //   });
-    // }
+    const myLocation = this.props.map.currentLocation || defaultCurrentLocation;
+    if (myLocation) {
+      // Set previous location.
+      const prevCordinate = myLocation.coordinate;
+      this.props.mapActions.changedCurrentLocation({
+        name: "My location",
+        coordinate: {
+          latitude: prevCordinate.latitude,
+          longitude: prevCordinate.longitude,
+          error: error.message,
+        }
+      });
+    }
   }
 
   handleDetectDirection = ({distance, duration}) => 
@@ -284,8 +299,39 @@ export default class FirstScreenView extends React.Component {
     // this.setState({activeModal: 'unlock'});
   }
 
-  filterSearch = () => {
-    
+  filterSearch = () => {}
+
+  findNearest = () => {
+    const { map } = this.props;
+    const { places, currentLocation } = map;
+    var minDistance = null;
+    var minIndex = 0;
+    var myLocation = currentLocation || defaultCurrentLocation;
+    console.log('==== myLocation: ', myLocation);
+
+    for (var i = 0; i < places.length; i++) {
+      const place = places[i];
+      // Check stations in place
+      if (place.stations && (place.stations.length == 0)) continue;
+      // Check current opening status of place
+      const hourStatus = openHourStatus(place.openHours);
+      if (!hourStatus.openStatus) continue;
+      // Calculate minimum distance.
+      var placeDistance = getDistance(
+        myLocation.coordinate.latitude,
+        myLocation.coordinate.longitude,
+        place.coordinate.latitude,
+        place.coordinate.longitude,
+        'K'
+      );
+      if (!minDistance || (minDistance > placeDistance)) {
+        minDistance = placeDistance;
+        minIndex = i;
+      }
+    }
+    (this.mapView && this.mapView.onGoToLocation) &&
+      this.mapView.onGoToLocation(places[minIndex].coordinate);
+    this.openNearPlacesDialog(minIndex);
   }
 
   processPayment = () => {
@@ -430,14 +476,35 @@ export default class FirstScreenView extends React.Component {
     this.setState({showConfirmAddCreditCardDialog: false})
   }
 
-  onUnlock = () => {
+  onUnlock = async () => {
     const { auth, map, stripeActions, stripePayment } = this.props;
     const { scannedQrCode } = map;
-    if (stripePayment.customer && stripePayment.customer.id) {
-      Actions['map_scan_qr']();
+    const { _t } = this.props.appActions;
+    const cameraPermissionStatus = await requireCameraPermission(_t);
+    const notificationPermisionStatus = await requireNotificationPermission(_t);
+
+    if (cameraPermissionStatus && notificationPermisionStatus) {
+      if (stripePayment.customer && stripePayment.customer.id) {
+        Actions['map_scan_qr']();
+      } else {
+        // setup card info
+        this.setState({ showConfirmAddCreditCardDialog: true });
+      }
     } else {
-      // setup card info
-      this.setState({showConfirmAddCreditCardDialog: true});
+      Alert.alert(
+        _t('Check permissions for camera and notification'),
+        _t('You must allow the permissions for camera and notification to rent a battery. Would you setup them on phone settings?'),
+        [
+          {
+            text: _t('Ok'),
+            onPress: () => {
+              // Open settings.
+              openSettings().catch(() => console.warn('cannot open settings'));
+            }
+          }
+        ],
+        { cancelable: false },
+      );
     }
   }
 
@@ -501,6 +568,7 @@ export default class FirstScreenView extends React.Component {
             }
           />
           {/* <MapButton name='tree' onPress={this.goGift}/> */}
+          {/* <MapButton name='search' onPress={this.onClickRefresh} /> */}
           {activeModal!=MAP_MODAL.NEARE_PLACE && <MapButton name='refresh' onPress={this.onClickRefresh}/>}
           {activeModal!=MAP_MODAL.NEARE_PLACE && <MapButton name='position' onPress={this.onClickPosition}/>}
         </ClusterMapView>
@@ -516,14 +584,11 @@ export default class FirstScreenView extends React.Component {
 
     return (
       <View style={{position: 'relative', width: W, height: H}}>
-        {/* <Menu 
-          isShowable={profileOpened || propsProfileOpened} 
-          
-        /> */}
         <ProfileMenuDialog isVisible={profileOpened} onClose={()=> {this.setState({profileOpened: false })}} />
         {/* { this.renderMapView() } */}
         { this.renderClusterMapView() }
         <Spacer size={20} />
+        <FindNearestDialog onClickFind={this.findNearest} />
         {activeModal!=MAP_MODAL.NEARE_PLACE && <UnlockDialog onClickUnlock={this.onUnlock} />}
         {/* <UnlockDialog onClickUnlock={this.onUnlock} /> */}
         {activeModal== MAP_MODAL.SEARCH && <SearchDialog onCancel={this.closeSearchDialog} 

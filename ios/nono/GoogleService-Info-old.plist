@@ -6,8 +6,6 @@
 	<string>725402495129-6pccjqd3lt4u1ohp4u5ji5lmiliitvuk.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
 	<string>com.googleusercontent.apps.725402495129-6pccjqd3lt4u1ohp4u5ji5lmiliitvuk</string>
-	<key>ANDROID_CLIENT_ID</key>
-	<string>725402495129-a2l2sqp28o1hqjlnseb41346jfutud0v.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyBwINjstRC_Slxjj8s1HnS7k__4y5J3OQ8</string>
 	<key>GCM_SENDER_ID</key>
@@ -21,20 +19,18 @@
 	<key>STORAGE_BUCKET</key>
 	<string>nono-app-a7dde.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<false></false>
+	<false/>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false></false>
+	<false/>
 	<key>IS_APPINVITE_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>IS_GCM_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>GOOGLE_APP_ID</key>
 	<string>1:725402495129:ios:16e555fcd82c74b745f008</string>
 	<key>DATABASE_URL</key>
 	<string>https://nono-app-a7dde.firebaseio.com</string>
-	<key>ADMOB_APP_ID</key>
-	<string>ca-app-pub-9857774334300015~2815081438</string>
 </dict>
 </plist>

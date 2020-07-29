@@ -63,7 +63,7 @@
     "react-native-nav": "^2.0.2",
     "react-native-onesignal": "^3.7.3",
     "react-native-paper": "^3.2.1",
-    "react-native-permissions": "^2.0.8",
+    "react-native-permissions": "^2.1.5",
     "react-native-phone-input": "^0.2.4",
     "react-native-qrcode-image": "^0.2.8",
     "react-native-qrcode-scanner": "^1.3.1",

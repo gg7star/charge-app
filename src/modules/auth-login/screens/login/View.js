@@ -38,7 +38,7 @@ export default class LoginView extends React.Component {
     if (!isExistUser) {
       this.setState({phoneLogining: false}, () => {
         Alert.alert(
-          _t('Failed to login.'),
+          _t('Failed to login with phone number.'),
           _t('Your phone number was not registered yet. Would you register now?'),
           [
             {text: _t('Cancel'), onPress: () => console.log('Cancel Pressed')},
@@ -57,8 +57,9 @@ export default class LoginView extends React.Component {
           showConfirmCodeModal: true
         });
       } else {
+        console.log('===== Phone number login failed: error: ', res.error);
         Alert.alert(
-          _t('Failed to login'),
+          _t('Failed to login with phone number.'),
           _t(res.error),
           [
             {text: _t('OK'), onPress: () => console.log('OK Pressed')},
@@ -75,13 +76,15 @@ export default class LoginView extends React.Component {
     const { _t } = appActions;
     this.setState({facebookLogining: true});
     const res = await loginWithFacebook();
+    console.log('===== res: ', res);
     this.setState({facebookLogining: false});
     if (res.credential) {
       authActions.loginSuccessWithSocial(res.credential);
     } else {
       authActions.loginFailed(res.error);
+      console.log('===== Facebook login failed: error: ', res.error);
       Alert.alert(
-        _t('Failed to login.'),
+        _t('Failed to login with Facebook account.'),
         _t(res.error),
         [
           { text: _t('OK'), onPress: () => console.log("OK Pressed") }
@@ -101,9 +104,9 @@ export default class LoginView extends React.Component {
       authActions.loginSuccessWithSocial(res.credential, auth);
     } else {
       authActions.loginFailed(res.error);
-      Alert(res.error);
+      console.log('===== login error: ', res.error);
       Alert.alert(
-        _t('Failed to sign up with Apple account.'),
+        _t('Failed to login with Apple account.'),
         _t(res.error),
         [
           {text: _t('OK'), onPress: () => console.log('OK Pressed')},
@@ -195,7 +198,7 @@ export default class LoginView extends React.Component {
             disabled={facebookLogining}
           />
           { (Platform.OS === 'ios') &&
-            [<Spacer size={15*em} />, 
+            [<Spacer size={15*em} key={'AppleLoginButtonSpace'} />, 
             <Button
               onPress={this.onAppleLogin}
               caption={_t('Continue with Apple')}

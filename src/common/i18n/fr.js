@@ -242,5 +242,32 @@ export default {
   "batteries": "batteries",
   "None": "Rien",
 
-  "Why?": "Pourquoi ? "
+  "Why?": "Pourquoi ? ",
+  "It past 24 hours since you rented a buttery. After 48 hours, the buttery will be sold automatically.": "Vous avez atteint(e) 24 heures de location gratuite. Ramenez la batterie dans les 24 heures restantes pour ne pas être débité(e) de la caution.",
+  "Notification permission": "Autorisez \"Nono\" à vous envoyer des notification ?",
+  "You must allow the notification permission to rent a battery. Would you setup it on phone settings?": "Vous devez autoriser les notifications pour pouvoir louer une batterie. Pourriez-vous les accepter dans les paramètres de votre téléphone ?",
+  "Location permission": "Autoriser \"Nono\" à utiliser votre position ?",
+  "You need to allow location permission to search stations. Would you setup it on phone settings?": "L’application Nono utilise Google Map et souhaite avoir accès à votre localisation afin de pouvoir vous guider aux stations les plus proches de vous.",
+  "Find the nearest station": "Trouver la station la plus proche",
+  "Camera permission": "\"Nono\" souhaite accéder à l'appareil photo.",
+  "You need to allow camera permission to rent a battery. Would you setup it on phone settings?": "L’application Nono souhaite accéder à votre caméra afin de pouvoir scanner le QR code nécessaire à location d’une batterie.",
+
+  "Failed to sign up with Facebook account.": "Échec de l'inscription avec le compte Facebook.",
+  "Failed to sign up with Apple account.": "Échec de l'inscription avec le compte Apple.",
+  "Failed to sign up with phone number.": "Échec de l'inscription avec le numéro de téléphone.",
+
+  "cccin with phone number.": "Échec de la connexion.",
+
+  "Failed to sign up with Apple account.": "Échec de l'inscription avec le compte Apple.",
+  
+  "Failed to login with Apple account.": "Échec de la connexion avec le compte Apple.",
+  "Failed to login with Facebook account.": "Échec de la connexion avec le compte Facebook.",
+  "Failed to login with phone number.": "Échec de la connexion avec le numéro de téléphone.",
+
+  "Your phone number was not registered yet. Would you register now?": "Votre numéro de téléphone n'est pas encore enregistré. Voulez-vous l'enregistrer maintenant ?",
+  "Please enter a valid phone number.": "S'il vous plaît entrer un numéro de téléphone valide.",
+  "We have blocked all requests from this device due to unusual activity. Try again later.": "Nous avons bloqué toutes les demandes de cet appareil en raison d'une activité inhabituelle. Réessayez plus tard.",
+  "A network error has occurred, please try again.": "Une erreur réseau s'est produite, veuillez réessayer.",
+  "Your phone number already was registered. Would you login now?": "Votre numéro de téléphone était déjà enregistré. Voulez-vous vous connecter maintenant?",
+  
 };

@@ -34,6 +34,10 @@ const PIN_CLOSE_IMAGE = require('~/common/assets/images/png/pin-close.png');
 const PIN_SELECT_IMAGE = require('~/common/assets/images/png/pin-select.png');
 const CURRENT_LOCATION_IMAGE = require('~/common/assets/images/png/currentLocation.png');
 
+const GOOGLE_MAPS_APIKEY = Platform.OS === 'ios'
+  ? googleMapConfig.IOS_GOOGLE_MAPS_APIKEY
+  : googleMapConfig.ANDROID_GOOGLE_MAPS_APIKEY;
+
 export default class ClusterMapView extends React.Component {
   state = {
     mapView: null,
@@ -160,14 +164,13 @@ export default class ClusterMapView extends React.Component {
   renderMapViewDirection = () => {
     const { currentLocation, directionCoordinates } = this.state;
     const { selectedPlace, onDetectDirection } = this.props;
-    const GOOGLE_MAPS_APIKEY = Platform.OS === 'ios' 
-      ? googleMapConfig.IOS_GOOGLE_MAPS_APIKEY
-      : googleMapConfig.ANDROID_GOOGLE_MAPS_APIKEY;
+
     console.log('===== renderMapViewDirection: currentLocation: ', currentLocation)
 
     var mapDirections = [];
     mapDirections.push(
       <MapViewDirections
+        key={'MapDirection'}
         origin={currentLocation.coordinate}
         destination={selectedPlace.coordinate}
         apikey={GOOGLE_MAPS_APIKEY}

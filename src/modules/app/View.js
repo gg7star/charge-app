@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import { StyleSheet,View, Platform } from 'react-native';
-import {PERMISSIONS, request} from 'react-native-permissions';
 import { Root, Toast } from 'native-base';
 import OneSignal from 'react-native-onesignal';
 import { Actions } from 'react-native-router-flux';
@@ -66,9 +65,6 @@ export default class AppView extends Component {
     appActions.setGlobalNotification({message: null, type: ''});
     // mapActions.initMap();
 
-    // Check permissions
-    const cameraPermission  = Platform.OS === 'ios' ? PERMISSIONS.IOS.CAMERA : PERMISSIONS.ANDROID.CAMERA;
-    const cameraStatus = await request(cameraPermission);
     // Onsignal
     OneSignal.init(onesignalConfig.appId);
     OneSignal.inFocusDisplaying(2);
@@ -162,9 +158,12 @@ export default class AppView extends Component {
   };
 
   onRentFailure = (error) => {
-    const { auth, rent, rentActions } = this.props;
-    if ((rent.rentStatus == RENT_STATUS.RENT_REQUEST))
+    const { auth, rent, rentActions, mapActions } = this.props;
+    if ((rent.rentStatus == RENT_STATUS.RENT_REQUEST)) {
       rentActions.rentFailure(error);
+      // Require all stations again.
+      mapActions.getAllStations();
+    }
   };
 
   onReturnSuccess = (data) => {

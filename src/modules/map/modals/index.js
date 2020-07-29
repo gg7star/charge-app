@@ -1,6 +1,7 @@
 import UnlockDialog from './unlock/ViewContainer';
 import SearchDialog from './search/ViewContainer';
 import DetailDialog from './detail/ViewContainer';
+import FindNearestDialog from './find-nearest/ViewContainer';
 import FinishDialog from './finish/ViewContainer';
 import FinishTopDialog from './finish-top/ViewContainer';
 import ReserveDialog from './reserve/ViewContainer';
@@ -15,6 +16,7 @@ export {
   UnlockDialog,
   SearchDialog,
   DetailDialog,
+  FindNearestDialog,
   FinishDialog,
   FinishTopDialog,
   ReserveDialog,
