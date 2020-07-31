@@ -1,5 +1,6 @@
 import React from 'react';
 import Modal from "react-native-modal";
+import { Platform } from 'react-native';
 import { CustomCreditCard } from '~/common/components';
 import { H, W } from '~/common/constants';
 
@@ -19,7 +20,7 @@ export default class CreditCardDialog extends React.Component {
         style={{
           margin: 0,
           padding: 20,
-          paddingTop: 100,
+          paddingTop: (Platform.OS === 'ios') ? 100 : 10,
           backgroundColor: 'white'
         }}
       >

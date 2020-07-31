@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text, Image, TouchableOpacity } from 'react-native'
-import { colors } from '~/common/constants'
+import { colors, W, H, em } from '~/common/constants'
 const BACK_IMAGE = require('~/common/assets/images/png/arrow.png');
 export default class ProfileHeader extends React.Component {
   render() {

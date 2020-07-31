@@ -28,10 +28,10 @@ export function searchPlaces(searchVal, currentLocation, radius) {
   }
 }
 
-export function selectPlace(index) {
+export function selectPlace(index, place) {
   return {
     type: types.SELECT_PLACE,
-    payload: { index }
+    payload: { index, place }
   }
 }
 

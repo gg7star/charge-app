@@ -224,18 +224,19 @@ export default class FirstScreenView extends React.Component {
 
   openSearchDialog = () => {
     this.props.mapActions.setActiveModal(MAP_MODAL.SEARCH);
-    // this.setState({activeModal: MAP_MODAL.SEARCH});
   }
 
   closeSearchDialog = () => {
     this.props.mapActions.setActiveModal(MAP_MODAL.UNLOCK);
-    // this.setState({activeModal: MAP_MODAL.UNLOCK});
   }
 
   selectPlace = (index) => {
-    this.props.mapActions.selectPlace(index);
-    this.props.mapActions.setActiveModal(MAP_MODAL.DETAIL);
-    // this.setState({activeModal: MAP_MODAL.DETAIL});
+    const { mapActions, map } = this.props;
+    const { searchedPlaces } = map;
+    const place = ((index == -1) && searchedPlaces)
+      ? null : searchedPlaces[index]
+    mapActions.selectPlace(index, place);
+    mapActions.setActiveModal(MAP_MODAL.DETAIL);
   }
   //onSelectPlace
   onSelectPlace = (index) => {
@@ -244,49 +245,39 @@ export default class FirstScreenView extends React.Component {
 
   closeDetailDialog = () => {
     this.props.mapActions.setActiveModal(MAP_MODAL.UNLOCK);
-    this.props.mapActions.selectPlace(-1);
-    // this.setState({activeModal: MAP_MODAL.UNLOCK}, () => {
-    //   this.props.mapActions.selectPlace(-1);
-    // });
+    this.props.mapActions.selectPlace(-1, null);
   }
 
   openFinishDialog = () => {
     this.props.mapActions.setActiveModal(MAP_MODAL.FINISH);
-    // this.setState({activeModal: 'finish'});
   }
 
   closeFinishDialog = () => {
     this.props.mapActions.setActiveModal(MAP_MODAL.UNLOCK);
-    this.props.mapActions.selectPlace(-1);
-    // this.setState({
-    //   ...this.state, activeModal: 'unlock'},
-    //   () => this.props.mapActions.selectPlace(-1)
-    // );
+    this.props.mapActions.selectPlace(-1, null);
   }
 
   openReserveDialog = () => {
     this.props.mapActions.setActiveModal(MAP_MODAL.RESERVE);
-    // this.setState({activeModal: 'reserve'});
   }
 
   closeReserveDialog = () => {
     this.props.mapActions.setActiveModal(MAP_MODAL.UNLOCK);
-    // this.setState({activeModal: 'unlock'});
   }
 
   openNearPlacesDialog = (index) => {
-    this.props.mapActions.selectPlace(index);
-    this.props.mapActions.setActiveModal(MAP_MODAL.NEARE_PLACE);
-    // this.setState({activeModal: 'near-places'});
+    const { mapActions, map } = this.props;
+    const { searchedPlaces } = map;
+    const place = ((index == -1) && searchedPlaces)
+      ? null : searchedPlaces[index]
+    mapActions.selectPlace(index, place);
+    mapActions.setActiveModal(MAP_MODAL.NEARE_PLACE);
   }
 
   closeNearPlacesDialog = () => {
     const _this = this;
     this.props.mapActions.setActiveModal(MAP_MODAL.UNLOCK);
-    _this.props.mapActions.selectPlace(-1);
-    // this.setState({activeModal: 'unlock'}, () => {
-    //   _this.props.mapActions.selectPlace(-1);
-    // });
+    _this.props.mapActions.selectPlace(-1, null);
   }
 
   openFilterDialog = (index) => {
@@ -521,7 +512,6 @@ export default class FirstScreenView extends React.Component {
 
     return (
       <MapView
-          mapType={Platform.OS == "android" ? "none" : "standard"}
           currentLocation={location}
           places={searchedPlaces}
           selectedPlace={place}
@@ -551,7 +541,6 @@ export default class FirstScreenView extends React.Component {
 
     return (
       <ClusterMapView
-          mapType={Platform.OS == "android" ? "none" : "standard"}
           currentLocation={location}
           places={searchedPlaces}
           selectedPlace={place}

@@ -164,7 +164,7 @@ export default class CustomMapView extends React.Component {
       >
         <React.Fragment>
           <MapView 
-            style={{width: '100%', height: '100%'}}
+            style={{flex: 1, width: '100%', height: '100%'}}
             initialRegion={region}
             provider={PROVIDER_GOOGLE}
             mapType={Platform.OS == "android" ? "terrain" : "standard"}

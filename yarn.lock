@@ -7449,10 +7449,10 @@ react-native-camera@^3.26.0:
   dependencies:
     prop-types "^15.6.2"
 
-react-native-cluster-map@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/react-native-cluster-map/-/react-native-cluster-map-1.0.6.tgz#c1b7568c08a131b9180cfa43762b57fa0dd2c21c"
-  integrity sha512-sZX2weO0BhKfGCArH1NqtZwdVUpg2lazw7CFXR94acbb3xROswxJXlyuOmCoCL4TCiNItxHWrRGJo22Nqpyz5w==
+react-native-cluster-map@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/react-native-cluster-map/-/react-native-cluster-map-1.0.8.tgz#ebfe7f9ca3728946f83d326241b6da7c1afae790"
+  integrity sha512-o1QmY2rbGJ7n+mA4mz6lAExNurnkVkoxtc1zgJB6k52Hrh3YhHPEuQ1xSrkR9xiZOXwNvnffaa5u5CxXD1YJzQ==
   dependencies:
     "@mapbox/geo-viewport" "0.4.0"
     "@types/jest" "^24.0.18"

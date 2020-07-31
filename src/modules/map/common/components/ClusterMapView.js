@@ -109,7 +109,6 @@ export default class ClusterMapView extends React.Component {
   };
 
   onUserLocationChange = async (currLoc) => {
-    console.log('====== onUserLocationChange: currLoc: ', currLoc.nativeEvent);
     if (currLoc.nativeEvent && currLoc.nativeEvent.coordinate) {
       const { onDetectCurrentLocation } = this.props;
       onDetectCurrentLocation && onDetectCurrentLocation(currLoc.nativeEvent.coordinate);
@@ -165,71 +164,72 @@ export default class ClusterMapView extends React.Component {
     const { currentLocation, directionCoordinates } = this.state;
     const { selectedPlace, onDetectDirection } = this.props;
 
-    console.log('===== renderMapViewDirection: currentLocation: ', currentLocation)
-
-    var mapDirections = [];
-    mapDirections.push(
-      <MapViewDirections
-        key={'MapDirection'}
-        origin={currentLocation.coordinate}
-        destination={selectedPlace.coordinate}
-        apikey={GOOGLE_MAPS_APIKEY}
-        mode={"WALKING"}
-        strokeWidth={0}
-        strokeColor="hotpink"
-        optimizeWaypoints={true}
-        precision={'high'}
-        onStart={(params) => {
-          console.log(`Started routing between "${params.origin}" and "${params.destination}"`);
-        }}
-        onReady={result => {
-          console.log('====== result: ', result);
-          if (!result) {
-            console.log('====== reset direction');
-            this.setState({directionCoordinates: []});
+    if (selectedPlace && selectedPlace.coordinate && currentLocation && currentLocation.coordinate) {
+      var mapDirections = [];
+      mapDirections.push(
+        <MapViewDirections
+          key={'MapDirection'}
+          origin={currentLocation.coordinate}
+          destination={selectedPlace.coordinate}
+          apikey={GOOGLE_MAPS_APIKEY}
+          mode={"WALKING"}
+          strokeWidth={0}
+          strokeColor="hotpink"
+          optimizeWaypoints={true}
+          precision={'high'}
+          onStart={(params) => {
+            console.log(`====== Started routing between "${params.origin}" and "${params.destination}"`);
+          }}
+          onReady={result => {
+            console.log('====== result: ', result);
+            if (!result) {
+              console.log('====== reset direction');
+              this.setState({directionCoordinates: []});
+              onDetectDirection && onDetectDirection({
+                distance: null,
+                duration: null
+              });
+              return;
+            }
+            var distance = convertUnits(result.distance).from('km').toBest({ cutOffNumber: 1 });
+            var duration = convertUnits(result.duration).from('min').toBest({ cutOffNumber: 1 });
+            onDetectDirection && onDetectDirection({
+              distance: `${Math.round(distance.val * 100)/100} ${distance.unit}`,
+              duration: `${Math.round(duration.val)} ${duration.unit}`
+            })
+            var directionCoordinates = [];
+            directionCoordinates.push(currentLocation.coordinate);
+            for(var i = 0; i < result.coordinates.length - 1; i++) {
+              var coord = result.coordinates[i];
+              directionCoordinates.push(coord);
+            }
+            directionCoordinates.push(selectedPlace.coordinate);
+            const counts = directionCoordinates.length;
+            // this.mapView && this.mapView.fitToCoordinates(directionCoordinates, {
+            //   edgePadding: {
+            //     right: (width / 10),
+            //     bottom: (height / 5 * 2),
+            //     left: (width / 10),
+            //     top: (height / 7),
+            //   }
+            // });
+            this.setState({directionCoordinates});
+          }}
+          onError={(errorMessage) => {
+            console.log('==== GOT AN ERROR: ', errorMessage);
             onDetectDirection && onDetectDirection({
               distance: null,
               duration: null
             });
-            return;
-          }
-          var distance = convertUnits(result.distance).from('km').toBest({ cutOffNumber: 1 });
-          var duration = convertUnits(result.duration).from('min').toBest({ cutOffNumber: 1 });
-          onDetectDirection && onDetectDirection({
-            distance: `${Math.round(distance.val * 100)/100} ${distance.unit}`,
-            duration: `${Math.round(duration.val)} ${duration.unit}`
-          })
-          var directionCoordinates = [];
-          directionCoordinates.push(currentLocation.coordinate);
-          for(var i = 0; i < result.coordinates.length - 1; i++) {
-            var coord = result.coordinates[i];
-            directionCoordinates.push(coord);
-          }
-          directionCoordinates.push(selectedPlace.coordinate);
-          const counts = directionCoordinates.length;
-          // this.mapView && this.mapView.fitToCoordinates(directionCoordinates, {
-          //   edgePadding: {
-          //     right: (width / 10),
-          //     bottom: (height / 5 * 2),
-          //     left: (width / 10),
-          //     top: (height / 7),
-          //   }
-          // });
-          this.setState({directionCoordinates});
-        }}
-        onError={(errorMessage) => {
-          console.log('==== GOT AN ERROR: ', errorMessage);
-          onDetectDirection && onDetectDirection({
-            distance: null,
-            duration: null
-          });
-          this.setState({directionCoordinates: []});
-        }}
-      />
-    );
-    if (selectedPlace && (directionCoordinates.length > 0))
-      mapDirections.push(this.renderCustomDirection());
-    return mapDirections;
+            this.setState({directionCoordinates: []});
+          }}
+        />
+      );
+      if (selectedPlace && (directionCoordinates.length > 0))
+        mapDirections.push(this.renderCustomDirection());
+      return mapDirections;
+    }
+    else return null
   };
 
   renderCustomClusterMarker = (count) => {
@@ -257,9 +257,9 @@ export default class ClusterMapView extends React.Component {
 
   renderClusterMap = () => {
     const { currentLocation } = this.state;
-    const { selectedPlace } = this.props;
+    const { selectedPlace, children } = this.props;
     var region = null;
-    if (currentLocation)
+    if (currentLocation && currentLocation.coordinate)
       region = {
         latitude: currentLocation.coordinate.latitude,
         longitude: currentLocation.coordinate.longitude,
@@ -268,31 +268,34 @@ export default class ClusterMapView extends React.Component {
       };
 
     return (
-      <ClusterMap
-        initialRegion={INITIALIZE_REGION}
-        region={region}
-        style={styles.map}
-        provider={PROVIDER_GOOGLE}
-        mapType={Platform.OS == "android" ? "none" : "standard"}
-        showsUserLocation={true}
-        showsCompass={true}
-        rotateEnabled={true}
-        loadingEnabled={true}
-        showsBuildings={true}
-        pitchEnabled={true}
-        onMapReady={() => this.onMapReady(region)}
-        onUserLocationChange={this.onUserLocationChange}
-        zoomTapEnabled={false}
-        renderClusterMarker={this.renderCustomClusterMarker}
-        ref={c => this.mapView = c}
-        priorityMarker={(selectedPlace && selectedPlace.coordinate && currentLocation && currentLocation.coordinate) &&
-          this.renderMapViewDirection()}
+      <View
+        style={styles.container}
       >
-        { this.renderMarkers() }
-       {/* {(selectedPlace && selectedPlace.coordinate && currentLocation && currentLocation.coordinate) &&
-          this.renderMapViewDirection()} */}
-        {/* { selectedPlace && (directionCoordinates.length > 0) && this.renderCustomDirection() } */}
-      </ClusterMap>
+        <ClusterMap
+          initialRegion={INITIALIZE_REGION}
+          region={region}
+          // style={{ flex: 1, width: '100%', height: '100%' }}
+          style={styles.map}
+          provider={PROVIDER_GOOGLE}
+          mapType={Platform.OS == "android" ? "terrain" : "standard"}
+          showsUserLocation={true}
+          showsCompass={true}
+          rotateEnabled={true}
+          loadingEnabled={true}
+          showsBuildings={true}
+          pitchEnabled={true}
+          onMapReady={() => this.onMapReady(region)}
+          onUserLocationChange={this.onUserLocationChange}
+          zoomTapEnabled={false}
+          renderClusterMarker={this.renderCustomClusterMarker}
+          ref={c => this.mapView = c}
+          priorityMarker={this.renderMapViewDirection()}
+        >
+          {this.renderMarkers()}
+          {/* { selectedPlace && (directionCoordinates.length > 0) && this.renderCustomDirection() } */}
+        </ClusterMap>
+        {children && children}
+      </View>
     );
   };
 
@@ -300,13 +303,7 @@ export default class ClusterMapView extends React.Component {
     const { children } = this.props;
 
     return (
-      <View style={styles.container}
-        // style={
-        //   {
-        //   position: 'absolute', left: 0, top: 0,
-        //   width: W, height: H, zIndex: 10
-        // }}
-      >
+      <View style={styles.container}>
         { this.renderClusterMap() }
         { children && children }
       </View>
@@ -316,19 +313,30 @@ export default class ClusterMapView extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
+    flex: 1,
+    // ...StyleSheet.absoluteFillObject,
+
+    // position: 'absolute',
+    // top: 0,
+    // left: 0,
+    // right: 0,
+    // bottom: 0,
+    // justifyContent: 'flex-end',
+    // alignItems: 'center',
+
+    // position: 'absolute', left: 0, top: 0,
+    // width: W, height: H, zIndex: 10
   },
   map: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    // flex: 1,
+    // width: W,
+    // height: H,
+    ...StyleSheet.absoluteFillObject
+
+    // position: 'absolute',
+    // top: 0,
+    // left: 0,
+    // right: 0,
+    // bottom: 0,
   },
 });

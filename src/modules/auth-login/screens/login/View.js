@@ -206,6 +206,7 @@ export default class LoginView extends React.Component {
               textColor='#fff'
               icon={APPLE_IMAGE}
               iconColor='#fff'
+              key={'Apple-Login-Button'}
             />]
           }
           <Spacer size={30*em} />
