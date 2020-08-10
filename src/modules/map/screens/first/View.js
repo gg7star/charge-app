@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Platform, Alert, PermissionsAndroid } from 'react-native';
-import { check, request, requestNotifications, openSettings, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import { openSettings } from 'react-native-permissions';
 import { Actions } from 'react-native-router-flux';
 import stripe from 'tipsi-stripe';
 import Geolocation from 'react-native-geolocation-service';
@@ -24,6 +24,7 @@ import { Spacer } from '~/common/components';
 import MapButton from '~/modules/map/common/components/MapButton';
 import MapView from '~/modules/map/common/components/MapView';
 import ClusterMapView from '~/modules/map/common/components/ClusterMapView';
+import MapClusteringView from '~/modules/map/common/components/MapClusteringView';
 import ProfileMenuDialog from '~/modules/profile/modals/menu/ProfileMenuDialogContainer';
 import defaultCurrentLocation from '~/common/config/locations';
 import MAP_MODAL from '~/common/constants/map';
@@ -45,13 +46,15 @@ const GEOLOCATION_OPTION = {
   watchId: null
 };
 const GEOLOCATION_WATCH_OPTION = {
-  enableHighAccuracy: false,
+  enableHighAccuracy: true,
   distanceFilter: 0,
   interval: 20000,
   fastestInterval: 15000
 }
 
 export default class FirstScreenView extends React.Component {
+  watchId = null;
+
   state = {
     profileOpened: false,
     activeModal: 'unlock',
@@ -59,9 +62,10 @@ export default class FirstScreenView extends React.Component {
     rentStatus: RENT_STATUS.INIT,
     showCreditSettingModal: false,
     showConfirmAddCreditCardDialog: false
-  }
+  };
   
   async componentDidMount() {
+    console.log('===== componentDidMount')
     const { initialModal, profileOpened, map, rent } = this.props
     var newState = {...this.state, rentStatus: rent.rentStatus};
     if (map.activeModal) {
@@ -79,9 +83,9 @@ export default class FirstScreenView extends React.Component {
     }
     this.setState({...newState});
 
-    const watchId = await this.initGeoLocation();
+    await this.initGeoLocation();
     this.onClickPosition();
-    this.setState({ watchId });
+    // this.setState({ watchId });
 
     // Require notification permission again.
     const { _t } = this.props.appActions;
@@ -89,9 +93,10 @@ export default class FirstScreenView extends React.Component {
   }
 
   async componentWillUnmount() {
-    const { watchId } = this.state;
-    if (watchId) {
-      Geolocation.clearWatch(watchId);
+    // const { watchId } = this.state;
+    console.log('===== componentWillUnmount')
+    if (this.watchId) {
+      Geolocation.clearWatch(this.watchId);
       Geolocation.stopObserving();
     }
   }
@@ -121,7 +126,7 @@ export default class FirstScreenView extends React.Component {
         GEOLOCATION_OPTION
       );
 
-      Geolocation.watchPosition(
+      this.watchId = Geolocation.watchPosition(
         (position) => { _this.handleGetCurrentLocation(position) },
         (error) => { _this.handleCurrentLocationError(error) },
         GEOLOCATION_WATCH_OPTION
@@ -170,17 +175,18 @@ export default class FirstScreenView extends React.Component {
   }
 
   handleGetCurrentLocation = (position) => {
-    console.log('===== handleGetCurrentLocatioin: position: ', position);
-    const { mapActions } = this.props;
-    const newLocation = {
-      name: "My location",
-      coordinate: {
-        ...position.coords,
-        error: null,
-      }
-    };
-    mapActions.changedCurrentLocation(newLocation);
-    mapActions.searchPlaces('', newLocation, null);
+    // For test 08
+    // console.log('===== handleGetCurrentLocatioin: position: ', position);
+    // const { mapActions } = this.props;
+    // const newLocation = {
+    //   name: "My location",
+    //   coordinate: {
+    //     ...position.coords,
+    //     error: null,
+    //   }
+    // };
+    // mapActions.changedCurrentLocation(newLocation);
+    // mapActions.searchPlaces('', newLocation, null);
   }
 
   handleCurrentLocationError = (error) => {
@@ -401,25 +407,6 @@ export default class FirstScreenView extends React.Component {
   onDeposit = async () => {
     const { auth, rent, stripeActions, rentActions, mapActions, appActions } = this.props;
     const { _t } = appActions;
-    // this.setState({depositingBattery: true});
-    // const res = await returnBattery(rent, auth);
-    // console.log('===== res: ', res);
-    // if (res.error) {
-    //   Alert.alert(
-    //     _t('Failed to return the battery. Please try again.'),
-    //     _t(res.errorMessage),
-    //     [
-    //       {text: _t('OK'), onPress: () => console.log('OK Pressed')},
-    //     ],
-    //     {cancelable: true},
-    //   );
-    //   this.setState({depositingBattery: false});
-    //   return;
-    // } else {
-    //   Actions['admob']({adMode: 'reward'});
-    // }
-    
-    // mapActions.setActiveModal(MAP_MODAL.FEEDBACK);
     rentActions.requireFeedback();
   }
 
@@ -564,6 +551,36 @@ export default class FirstScreenView extends React.Component {
     );
   }
 
+  renderMapClusteringView = () => {
+    const { currentLocation, searchedPlaces, place } = this.props.map;
+    const { activeModal } = this.state;
+    const location = currentLocation || defaultCurrentLocation;
+
+    return (
+      <MapClusteringView
+        currentLocation={location}
+        places={searchedPlaces}
+        selectedPlace={place}
+        onSelectMarker={this.openNearPlacesDialog}
+        onDetectDirection={this.handleDetectDirection}
+        onDetectCurrentLocation={this.handleGetCurrentLocationFromGoogleMap}
+        ref={c => this.mapView = c}
+      >
+        <MapButton
+          name='profile'
+          onPress={() => {
+            this.setState({ profileOpened: true });
+          }
+          }
+        />
+        {/* <MapButton name='tree' onPress={this.goGift}/> */}
+        {/* <MapButton name='search' onPress={this.onClickRefresh} /> */}
+        {activeModal != MAP_MODAL.NEARE_PLACE && <MapButton name='refresh' onPress={this.onClickRefresh} />}
+        {activeModal != MAP_MODAL.NEARE_PLACE && <MapButton name='position' onPress={this.onClickPosition} />}
+      </MapClusteringView>
+    );
+  }
+
   render() {
     const { enabledDeposit, rentStatus } = this.props.rent;
     const {
@@ -576,6 +593,7 @@ export default class FirstScreenView extends React.Component {
         <ProfileMenuDialog isVisible={profileOpened} onClose={()=> {this.setState({profileOpened: false })}} />
         {/* { this.renderMapView() } */}
         { this.renderClusterMapView() }
+        {/* {this.renderMapClusteringView()} */}
         <Spacer size={20} />
         <FindNearestDialog onClickFind={this.findNearest} />
         {activeModal!=MAP_MODAL.NEARE_PLACE && <UnlockDialog onClickUnlock={this.onUnlock} />}

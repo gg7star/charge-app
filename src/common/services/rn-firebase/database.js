@@ -8,6 +8,7 @@ const PLACES_TABLE_NAME = 'places';
 const CARD_TABLE_NAME = 'cards';
 const HISTORY_TABLE_NAME= 'histories';
 const NOTIFICATION_TABLE_NAME = 'notifications';
+const ADMOB_TABLE_NAME = 'admobs';
 
 export async function onlineDatabase() {
   if (!firebase.apps.length) {
@@ -260,6 +261,21 @@ export async function loadNotifications() {
     }
   }
   return null;
+}
+
+export async function loadAdmobs() {
+  try {
+    return firebase.database().ref(`/${ADMOB_TABLE_NAME}`).once('value').then((snapshot) => {
+      if (snapshot.exists) {
+        return snapshot.val()
+      } else {
+        return null;
+      }
+    });
+  } catch (error) {
+    console.log('===== error: ', error);
+    return null;
+  }
 }
 
 function orderByDate(array) {

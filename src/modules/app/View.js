@@ -24,11 +24,17 @@ export default class AppView extends Component {
   };
 
   componentDidMount() {
+    // const { auth } = this.props;
     _app = this;
+    // console.log('==== checking auth: ', auth);
+    // if (auth && auth.isAuthenticated) {
+    //   console.log('==== Go to Home.');
+    //   Actions['home']();
+    // }
   }
   
   async UNSAFE_componentWillReceiveProps(nextProps) {
-    const { app } = nextProps;
+    const { app, auth } = nextProps;
     const { loaded } = this.state;
     if (app.loaded && !loaded) {
       const _this = this;
@@ -36,6 +42,11 @@ export default class AppView extends Component {
         _this.initialize();
       });
     }
+    // console.log('==== checking auth: ', auth);
+    // if (auth && auth.isAuthenticated) {
+    //   console.log('==== Go to Home.');
+    //   Actions['home']();
+    // }
   }
 
   async componentWillUnmount() {
@@ -96,7 +107,9 @@ export default class AppView extends Component {
 
   onReceived = (_this, notification) => {
     console.log("==== Notification received: ", notification, _this);
-    this.props.profileActions.addNotification(notification, _this.props.app.language);
+    console.log("==== notification.payload: ", notification.payload);
+    console.log("==== notification.payload.additionalData: ", notification.payload.additionalData);
+    
     const { additionalData } = notification.payload;
     console.log('=== additionalData: ', additionalData);
     if (additionalData) {
@@ -106,20 +119,21 @@ export default class AppView extends Component {
       switch(type) {
         case NONO_NOTIFICATION_TYPES.RENT_BATTERY:
           console.log('==== received rent battery response: message: ', notificationData.data);
-          _this.onRentSuccess({...notificationData.data});
+          _this.onRentSuccess({ ...notificationData.data }, _this);
           break;
         case NONO_NOTIFICATION_TYPES.FAILED_RENT_BATTERY:
           console.log('==== received failed to rent battery response: message: ', notificationData.data);
-          _this.onRentFailure({error: notificationData.data.msg});
+          _this.onRentFailure({ error: notificationData.data.msg }, _this);
           break;
         case NONO_NOTIFICATION_TYPES.RETURNED_BATTERY:
           console.log('==== received to return battery: message: ', notificationData.data);
-          _this.onReturnSuccess({...notificationData.data});
+          _this.onReturnSuccess({...notificationData.data}, _this);
           break;
         default:
           break;
       }
     }
+    this.props.profileActions.addNotification(notification, _this.props.app.language);
   }
 
   onOpened = (openResult) => {
@@ -146,15 +160,15 @@ export default class AppView extends Component {
     this.setState({fcmListener});
   };
 
-  onRentSuccess = (data) => {
-    const { auth, rentActions, rent } = this.props;
+  onRentSuccess = (data, that) => {
+    const { auth, rentActions, rent } = that.props;
     // For test
-    // if (__DEV__ && (rent.rentStatus == RENT_STATUS.INIT)) {
-    //   rentActions.rentSuccess(data, auth);
-    // }
-
-    if ((rent.rentStatus == RENT_STATUS.RENT_REQUEST))
+    if (__DEV__ && (rent.rentStatus == RENT_STATUS.INIT)) {
       rentActions.rentSuccess(data, auth);
+    }
+    
+    // if ((rent.rentStatus == RENT_STATUS.RENT_REQUEST))
+    //   rentActions.rentSuccess(data, auth);
   };
 
   onRentFailure = (error) => {
@@ -166,8 +180,8 @@ export default class AppView extends Component {
     }
   };
 
-  onReturnSuccess = (data) => {
-    const { auth, rent, rentActions } = this.props;
+  onReturnSuccess = (data, that) => {
+    const { auth, rent, rentActions } = that.props;
     var returnedData = {
       ...data,
       placeOfDeposit: data.stationNo
@@ -175,8 +189,8 @@ export default class AppView extends Component {
     console.log('===== onReturnSuccess');
     console.log('---- data: ', data);
     console.log('---- rent: ', rent);
-    if ((rent.rentStatus == RENT_STATUS.RENTED) && (data.tradeNo == rent.tradeNo))
-      rentActions.returnedBattery(returnedData, auth);
+    // if ((rent.rentStatus == RENT_STATUS.RENTED) && (data.tradeNo == rent.tradeNo))
+      rentActions.returnedBattery(returnedData);
   };
 
   render() {

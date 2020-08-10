@@ -6,6 +6,7 @@ import signup from './signupReducer';
 import map from './mapReducer';
 import profile from './profileReducer';
 import rent from './rentReducer';
+import admob from './admobReducer';
 
 export default combineReducers({
   app,
@@ -14,5 +15,6 @@ export default combineReducers({
   profile,
   rent,
   signup,
-  stripePayment
+  stripePayment,
+  admob,
 });

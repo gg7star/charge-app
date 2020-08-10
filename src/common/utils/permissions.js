@@ -97,7 +97,7 @@ export const requireLocationPermission = async (_t) => {
           'The permission has not been requested / is denied but requestable',
         );
         // Require location permission
-        const status = await request(cameraPermission);
+        const status = await request(permission);
         if (status === RESULTS.GRANTED) return true;
         if ((status === RESULTS.DENIED) || (status === RESULTS.BLOCKED)) {
           console.log('===== Location permission was denied by user.');

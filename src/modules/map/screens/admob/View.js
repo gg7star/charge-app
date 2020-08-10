@@ -9,12 +9,9 @@ import admob, {
   TestIds,
   MaxAdContentRating
 } from '@react-native-firebase/admob';
-import admobConfig from '~/common/config/admob';
 import { saveHistory } from '~/common/services/rn-firebase/database';
 import { calculateDurationWithMins } from '~/common/utils/time';
 import MAP_MODAL from '~/common/constants/map';
-
-const admobConf = Platform.OS === 'ios' ? admobConfig.ios : admobConfig.android;
 
 export default class ScreenView extends React.Component {
   state = {
@@ -22,7 +19,7 @@ export default class ScreenView extends React.Component {
     unsubscribe: null,
     error: null,
     status: 'Loading advertising...',
-    adMode: this.props.adMode || admobConfig.defaultAdMob
+    adMobSettings: null
   }
 
   saveRentHistory = () => {
@@ -47,73 +44,88 @@ export default class ScreenView extends React.Component {
     var advert = null;
     var unsubscribe = null;
     const { _t } = this.props.appActions;
+    const adMobSettings = this.props.admob.settings || null;
+    if (adMobSettings) {
+      const admobConf = Platform.OS === 'ios' ? adMobSettings.ios : adMobSettings.android;
+      advert = RewardedAd.createForAdRequest(
+        // TestIds.REWARDED,
+        // __DEV__ ? TestIds.REWARDED : admobConf.rewardUnitId,
+        admobConf.rewardUnitId,
+        {requestNonPersonalizedAdsOnly: true,}
+      );
 
-    advert = RewardedAd.createForAdRequest(
-      // TestIds.REWARDED,
-      // __DEV__ ? TestIds.REWARDED : admobConf.rewardUnitId,
-      admobConf.rewardUnitId,
-      {requestNonPersonalizedAdsOnly: true,}
-    );
+      unsubscribe = advert.onAdEvent((type, error, reward) => {
+        if (type === RewardedAdEventType.LOADED) {
+          this.setState({status: _t('Loading reward advertising...'), error: null});
+          advert.show();
+        }
+        if (type === RewardedAdEventType.EARNED_REWARD) {
+          this.setState({status: `${_t('User earned reward of')} ${reward}`, error: null});
+          console.log('=== User earned reward of ', reward);
+        }
+        if (type === RewardedAdEventType.ERROR || error) {
+          console.log('==== reward error: ', error);
+          this.setState({error: _t('Network error for RewardedAd.'), status: null});
+        }
+        if (type === RewardedAdEventType.CLOSED) {
+          this.setState({error: null, status: null});
+          this.onClickScreen();
+        }
+      });
 
-    unsubscribe = advert.onAdEvent((type, error, reward) => {
-      if (type === RewardedAdEventType.LOADED) {
-        this.setState({status: _t('Loading reward advertising...'), error: null});
-        advert.show();
-      }
-      if (type === RewardedAdEventType.EARNED_REWARD) {
-        this.setState({status: `${_t('User earned reward of')} ${reward}`, error: null});
-        console.log('=== User earned reward of ', reward);
-      }
-      if (type === RewardedAdEventType.ERROR || error) {
-        console.log('==== reward error: ', error);
-        this.setState({error: _t('Network error for RewardedAd.'), status: null});
-      }
-      if (type === RewardedAdEventType.CLOSED) {
-        this.setState({error: null, status: null});
-        this.onClickScreen();
-      }
-    });
-
-    return {advert, unsubscribe};
+      return {advert, unsubscribe};
+    }
+    return null;
   }
 
   createInterstitialAdMob = () => {
     var advert = null;
     var unsubscribe = null;
     const { _t } = this.props.appActions;
+    const adMobSettings = this.props.admob.settings || null;
+    if (adMobSettings) {
+      const admobConf = Platform.OS === 'ios' ? adMobSettings.ios : adMobSettings.android;
+      console.log('====== admobConf: ', admobConf, admobConf.interstitialUnitId)
+      advert = InterstitialAd.createForAdRequest(
+        // TestIds.INTERSTITIAL,
+        // __DEV__ ? TestIds.INTERSTITIAL : admobConf.interstitialUnitId,
+        admobConf.interstitialUnitId,
+        {requestNonPersonalizedAdsOnly: true,}
+      );
 
-    advert = InterstitialAd.createForAdRequest(
-      // TestIds.INTERSTITIAL,
-      // __DEV__ ? TestIds.INTERSTITIAL : admobConf.interstitialUnitId,
-      admobConf.interstitialUnitId,
-      {requestNonPersonalizedAdsOnly: true,}
-    );
+      unsubscribe = advert.onAdEvent((type, error) => {
+        console.log('===== onAdEvent: type: ', type);
+        if (type === AdEventType.LOADED) {
+          this.setState({status: _t('Loading interstitial advertising...'), error: null});
+          advert.show();
+        }
+        if (type === AdEventType.OPENED) {
+          this.setState({status: _t('Opening interstitial advertising...'), error: null});
+        }
+        if (type === AdEventType.ERROR) {
+          console.log('===== onAdEvent: error: ', error);
+          this.setState({error: _t('Network error for InterstitialAd.'), status: null});
+        }
+        if (type === AdEventType.CLOSED) {
+          this.setState({error: null, status: null});
+          this.onClickScreen();
+        }
+      });
 
-    unsubscribe = advert.onAdEvent((type, error) => {
-      console.log('===== onAdEvent: type: ', type);
-      if (type === AdEventType.LOADED) {
-        this.setState({status: _t('Loading interstitial advertising...'), error: null});
-        advert.show();
-      }
-      if (type === AdEventType.OPENED) {
-        this.setState({status: _t('Opening interstitial advertising...'), error: null});
-      }
-      if (type === AdEventType.ERROR) {
-        console.log('===== onAdEvent: error: ', error);
-        this.setState({error: _t('Network error for InterstitialAd.'), status: null});
-      }
-      if (type === AdEventType.CLOSED) {
-        this.setState({error: null, status: null});
-        this.onClickScreen();
-      }
-    });
-
-    return {advert, unsubscribe};
+      return {advert, unsubscribe};
+    }
+    return null;
   }
 
   async componentDidMount() {
     const { _t } = this.props.appActions;
+    const admobProps = this.props.admob;
     this.saveRentHistory();
+    console.log('==== admobProps: ', admobProps)
+    if (!admobProps || !admobProps.settings) {
+      console.log('===== empty admob');
+      return;
+    }
 
     await admob().setRequestConfiguration({
       setRequestConfiguration: MaxAdContentRating.PG,
@@ -122,8 +134,9 @@ export default class ScreenView extends React.Component {
     });
 
     var adverts = null;
-    const mode = this.props.adMode || admobConfig.defaultAdMob;
-    console.log('====== AdMob: ', mode, admobConf, TestIds.INTERSTITIAL, TestIds.REWARDED);
+    const adMobSettings = admobProps.settings;
+    const mode = admobProps.settings.defaultAdMob;
+    console.log('====== AdMob: ', mode, adMobSettings, TestIds.INTERSTITIAL, TestIds.REWARDED);
     if (mode === 'reward') {
       adverts = this.createRewardAdMob();
     } else if (mode === 'interstitial') {
@@ -131,18 +144,22 @@ export default class ScreenView extends React.Component {
     } else {
       return;
     }
-    const { advert, unsubscribe } = adverts;
-    advert.load();
-    this.setState({advert, unsubscribe});
+    if (adverts) {
+      const { advert, unsubscribe } = adverts;
+      advert.load();
+      this.setState({advert, unsubscribe});
+    }
   }
 
   onClickScreen = () => {
-    const { mapActions } = this.props;
+    const { mapActions, admobActions } = this.props;
     const { unsubscribe } = this.state;
     console.log('==== unsubscribe admob');
     unsubscribe && unsubscribe();
     mapActions.setViewedAdmob(true);
+    admobActions.hideAdmob();
     // mapActions.setActiveModal(MAP_MODAL.RENT);
+    Actions['map']();
     Actions['map_first']();
   }
 
@@ -161,9 +178,9 @@ export default class ScreenView extends React.Component {
           alignItems: 'stretch',
         }}
       >
-        <View style={{justifyConetnet: 'center'}}>
+        <View style={{ justifyConetnet: 'center', flex: 1}}>
           <TouchableOpacity
-            style={{justifyContent: 'center'}}
+            style={{justifyContent: 'center', flex: 1}}
             onPress={this.onClickScreen}
           >
             {status && 

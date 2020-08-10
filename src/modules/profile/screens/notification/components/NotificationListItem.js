@@ -15,6 +15,8 @@ export default class NotificationListItem extends React.Component {
         }}
         onPress={this.props.onPress}
       >
+        {payload && (
+        <>
         <View style={{flexDirection: 'row', justifyContent: "space-between"}}>
           <View style={{justifyContent: 'flex-start'}}>
             <Text style={{fontSize: 17, fontWeight: '500'}}>
@@ -32,6 +34,8 @@ export default class NotificationListItem extends React.Component {
             {payload.body}
           </Text>
         </View>
+        </>)}
+        
       </TouchableOpacity>
     )
   }

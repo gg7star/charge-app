@@ -42,7 +42,7 @@ export function* loadPlacesOnMap(action) {
     const places = response.data;
     yield put({ type: mapActionTypes.LOAD_PLACES_ON_MAP_SUCCESS, payload: { places } })
   } catch(error) {
-    console.log('====== Get places: error: ', e);
+    console.log('====== Get places: error: ', error);
     yield put({ type: mapActionTypes.LOAD_PLACES_ON_MAP_FAILURE })
   }
 }

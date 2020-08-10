@@ -27,6 +27,15 @@ export default class LoginView extends React.Component {
     showConfirmCodeModal: false
   }
 
+  // async UNSAFE_componentWillReceiveProps(nextProps) {
+  //   const { auth } = nextProps;
+  //   console.log('==== checking auth: ', auth);
+  //   if (auth && auth.isAuthenticated) {
+  //     console.log('==== Go to Home.');
+  //     Actions['home']();
+  //   }
+  // }
+
   onLogin = async () => {
     const { _t } = this.props.appActions;
     const { countryCode, phoneNumber } = this.state;
@@ -79,7 +88,7 @@ export default class LoginView extends React.Component {
     console.log('===== res: ', res);
     this.setState({facebookLogining: false});
     if (res.credential) {
-      authActions.loginSuccessWithSocial(res.credential);
+      authActions.loginSuccessWithSocial(res.credential, auth);
     } else {
       authActions.loginFailed(res.error);
       console.log('===== Facebook login failed: error: ', res.error);
