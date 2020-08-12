@@ -70,6 +70,27 @@ export default function StripeStateReducer(
         isFetched: true,
         isFetching: false
       }
+    case stripeActionTypes.LOAD_CARD_REQUEST:
+      return {
+        ...state,
+        isFetching: true,
+      };
+    case stripeActionTypes.LOAD_CARD_SUCCESS:
+      return {
+        ...state,
+        cardInfo: {...action.payload.result.cardInfo},
+        customer: { ...action.payload.result.customer },
+        isFetched: true,
+        isFetching: false,
+      };
+    case stripeActionTypes.LOAD_CARD_FAILURE:
+      return {
+        ...state,
+        cardInfo: false,
+        cardInfo: false,
+        isFetched: true,
+        isFetching: false,
+      }
     default:
       return state;
   }

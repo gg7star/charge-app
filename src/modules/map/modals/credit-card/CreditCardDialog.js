@@ -20,7 +20,7 @@ export default class CreditCardDialog extends React.Component {
         style={{
           margin: 0,
           padding: 20,
-          paddingTop: (Platform.OS === 'ios') ? 100 : 10,
+          paddingTop: 12,
           backgroundColor: 'white'
         }}
       >

@@ -17,7 +17,7 @@ export default class ScreenView extends React.Component {
     return (
       <ProfileWrapper>
         <ProfileHeader title={_t('Notifications')} onPress={this.goBack} />
-        <ScrollView style={{height: Platform.OS=='ios'? H-60 : H-40}}>
+        <ScrollView style={{height: Platform.OS=='ios'? (H-60)*em : (H-40)*em}}>
           {(notifications && (notifications.length > 0)) ?
             notifications.map((notification, k) => (
               <NotificationListItem notification={notification} key={k} onPress={() => this.goSummary(k)}/>

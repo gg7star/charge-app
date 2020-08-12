@@ -72,6 +72,7 @@ export default class ClusterMapView extends React.Component {
         return selectedPlace && p.name === selectedPlace.name
       });
     var placeImage = PIN_OPEN_IMAGE;
+    if (!places || (places.length === 0)) return null;
     var markers = [];
     if (places) {
       const placeMakers = Object.keys(places).map((key, index) => {
@@ -96,13 +97,13 @@ export default class ClusterMapView extends React.Component {
             <Image source={placeImage} style={{ width: 40, height: 40 }} />
           </Marker>
           markers.push(marker);
-          return marker;
+          // return marker;
         }
       });
-      // console.log('===== markers, ', placeMakers);
+     
       // return placeMakers;
     };
-    
+    // return null;
     return markers;
   };
 
@@ -199,6 +200,7 @@ export default class ClusterMapView extends React.Component {
         strokeWidth={4}
         strokeColor={startColor}
         strokeColors={strokeColors}
+        key={'polyline'}
       />
     );
   };
@@ -206,7 +208,8 @@ export default class ClusterMapView extends React.Component {
   renderMapViewDirection = () => {
     const { currentLocation, directionCoordinates } = this.state;
     const { selectedPlace, onDetectDirection } = this.props;
-    if (selectedPlace && selectedPlace.coordinate && currentLocation && currentLocation.coordinate) {
+    if (selectedPlace && selectedPlace.coordinate && 
+      currentLocation && currentLocation.coordinate) {
       var mapDirections = [];
       mapDirections.push(
         <MapViewDirections
@@ -237,11 +240,10 @@ export default class ClusterMapView extends React.Component {
         mapDirections.push(this.renderCustomDirection());
       return mapDirections;
     }
-    else return null
+    else return null;
   };
 
   renderCustomClusterMarker = (count) => {
-    // return null;
     return (
       <View style={{margin: 5, width: 45, height: 45,}}>
         <View
@@ -287,7 +289,7 @@ export default class ClusterMapView extends React.Component {
           region={region}
           style={styles.map}
           provider={PROVIDER_GOOGLE}
-          mapType={Platform.OS == "android" ? "standard" : "standard"}
+          mapType={"standard"}
           showsUserLocation={true}
           showsCompass={true}
           rotateEnabled={true}
@@ -304,7 +306,6 @@ export default class ClusterMapView extends React.Component {
           key={"cluster-map"}
         >
           {this.renderMarkers()}
-          {/* {this.renderMapViewDirection()} */}
         </ClusterMap>
         {children && children}
       </View>

@@ -9,6 +9,7 @@ const CARD_TABLE_NAME = 'cards';
 const HISTORY_TABLE_NAME= 'histories';
 const NOTIFICATION_TABLE_NAME = 'notifications';
 const ADMOB_TABLE_NAME = 'admobs';
+const RATE_TABLE_NAME = 'rates';
 
 export async function onlineDatabase() {
   if (!firebase.apps.length) {
@@ -177,6 +178,27 @@ export async function saveCreditCard(cardInfo, customer) {
   return null;
 }
 
+export async function loadCreditCard() {
+  const uid = firebase.auth().currentUser.uid;
+  console.log('====== loadCreditCard: uid: ', uid);
+  if (uid) {
+    try {
+      return firebase.database().ref(`${CARD_TABLE_NAME}/${uid}`).once('value').then((snapshot) => {
+        console.log('===== snapshot: ', snapshot)
+        if (snapshot.exists) {
+          return snapshot.val();
+        } else {
+          return null;
+        }
+      });
+    } catch (error) {
+      console.log('===== error: ', error);
+      return null;
+    }
+  }
+  return null;
+}
+
 export async function saveHistory(history) {
   console.log('====== saveHistory: history: ', history)
   const uid = firebase.auth().currentUser.uid
@@ -276,6 +298,24 @@ export async function loadAdmobs() {
     console.log('===== error: ', error);
     return null;
   }
+}
+
+export async function saveRate(rate) {
+  console.log('====== saveRate: rate: ', rate)
+  const uid = firebase.auth().currentUser.uid
+  if (uid) {
+    try {
+      const dateKey = moment(rate.date, 'DD/MM/YY LTS').format('DD-MM-YYYY LTS');
+      return firebase.database().ref(`${RATE_TABLE_NAME}/${uid}/${dateKey}`)
+        .set(rate).then(() => {
+          return rate;
+        });
+    } catch (e) {
+      console.log('==== error: ', e);
+      return null
+    }
+  }
+  return null;
 }
 
 function orderByDate(array) {

@@ -2,7 +2,7 @@ import React from 'react';
 import Dialog2Wrapper from '~/modules/map/common/wrappers/Dialog2Wrapper';
 import { View } from 'react-native';
 import { Button, Spacer } from '~/common/components';
-import { colors, W, H } from '~/common/constants';
+import { colors, W, H, em } from '~/common/constants';
 import DetailInfo from './components/DetailInfoContainer';
 
 export default class Dialog extends React.Component {
@@ -22,7 +22,7 @@ export default class Dialog extends React.Component {
         {place &&
           <Dialog2Wrapper onClose={this.props.onClose}>
             <DetailInfo data={place} distance={direction.distance} />
-            <Spacer size={20} />
+            <Spacer size={20 * em} />
             <View
               style={{
                 flexDirection: 'row',

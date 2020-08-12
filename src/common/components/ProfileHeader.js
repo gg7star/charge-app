@@ -8,7 +8,16 @@ export default class ProfileHeader extends React.Component {
 
     return (
       <React.Fragment>
-        <TouchableOpacity onPress={onPress} style={{width: 50, height: 50, zIndex: 51, alignItems: 'flex-start', justifyContent: 'center'}}>
+        <TouchableOpacity
+          onPress={onPress}
+          style={{
+            width: 50,
+            height: 50,
+            zIndex: 51,
+            alignItems: 'flex-start',
+            justifyContent: 'center',
+          }}
+        >
           {backImage ? (
             <Image source={backImage} style={{tintColor: colors.primary}} />
           ) : (

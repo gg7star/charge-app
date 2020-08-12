@@ -54,7 +54,7 @@ export default class ScanQRView extends React.Component {
     this.setState({qrCode: scanedQrCode, scanBarAnimateReverse: false});
     // , () => {
       var temp = scanedQrCode.split(' ');
-      // For test
+
       const parsedStationSn = temp[temp.length-1]; // need to parse from scanedQrCode
       console.log('==== QR code: ', scanedQrCode, parsedStationSn);
       // Check stationSN validation

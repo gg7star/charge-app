@@ -180,7 +180,7 @@ ${_t('Please input a valid card.')}`,
             disabled={!isValidCard}
           />
         </View>
-        {Platform.OS === 'android' && <Spacer size={40*em} />}
+        {Platform.OS === 'android' ? <Spacer size={40 * em} /> : <Spacer size={20 * em} />}
       </ScrollView>
     );
   }

@@ -10,10 +10,11 @@ import {
 } from '~/common/services/rn-firebase/database';
 import * as notifications from '~/common/services/onesignal/notifications';
 import { createFcmToken, saveFcmToken, startReceiveFcm } from '~/common/services/rn-firebase/message';
-import { AppActions, LoginActions, RentActions, MapActions } from '~/actions';
+import { AppActions, LoginActions, RentActions, MapActions, StripeActions } from '~/actions';
 
 const { updatedUserInfo } = LoginActions;
 const { rentSuccess } = RentActions;
+const { loadCardRequest } = StripeActions;
 
 export default function* watcher() {
   yield takeLatest(LOAD, processLoadDataOnFirstRunning);
@@ -55,6 +56,7 @@ export function* processLoginSuccess(action) {
   }
 
   if (user) {
+    yield put(loadCardRequest());
     const { providerData, email } = user;
     const authProvider = providerData[0] ? providerData[0].providerId : null;
 
@@ -67,6 +69,7 @@ export function* processLoginSuccess(action) {
 export function* processSocialLoginSuccess(action) {
   const { credential, auth } = action.payload;
   const resCreateUser = yield call(createSocialAccount, credential);
+  yield put(loadCardRequest());
   if(resCreateUser) {
     if(
       credential.additionalUserInfo && 

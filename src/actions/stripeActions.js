@@ -64,3 +64,28 @@ export function registerCardFailure(result) {
     }
   };
 }
+
+
+export function loadCardRequest() {
+  return {
+    type: types.LOAD_CARD_REQUEST,
+  };
+}
+
+export function loadCardSuccess(result) {
+  return {
+    type: types.LOAD_CARD_SUCCESS,
+    payload: {
+      result
+    }
+  };
+}
+
+export function loadCardFailure(result) {
+  return {
+    type: types.LOAD_CARD_FAILURE,
+    payload: {
+      result
+    }
+  };
+}

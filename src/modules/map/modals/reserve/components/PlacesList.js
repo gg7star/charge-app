@@ -52,6 +52,7 @@ export default class PlacesList extends React.Component {
       position: 'relative',
       width: W-80
     }];
+    if (!item) return null;
     const hourStatus = openHourStatus(item.openHours);
     const { batterries, places } = getStationStatus(item.stations_status);
     return (

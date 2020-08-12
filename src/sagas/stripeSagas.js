@@ -4,7 +4,7 @@ import { processRequest } from '~/common/services/api';
 import serverUrls from '~/common/constants/api';
 import { AppActions, StripeActions, MapActions, RentActions } from '~/actions';
 import { stripeActionTypes } from '~/actions/types';
-import { saveCreditCard, saveHistory } from '~/common/services/rn-firebase/database';
+import { loadCreditCard, saveCreditCard, saveHistory } from '~/common/services/rn-firebase/database';
 import * as notifications from '~/common/services/onesignal/notifications';
 import MAP_MODAL from '~/common/constants/map';
 
@@ -12,13 +12,16 @@ const {
   doPaymentSuccess,
   doPaymentFailure,
   registerCardSuccess,
-  registerCardFailure
+  registerCardFailure,
+  loadCardSuccess,
+  loadCardFailure,
 } = StripeActions;
 const { setActiveModal } = MapActions;
 const { setGlobalNotification } = AppActions;
 const { requireFeedback } = RentActions;
 
 export default function* watcher() {
+  yield takeLatest(stripeActionTypes.LOAD_CARD_REQUEST, processLoadCardInfo);
   yield takeLatest(stripeActionTypes.REGISTER_CARD_REQUEST, saveCardInfo);
   yield takeLatest(stripeActionTypes.DO_PAYMENT_REQUEST, doPayment);
 }
@@ -131,14 +134,25 @@ export function* saveCardInfo(action) {
       Actions['map_scan_qr']();
     } else {
       yield put(registerCardFailure({errorMessage: response.data.message}));
-      // yield put(setGlobalNotification({
-      //   message: 'Your card was failed to save. Please try later.',
-      //   type: 'danger'}
-      // ));
     }
   } catch(error) {
     console.log('==== saveCardInfo response error: ', error);
     yield put(registerCardFailure(error.data));
-    // yield put(setGlobalNotification({message: 'Your card was failed to save. Please try later.', type: 'danger'}));
+  }
+}
+
+export function* processLoadCardInfo(action) {
+  try {
+    // Get a card info
+    const result = yield call(loadCreditCard);
+    console.log('====== processLoadCardInfo: result: ', result)
+    if (result && !result.error) {
+      yield put(loadCardSuccess(result));
+    } else {
+      yield put(loadCardFailure(result));
+    }
+  } catch (error) {
+    console.log('==== loadCardInfo response error: ', error);
+    yield put(loadCardFailure(error.data));
   }
 }

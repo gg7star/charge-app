@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView, Linking, Platform } from 'react-native';
 import DropDownItem from "react-native-drop-down-item";
 import moment from 'moment';
-import { em } from '~/common/constants';
+import { H, W, em } from '~/common/constants';
 import { openHourStatus } from '~/common/utils/time';
 import { getStationStatus } from '~/common/utils/stationStatus';
 
@@ -130,9 +130,9 @@ export default class DetailInfo extends React.Component {
       address = data.description ? data.description : data.title;
       subAddress = data.location; //`${data.coordinate.latitude}, ${data.coordinate.longitude}`
     }
-    
+    console.log('==== H: ', H)
     return (
-      <ScrollView  style={{ alignSelf: 'stretch' }}>
+      <ScrollView  style={{ alignSelf: 'stretch', maxHeight: (H - 150) }}>
         {this.renderSummary()}
         <View style={styles.row}>
           <View style={styles.col1}>
@@ -194,18 +194,6 @@ export default class DetailInfo extends React.Component {
             </TouchableOpacity>
           </View>
         </View>
-        {/* <View style={styles.row}>
-          <View style={styles.col1}>
-            <Image source={require('~/common/assets/images/png/share.png')} 
-              style={{tintColor: '#5ed8fc'}}
-            />
-          </View>
-          <View style={styles.col2}>
-            <Text style={{fontSize: 17}}>
-              {_t('Share')}
-            </Text>
-          </View>
-        </View> */}
       </ScrollView>
     )
   }
@@ -214,7 +202,7 @@ export default class DetailInfo extends React.Component {
 const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
-    marginVertical: 15
+    marginVertical: 15 * em
   },
   col1: {
     width: 50*em,

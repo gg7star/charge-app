@@ -9,9 +9,11 @@ import admob, {
   TestIds,
   MaxAdContentRating
 } from '@react-native-firebase/admob';
+import {
+  AdMobInterstitial,
+} from 'react-native-admob';
 import { saveHistory } from '~/common/services/rn-firebase/database';
 import { calculateDurationWithMins } from '~/common/utils/time';
-import MAP_MODAL from '~/common/constants/map';
 
 export default class ScreenView extends React.Component {
   state = {
@@ -117,6 +119,28 @@ export default class ScreenView extends React.Component {
     return null;
   }
 
+  createInterstitialAdMobWithoutFirebase = () => {
+    try {
+      console.log('====== createInterstitialAdMobWithoutFirebase')
+      // Display an interstitial
+      AdMobInterstitial.setAdUnitID(
+        'ca-app-pub-9857774334300015/2396169916'
+        // 'ca-app-pub-9857774334300015/9480979670'
+        // TestIds.INTERSTITIAL
+        );
+      console.log('====== setAdUnitID')
+      AdMobInterstitial.setTestDevices([AdMobInterstitial.simulatorId]);
+      console.log('====== setTestDevices')
+      AdMobInterstitial.requestAd().then(() => {
+        console.log('====== showAd')  
+        AdMobInterstitial.showAd()}
+      );
+      console.log('====== requestAd')
+    } catch (error) {
+      console.log('===== error: ', error);
+    }
+  }
+
   async componentDidMount() {
     const { _t } = this.props.appActions;
     const admobProps = this.props.admob;
@@ -126,7 +150,7 @@ export default class ScreenView extends React.Component {
       console.log('===== empty admob');
       return;
     }
-
+    // this.createInterstitialAdMobWithoutFirebase();
     await admob().setRequestConfiguration({
       setRequestConfiguration: MaxAdContentRating.PG,
       tagForChildDirectedTreatment: true,

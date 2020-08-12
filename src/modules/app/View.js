@@ -13,7 +13,7 @@ import {
 import { SplashView } from '~/common/components';
 import { NONO_NOTIFICATION_TYPES } from '~/common/services/onesignal/notifications';
 // import { rentSuccess, rentFailure } from '~/actions/rentActions';
-import MAP_MODAL from '~/common/constants/map';
+// import MAP_MODAL from '~/common/constants/map';
 import { RENT_STATUS } from '~/common/constants/rent';
 
 export default class AppView extends Component {
@@ -24,13 +24,13 @@ export default class AppView extends Component {
   };
 
   componentDidMount() {
-    // const { auth } = this.props;
-    _app = this;
-    // console.log('==== checking auth: ', auth);
-    // if (auth && auth.isAuthenticated) {
-    //   console.log('==== Go to Home.');
-    //   Actions['home']();
-    // }
+    // _app = this;
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log('===== nextProps: ', nextProps);
+    console.log('===== nextState: ', nextState);
+    return true;
   }
   
   async UNSAFE_componentWillReceiveProps(nextProps) {
@@ -162,7 +162,7 @@ export default class AppView extends Component {
 
   onRentSuccess = (data, that) => {
     const { auth, rentActions, rent } = that.props;
-    // For test
+    // For test 08
     if (__DEV__ && (rent.rentStatus == RENT_STATUS.INIT)) {
       rentActions.rentSuccess(data, auth);
     }

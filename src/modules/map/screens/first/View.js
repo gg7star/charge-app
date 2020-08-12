@@ -170,29 +170,28 @@ export default class FirstScreenView extends React.Component {
         error: null,
       }
     };
-    // mapActions.changedCurrentLocation(newLocation);
-    // mapActions.searchPlaces('', newLocation, null);
+    mapActions.changedCurrentLocation(newLocation);
+    mapActions.searchPlaces('', newLocation, null);
   }
 
   handleGetCurrentLocation = (position) => {
-    // For test 08
-    // console.log('===== handleGetCurrentLocatioin: position: ', position);
-    // const { mapActions } = this.props;
-    // const newLocation = {
-    //   name: "My location",
-    //   coordinate: {
-    //     ...position.coords,
-    //     error: null,
-    //   }
-    // };
-    // mapActions.changedCurrentLocation(newLocation);
-    // mapActions.searchPlaces('', newLocation, null);
+    console.log('===== handleGetCurrentLocatioin: position: ', position);
+    const { mapActions } = this.props;
+    const newLocation = {
+      name: "My location",
+      coordinate: {
+        ...position.coords,
+        error: null,
+      }
+    };
+    mapActions.changedCurrentLocation(newLocation);
+    mapActions.searchPlaces('', newLocation, null);
   }
 
   handleCurrentLocationError = (error) => {
     console.log('===== location error: ', error);
     const myLocation = this.props.map.currentLocation || defaultCurrentLocation;
-    if (myLocation) {
+    if (myLocation && !myLocation.coordinate.error) {
       // Set previous location.
       const prevCordinate = myLocation.coordinate;
       this.props.mapActions.changedCurrentLocation({
@@ -220,7 +219,7 @@ export default class FirstScreenView extends React.Component {
       ? map.currentLocation
       : defaultCurrentLocation;
     (this.mapView && this.mapView.onGoToLocation) && 
-      this.mapView.onGoToLocation(position.coordinate);
+      position && this.mapView.onGoToLocation(position.coordinate);
   }
 
   goGift = () => {
@@ -304,7 +303,7 @@ export default class FirstScreenView extends React.Component {
     var minDistance = null;
     var minIndex = 0;
     var myLocation = currentLocation || defaultCurrentLocation;
-    console.log('==== myLocation: ', myLocation);
+    console.log('==== myLocation: ', myLocation, places);
 
     for (var i = 0; i < places.length; i++) {
       const place = places[i];
@@ -326,9 +325,12 @@ export default class FirstScreenView extends React.Component {
         minIndex = i;
       }
     }
-    (this.mapView && this.mapView.onGoToLocation) &&
-      this.mapView.onGoToLocation(places[minIndex].coordinate);
-    this.openNearPlacesDialog(minIndex);
+    console.log('===== places[minIndex]: ', places, minIndex);
+    if (places.length > 0) {
+      (this.mapView && this.mapView.onGoToLocation) &&
+        this.mapView.onGoToLocation(places[minIndex].coordinate);
+      this.openNearPlacesDialog(minIndex);
+    }
   }
 
   processPayment = () => {
@@ -523,9 +525,19 @@ export default class FirstScreenView extends React.Component {
 
   renderClusterMapView = () => {
     const { currentLocation, searchedPlaces, place } = this.props.map;
+    const { enabledDeposit, rentStatus } = this.props.rent;
     const { activeModal } = this.state;
     const location = currentLocation || defaultCurrentLocation;
-
+    const showBottomButtons = !(
+      (activeModal == MAP_MODAL.NEARE_PLACE)
+      || (activeModal == MAP_MODAL.RENT) 
+      || (activeModal == MAP_MODAL.FINISH)
+      || (activeModal == MAP_MODAL.FEEDBACK)
+    ) && 
+    ((rentStatus < RENT_STATUS.RENT_REQUEST) 
+      || (rentStatus > RENT_STATUS.REQUIRED_FEEDBACK)
+    );
+    
     return (
       <ClusterMapView
           currentLocation={location}
@@ -545,8 +557,8 @@ export default class FirstScreenView extends React.Component {
           />
           {/* <MapButton name='tree' onPress={this.goGift}/> */}
           {/* <MapButton name='search' onPress={this.onClickRefresh} /> */}
-          {activeModal!=MAP_MODAL.NEARE_PLACE && <MapButton name='refresh' onPress={this.onClickRefresh}/>}
-          {activeModal!=MAP_MODAL.NEARE_PLACE && <MapButton name='position' onPress={this.onClickPosition}/>}
+          {showBottomButtons && <MapButton name='refresh' onPress={this.onClickRefresh}/>}
+          {showBottomButtons && <MapButton name='position' onPress={this.onClickPosition}/>}
         </ClusterMapView>
     );
   }
@@ -589,37 +601,39 @@ export default class FirstScreenView extends React.Component {
     } = this.state;
 
     return (
-      <View style={{position: 'relative', width: W, height: H}}>
-        <ProfileMenuDialog isVisible={profileOpened} onClose={()=> {this.setState({profileOpened: false })}} />
+      <View style={{position: 'relative', width: '100%', height: '100%'}}>
+        <ProfileMenuDialog
+        isVisible={profileOpened}
+        onClose={()=> {this.setState({profileOpened: false })}}
+      />
         {/* { this.renderMapView() } */}
         { this.renderClusterMapView() }
         {/* {this.renderMapClusteringView()} */}
         <Spacer size={20} />
         <FindNearestDialog onClickFind={this.findNearest} />
-        {activeModal!=MAP_MODAL.NEARE_PLACE && <UnlockDialog onClickUnlock={this.onUnlock} />}
-        {/* <UnlockDialog onClickUnlock={this.onUnlock} /> */}
-        {activeModal== MAP_MODAL.SEARCH && <SearchDialog onCancel={this.closeSearchDialog} 
+        {(activeModal != MAP_MODAL.NEARE_PLACE) && <UnlockDialog onClickUnlock={this.onUnlock} />}
+        {(activeModal == MAP_MODAL.SEARCH) && <SearchDialog onCancel={this.closeSearchDialog} 
           selectPlace={this.selectPlace} />
         }
-        {activeModal== MAP_MODAL.DETAIL && <DetailDialog
+        {(activeModal == MAP_MODAL.DETAIL) && <DetailDialog
             onClose={this.closeDetailDialog} 
             onFinish={this.openFinishDialog}
             onReserve={this.openReserveDialog}
           />
         }
-        {activeModal==MAP_MODAL.FINISH && 
+        {(activeModal == MAP_MODAL.FINISH) && 
           <React.Fragment>
             <FinishTopDialog />
             <FinishDialog onFinish={this.closeFinishDialog} />
           </React.Fragment>
         }
-        {activeModal==MAP_MODAL.RESERVE && 
+        {(activeModal == MAP_MODAL.RESERVE) && 
           <ReserveDialog
             onClose={this.closeReserveDialog} 
             onSelectPlace={this.selectPlace}
           />
         }
-        {activeModal==MAP_MODAL.NEARE_PLACE && 
+        {(activeModal == MAP_MODAL.NEARE_PLACE) && 
           <NearPlacesDialog
             onClose={this.closeNearPlacesDialog} 
             onSelectPlace={this.onSelectPlace}
@@ -628,7 +642,7 @@ export default class FirstScreenView extends React.Component {
             onOpenFilter={this.openFilterDialog}
           />
         }
-        {activeModal==MAP_MODAL.FILTER && 
+        {(activeModal == MAP_MODAL.FILTER) && 
           <FilterDialog
             onClose={this.closeNearPlacesDialog} 
             onFilter={this.filterSearch}
@@ -638,7 +652,7 @@ export default class FirstScreenView extends React.Component {
           (activeModal != MAP_MODAL.FINISH) &&
           (activeModal!=MAP_MODAL.NEARE_PLACE) && 
           (activeModal!=MAP_MODAL.DETAIL)
-          )&& 
+          ) && 
           <RentDialog
             onBuy={this.onBuy}
             onDeposit={this.onDeposit}
@@ -649,8 +663,8 @@ export default class FirstScreenView extends React.Component {
         }
         {((rentStatus == RENT_STATUS.REQUIRED_FEEDBACK) && 
           (activeModal != MAP_MODAL.FINISH) && 
-          (activeModal!=MAP_MODAL.NEARE_PLACE) && 
-          (activeModal!=MAP_MODAL.DETAIL)
+          (activeModal != MAP_MODAL.NEARE_PLACE) && 
+          (activeModal != MAP_MODAL.DETAIL)
           ) &&
           <FeedbackDialog onClose={this.closeFeedbackDialog} />
         }

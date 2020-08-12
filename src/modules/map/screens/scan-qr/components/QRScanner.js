@@ -252,7 +252,7 @@ export default class QRScannerView extends Component {
     hintTextStyle: PropTypes.object,
     
     renderHeaderView: PropTypes.func,
-    renderFooterView: PropTypes.object,
+    renderFooterView: PropTypes.func,
     
     onScanResult: PropTypes.func,
     scanInterval: PropTypes.number,
