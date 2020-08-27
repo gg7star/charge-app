@@ -1,3 +1,4 @@
+import { Platform } from 'react-native';
 import { em } from '../constants/em'
 
 export default {
@@ -14,5 +15,17 @@ export default {
     titleWhite: {
       fontSize: 22*em, color: '#fff', fontWeight: 'bold'
     }
-  }  
+  },
+  shadow: Platform.select({
+    ios: {
+      shadowColor: "#000000",
+      backgroundColor: '#ffffff00',
+      shadowOffset: { width: 1, height: 6 },
+      shadowOpacity: 0.4,
+      shadowRadius: 2,
+    },
+    android: {
+      elevation: 3,
+    }
+  }),
 }

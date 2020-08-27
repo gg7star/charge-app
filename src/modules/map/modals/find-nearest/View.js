@@ -1,10 +1,8 @@
 import React from 'react'
 import DialogWrapper from '../../common/wrappers/DialogWrapper'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, Platform } from 'react-native'
 import { Button, Spacer } from '~/common/components'
 import { colors, W, em } from '~/common/constants'
-
-const UNLOCK_ICON_IMAGE = require('~/common/assets/images/png/qr-code.png');
 
 export default class FindNearestDialog extends React.Component {
   render() {
@@ -34,13 +32,21 @@ const styles = StyleSheet.create({
     width: 220 * em,
     height: 40,
     top: 57,
-    left: W / 2 - 110 * em,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    backgroundColor: '#ffffff00',
-    shadowColor: "#000000",
-    shadowOffset: { width: 1, height: 6 },
-    shadowOpacity: 0.4,
-    shadowRadius: 2,
+    left: (W / 2 - 110) * em,
+    borderRadius: 20,
+    // borderTopRightRadius: 20,
+    // backgroundColor: '#ffffff00',
+    ...Platform.select({
+      ios: {
+        // shadowColor: "#000000",
+        // backgroundColor: '#ffffff00',
+        shadowOffset: { width: 1, height: 6 },
+        shadowOpacity: 0.4,
+        shadowRadius: 2,
+      },
+      android : {
+        elevation: 8,
+      }
+    })
   }
 })

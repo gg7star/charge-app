@@ -27,11 +27,11 @@ export default class AppView extends Component {
     // _app = this;
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log('===== nextProps: ', nextProps);
-    console.log('===== nextState: ', nextState);
-    return true;
-  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   console.log('===== nextProps: ', nextProps);
+  //   console.log('===== nextState: ', nextState);
+  //   return true;
+  // }
   
   async UNSAFE_componentWillReceiveProps(nextProps) {
     const { app, auth } = nextProps;
@@ -163,12 +163,12 @@ export default class AppView extends Component {
   onRentSuccess = (data, that) => {
     const { auth, rentActions, rent } = that.props;
     // For test 08
-    if (__DEV__ && (rent.rentStatus == RENT_STATUS.INIT)) {
-      rentActions.rentSuccess(data, auth);
-    }
-    
-    // if ((rent.rentStatus == RENT_STATUS.RENT_REQUEST))
+    // if (__DEV__ && (rent.rentStatus == RENT_STATUS.INIT)) {
     //   rentActions.rentSuccess(data, auth);
+    // }
+    
+    if ((rent.rentStatus == RENT_STATUS.RENT_REQUEST))
+      rentActions.rentSuccess(data, auth);
   };
 
   onRentFailure = (error) => {

@@ -346,7 +346,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development: yang changliu (6KY6Z42SU3)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development: yang changliu (6KY6Z42SU3)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1.0.3;
+				CURRENT_PROJECT_VERSION = 1.0.4;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = RKJP96853R;
 				HEADER_SEARCH_PATHS = (
@@ -417,7 +417,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development: yang changliu (6KY6Z42SU3)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development: yang changliu (6KY6Z42SU3)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1.0.3;
+				CURRENT_PROJECT_VERSION = 1.0.4;
 				DEVELOPMENT_TEAM = RKJP96853R;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",

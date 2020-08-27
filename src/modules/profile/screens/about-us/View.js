@@ -69,7 +69,7 @@ export default class ScreenView extends React.Component {
     )
   }
   goBack = () => {
-    Actions.map();
-    Actions['map_first']({profileOpened: true});
+    const { onClose } = this.props;
+    onClose && onClose();
   }
 }

@@ -314,7 +314,6 @@ export default class QRScannerView extends Component {
   }
   
   componentWillUnmount(){
-    console.log('===== QRScanner: componentWillUnmount')
     this.stopScanCamera();
   }
 
@@ -342,7 +341,7 @@ export default class QRScannerView extends Component {
     ) {
       const qrCode = e ? `${e.type}: ${e.data}` : '';
       this.handleAppStateChange('stop');
-      this.setState({scanEnabled: false, qrCode}, () => {
+      this.setState({scanEnabled: false, qrCode}, (that=this) => {
         Alert.alert(
           _t('QR Code scanned'),
           `${_t('Are you sure to rent a Nono power bank for 48 hours?')}`,
@@ -350,12 +349,12 @@ export default class QRScannerView extends Component {
             {
               text: 'Cancel',
               onPress: () => {
-                _this.resumeScan();
+                that.resumeScan();
               },
               style: 'cancel',
             },
             {text: 'OK', onPress: () => {
-              _this.props.onScanResult(qrCode, _this.resumeScan);
+              that.props.onScanResult(qrCode, that.resumeScan);
             }},
           ],
           {cancelable: false},
@@ -371,8 +370,8 @@ export default class QRScannerView extends Component {
 
   resumeScan = () => {
     console.log('==== resumeScan');
-    _this.handleAppStateChange('active');
-    _this.setState({scanEnabled: true});
+    this.handleAppStateChange('active');
+    this.setState({scanEnabled: true});
   }
   
   render(){
@@ -391,8 +390,8 @@ export default class QRScannerView extends Component {
         style={{ flex: 1, justifyContent: 'space-between', } }
         aspect={1}
         barCodeTypes={[RNCamera.Constants.BarCodeType.qr, 'qr']}
-        permissionDialogTitle={'Permission to use camera'}
-        permissionDialogMessage={'We need your permission to use your camera phone'}
+        // permissionDialogTitle={'Permission to use camera'}
+        // permissionDialogMessage={'We need your permission to use your camera phone'}
         onGoogleVisionBarcodesDetected={({ barcodes }) => {
           console.log('===== onGoogleVisionBarcodesDetected: barcodes: ', barcodes)
           this.onScanResult(barcodes[0]);

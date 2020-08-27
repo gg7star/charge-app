@@ -15,12 +15,12 @@ const MenuWrapper = (props) => {
         paddingTop: 20, paddingBottom: 20, paddingHorizontal: 20,
       }}
     >
-      {/* <TouchableOpacity
+      <TouchableOpacity
         onPressIn={props.onClose}
         style={{width: 50, height: 50, alignItems: 'flex-start', justifyContent: 'center'}}
       >
         <Image source={CLOSE_IMAGE} style={{width: 15, height: 15}} />
-      </TouchableOpacity> */}
+      </TouchableOpacity>
       <Spacer size={50} />
       {props.children}
     </View>

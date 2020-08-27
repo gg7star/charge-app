@@ -28,7 +28,6 @@ const INITIALIZE_REGION = {
   longitudeDelta: LONGITUDE_DELTA,
 };
 
-
 const PIN_OPEN_IMAGE = require('~/common/assets/images/png/pin-open.png');
 const PIN_CLOSE_IMAGE = require('~/common/assets/images/png/pin-close.png');
 const PIN_SELECT_IMAGE = require('~/common/assets/images/png/pin-select.png');
@@ -44,8 +43,7 @@ export default class ClusterMapView extends React.Component {
   state = {
     // mapView: null,
     directionCoordinates: [],
-    degree: 0,
-    currentLocation: this.props.currentLocation
+    degree: 0
   }
 
   onMapReady = (coordinate) => {
@@ -67,8 +65,8 @@ export default class ClusterMapView extends React.Component {
   };
 
   renderMarkers = () => {
-    const { places, selectedPlace } = this.props;
-    // const currentLocation = this.state.currentLocation;
+    const { places, selectedPlace, currentLocation } = this.props;
+
     const selectedIndex = places.findIndex(p => {
       return selectedPlace && p.name === selectedPlace.name
     });
@@ -117,12 +115,11 @@ export default class ClusterMapView extends React.Component {
     if (currLoc.nativeEvent && currLoc.nativeEvent.coordinate) {
       const { onDetectCurrentLocation } = this.props;
       onDetectCurrentLocation && onDetectCurrentLocation(currLoc.nativeEvent.coordinate);
-      this.setState({ currentLocation: { coordinate: currLoc.nativeEvent.coordinate } })
     }
   };
 
   renderCurrentLocationMarker = () => {
-    const currentLocation = this.state.currentLocation;
+    const { currentLocation } = this.props;
     const { directionCoordinates } = this.state;
     // const degree = (directionCoordinates.length > 2)
     //   ? this.calculateDegree(directionCoordinates[0], directionCoordinates[1])
@@ -167,8 +164,8 @@ export default class ClusterMapView extends React.Component {
   };
 
   renderMapViewDirection = () => {
-    const { currentLocation, directionCoordinates } = this.state;
-    const { selectedPlace, onDetectDirection } = this.props;
+    const { directionCoordinates } = this.state;
+    const { selectedPlace, onDetectDirection, currentLocation } = this.props;
 
     if (selectedPlace && selectedPlace.coordinate && currentLocation && currentLocation.coordinate) {
       var mapDirections = [];
@@ -253,7 +250,7 @@ export default class ClusterMapView extends React.Component {
             shadowOffset: { width: 2, height: 3 },
             shadowOpacity: 0.23,
             shadowRadius: 4.62,
-            elevation: 8
+            elevation: 8,
           }}>
           <Text style={{ color: "#FFFFFF", fontSize: 17, fontWeight: '500' }}>{count}</Text>
         </View>
@@ -262,9 +259,8 @@ export default class ClusterMapView extends React.Component {
   }
 
   renderClusterMap = () => {
-    const { currentLocation } = this.state;
-    const { selectedPlace, children } = this.props;
-    var region = null;
+    const { selectedPlace, children, currentLocation } = this.props;
+    var region = INITIALIZE_REGION;
     if (currentLocation && currentLocation.coordinate)
       region = {
         latitude: currentLocation.coordinate.latitude,

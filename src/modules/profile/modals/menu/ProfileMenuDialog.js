@@ -1,13 +1,13 @@
 import React from 'react';
 import Modal from "react-native-modal";
 import { View, Text, Image } from 'react-native';
-import TouchableScale from 'react-native-touchable-scale';
-import { Actions } from 'react-native-router-flux';
-import LinearGradient from 'react-native-linear-gradient';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import BackWrapper from '~/modules/profile/modals/menu/wrappers/BackWrapper';
-import MenuWrapper from '~/modules/profile/modals/menu/wrappers/MenuWrapper';
 import MenuItem from '~/modules/profile/modals/menu/components/MenuItem';
+import Notification from '~/modules/profile/screens/notification/ViewContainer';
+import History from '~/modules/profile/screens/history/ViewContainer';
+import Payment from '~/modules/profile/screens/payment/ViewContainer';
+import Setting from '~/modules/profile/screens/setting/ViewContainer';
+import AboutUs from '~/modules/profile/screens/about-us/ViewContainer';
+import Help from '~/modules/profile/screens/help/ViewContainer';
 import { H, W } from '~/common/constants';
 import styles from './styles';
 
@@ -26,7 +26,7 @@ const NONO_IMAGE = require('~/common/assets/images/png/Union-32.png');
 
 export default class ProfileMenuDialog extends React.Component {
   state = {
-    
+    selectedMenu: null
   };
 
   handleClickOutside = () => {
@@ -34,71 +34,20 @@ export default class ProfileMenuDialog extends React.Component {
     onClose && onClose();
   }
 
-  onClickItem = (route) => {
+  onClickItem = (menu) => {
     const { onClose } = this.props;
-    onClose && onClose();
-    Actions.profile();
-    Actions[route]();
+    this.setState({ selectedMenu: menu });
   }
 
-  renderStartYourForest = () => {
-    return (
-      <View>
-        <TouchableScale
-          onPress={() => {
-            Actions.profile();
-            Actions['profile_create_team']();
-          }}
-        >
-          <LinearGradient
-            colors={['#07e28e', '#36f7ad']}
-            style={{
-              paddingVertical: 10,
-              paddingLeft: 8,
-              borderRadius: 15, 
-              flexDirection: 'row',
-              width: '100%',
-              justifyContent: 'space-between',
-              alignItems: 'center'
-            }}
-          >
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}
-            >
-              <Image
-                source={TREE_IMAGE} 
-                style={{ marginLeft: 5, marginRight: 5}}
-              />
-              <Text
-                style={{
-                  color: 'white', fontSize: 16, fontWeight: '600', paddingLeft: 5,
-                  justifyContent: 'center', alignContent: 'center', alignItems: 'center'
-                }}
-              >
-                {_t('Start your forest')}
-              </Text>
-            </View>
-            <MaterialIcon
-              name='chevron-right'
-              style={{
-                backgroundColor: 'transparent',
-                color: 'white',
-                fontSize: 24,
-              }}
-            />
-          </LinearGradient>
-        </TouchableScale>
-      </View>
-    );
-  };
+  onCloseItem = () => {
+    this.setState({selectedMenu: null});
+  }
 
   renderView = () => {
-    const { _t } = this.props.appActions
-    const { credential } = this.props.auth
+    const { _t } = this.props.appActions;
+    const { credential } = this.props.auth;
+    const { selectedMenu } = this.state;
+    const isModalVisible = selectedMenu ? true : false;
     return (
       <View style={styles.container}>
         <View>
@@ -116,14 +65,13 @@ export default class ProfileMenuDialog extends React.Component {
           {credential && credential.user.displayName}
         </Text>
         <View>
-          {/* {this.renderStartYourForest()} */}
           {menuList.map((menu, k) => (
             <View key={k}>
               <MenuItem
                 image={menu.image}
                 title={_t(menu.title)}
                 disabled={menu.disabled}
-                onPress={() => this.onClickItem(menu.route)}
+                onPress={() => this.onClickItem(menu)}
               />
             </View>
           ))}
@@ -136,6 +84,20 @@ export default class ProfileMenuDialog extends React.Component {
             onPress={() => this.onClickItem(lastMenuItem.route)}
           />
         </View> */}
+        <Modal
+          isVisible={isModalVisible}
+          animationIn={'slideInRight'}
+          animationOut={'slideOutLeft'}
+          deviceWidth={W}
+          deviceHeight={H}
+          avoidKeyboard={true}
+          // hasBackdrop
+          backdropColor='white'
+          coverScreen
+          style={{ margin: 0 }}
+        >
+          {selectedMenu && <selectedMenu.component onClose={this.onCloseItem} />}
+        </Modal>
       </View>
     );
   }
@@ -148,13 +110,13 @@ export default class ProfileMenuDialog extends React.Component {
         isVisible={isVisible}
         animationIn={'slideInLeft'}
         animationOut={'slideOutLeft'}
-        hasBackdrop
+        // hasBackdrop
         backdropOpacity={0.5}
-        coverScreen
-        style={{margin: 0}}
-        onBackdropPress={() => onClose()}
+        // coverScreen
+        style={{ flex: 1, }}
+        onBackdropPress={this.handleClickOutside}
       >
-        { this.renderView() }
+        {this.renderView()}
       </Modal>
     )
   }
@@ -166,7 +128,8 @@ const menuList = [
     title: 'Notifications',
     image: NOTIFICATION_IMAGE,
     route: 'profile_notification',
-    disabled: false
+    disabled: false,
+    component: Notification
   },
   // {
   //   title: 'My points',
@@ -184,25 +147,29 @@ const menuList = [
     title: 'Histories',
     image: HISTORY_IMAGE,
     route: 'profile_history',
-    disabled: false
+    disabled: false,
+    component: History
   },
   {
     title: 'Bank info',
     image: CARD_IMAEG,
     route: 'profile_payment',
-    disabled: false
+    disabled: false,
+    component: Payment
   },
   {
     title: 'Settings',
     image: SETTINGS_IMAEG,
     route: 'profile_setting',
-    disabled: false
+    disabled: false,
+    component: Setting
   },
   {
     title: 'About us',
     image: ABOUT_US_IMAGE,
     route: 'profile_about_us',
-    disabled: false
+    disabled: false,
+    component: AboutUs
   }
 ]
 
@@ -210,6 +177,7 @@ const lastMenuItem = {
   title: 'Need help?',
   image: NEED_HELP_IMAGE,
   route: 'profile_help',
-  disabled: false
+  disabled: false,
+  component: Help
 }
 

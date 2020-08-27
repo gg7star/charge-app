@@ -11,7 +11,7 @@ export default class PlacesList extends React.Component {
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     const { searchedPlaces, place } = nextProps.map;
-   
+    
     if (searchedPlaces && place) {
       const selectedIndex = searchedPlaces.findIndex(p => p.name === place.name);
       if (this.flatList && selectedIndex >= 0) {
@@ -104,7 +104,7 @@ export default class PlacesList extends React.Component {
 
   render() {
     const { searchedPlaces, place } = this.props.map;
-    const itemIndex = searchedPlaces.findIndex(p => {return p.name === place.name});
+    const itemIndex = (searchedPlaces && place) ? searchedPlaces.findIndex(p => {return p.name === place.name}) : -1;
     return (
       <View style={{ marginHorizontal: -20 }}>
         {this.renderListItem({item: searchedPlaces[itemIndex], index: itemIndex})}

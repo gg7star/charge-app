@@ -20,12 +20,18 @@ const PIN_CLOSE_IMAGE = require('~/common/assets/images/png/pin-close.png');
 const PIN_SELECT_IMAGE = require('~/common/assets/images/png/pin-select.png');
 const CURRENT_LOCATION_IMAGE = require('~/common/assets/images/png/currentLocation.png');
 
+const INITIALIZE_REGION = {
+  latitude: defaultCurrentLocation.coordinate.latitude,
+  longitude: defaultCurrentLocation.coordinate.longitude,
+  latitudeDelta: LATITUDE_DELTA,
+  longitudeDelta: LONGITUDE_DELTA,
+};
+
 export default class CustomMapView extends React.Component {
   state = {
     mapView: null,
     directionCoordinates: [],
     degree: 0,
-    currentLocation: this.props.currentLocation
   }
 
   onGoToLocation = (coordinate) => {
@@ -38,8 +44,7 @@ export default class CustomMapView extends React.Component {
   };
 
   renderMarkers = () => {
-    const { places, selectedPlace } = this.props;
-    // const currentLocation = this.state.currentLocation;
+    const { places, selectedPlace, currentLocation } = this.props;
     const selectedIndex = places.findIndex(p => {
         return selectedPlace && p.name === selectedPlace.name
       });
@@ -92,12 +97,11 @@ export default class CustomMapView extends React.Component {
     if (currLoc.nativeEvent && currLoc.nativeEvent.coordinate) {
       const { onDetectCurrentLocation } = this.props;
       onDetectCurrentLocation && onDetectCurrentLocation(currLoc.nativeEvent.coordinate);
-      this.setState({currentLocation: {coordinate: currLoc.nativeEvent.coordinate}})
     }
   };
 
   renderCurrentLocationMarker = () => {
-    const currentLocation = this.state.currentLocation;
+    const { currentLocation } = this.props;
     const { directionCoordinates } = this.state;
     // const degree = (directionCoordinates.length > 2)
     //   ? this.calculateDegree(directionCoordinates[0], directionCoordinates[1])
@@ -141,12 +145,12 @@ export default class CustomMapView extends React.Component {
   };
 
   render() {
-    const { directionCoordinates, currentLocation } = this.state;
-    const { selectedPlace, onDetectDirection, children } = this.props;
+    const { directionCoordinates } = this.state;
+    const { selectedPlace, onDetectDirection, children, currentLocation } = this.props;
     const GOOGLE_MAPS_APIKEY = Platform.OS === 'ios' 
       ? googleMapConfig.IOS_GOOGLE_MAPS_APIKEY
       : googleMapConfig.ANDROID_GOOGLE_MAPS_APIKEY;
-    var region = null;
+    var region = INITIALIZE_REGION;
     if (currentLocation)
       region = {
         latitude: currentLocation.coordinate.latitude,

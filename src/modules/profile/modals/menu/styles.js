@@ -4,13 +4,14 @@ export default {
   container: {
     borderTopRightRadius: 20,
     borderBottomRightRadius: 20,
-    paddingTop: 40,
-    paddingBottom: 20,
-    paddingHorizontal: 20,
+    paddingTop: 40*em,
+    paddingBottom: 20*em,
+    paddingHorizontal: 20*em,
     backgroundColor: '#FFFFFF',
     height: H,
-    width: W/5*4,
-    left: 0
+    width: (W / 5 * 4),
+    left: -20*em,
+    margin: 0,
   },
   logoImage: {
     height: 75*em,

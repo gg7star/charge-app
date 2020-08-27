@@ -1,33 +1,45 @@
 import React from 'react';
 import { ScrollView, Platform, Text } from 'react-native';
-import { Actions } from 'react-native-router-flux';
+import Modal from "react-native-modal";
 import ProfileWrapper from '../../common/wrappers/ProfileWrapper';
 import { ProfileHeader } from '~/common/components';
 import { W, H, em } from '~/common/constants';
 import HistoryListItemContainer from './components/HistoryListItemContainer';
+import HistorySummary from '~/modules/profile/screens/history-summary/ViewContainer';
 import moment from 'moment';
 import 'moment/min/moment-with-locales';
 import 'moment/locale/fr';
 
 export default class HistoryView extends React.Component {
+  state = {
+    selectedIndex: -1
+  }
+
   componentDidMount() {
     this.props.profileActions.loadHistories();
   }
 
   goBack = () => {
-    Actions.map();
-    Actions['map_first']({profileOpened: true});
+    const { onClose } = this.props;
+    onClose && onClose();
   };
   
   goSummary = (index) => {
-    this.props.profileActions.selectHistory(index);
-    Actions['profile_history_summary']();
+    this.setState({ selectedIndex: index});
   };
+
+  handleCloseItem = (index) => {
+    this.setState({ selectedIndex: -1 });
+  }
 
   render() {
     const { _t } = this.props.appActions;
     const { histories } = this.props.profile;
-    console.log('===== histories: ', histories);
+    const { selectedIndex } = this.state;
+    if (selectedIndex >= 0) {
+      console.log('===== histories[selectedIndex]: ', selectedIndex, histories[selectedIndex]);
+    }
+
     return (
       <ProfileWrapper>
         <ProfileHeader title={_t('History')} onPress={this.goBack} />
@@ -41,6 +53,14 @@ export default class HistoryView extends React.Component {
             </Text>
         }
         </ScrollView>
+        {(selectedIndex >= 0) && <Modal
+          isVisible={(selectedIndex >= 0)}
+          animationIn={'slideInRight'}
+          animationOut={'slideOutLeft'}
+          style={{ margin: 0, }}
+        >
+          <HistorySummary onClose={this.handleCloseItem} history={histories[selectedIndex]} />
+        </Modal>}
       </ProfileWrapper>
     );
   }

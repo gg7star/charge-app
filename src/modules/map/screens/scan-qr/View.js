@@ -37,7 +37,6 @@ export default class ScanQRView extends React.Component {
   };
 
   onClickClose = (closeCallback) => {
-    console.log('===== qrScanner: ', this.qrScanner, closeCallback);
     closeCallback && closeCallback();
     Actions['map_first']();
   };
@@ -59,8 +58,9 @@ export default class ScanQRView extends React.Component {
       console.log('==== QR code: ', scanedQrCode, parsedStationSn);
       // Check stationSN validation
       const { auth, map, mapActions, rentActions } = _this.props;
-      const { stationSnList } = map;
-      if (stationSnList && stationSnList.find(e => e.stationSn === parsedStationSn)) {
+      const { stations } = map;
+      console.log('==== stations: ', stations)
+    if (stations && stations.find(e => e.stationSn === parsedStationSn)) {
         console.log('==== mapActions.scannedQrCode: ', parsedStationSn);
         mapActions.scannedQrCode(parsedStationSn);
         _this.setState({rentingBattery: true});

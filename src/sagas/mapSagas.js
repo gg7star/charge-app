@@ -50,29 +50,39 @@ export function* loadPlacesOnMap(action) {
 export function* getAllStations(action) {
   try {
     // Get a list of all stationSn
+    // const response = yield call(
+    //   processRequest,
+    //   `${serverUrls.apiGatewayServerURL}/rental/cabinet_list`,
+    //   'POST',
+    //   null
+    // );
+    // const stationSnList = response.data.stationSnList;
+    // yield put(requestGetAllStationsSuccess(stationSnList));
+    // // Get detail info of all stations
+    // for(var i = 0; i < stationSnList.length; i++) {
+    //   const stationSnData = stationSnList[i]
+    //   const responseStation = yield call(
+    //     processRequest,
+    //     `${serverUrls.apiGatewayServerURL}/rental/cabinet_info`,
+    //     'POST', stationSnData
+    //   );
+    //   console.log('==== responseStation: ', responseStation);
+    //   if (responseStation.data.code === "200") {
+    //     yield put(receivedStationDetail(responseStation.data.body[0]));
+    //   } else {
+    //     console.log('==== Failed to get stationSN: ', stationSnList[i])
+    //   }
+    // }
+
+    // Get a list of all stations
     const response = yield call(
       processRequest,
-      `${serverUrls.apiGatewayServerURL}/rental/cabinet_list`,
-      'POST',
+      `${serverUrls.apiGatewayServerURL}/station/all`,
+      'GET',
       null
     );
-    const stationSnList = response.data.stationSnList;
-    yield put(requestGetAllStationsSuccess(stationSnList));
-    // Get detail info of all stations
-    for(var i = 0; i < stationSnList.length; i++) {
-      const stationSnData = stationSnList[i]
-      const responseStation = yield call(
-        processRequest,
-        `${serverUrls.apiGatewayServerURL}/rental/cabinet_info`,
-        'POST', stationSnData
-      );
-      console.log('==== responseStation: ', responseStation);
-      if (responseStation.data.code === "200") {
-        yield put(receivedStationDetail(responseStation.data.body[0]));
-      } else {
-        console.log('==== Failed to get stationSN: ', stationSnList[i])
-      }
-    }
+    const stations = response.data;
+    yield put(requestGetAllStationsSuccess(stations));
   } catch(error) {
     console.log('==== getAllStations response error: ', error);
     yield put(requestGetAllStationsFailure(error ? error.data : ''));

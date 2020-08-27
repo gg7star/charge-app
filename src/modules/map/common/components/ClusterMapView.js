@@ -14,10 +14,10 @@ import moment from 'moment';
 
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
-const LATITUDE_DELTA = 60;
-const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+const LATITUDE_DELTA = 0.04;
+const LONGITUDE_DELTA = 0.04; //LATITUDE_DELTA * ASPECT_RATIO;
 const INIT_VIEW_LATITUDE_DELTA = 0.04;
-const INIT_VIEW_LONGITUDE_DELTA = INIT_VIEW_LATITUDE_DELTA * ASPECT_RATIO;
+const INIT_VIEW_LONGITUDE_DELTA = 0.04;// INIT_VIEW_LATITUDE_DELTA * ASPECT_RATIO;
 const CURRENT_LOCATION_LATITUDE_DELTA = 0.0059397161733585335;
 const CURRENT_LOCATION_LONGITUDE_DELTA = 0.005845874547958374;
 
@@ -27,7 +27,6 @@ const INITIALIZE_REGION = {
   latitudeDelta: LATITUDE_DELTA,
   longitudeDelta: LONGITUDE_DELTA,
 };
-
 
 const PIN_OPEN_IMAGE = require('~/common/assets/images/png/pin-open.png');
 const PIN_CLOSE_IMAGE = require('~/common/assets/images/png/pin-close.png');
@@ -40,14 +39,25 @@ const GOOGLE_MAPS_APIKEY = Platform.OS === 'ios'
 
 export default class ClusterMapView extends React.Component {
   state = {
-    // mapView: null,
     directionCoordinates: [],
     degree: 0,
-    currentLocation: this.props.currentLocation
+    tracksViewChangesAll: true,
+    tracksViewChangesIndex: -1,
+    isSelectedTracksViewChangesIndex: true
   };
+
   mapView = null;
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.places !== this.props.places
+      || prevProps.place !== this.props.place
+      ) {
+      this.setState({ tracksViewChangesAll: true })
+    }
+  }
+
   onMapReady = (coordinate) => {
+    // Marked to fix lagging
     this.mapView.mapRef.animateToRegion({
       latitude: coordinate.latitude,
       longitude: coordinate.longitude,
@@ -55,6 +65,10 @@ export default class ClusterMapView extends React.Component {
       longitudeDelta: INIT_VIEW_LONGITUDE_DELTA
     });  
   };
+
+  onRegionChange = (region) => {
+    // console.log('===== onRegionChange: region', region);
+  } 
 
   onGoToLocation = (coordinate) => {
     this.mapView.mapRef.animateToRegion({
@@ -65,9 +79,16 @@ export default class ClusterMapView extends React.Component {
     });  
   };
 
+  onSelectMarker = (index) => {
+    const that = this;
+    this.setState({ tracksViewChangesIndex: index, isSelectedTracksViewChangesIndex: true }, () => {
+      that.props.onSelectMarker(index);
+    });
+  }
+
   renderMarkers = () => {
     const { places, selectedPlace } = this.props;
-    // const currentLocation = this.state.currentLocation;
+    const { tracksViewChangesAll, tracksViewChangesIndex, isSelectedTracksViewChangesIndex } = this.state;
     const selectedIndex = places.findIndex(p => {
         return selectedPlace && p.name === selectedPlace.name
       });
@@ -77,9 +98,11 @@ export default class ClusterMapView extends React.Component {
     if (places) {
       const placeMakers = Object.keys(places).map((key, index) => {
         const place = places[key];
+        const isTracksViewChanges = (key === tracksViewChangesIndex) || isSelectedTracksViewChangesIndex;
         if(place && place.coordinate) {
-          if (selectedPlace && (key === `${selectedIndex}`)) placeImage = PIN_SELECT_IMAGE;
-          else {
+          if (selectedPlace && (key === `${selectedIndex}`)){
+            placeImage = PIN_SELECT_IMAGE;
+          }else {
             // placeImage = place.isOpened ? PIN_OPEN_IMAGE : PIN_CLOSE_IMAGE;
             if (place.openHours) {
               // const currentWeekDay = translate(moment().format('dddd'), 'fr');
@@ -92,18 +115,32 @@ export default class ClusterMapView extends React.Component {
           const marker = <Marker
             key={`station-${index}`}
             coordinate={place.coordinate}
-            onPress={() => this.props.onSelectMarker(key)}
+            tracksViewChanges={isTracksViewChanges || tracksViewChangesAll}
+            onPress={() => this.onSelectMarker(key)}
           >
             <Image source={placeImage} style={{ width: 40, height: 40 }} />
           </Marker>
           markers.push(marker);
-          // return marker;
+          return marker;
         }
       });
-     
-      // return placeMakers;
     };
-    // return null;
+    var newState = {};
+    if (tracksViewChangesAll) {
+      newState = {
+        ...newState,
+        tracksViewChangesAll: false
+      }
+    }
+    if (isSelectedTracksViewChangesIndex) {
+      newState = {
+        ...newState,
+        isSelectedTracksViewChangesIndex: false
+      }
+    }
+    if (Object.keys(newState).length > 0) {
+      this.setState({...newState});
+    }
     return markers;
   };
 
@@ -117,16 +154,15 @@ export default class ClusterMapView extends React.Component {
     if (currLoc.nativeEvent && currLoc.nativeEvent.coordinate) {
       const { onDetectCurrentLocation } = this.props;
       onDetectCurrentLocation && onDetectCurrentLocation(currLoc.nativeEvent.coordinate);
-      this.setState({currentLocation: {coordinate: currLoc.nativeEvent.coordinate}})
     }
   };
 
   handleMapDirectionViewOnReady = (result, that) => {
-    const { currentLocation, directionCoordinates } = that.state;
-    const { selectedPlace, onDetectDirection } = that.props;
-    console.log('====== onReady: result: ', result);
+    const { directionCoordinates } = that.state;
+    const { selectedPlace, onDetectDirection, currentLocation } = that.props;
+    if (!currentLocation || !selectedPlace) return;
+
     if (!result) {
-      console.log('====== reset direction');
       this.setState({ directionCoordinates: [] });
       onDetectDirection && onDetectDirection({
         distance: null,
@@ -136,10 +172,6 @@ export default class ClusterMapView extends React.Component {
     }
     var distance = convertUnits(result.distance).from('km').toBest({ cutOffNumber: 1 });
     var duration = convertUnits(result.duration).from('min').toBest({ cutOffNumber: 1 });
-    onDetectDirection && onDetectDirection({
-      distance: `${Math.round(distance.val * 100) / 100} ${distance.unit}`,
-      duration: `${Math.round(duration.val)} ${duration.unit}`
-    })
     var tmpDirectionCoordinates = [];
     tmpDirectionCoordinates.push(currentLocation.coordinate);
     for (var i = 0; i < result.coordinates.length - 1; i++) {
@@ -148,20 +180,16 @@ export default class ClusterMapView extends React.Component {
     }
     tmpDirectionCoordinates.push(selectedPlace.coordinate);
     const counts = tmpDirectionCoordinates.length;
-    // console.log('==== this: ', this)
-    // this.mapView && this.mapView.mapRef && this.mapView.mapRef.fitToCoordinates(tmpDirectionCoordinates, {
-    //   edgePadding: {
-    //     right: (width / 10),
-    //     bottom: (height / 5 * 2),
-    //     left: (width / 10),
-    //     top: (height / 7),
-    //   }
-    // });
-    this.setState({directionCoordinates: tmpDirectionCoordinates});
+    this.setState({directionCoordinates: tmpDirectionCoordinates}, () => {
+      onDetectDirection && onDetectDirection({
+        distance: `${Math.round(distance.val * 100) / 100} ${distance.unit}`,
+        duration: `${Math.round(duration.val)} ${duration.unit}`
+      });
+    });
   }
 
   renderCurrentLocationMarker = () => {
-    const currentLocation = this.state.currentLocation;
+    const { currentLocation } = this.props;
     const { directionCoordinates } = this.state;
     // const degree = (directionCoordinates.length > 2)
     //   ? this.calculateDegree(directionCoordinates[0], directionCoordinates[1])
@@ -206,11 +234,11 @@ export default class ClusterMapView extends React.Component {
   };
 
   renderMapViewDirection = () => {
-    const { currentLocation, directionCoordinates } = this.state;
-    const { selectedPlace, onDetectDirection } = this.props;
+    const { directionCoordinates } = this.state;
+    const { selectedPlace, onDetectDirection, currentLocation } = this.props;
+    var mapDirections = [];
     if (selectedPlace && selectedPlace.coordinate && 
       currentLocation && currentLocation.coordinate) {
-      var mapDirections = [];
       mapDirections.push(
         <MapViewDirections
           key={'MapDirection'}
@@ -234,13 +262,14 @@ export default class ClusterMapView extends React.Component {
             });
             this.setState({directionCoordinates: []});
           }}
+          {...{ isOutsideCluster: true }}
         />
       );
       if (selectedPlace && (directionCoordinates.length > 0))
         mapDirections.push(this.renderCustomDirection());
-      return mapDirections;
+      // return mapDirections;
     }
-    else return null;
+    return mapDirections;
   };
 
   renderCustomClusterMarker = (count) => {
@@ -254,11 +283,17 @@ export default class ClusterMapView extends React.Component {
             backgroundColor: '#35cdfa',
             justifyContent: 'center',
             alignItems: 'center',
-            shadowColor: "#000000",
-            shadowOffset: { width: 2, height: 3 },
-            shadowOpacity: 0.23,
-            shadowRadius: 4.62,
-            elevation: 8
+            ...Platform.select({
+              ios: {
+              // shadowColor: "#000000",
+              shadowOffset: { width: 2, height: 3 },
+              shadowOpacity: 0.23,
+              shadowRadius: 4.62,
+              },
+              android: {
+                elevation: 8,
+              }
+            }),
           }}>
           <Text style={{color: "#FFFFFF", fontSize: 17, fontWeight: '500'}}>
             {count}
@@ -269,21 +304,24 @@ export default class ClusterMapView extends React.Component {
   }
 
   renderClusterMap = () => {
-    const { currentLocation } = this.state;
+    const { currentLocation } = this.props;
     const { selectedPlace, children } = this.props;
-    var region = null;
-    if (currentLocation && currentLocation.coordinate)
+    var region = INITIALIZE_REGION;
+    if (currentLocation && currentLocation.coordinate
+      && currentLocation.coordinate.latitude &&
+      currentLocation.coordinate.longitude
+    ){
       region = {
         latitude: currentLocation.coordinate.latitude,
         longitude: currentLocation.coordinate.longitude,
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA,
       };
+    }
+    const mapDirections = this.renderMapViewDirection();
 
     return (
-      <View
-        style={styles.container}
-      >
+      <View style={styles.container}>
         <ClusterMap
           initialRegion={INITIALIZE_REGION}
           region={region}
@@ -297,14 +335,15 @@ export default class ClusterMapView extends React.Component {
           showsBuildings={true}
           pitchEnabled={true}
           onMapReady={() => this.onMapReady(region)}
+          onRegionChange={this.onRegionChange}
           onUserLocationChange={this.onUserLocationChange}
           zoomTapEnabled={false}
           renderClusterMarker={this.renderCustomClusterMarker}
           ref={c => this.mapView = c}
-          priorityMarker={this.renderMapViewDirection()}
-          isOutsideCluster={true}
+          // priorityMarker={this.renderMapViewDirection()}
           key={"cluster-map"}
         >
+          {(mapDirections.length > 0) && mapDirections}
           {this.renderMarkers()}
         </ClusterMap>
         {children && children}
@@ -326,19 +365,18 @@ export default class ClusterMapView extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    // ...StyleSheet.absoluteFillObject,
+    // flex: 1,
 
-    // position: 'absolute',
-    // top: 0,
-    // left: 0,
-    // right: 0,
-    // bottom: 0,
-    // justifyContent: 'flex-end',
-    // alignItems: 'center',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
 
-    // position: 'absolute', left: 0, top: 0,
-    // width: W, height: H, zIndex: 10
+    position: 'absolute', left: 0, top: 0,
+    width: W, height: H, zIndex: 10
   },
   map: {
     // flex: 1,

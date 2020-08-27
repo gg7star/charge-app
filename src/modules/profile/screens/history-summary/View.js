@@ -7,15 +7,14 @@ import { W, H, em } from '~/common/constants';
 import LinearGradient from 'react-native-linear-gradient'
 
 export default class HistorySummaryView extends React.Component {
-  componentDidMount() {
-    this.props.profileActions.loadHistories();    
-  }
-
-  goBack = () => Actions.pop();
+  goBack = () => {
+    const { onClose } = this.props;
+    onClose && onClose();
+  };
 
   renderConsumeTable = () => {
-    const { history } = this.props.profile
-    const { _t } = this.props.appActions
+    const { history } = this.props;
+    const { _t } = this.props.appActions; 
 
     return (
       <View style={{
@@ -102,8 +101,8 @@ export default class HistorySummaryView extends React.Component {
   };
 
   renderSummaryTable = () => {
-    const { _t } = this.props.appActions
-    const { history } = this.props.profile
+    const { _t } = this.props.appActions;
+    const { history } = this.props;
     return (
       <View style={{}}>
         <View style={{ flexDirection: 'row' }}>
@@ -128,7 +127,7 @@ export default class HistorySummaryView extends React.Component {
             />
           </View>
           <View style={{ width: 290*em }}>
-            <Text style={{ color: '#bfbfc4', mfontSize: 15, arginBottom: 5}}>
+            <Text style={{ color: '#bfbfc4', fontSize: 15, alginBottom: 5}}>
               {_t('Place of taking')}
             </Text>
             <Text style={{ color: '#36384a', fontSize: 17, marginBottom: 30 }}>
@@ -148,7 +147,7 @@ export default class HistorySummaryView extends React.Component {
 
   render() {
     const { _t } = this.props.appActions;
-    const { history } = this.props.profile;
+    const { history } = this.props;
     return (
       <ProfileWrapper>
         <ProfileHeader title={_t('Summary')} onPress={this.goBack} />

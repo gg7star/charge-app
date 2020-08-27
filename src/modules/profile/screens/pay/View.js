@@ -34,7 +34,9 @@ export default class ScreenView extends React.Component {
   }
 
   goBack = () => {
-    Actions['profile_wallet']()
+    // Actions['profile_wallet']()
+    const { onClose } = this.props;
+    onClose && onClose();
   }
 
   addCoupon = () => {

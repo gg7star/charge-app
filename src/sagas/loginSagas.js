@@ -67,48 +67,48 @@ export function* processLoginSuccess(action) {
 }
 
 export function* processSocialLoginSuccess(action) {
-  const { credential, auth } = action.payload;
-  const resCreateUser = yield call(createSocialAccount, credential);
+  // const { credential, auth } = action.payload;
+  // const resCreateUser = yield call(createSocialAccount, credential);
   yield put(loadCardRequest());
-  if(resCreateUser) {
-    if(
-      credential.additionalUserInfo && 
-      credential.additionalUserInfo.isNewUser
-    ) {
-      var provideId = credential.additionalUserInfo.providerId;
-      var socialSiteName = (provideId === 'facebook.com') ? 'Facebook' : 'Apple';
-      // Send notification
-      var contents = {
-        'en': `You are registered firstly with your ${socialSiteName} account.`,
-        'fr': `Vous vous êtes inscrit avec votre compte ${socialSiteName}.`
-      }
-      var message = {
-        type: notifications.NONO_NOTIFICATION_TYPES.REGISTERED_FIRST
-      };
-      var otherParameters = {
-        headings: {
-          "en": "Welcome to Nono!",
-          "fr": "Bienvenue sur l’application de Nono !"
-        },
-      }
-      if (auth && auth.oneSignalDevice && auth.oneSignalDevice.userId) {
-        notifications.postNotification(
-          contents,
-          message,
-          `${auth.oneSignalDevice.userId}`,
-          otherParameters
-        );
-      }
-      // Go to Hint screen
-      console.log('==== Go to Hint.', auth, credential);
-      Actions['hint']();
-    }
-    // else Actions['hint']();
-    else{
-      console.log('==== Go to Home.');
-      Actions['home']();
-    }
-  };
+  // if(resCreateUser) {
+  //   if(
+  //     credential.additionalUserInfo && 
+  //     credential.additionalUserInfo.isNewUser
+  //   ) {
+  //     var provideId = credential.additionalUserInfo.providerId;
+  //     var socialSiteName = (provideId === 'facebook.com') ? 'Facebook' : 'Apple';
+  //     // Send notification
+  //     var contents = {
+  //       'en': `You are registered firstly with your ${socialSiteName} account.`,
+  //       'fr': `Vous vous êtes inscrit avec votre compte ${socialSiteName}.`
+  //     }
+  //     var message = {
+  //       type: notifications.NONO_NOTIFICATION_TYPES.REGISTERED_FIRST
+  //     };
+  //     var otherParameters = {
+  //       headings: {
+  //         "en": "Welcome to Nono!",
+  //         "fr": "Bienvenue sur l’application de Nono !"
+  //       },
+  //     }
+  //     if (auth && auth.oneSignalDevice && auth.oneSignalDevice.userId) {
+  //       notifications.postNotification(
+  //         contents,
+  //         message,
+  //         `${auth.oneSignalDevice.userId}`,
+  //         otherParameters
+  //       );
+  //     }
+  //     // Go to Hint screen
+  //     console.log('==== Go to Hint.', auth, credential);
+  //     Actions['hint']();
+  //   }
+  //   // else Actions['hint']();
+  //   else{
+  //     console.log('==== Go to Home.');
+  //     Actions['home']();
+  //   }
+  // };
 }
 
 function receivedFcm(fcmMsg) {

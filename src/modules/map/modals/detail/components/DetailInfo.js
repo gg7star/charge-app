@@ -48,12 +48,12 @@ export default class DetailInfo extends React.Component {
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 5 }}>
             <View style={{ justifyContent: 'center', alignItems: 'flex-start', flex: 1 }}>
               <Text style={{color: '#35cdfa', fontWeight: '500', fontSize: 17}}>
-                {`${batterries} ${_t('batteries')}`}
+                {`${batterries} ${(batterries > 1) ? _t('batteries') : _t('battery')}`}
               </Text>
             </View>
             <View style={{ justifyContent: 'center', alignItems: 'flex-start', flex: 1 }}>
               <Text style={{color: '#35cdfa', fontWeight: '500', fontSize: 17}}>
-                {`${places} ${_t('places')}`}
+                {`${places} ${(places > 1) ? _t('places') : _t('place')}`}
               </Text>
             </View>
           </View>
@@ -130,7 +130,6 @@ export default class DetailInfo extends React.Component {
       address = data.description ? data.description : data.title;
       subAddress = data.location; //`${data.coordinate.latitude}, ${data.coordinate.longitude}`
     }
-    console.log('==== H: ', H)
     return (
       <ScrollView  style={{ alignSelf: 'stretch', maxHeight: (H - 150) }}>
         {this.renderSummary()}

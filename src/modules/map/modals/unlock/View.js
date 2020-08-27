@@ -1,8 +1,9 @@
 import React from 'react'
 import DialogWrapper from '../../common/wrappers/DialogWrapper'
 import { View } from 'react-native'
-import { Button, Spacer } from '~/common/components'
-import { colors, W } from '~/common/constants'
+import { Button, Spacer } from '~/common/components';
+import { colors, W } from '~/common/constants';
+import commonStyle from '~/common/styles';
 
 const UNLOCK_ICON_IMAGE = require('~/common/assets/images/png/qr-code.png');
 
@@ -20,6 +21,7 @@ export default class Dialog extends React.Component {
           iconColor={'#fff'}
           caption={_t('Unlocks a nono')}
           onPress={onClickUnlock}
+          // shadowStyle={commonStyle.shadow}
         />
         <Spacer size={30} />
       </DialogWrapper>

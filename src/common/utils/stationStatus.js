@@ -1,10 +1,10 @@
-export function getStationStatus(stationStatuArray) {
+export function getStationStatus(stationStatusArray) {
   var totalBaterries = 0;
   var totalPlaces = 0;
-  if (stationStatuArray && (stationStatuArray.length > 0)) {
-    for (var i = 0; i < stationStatuArray.length; i++) {
-      totalBaterries += stationStatuArray[i].baterries;
-      totalPlaces += stationStatuArray[i].places;
+  if (stationStatusArray && (stationStatusArray.length > 0)) {
+    for (var i = 0; i < stationStatusArray.length; i++) {
+      totalBaterries += stationStatusArray[i].baterries;
+      totalPlaces += stationStatusArray[i].places;
     }
   }
   return { batterries: totalBaterries, places: totalPlaces };

@@ -25,6 +25,10 @@ export default function reducer(state = initialState, action) {
         ...state,
         currentLocation: action.payload.currentLocation
       }
+    case mapActionTypes.LOAD_PLACES_ON_MAP_REQUEST:
+      return {
+        ...state,
+      }
     case mapActionTypes.LOAD_PLACES_ON_MAP_SUCCESS:
       return {
         ...state,
