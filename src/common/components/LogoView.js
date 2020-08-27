@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Platform, Animated } from 'react-native';
-import { em } from '~/common/constants';
+import { em, H } from '~/common/constants';
 
 export default class LogoView extends Component {
   render() {
@@ -23,7 +23,7 @@ export default class LogoView extends Component {
         >
           <Animated.Image
             resizeMode="contain"
-            style={{width: 160*em, height: 160*em, marginBottom: 5*em}}
+            style={{width: 160*em, height: (H < 700 ? 110 : 160)*em, marginBottom: 5*em}}
             source={require('~/common/assets/images/png/logo-nono-2x.png')}
           />
           <Animated.Image

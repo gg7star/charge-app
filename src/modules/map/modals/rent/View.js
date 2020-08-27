@@ -47,10 +47,11 @@ export default class RentDialog extends React.Component {
     if (!rent.startTime) return `48:00:00`;
 
     const res = calculateDurationString(rent.startTime, moment());
-    if (res === '00:00:00') {
-      this.setState({calculating: false});
-      // Make auto-payment
-      this.props.onAutoBuy && this.props.onAutoBuy();
+    if ((res === '00:00:00') && this.state.calculating) {
+      this.setState({calculating: false}, () => {
+        // Make auto-payment
+        this.props.onAutoBuy && this.props.onAutoBuy();
+      });
     }
     return res;
   };

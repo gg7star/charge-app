@@ -6,7 +6,8 @@ import View from './View';
 
 const mapStateToProps = state => ({
   app: state.app || {},
-  map: state.map || {}
+  map: state.map || {},
+  rent: state.rent || {},
 });
 
 const mapDispatchToProps = dispatch => ({

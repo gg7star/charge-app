@@ -1,6 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, View, Text, Image } from 'react-native'
 import moment from 'moment';
+import { W, H, em } from '~/common/constants';
 
 export default class HistoryListItem extends React.Component {
   

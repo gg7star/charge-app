@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text, Image, TouchableOpacity } from 'react-native'
-import { colors } from '~/common/constants'
+import { colors, W, H, em } from '~/common/constants'
 const BACK_IMAGE = require('~/common/assets/images/png/arrow.png');
 export default class ProfileHeader extends React.Component {
   render() {
@@ -8,7 +8,16 @@ export default class ProfileHeader extends React.Component {
 
     return (
       <React.Fragment>
-        <TouchableOpacity onPress={onPress} style={{width: 50, height: 50, zIndex: 51, alignItems: 'flex-start', justifyContent: 'center'}}>
+        <TouchableOpacity
+          onPress={onPress}
+          style={{
+            width: 50,
+            height: 50,
+            zIndex: 51,
+            alignItems: 'flex-start',
+            justifyContent: 'center',
+          }}
+        >
           {backImage ? (
             <Image source={backImage} style={{tintColor: colors.primary}} />
           ) : (

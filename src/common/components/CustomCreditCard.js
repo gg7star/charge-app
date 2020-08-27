@@ -5,6 +5,7 @@ import stripe from 'tipsi-stripe';
 import { CreditCardInput } from "react-native-credit-card-input";
 import { CardIOModule, CardIOUtilities } from 'react-native-awesome-card-io';
 import { Button, ProfileHeader, Spacer } from '~/common/components';
+import { initStripe } from '~/common/lib/stripe';
 import { W, H, em } from '~/common/constants';
 
 export default class CustomCreditCard extends React.Component {
@@ -50,6 +51,8 @@ export default class CustomCreditCard extends React.Component {
     const { cardInfo } = this.state;
     const { onValidate, appActions } = this.props;
     const { _t } = appActions;
+
+    initStripe();
 
     if (cardInfo && cardInfo.valid) {
       var expiryArray = cardInfo.values.expiry.split('/');
@@ -177,7 +180,7 @@ ${_t('Please input a valid card.')}`,
             disabled={!isValidCard}
           />
         </View>
-        {Platform.OS === 'android' && <Spacer size={40*em} />}
+        {Platform.OS === 'android' ? <Spacer size={40 * em} /> : <Spacer size={20 * em} />}
       </ScrollView>
     );
   }

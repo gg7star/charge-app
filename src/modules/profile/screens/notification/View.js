@@ -12,12 +12,13 @@ export default class ScreenView extends React.Component {
   }
 
   render() {
-    const { _t } = this.props.appActions;
-    const { notifications } = this.props.profile;
+    const { appActions, profile, onClose } = this.props;
+    const { _t } = appActions;
+    const { notifications } = profile;
     return (
       <ProfileWrapper>
-        <ProfileHeader title={_t('Notifications')} onPress={this.goBack} />
-        <ScrollView style={{height: Platform.OS=='ios'? H-60 : H-40}}>
+        <ProfileHeader title={_t('Notifications')} onPress={onClose} />
+        <ScrollView style={{height: Platform.OS=='ios'? (H-60)*em : (H-40)*em}}>
           {(notifications && (notifications.length > 0)) ?
             notifications.map((notification, k) => (
               <NotificationListItem notification={notification} key={k} onPress={() => this.goSummary(k)}/>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, TouchableOpacity, StyleSheet, Image } from 'react-native'
+import { View, TouchableOpacity, StyleSheet, Image, Platform } from 'react-native'
 import { em } from '~/common/constants'
 
 const PROFILE_IMAGE = require('~/common/assets/images/png/profile.png');
@@ -17,7 +17,7 @@ export default class MapButton extends React.Component {
       case 'profile':
         return (
           <Button
-            style={[styles.button, styles.profile, styles.shadow]}
+            style={[styles.button, styles.profile, styles.shadowStyle]}
             onPress={onPress}
             image={PROFILE_IMAGE}
           />
@@ -33,7 +33,7 @@ export default class MapButton extends React.Component {
       case 'tree':
         return (
           <Button
-            style={[styles.button, styles.tree, styles.shadow]} 
+            style={[styles.button, styles.tree, styles.shadowStyle]} 
             onPress={onPress}
             image={TREE_IMAGE}
           />
@@ -49,7 +49,7 @@ export default class MapButton extends React.Component {
       case 'refresh':
         return (
           <Button
-            style={[styles.button, styles.refresh, styles.shadow]} 
+            style={[styles.button, styles.refresh, styles.shadowStyle]} 
             onPress={onPress}
             image={REFRESH_IMAGE}
           />
@@ -57,7 +57,7 @@ export default class MapButton extends React.Component {
       case 'position':
         return (
           <Button
-            style={[styles.button, styles.position, styles.shadow]} 
+            style={[styles.button, styles.position, styles.shadowStyle]} 
             onPress={onPress}
             image={POSITION_IMAGE}
           />
@@ -89,11 +89,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  shadow: {
-    shadowColor: "#000000",
-    shadowOffset: { width: 1, height: 5 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
+  shadowStyle: {
+    ...Platform.select({
+      ios: {
+        // shadowColor: "#000000",
+        shadowOffset: { width: 1, height: 5 },
+        shadowOpacity: 0.2,
+        shadowRadius: 2,
+      },
+      android: {
+        elevation: 5,
+      },
+    })
   },
   profile: {
     top: 50,

@@ -118,7 +118,7 @@ export default class ScreenView extends React.Component {
 
   enterCode = () => {
     const { code } = this.state;
-    const { stationSnList } = this.props.map;
+    const { stations } = this.props.map;
     const { auth, mapActions, appActions } = this.props;
     const { _t } = appActions;
     Alert.alert(
@@ -132,7 +132,7 @@ export default class ScreenView extends React.Component {
         },
         {text: _t('OK'), onPress: () => {
           // Check stationSN validation
-          if (stationSnList && stationSnList.find(e => e.stationSn === code)) {
+          if (stations && stations.find(e => e.stationSn === code)) {
             this.props.mapActions.scannedQrCode(code);
             const res = rentBattery({
               stationSn: code,
@@ -153,6 +153,7 @@ export default class ScreenView extends React.Component {
             } else {
               // For test
               // mapActions.setActiveModal(MAP_MODAL.RENT);
+              
               Actions['map_first']();
             }
           } else {

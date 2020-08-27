@@ -7,8 +7,8 @@ export default class CardForm extends React.Component {
   state = {}
 
   goBack = () => {
-    // Actions.map();
-    Actions['profile_payment']();
+    const { onClose } = this.props;
+    onClose && onClose();
   }
 
   onValidate = ({cardInfo, cardToken}) => {

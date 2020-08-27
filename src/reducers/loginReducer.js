@@ -47,7 +47,7 @@ export default function reducer(state = initialState, action) {
         ...state,
         isAuthenticated: true,
         isFetching: false,
-        auth: payload.auth,
+        // auth: payload.auth,
         credential: payload.credential,
         authProvider: ( providerData && providerData[0] )
           ? providerData[0].providerId

@@ -3,7 +3,10 @@ import { TouchableOpacity, Text, Alert, Platform } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { Spacer, Button, PhoneNumberInput } from '~/common/components';
 import { PhoneAuth, FacebookAuth, AppleAuth } from '~/common/services/rn-firebase/auth';
-import { checkIfUserExistsByPhoneNumber } from '~/common/services/rn-firebase/database';
+import {
+  createSocialAccount,
+  checkIfUserExistsByPhoneNumber
+} from '~/common/services/rn-firebase/database';
 import { sendFcmMessage } from '~/common/services/rn-firebase/message';
 import { W, H, em } from '~/common/constants';
 import commonStyles from '~/common/styles';
@@ -79,7 +82,8 @@ export default class LoginView extends React.Component {
     console.log('===== res: ', res);
     this.setState({facebookLogining: false});
     if (res.credential) {
-      authActions.loginSuccessWithSocial(res.credential);
+      this.onSocialLoginSuccess(res.credential, auth);
+      authActions.loginSuccessWithSocial(res.credential, auth);
     } else {
       authActions.loginFailed(res.error);
       console.log('===== Facebook login failed: error: ', res.error);
@@ -101,6 +105,7 @@ export default class LoginView extends React.Component {
     const res = await loginWithApple();
     this.setState({appleSigning: false});
     if (res.credential) {
+      this.onSocialLoginSuccess(res.credential, auth);
       authActions.loginSuccessWithSocial(res.credential, auth);
     } else {
       authActions.loginFailed(res.error);
@@ -115,6 +120,51 @@ export default class LoginView extends React.Component {
       );
     }
   };
+
+  onSocialLoginSuccess = async (credential, auth) => {
+    const resCreateUser = await createSocialAccount(credential);
+    if (resCreateUser) {
+      if (
+        credential.additionalUserInfo &&
+        credential.additionalUserInfo.isNewUser
+      ) {
+        var provideId = credential.additionalUserInfo.providerId;
+        var socialSiteName = (provideId === 'facebook.com') ? 'Facebook' : 'Apple';
+        // Send notification
+        var contents = {
+          'en': `You are registered firstly with your ${socialSiteName} account.`,
+          'fr': `Vous vous êtes inscrit avec votre compte ${socialSiteName}.`
+        }
+        var message = {
+          type: notifications.NONO_NOTIFICATION_TYPES.REGISTERED_FIRST
+        };
+        var otherParameters = {
+          headings: {
+            "en": "Welcome to Nono!",
+            "fr": "Bienvenue sur l’application de Nono !"
+          },
+        }
+        if (auth && auth.oneSignalDevice && auth.oneSignalDevice.userId) {
+          notifications.postNotification(
+            contents,
+            message,
+            `${auth.oneSignalDevice.userId}`,
+            otherParameters
+          );
+        }
+        // Go to Hint screen
+        console.log('==== Go to Hint.', auth, credential);
+        Actions['hint']();
+      }
+      // else Actions['hint']();
+      else {
+        console.log('==== Go to Home.');
+        // Actions['home']();
+        Actions.home();
+        Actions['map_first']();
+      }
+    };
+  }
 
   goSignup = () => Actions['signup_first']({phoneNumber: this.state.phoneNumber});
 
@@ -206,6 +256,7 @@ export default class LoginView extends React.Component {
               textColor='#fff'
               icon={APPLE_IMAGE}
               iconColor='#fff'
+              key={'Apple-Login-Button'}
             />]
           }
           <Spacer size={30*em} />

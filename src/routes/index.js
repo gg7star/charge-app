@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Router, Scene } from 'react-native-router-flux';
+import { Router, Scene, Stack } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { SignUp } from '~/modules/auth-signup';
 import Login from '~/modules/auth-login/screens/login/ViewContainer';

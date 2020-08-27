@@ -8,18 +8,18 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:725402495129:android:742ead3f38f7f04345f008",
+        "mobilesdk_app_id": "1:725402495129:android:ae5ef496d3fd630845f008",
         "android_client_info": {
           "package_name": "com.chargeme.nono"
         }
       },
       "oauth_client": [
         {
-          "client_id": "725402495129-a2l2sqp28o1hqjlnseb41346jfutud0v.apps.googleusercontent.com",
+          "client_id": "725402495129-mitudmvgr1bmnqkpvc5nhr7dt6ad64n2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.chargeme.nono",
-            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+            "certificate_hash": "57cce5a57179b25b43950f0cc640f8e5645bff6d"
           }
         },
         {
@@ -58,7 +58,7 @@
           ]
         }
       },
-      "admob_app_id": "ca-app-pub-9857774334300015~5150013736"
+      "admob_app_id": "ca-app-pub-9857774334300015~7840068288"
     }
   ],
   "configuration_version": "1"

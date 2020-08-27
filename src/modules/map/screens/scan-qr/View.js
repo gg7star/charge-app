@@ -20,6 +20,8 @@ export default class ScanQRView extends React.Component {
     startRentTime: null
   };
 
+  qrScanner = null;
+
   UNSAFE_componentWillReceiveProps(nextProps) {
     const { rent } = nextProps;
     const { isRented, isFetching } = rent;
@@ -34,7 +36,8 @@ export default class ScanQRView extends React.Component {
     this.setState({ isTorchOn: !isTorchOn });
   };
 
-  onClickClose = () => {
+  onClickClose = (closeCallback) => {
+    closeCallback && closeCallback();
     Actions['map_first']();
   };
 
@@ -50,13 +53,14 @@ export default class ScanQRView extends React.Component {
     this.setState({qrCode: scanedQrCode, scanBarAnimateReverse: false});
     // , () => {
       var temp = scanedQrCode.split(' ');
-      // For test
+
       const parsedStationSn = temp[temp.length-1]; // need to parse from scanedQrCode
       console.log('==== QR code: ', scanedQrCode, parsedStationSn);
       // Check stationSN validation
       const { auth, map, mapActions, rentActions } = _this.props;
-      const { stationSnList } = map;
-      if (stationSnList && stationSnList.find(e => e.stationSn === parsedStationSn)) {
+      const { stations } = map;
+      console.log('==== stations: ', stations)
+    if (stations && stations.find(e => e.stationSn === parsedStationSn)) {
         console.log('==== mapActions.scannedQrCode: ', parsedStationSn);
         mapActions.scannedQrCode(parsedStationSn);
         _this.setState({rentingBattery: true});
@@ -138,7 +142,7 @@ export default class ScanQRView extends React.Component {
     );
   }
 
-  renderBottom = () => {
+  renderBottom = (closeCllback) => {
     return (
       <View style={{flex: 1, flexDirection: 'column'}}>
         <View style={{flex: 1, alignItems: 'flex-end'}}>
@@ -165,7 +169,7 @@ export default class ScanQRView extends React.Component {
         <View style={{flex: 1, flexDirection: 'row'}}>
           <TouchableOpacity
             style={{ flex: 1, alignItems: 'flex-start'}}
-            onPress={() => this.onClickClose()}
+            onPress={() => this.onClickClose(closeCllback)}
           >
             <MaterialIcon name="close" style={{
               color: '#fff',
@@ -217,7 +221,8 @@ export default class ScanQRView extends React.Component {
         < QRScannerContainer
           onScanResult={ this.onReceivedQRCode }
           renderHeaderView={ this.renderTitleBar }
-          renderFooterView={ <this.renderBottom onSwitchToQRCodeInput={onSwitchToQRCodeInput}/>}
+          // renderFooterView={ <this.renderBottom onSwitchToQRCodeInput={onSwitchToQRCodeInput}/>}
+          renderFooterView={this.renderBottom}
           scanBarAnimateReverse={ true }
           hintText={`${_t('QR code not detected?')} ${_t('Enter the number of the station')}`}
         />

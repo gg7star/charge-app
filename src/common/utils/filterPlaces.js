@@ -25,26 +25,8 @@ export function filterPlaces(places, value, currentLocation, radius) {
   var filteredPlaces = [];
   Object.keys(places).map((key) => {
     const place = places[key];
-    filteredPlaces.push(place);
-    // Disable filter feature by current location.
-    // if (place.name.toLowerCase().search(searchVal.toLowerCase()) > -1 || 
-    //   key.toLowerCase().search(searchVal.toLowerCase()) > -1
-    // ) {
-    //   if (currentLocation) {
-    //     const {latitude, longitude} = currentLocation.coordinate;
-    //     const filteringRadius = radius | 2; // Km
-    //     const distance = getDistance(
-    //       latitude, longitude,
-    //       place.coordinate.latitude, place.coordinate.longitude,
-    //       "K"
-    //     );
-    //     if ( distance <= filteringRadius) {
-    //       filteredPlaces.push(place);
-    //     }
-    //   } else {
-    //     filteredPlaces.push(place);
-    //   }
-    // }
+		if (place.stations && (place.stations.length >= 1))
+			filteredPlaces.push(place);
   });
   return filteredPlaces
 }

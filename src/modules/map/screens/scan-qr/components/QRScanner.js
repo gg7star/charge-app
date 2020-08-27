@@ -7,7 +7,9 @@ import {
   Text,
   Image,
   AppState,
-  Alert
+  Alert,
+  Platform,
+  Dimensions
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { RNCamera } from 'react-native-camera';
@@ -250,7 +252,7 @@ export default class QRScannerView extends Component {
     hintTextStyle: PropTypes.object,
     
     renderHeaderView: PropTypes.func,
-    renderFooterView: PropTypes.object,
+    renderFooterView: PropTypes.func,
     
     onScanResult: PropTypes.func,
     scanInterval: PropTypes.number,
@@ -266,8 +268,37 @@ export default class QRScannerView extends Component {
   
   state = {
     qrCode: '',
-    scanEnabled: true
+    scanEnabled: true,
+
+    flash: 'off',
+    zoom: 0,
+    autoFocus: 'on',
+    autoFocusPoint: {
+      normalized: { x: 0.5, y: 0.5 }, // normalized values required for autoFocusPointOfInterest
+      drawRectPosition: {
+        x: Dimensions.get('window').width * 0.5 - 32,
+        y: Dimensions.get('window').height * 0.5 - 32,
+      },
+    },
+    depth: 0,
+    type: 'back',
+    whiteBalance: 'auto',
+    ratio: '16:9',
+    recordOptions: {
+      mute: false,
+      maxDuration: 5,
+      quality: RNCamera.Constants.VideoQuality['288p'],
+    },
+    isRecording: false,
+    canDetectFaces: false,
+    canDetectText: false,
+    canDetectBarcode: false,
+    faces: [],
+    textBlocks: [],
+    barcodes: [],
   };
+
+  rnCamera = null;
 
   constructor(props){
     super(props);
@@ -283,6 +314,11 @@ export default class QRScannerView extends Component {
   }
   
   componentWillUnmount(){
+    this.stopScanCamera();
+  }
+
+  stopScanCamera = () => {
+    this.setState({ scanEnabled: false })
     AppState.removeEventListener('change', this.handleAppStateChange);
     this.rnCamera && this.rnCamera.pausePreview && this.rnCamera.pausePreview();
   }
@@ -296,7 +332,7 @@ export default class QRScannerView extends Component {
   };
   
   onScanResult = (e) => {
-    _this = this;
+    const _this = this;
     const { _t } = this.props.appActions;
     console.log('====== onScanResult: e: ', e);
     if (
@@ -305,7 +341,7 @@ export default class QRScannerView extends Component {
     ) {
       const qrCode = e ? `${e.type}: ${e.data}` : '';
       this.handleAppStateChange('stop');
-      this.setState({scanEnabled: false, qrCode}, () => {
+      this.setState({scanEnabled: false, qrCode}, (that=this) => {
         Alert.alert(
           _t('QR Code scanned'),
           `${_t('Are you sure to rent a Nono power bank for 48 hours?')}`,
@@ -313,12 +349,12 @@ export default class QRScannerView extends Component {
             {
               text: 'Cancel',
               onPress: () => {
-                _this.resumeScan();
+                that.resumeScan();
               },
               style: 'cancel',
             },
             {text: 'OK', onPress: () => {
-              _this.props.onScanResult(qrCode, _this.resumeScan);
+              that.props.onScanResult(qrCode, that.resumeScan);
             }},
           ],
           {cancelable: false},
@@ -334,13 +370,14 @@ export default class QRScannerView extends Component {
 
   resumeScan = () => {
     console.log('==== resumeScan');
-    _this.handleAppStateChange('active');
-    _this.setState({scanEnabled: true});
+    this.handleAppStateChange('active');
+    this.setState({scanEnabled: true});
   }
   
   render(){
-    const { renderHeaderView, renderFooterView, torchOn, userFront } = this.props;
-    
+    const { renderHeaderView, renderFooterView, torchOn, userFront, appActions } = this.props;
+    const { _t } = appActions;
+    const { FlashMode } = RNCamera.Constants;
     return (
       <RNCamera
         ref={ ref => this.rnCamera = ref }
@@ -348,8 +385,17 @@ export default class QRScannerView extends Component {
         onBarCodeRead={ this.onScanResult }
         pausePreview={ this.onPausePreview }
         type={ userFront ? RNCamera.Constants.Type.front : RNCamera.Constants.Type.back }
-        flashMode={ torchOn ? RNCamera.Constants.FlashMode.torch : RNCamera.Constants.FlashMode.off }
-        style={ { flex: 1 } }
+        flashMode={torchOn ? (FlashMode.on) : FlashMode.off }
+        autoFocus={this.state.autoFocus}
+        style={{ flex: 1, justifyContent: 'space-between', } }
+        aspect={1}
+        barCodeTypes={[RNCamera.Constants.BarCodeType.qr, 'qr']}
+        // permissionDialogTitle={'Permission to use camera'}
+        // permissionDialogMessage={'We need your permission to use your camera phone'}
+        onGoogleVisionBarcodesDetected={({ barcodes }) => {
+          console.log('===== onGoogleVisionBarcodesDetected: barcodes: ', barcodes)
+          this.onScanResult(barcodes[0]);
+        }}
       >
         
         <QRScannerRectView
@@ -370,7 +416,7 @@ export default class QRScannerView extends Component {
         
         { renderHeaderView && <View style={ [ styles.topContainer ] }>{ renderHeaderView() }</View> }
         
-        { renderFooterView && <View style={ [ styles.bottomContainer ] }>{ renderFooterView }</View> }
+        { renderFooterView && <View style={ [ styles.bottomContainer ] }>{ renderFooterView(this.stopScanCamera) }</View> }
       
       </RNCamera>
     );

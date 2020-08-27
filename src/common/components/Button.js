@@ -6,7 +6,8 @@ import {
   View,
   Text,
   ActivityIndicator,
-  TouchableOpacity
+  TouchableOpacity,
+  Platform,
 } from 'react-native';
 import { em } from '~/common/constants';
 
@@ -17,8 +18,9 @@ export default class Button extends React.Component {
       bgGradientStart,
       containerHeight,
       borderRadius,
-      disabled
-    } = this.props
+      disabled,
+      shadowStyle
+    } = this.props;
 
     return (
       <TouchableOpacity
@@ -30,6 +32,7 @@ export default class Button extends React.Component {
           height: containerHeight,
           borderRadius,
           overflow: 'hidden',
+          ...shadowStyle,
         }}
         disabled={disabled}
       >
@@ -125,5 +128,6 @@ Button.defaultProps = {
   bgColor: '#fff',
   iconAlign: 'left',
   iconColor: '#fff',
-  disabled: false
+  disabled: false,
+  shadowStyle: {},
 }

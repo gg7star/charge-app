@@ -1,11 +1,13 @@
-import React from 'react'
-import FeedbackDialogWrapper from '../../common/wrappers/FeedbackDialogWrapper'
-import { View, Text, Image, TouchableOpacity, TextInput } from 'react-native'
-import { Actions } from 'react-native-router-flux'
-import { Button, Spacer } from '~/common/components'
-import { colors, W, H } from '~/common/constants'
-import StarRating from 'react-native-star-rating'
+import React from 'react';
+import FeedbackDialogWrapper from '../../common/wrappers/FeedbackDialogWrapper';
+import { View, Text, Image, TouchableOpacity, TextInput } from 'react-native';
+import { Actions } from 'react-native-router-flux';
+import { Button, Spacer } from '~/common/components';
+import { colors, W, H } from '~/common/constants';
+import StarRating from 'react-native-star-rating';
 import MAP_MODAL from '~/common/constants/map';
+import { saveRate } from '~/common/services/rn-firebase/database';
+import moment from 'moment';
 
 export default class Dialog extends React.Component {
   state = {
@@ -14,7 +16,8 @@ export default class Dialog extends React.Component {
     },
     status: 'until',
     rating: 0,
-    enabledComment: false
+    enabledComment: false,
+    comment: null,
   }
 
   adjustOnFocus = () => {
@@ -26,8 +29,17 @@ export default class Dialog extends React.Component {
     this.setState({...this.state, adjust: {marginBottom: 0}})
   }
 
-  sendRate = () => {
-    const { mapActions, rentActions } = this.props;
+  sendRate = async () => {
+    const { mapActions, rentActions, rent } = this.props;
+    const { rating, comment } = this.state;
+    const rate = {
+      rating,
+      comment,
+      rent,
+      date: moment().format('DD/MM/YY LTS'),
+    }
+    await saveRate(rate);
+
     mapActions.setActiveModal(MAP_MODAL.UNLOCK);
     rentActions.rentInit();
   }
@@ -46,6 +58,7 @@ export default class Dialog extends React.Component {
           }} 
           onFocus={this.adjustOnFocus}
           onBlur={this.adjustOnBlur}
+          onChangeText={comment => this.setState({comment})}
         />
       )
     } else {

@@ -1,11 +1,12 @@
 import React from 'react'
 import { TouchableOpacity, View, Text, Image, Linking } from 'react-native';
-import { Actions } from 'react-native-router-flux';
+import Modal from "react-native-modal";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ProfileWrapper from '../../common/wrappers/ProfileWrapper';
 import { ProfileHeader } from '~/common/components';
 import { W, H, em } from '~/common/constants';
 import { Button, Spacer } from '~/common/components';
+import CardForm from '~/modules/profile/screens/card-form/ViewContainer';
 
 const AMERICAN_EXPRESS_CARD_IMAGE = require('~/common/assets/images/cards/american-express.png');
 const DISCOVER_CARD_IMAGE = require('~/common/assets/images/cards/discover.png');
@@ -34,17 +35,23 @@ const CARDS = [
 
 export default class PaymentSettingView extends React.Component {
   state = {
+    showCardForm: false,
   };
 
   goBack = () => {
-    Actions.map();
-    Actions['map_first']({profileOpened: true});
+    const { onClose } = this.props;
+    onClose && onClose();
   }
 
   addCreditCard = () => {
     const { auth, profileActions, stripeActions } = this.props;
-    Actions['profile_payment_card']();
+    // Actions['profile_payment_card']();
+    this.setState({ showCardForm: true });
   };
+
+  handleCloseCardForm = () => {
+    this.setState({ showCardForm: false });
+  }
 
   onClearCard = () => this.props.stripeActions.initStripe();
 
@@ -184,12 +191,22 @@ export default class PaymentSettingView extends React.Component {
 
   render() {
     const { _t } = this.props.appActions;
+    const { showCardForm } = this.state;
 
     return (
       <ProfileWrapper>
         <ProfileHeader title={_t('Payment')} onPress={this.goBack} />
         {this.renderList()}
         {this.renderActionBar()}
+
+        <Modal
+          isVisible={showCardForm}
+          animationIn={'slideInRight'}
+          animationOut={'slideOutLeft'}
+          style={{ margin: 0, }}
+        >
+          <CardForm onClose={this.handleCloseCardForm} />
+        </Modal>
       </ProfileWrapper>
     )
   }

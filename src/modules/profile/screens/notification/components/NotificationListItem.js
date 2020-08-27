@@ -1,16 +1,18 @@
 import React from 'react';
 import { TouchableOpacity, View, Text, Image } from 'react-native';
 import moment from 'moment';
+import { W, H, em } from '~/common/constants';
 
 export default class NotificationListItem extends React.Component {
   
   render() {
     const { notification } = this.props;
     const { payload, date } = notification;
+    if (!payload) return null;
     return (
       <TouchableOpacity
         style={{
-          marginVertical: 13,
+          marginVertical: 13*em,
           marginLeft: 14,
         }}
         onPress={this.props.onPress}

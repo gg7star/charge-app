@@ -11,7 +11,7 @@ import { Button } from '~/common/components';
 export default class Dialog extends React.Component {
   render() {
     const { _t } = this.props.appActions;
-    const { places, searchLimit, place, direction, stationSnList } = this.props.map;
+    const { searchLimit, place, direction } = this.props.map;
     const price = 1;
     return (
       <FilterDialog2Wrapper 

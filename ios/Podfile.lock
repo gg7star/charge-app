@@ -334,13 +334,13 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
   - React-jsinspector (0.61.5)
-  - react-native-camera (3.26.0):
+  - react-native-camera (3.35.0):
     - React
-    - react-native-camera/RCT (= 3.26.0)
-    - react-native-camera/RN (= 3.26.0)
-  - react-native-camera/RCT (3.26.0):
+    - react-native-camera/RCT (= 3.35.0)
+    - react-native-camera/RN (= 3.35.0)
+  - react-native-camera/RCT (3.35.0):
     - React
-  - react-native-camera/RN (3.26.0):
+  - react-native-camera/RN (3.35.0):
     - React
   - react-native-date-picker (2.7.0):
     - React
@@ -722,7 +722,7 @@ SPEC CHECKSUMS:
   React-jsi: cb2cd74d7ccf4cffb071a46833613edc79cdf8f7
   React-jsiexecutor: d5525f9ed5f782fdbacb64b9b01a43a9323d2386
   React-jsinspector: fa0ecc501688c3c4c34f28834a76302233e29dc0
-  react-native-camera: 2b74be8edc1103c4c46d1f4e5f41723d9ff052cc
+  react-native-camera: d9e7b66e40420dcef111f3265a00f01eea54c52c
   react-native-date-picker: 648606a44e21d15725a61cc9f28e864f40ae8cdd
   react-native-fbsdk: b94a83971c496a35803f38b921aec6d637ba07b5
   react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9

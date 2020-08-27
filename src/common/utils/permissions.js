@@ -16,11 +16,10 @@ export const requireCameraPermission = async (_t) => {
     android: PERMISSIONS.ANDROID.CAMERA,
     ios: PERMISSIONS.IOS.CAMERA,
   });
-  console.log('===== cameraPermission: ', cameraPermission)
+
   try {
     // Check camera permission
     const hasPermission = await check(cameraPermission);
-    console.log('===== hasPermission: ', hasPermission);
 
     switch (hasPermission) {
       case RESULTS.UNAVAILABLE:
@@ -36,12 +35,12 @@ export const requireCameraPermission = async (_t) => {
         const status = await request(cameraPermission);
         if (status === RESULTS.GRANTED) return true;
         if ((status === RESULTS.DENIED) || (status === RESULTS.BLOCKED)) {
-          console.log('===== Camera permission was denied by user.');
+          console.log('Camera permission was denied by user.');
           requireCameraOpenSettings(_t);
         }
         break;
       case RESULTS.GRANTED:
-        console.log('The permission is granted');
+        // console.log('The permission is granted');
         return true;
       case RESULTS.BLOCKED:
         console.log('The permission is denied and not requestable anymore');
@@ -80,11 +79,10 @@ export const requireLocationPermission = async (_t) => {
     android: PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
     ios: PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
   });
-  console.log('===== locationPermission: ', permission)
+
   try {
     // Check location permission
     const hasPermission = await check(permission);
-    console.log('===== hasPermission: ', hasPermission);
 
     switch (hasPermission) {
       case RESULTS.UNAVAILABLE:
@@ -97,7 +95,7 @@ export const requireLocationPermission = async (_t) => {
           'The permission has not been requested / is denied but requestable',
         );
         // Require location permission
-        const status = await request(cameraPermission);
+        const status = await request(permission);
         if (status === RESULTS.GRANTED) return true;
         if ((status === RESULTS.DENIED) || (status === RESULTS.BLOCKED)) {
           console.log('===== Location permission was denied by user.');
@@ -105,7 +103,7 @@ export const requireLocationPermission = async (_t) => {
         }
         break;
       case RESULTS.GRANTED:
-        console.log('The permission is granted');
+        // console.log('The permission is granted');
         return true;
       case RESULTS.BLOCKED:
         console.log('The permission is denied and not requestable anymore');
@@ -140,11 +138,9 @@ export const requireLocationOpenSettings = (_t) => {
 /** Notification permissions */
 export const requireNotificationPermission = async (_t) => {
   // Check permissions
-  console.log('===== notificationPermission')
   try {
     // Check location permission
     const hasPermission = await checkNotifications();
-    console.log('===== hasPermission: ', hasPermission);
 
     switch (hasPermission.status) {
       case RESULTS.UNAVAILABLE:
@@ -167,7 +163,7 @@ export const requireNotificationPermission = async (_t) => {
         }
         break;
       case RESULTS.GRANTED:
-        console.log('The permission is granted');
+        // console.log('The permission is granted');
         return true;
       case RESULTS.BLOCKED:
         console.log('The permission is denied and not requestable anymore');

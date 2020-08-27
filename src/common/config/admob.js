@@ -6,9 +6,9 @@ export default admobConfig = {
     interstitialUnitId: 'ca-app-pub-9857774334300015/9706496643',
   },
   android: {
-    appId: 'ca-app-pub-9857774334300015~5150013736',
+    appId: 'ca-app-pub-9857774334300015~7840068288',
     rewardUnitId: '',
-    interstitialUnitId: 'ca-app-pub-9857774334300015/6749008199',
+    interstitialUnitId: 'ca-app-pub-9857774334300015/2396169916',
   },
   defaultAdMob: 'interstitial'
 };
