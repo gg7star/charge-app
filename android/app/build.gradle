@@ -266,3 +266,4 @@ apply from: file("../../node_modules/@react-native-community/cli-platform-androi
 
 apply plugin: "com.google.firebase.firebase-perf"
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
