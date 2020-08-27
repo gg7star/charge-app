@@ -340,10 +340,10 @@ export default class ClusterMapView extends React.Component {
           zoomTapEnabled={false}
           renderClusterMarker={this.renderCustomClusterMarker}
           ref={c => this.mapView = c}
-          // priorityMarker={this.renderMapViewDirection()}
+          priorityMarker={this.renderMapViewDirection()}
           key={"cluster-map"}
         >
-          {(mapDirections.length > 0) && mapDirections}
+          {/* {(mapDirections.length > 0) && mapDirections} */}
           {this.renderMarkers()}
         </ClusterMap>
         {children && children}
