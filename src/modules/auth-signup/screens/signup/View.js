@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, Text, Alert } from 'react-native';
+import { TouchableOpacity, Text, Alert, Platform } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import FirstWrapper from '~/modules/auth-login/common/wrappers/FirstWrapper';
 import {
@@ -201,31 +201,19 @@ export default class SignupView extends React.Component {
             loading={facebookSigning}
             disabled={facebookSigning}
           />
-          <Spacer size={15*em} />
-
-          {/* {appleAuth.isSupported && (
-            <AppleButton
-              cornerRadius={20*em}
-              style={{
-                width: '100%',
-                height: 50*em,
-                fontSize: 17*em,
-                fontWeight: 400
-              }}
-              buttonStyle={AppleButton.Style.BLACK}
-              buttonType={AppleButton.Type.CONTINUE}
-              onPress={() => this.onAppleSignup()}
-            />
-          )} */}
-          <Button
-            onPress={this.onAppleSignup}
-            caption={_t('Continue with Apple')}
-            bgColor='#36384a'
-            textColor='#fff'
-            icon={APPLE_IMAGE}
-            iconColor='#fff'
-          />
+          {(Platform.OS === 'ios') &&
+            [<Spacer size={15*em} />,
+            <Button
+              onPress={this.onAppleSignup}
+              caption={_t('Continue with Apple')}
+              bgColor='#36384a'
+              textColor='#fff'
+              icon={APPLE_IMAGE}
+              iconColor='#fff'
+            />]
+          }
           <Spacer size={10*em} />
+
           <TouchableOpacity
             style={{width: '100%', alignItems: 'center', justifyContent: 'center', flexDirection: 'row'}}
             onPress={this.goLogin}

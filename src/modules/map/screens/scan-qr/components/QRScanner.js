@@ -389,13 +389,16 @@ export default class QRScannerView extends Component {
         autoFocus={this.state.autoFocus}
         style={{ flex: 1, justifyContent: 'space-between', } }
         aspect={1}
+
         barCodeTypes={[RNCamera.Constants.BarCodeType.qr, 'qr']}
+        
         // permissionDialogTitle={'Permission to use camera'}
         // permissionDialogMessage={'We need your permission to use your camera phone'}
-        onGoogleVisionBarcodesDetected={({ barcodes }) => {
-          console.log('===== onGoogleVisionBarcodesDetected: barcodes: ', barcodes)
-          this.onScanResult(barcodes[0]);
-        }}
+
+        // onGoogleVisionBarcodesDetected={({ barcodes }) => {
+        //   console.log('===== onGoogleVisionBarcodesDetected: barcodes: ', barcodes)
+        //   this.onScanResult(barcodes[0]);
+        // }}
       >
         
         <QRScannerRectView
